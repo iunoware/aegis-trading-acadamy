@@ -18,9 +18,8 @@ export default function Home() {
       <LearningJourney />
       <Pricing />
       <Testimonials />
-      <Mentors />
+      {/* <Mentors /> */}
       <Certifications />
     </>
   );
 }
-
