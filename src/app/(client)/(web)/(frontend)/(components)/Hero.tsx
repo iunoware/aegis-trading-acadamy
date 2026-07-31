@@ -3,21 +3,21 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 // Market ticker data for bottom edge bar
-const TICKER_ITEMS = [
-  { symbol: "BTC/USD", price: "$96,450.00", change: "+4.25%", isUp: true },
-  { symbol: "NIFTY 50", price: "24,350.80", change: "+1.15%", isUp: true },
-  { symbol: "BANK NIFTY", price: "52,180.50", change: "+0.85%", isUp: true },
-  { symbol: "GOLD (XAU)", price: "$2,745.50", change: "+1.48%", isUp: true },
-  { symbol: "EUR/USD", price: "1.0845", change: "+0.32%", isUp: true },
-  { symbol: "S&P 500", price: "5,864.20", change: "+0.62%", isUp: true },
-];
+// const TICKER_ITEMS = [
+//   { symbol: "BTC/USD", price: "$96,450.00", change: "+4.25%", isUp: true },
+//   { symbol: "NIFTY 50", price: "24,350.80", change: "+1.15%", isUp: true },
+//   { symbol: "BANK NIFTY", price: "52,180.50", change: "+0.85%", isUp: true },
+//   { symbol: "GOLD (XAU)", price: "$2,745.50", change: "+1.48%", isUp: true },
+//   { symbol: "EUR/USD", price: "1.0845", change: "+0.32%", isUp: true },
+//   { symbol: "S&P 500", price: "5,864.20", change: "+0.62%", isUp: true },
+// ];
 
 export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -27,9 +27,8 @@ export default function Hero() {
   const buttonRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
-  // -------------------------------------------------------------
   // Video Playback Control via IntersectionObserver
-  // -------------------------------------------------------------
+
   useEffect(() => {
     const video = videoRef.current;
     const hero = heroRef.current;
@@ -68,9 +67,8 @@ export default function Hero() {
     };
   }, []);
 
-  // -------------------------------------------------------------
   // GSAP Animations with gsap.context()
-  // -------------------------------------------------------------
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -171,9 +169,8 @@ export default function Hero() {
       aria-label="Aegis Trading Academy Hero"
       className="relative w-full h-screen overflow-hidden bg-background text-white flex flex-col justify-between "
     >
-      {/* ------------------------------------------------------------- */}
       {/* VIDEO BACKGROUND */}
-      {/* ------------------------------------------------------------- */}
+
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
         <video
           ref={videoRef}
@@ -187,9 +184,8 @@ export default function Hero() {
         </video>
       </div>
 
-      {/* ------------------------------------------------------------- */}
       {/* BACKGROUND OVERLAYS */}
-      {/* ------------------------------------------------------------- */}
+
       {/* 1. Dark Overlay (rgba(0,0,0,0.55)) */}
       <div
         className="absolute inset-0 z-10 pointer-events-none"
@@ -211,9 +207,7 @@ export default function Hero() {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-162.5 h-162.5 rounded-full gold-radial-glow z-20 pointer-events-none opacity-35 blur-3xl transform-gpu"
       />
 
-      {/* ------------------------------------------------------------- */}
       {/* MAIN VIEWPORT CONTENT (100vh composition) */}
-      {/* ------------------------------------------------------------- */}
       <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grow flex items-center justify-between pointer-events-none">
         {/* Desktop Layout: Left Text, Center Logo, Right CTA */}
         <div className="w-full h-full flex flex-col md:flex-row items-center justify-between pt-16 pb-12">
@@ -255,7 +249,7 @@ export default function Hero() {
 
       {/* BOTTOM EDGE MARKET TICKER (Visually terminates Hero at bottom) */}
 
-      <div className="relative z-30 w-full bg-[#0d0d0d]/80 backdrop-blur-md border-t border-(--primary)/20 py-2.5 px-4 overflow-hidden">
+      {/* <div className="relative z-30 w-full bg-[#0d0d0d]/80 backdrop-blur-md border-t border-(--primary)/20 py-2.5 px-4 overflow-hidden">
         <div className="flex items-center space-x-8 animate-marquee whitespace-nowrap">
           {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, idx) => (
             <div
@@ -274,7 +268,7 @@ export default function Hero() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </section>
   );
 }

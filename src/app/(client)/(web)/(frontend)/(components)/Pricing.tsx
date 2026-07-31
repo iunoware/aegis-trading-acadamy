@@ -19,9 +19,8 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// -------------------------------------------------------------
 // Sub-component: PricingFeature
-// -------------------------------------------------------------
+
 interface PricingFeatureProps {
   text: string;
   isPopularPlan?: boolean;
@@ -47,9 +46,8 @@ const PricingFeature: React.FC<PricingFeatureProps> = ({
   );
 };
 
-// -------------------------------------------------------------
 // Sub-component: TrustItem
-// -------------------------------------------------------------
+
 interface TrustItemProps {
   icon: LucideIcon;
   text: string;
@@ -58,7 +56,7 @@ interface TrustItemProps {
 const TrustItem: React.FC<TrustItemProps> = ({ icon: Icon, text }) => {
   return (
     <div className="flex items-center gap-2.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-zinc-300">
-      <div className="w-7 h-7 rounded-full bg-[var(--primary)]/10 border border-[var(--primary)]/20 flex items-center justify-center text-[var(--primary)] shrink-0">
+      <div className="w-7 h-7 rounded-full bg-(--primary)/10 border border-(--primary)/20 flex items-center justify-center text-[var(--primary)] shrink-0">
         <Icon size={14} />
       </div>
       <span className="whitespace-nowrap tracking-wide">{text}</span>
@@ -66,25 +64,23 @@ const TrustItem: React.FC<TrustItemProps> = ({ icon: Icon, text }) => {
   );
 };
 
-// -------------------------------------------------------------
 // Sub-component: PaymentMethod
-// -------------------------------------------------------------
+
 interface PaymentMethodProps {
   name: string;
 }
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({ name }) => {
   return (
-    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg glass-panel border border-white/10 text-xs font-mono font-semibold tracking-wider text-zinc-400 uppercase hover:text-[var(--primary)] hover:border-[var(--primary)]/30 transition-colors duration-300">
-      <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]/60" />
+    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg glass-panel border border-white/10 text-xs font-mono font-semibold tracking-wider text-zinc-400 uppercase hover:text-primary hover:border-(--primary)/30 transition-colors duration-300">
+      <span className="w-1.5 h-1.5 rounded-full bg-(--primary)/60" />
       <span>{name}</span>
     </div>
   );
 };
 
-// -------------------------------------------------------------
 // Sub-component: PricingCard
-// -------------------------------------------------------------
+
 interface PricingPlan {
   id: string;
   title: string;
@@ -118,15 +114,15 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
 
   return (
     <article
-      className={`relative rounded-[24px] glass-panel p-8 sm:p-10 flex flex-col justify-between h-full transition-all duration-350 ease-out border ${
+      className={`relative rounded-3xl glass-panel p-8 sm:p-10 flex flex-col justify-between h-full transition-all duration-350 ease-out border ${
         isPopular
-          ? "border-[var(--primary)]/50 shadow-[0_20px_50px_rgba(212,175,55,0.15),inset_0_1px_0_rgba(255,255,255,0.2)] bg-gradient-to-b from-[#181818]/90 to-[#0d0d0d]/90"
-          : "border-white/10 hover:border-[var(--primary)]/30 bg-[#121212]/60"
+          ? "border-(--primary)/50 shadow-[0_20px_50px_rgba(212,175,55,0.15),inset_0_1px_0_rgba(255,255,255,0.2)] bg-linear-to-b from-[#181818]/90 to-[#0d0d0d]/90"
+          : "border-white/10 hover:border-(--primary)/30 bg-[#121212]/60"
       } hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_25px_60px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.2)] cursor-pointer ${className}`}
     >
       {isPopular && (
         <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20">
-          <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-[var(--primary)] text-black text-xs font-mono font-bold tracking-widest uppercase shadow-[0_0_20px_rgba(212,175,55,0.5)] animate-pulse">
+          <div className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-primary text-black text-xs font-mono font-bold tracking-widest uppercase shadow-[0_0_20px_rgba(212,175,55,0.5)] animate-pulse">
             <Sparkles size={12} className="fill-black" />
             <span>{popularBadgeText || "MOST POPULAR"}</span>
           </div>
@@ -140,7 +136,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
           </h3>
 
           {savingsLabel && (
-            <span className="px-3 py-1 rounded-full bg-[var(--primary)]/15 border border-[var(--primary)]/30 text-[var(--primary)] text-xs font-bold font-mono tracking-wide uppercase">
+            <span className="px-3 py-1 rounded-full bg-(--primary)/15 border border-(--primary)/30 text-primary text-xs font-bold font-mono tracking-wide uppercase">
               {savingsLabel}
             </span>
           )}
@@ -151,7 +147,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
             <span className="text-4xl sm:text-6xl font-extrabold font-mono gold-gradient-text tracking-tight">
               {price}
             </span>
-            <span className="text-sm sm:text-base text-[var(--muted)] font-mono uppercase tracking-wider">
+            <span className="text-sm sm:text-base text-muted font-mono uppercase tracking-wider">
               / {subtitle}
             </span>
           </div>
@@ -174,8 +170,8 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
           aria-label={buttonText}
           className={`w-full group inline-flex items-center justify-center gap-3 py-4 px-6 rounded-xl font-bold text-sm sm:text-base tracking-wider uppercase transition-all duration-300 transform active:translate-y-0 text-center ${
             isPopular
-              ? "bg-gradient-to-r from-[var(--primary-light)] via-[var(--primary)] to-[var(--primary-dark)] text-black shadow-[0_0_25px_rgba(212,175,55,0.35)] hover:shadow-[0_0_40px_rgba(212,175,55,0.6)]"
-              : "glass-panel text-white hover:text-[var(--primary)] border border-white/15 hover:border-[var(--primary)]/40"
+              ? "bg-linear-to-r from-primary-light via-primary to-primary-dark text-black "
+              : "glass-panel text-white hover:text-primary border border-white/15 hover:border-(--primary)/40"
           }`}
         >
           <span>{buttonText}</span>
@@ -194,7 +190,7 @@ const PRICING_PLANS: PricingPlan[] = [
   {
     id: "monthly",
     title: "Monthly Membership",
-    price: "₹999",
+    price: "$49",
     subtitle: "Per Month",
     features: [
       "Full Course Library",
@@ -210,7 +206,7 @@ const PRICING_PLANS: PricingPlan[] = [
   {
     id: "yearly",
     title: "Yearly Membership",
-    price: "₹9,999",
+    price: "$300",
     subtitle: "Per Year",
     savingsLabel: "Save 20%",
     isPopular: true,
@@ -255,7 +251,7 @@ export default function Pricing() {
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     const ctx = gsap.context(() => {
@@ -269,7 +265,7 @@ export default function Pricing() {
             trustStripRef.current,
             paymentSectionRef.current,
           ],
-          { opacity: 1, y: 0 }
+          { opacity: 1, y: 0 },
         );
         return;
       }
@@ -278,7 +274,11 @@ export default function Pricing() {
       gsap.set(headingRef.current, { opacity: 0, y: 30 });
       gsap.set(paragraphRef.current, { opacity: 0, y: 25 });
       if (cardsGridRef.current) {
-        gsap.set(cardsGridRef.current.children, { opacity: 0, y: 40, scale: 0.96 });
+        gsap.set(cardsGridRef.current.children, {
+          opacity: 0,
+          y: 40,
+          scale: 0.96,
+        });
       }
       gsap.set(trustStripRef.current, { opacity: 0, y: 20 });
       if (paymentSectionRef.current) {
@@ -309,11 +309,15 @@ export default function Pricing() {
             stagger: 0.2,
             ease: "back.out(1.2)",
           },
-          "-=0.4"
+          "-=0.4",
         );
       }
 
-      tl.to(trustStripRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.3");
+      tl.to(
+        trustStripRef.current,
+        { opacity: 1, y: 0, duration: 0.7 },
+        "-=0.3",
+      );
 
       if (paymentSectionRef.current) {
         tl.to(
@@ -324,7 +328,7 @@ export default function Pricing() {
             duration: 0.6,
             stagger: 0.1,
           },
-          "-=0.4"
+          "-=0.4",
         );
       }
 
@@ -350,19 +354,19 @@ export default function Pricing() {
       ref={sectionRef}
       id="pricing"
       aria-label="Pricing Section"
-      className="relative w-full py-28 lg:py-36 bg-[var(--background)] text-white overflow-hidden select-none"
+      className="relative w-full py-10 lg:py-15 bg-background text-white overflow-hidden"
     >
       <div className="absolute inset-0 pointer-events-none z-0">
         <div
           ref={glowRef}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full gold-radial-glow opacity-30 blur-3xl transform-gpu"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 rounded-full gold-radial-glow opacity-30 blur-3xl transform-gpu"
         />
       </div>
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         <div ref={labelRef} className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--primary)]/30 text-xs font-semibold tracking-widest text-[var(--primary)] font-mono uppercase bg-[var(--primary)]/5">
-            <ShieldCheck size={14} className="text-[var(--primary)]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-(--primary)/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-(--primary)/5">
+            <ShieldCheck size={14} className="text-primary" />
             PRICING
           </div>
         </div>
@@ -377,17 +381,19 @@ export default function Pricing() {
 
         <p
           ref={paragraphRef}
-          className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed text-zinc-300 max-w-[650px] text-center mb-16 sm:mb-20"
+          className="text-base sm:text-lg text-text font-normal leading-relaxed max-w-162.5 text-center mb-16 sm:mb-20"
         >
-          Choose the membership plan that fits your learning journey. Every subscription gives you access to our structured curriculum, live sessions, community, and continuous course updates.
+          Choose the membership plan that fits your learning journey. Every
+          subscription gives you access to our structured curriculum, live
+          sessions, community, and continuous course updates.
         </p>
 
         <div
           ref={cardsGridRef}
-          className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-[1080px] mx-auto items-stretch mb-16 sm:mb-20"
+          className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-220 mx-auto items-stretch mb-16 sm:mb-20"
         >
           {PRICING_PLANS.map((plan) => (
-            <div key={plan.id} className="w-full max-w-[520px] mx-auto">
+            <div key={plan.id} className="w-full max-w-130 mx-auto">
               <PricingCard plan={plan} />
             </div>
           ))}
@@ -395,7 +401,7 @@ export default function Pricing() {
 
         <div
           ref={trustStripRef}
-          className="w-full max-w-[1080px] mx-auto glass-panel border border-white/10 rounded-2xl py-4 px-6 mb-12"
+          className="w-full max-w-270 mx-auto glass-panel border border-white/10 rounded-2xl py-4 px-6 mb-12"
         >
           <div className="flex flex-wrap items-center justify-around gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
             {TRUST_ITEMS.map((item) => (
@@ -404,11 +410,11 @@ export default function Pricing() {
           </div>
         </div>
 
-        <div
+        {/* <div
           ref={paymentSectionRef}
           className="flex flex-col items-center space-y-4 text-center"
         >
-          <span className="text-xs font-mono font-semibold uppercase tracking-widest text-[var(--muted)]">
+          <span className="text-xs font-mono font-semibold uppercase tracking-widest text-muted">
             Secure Payments Accepted
           </span>
 
@@ -417,7 +423,7 @@ export default function Pricing() {
               <PaymentMethod key={method} name={method} />
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );

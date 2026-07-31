@@ -11,15 +11,13 @@ export default function MarketTicker() {
   const trackRef = useRef<HTMLDivElement>(null);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
 
-  // -------------------------------------------------------------
-  // Seamless GSAP 60 FPS Continuous Marquee Loop
-  // -------------------------------------------------------------
+  //Marquee Loop
   useEffect(() => {
     const track = trackRef.current;
     if (!track || instruments.length === 0) return;
 
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     if (prefersReducedMotion) {
@@ -56,7 +54,7 @@ export default function MarketTicker() {
 
   const handleMouseLeave = () => {
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
     if (tweenRef.current && !prefersReducedMotion) {
       tweenRef.current.play();
@@ -71,7 +69,7 @@ export default function MarketTicker() {
   return (
     <section
       aria-label="Live Financial Market Ticker"
-      className="relative w-full z-40 bg-[#090909]/90 backdrop-blur-md border-y border-[var(--primary)]/20 py-3 overflow-hidden select-none"
+      className="relative w-full z-40 bg-[#090909]/90 backdrop-blur-md border-y border-(--primary)/20 py-3 overflow-hidden select-none"
     >
       <div
         ref={tickerContainerRef}
@@ -84,10 +82,7 @@ export default function MarketTicker() {
           className="flex items-center whitespace-nowrap transform-gpu"
         >
           {duplicatedItems.map((item, idx) => (
-            <MarketTickerItem
-              key={`${item.id}-${idx}`}
-              item={item}
-            />
+            <MarketTickerItem key={`${item.id}-${idx}`} item={item} />
           ))}
         </div>
       </div>
