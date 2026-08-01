@@ -91,27 +91,27 @@ export default function LoginPage() {
     }
   }
 
-  if (isCheckingAuth) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[#050505] text-white">
-        <div className="flex flex-col items-center gap-3">
-          <div className="relative w-12 h-12 rounded-2xl bg-black/60 border border-[#C9A227]/30 flex items-center justify-center p-2 shadow-[0_0_20px_rgba(201,162,39,0.2)]">
-            <Image
-              src="/images/logo.png"
-              alt="Aegis Logo"
-              width={36}
-              height={36}
-              className="object-contain"
-            />
-          </div>
-          <Loader2 className="h-5 w-5 animate-spin text-[#C9A227]" />
-          <span className="text-xs font-mono text-zinc-400">
-            Verifying session...
-          </span>
-        </div>
-      </main>
-    );
-  }
+  // if (isCheckingAuth) {
+  //   return (
+  //     <main className="flex min-h-screen items-center justify-center bg-[#050505] text-white">
+  //       <div className="flex flex-col items-center gap-3">
+  //         <div className="relative w-12 h-12 rounded-2xl bg-black/60 border border-[#C9A227]/30 flex items-center justify-center p-2 shadow-[0_0_20px_rgba(201,162,39,0.2)]">
+  //           <Image
+  //             src="/images/logo.png"
+  //             alt="Aegis Logo"
+  //             width={36}
+  //             height={36}
+  //             className="object-contain"
+  //           />
+  //         </div>
+  //         <Loader2 className="h-5 w-5 animate-spin text-[#C9A227]" />
+  //         <span className="text-xs font-mono text-zinc-400">
+  //           Verifying session...
+  //         </span>
+  //       </div>
+  //     </main>
+  //   );
+  // }
 
   return (
     <main
@@ -212,7 +212,7 @@ export default function LoginPage() {
 
             {/* Mobile Header Branding */}
             <div className="lg:hidden text-center mb-6">
-              <div className="mx-auto mb-3 relative w-12 h-12 rounded-2xl bg-black/80 border border-[#C9A227]/40 flex items-center justify-center p-2 shadow-lg">
+              {/* <div className="mx-auto mb-3 relative w-12 h-12 rounded-2xl bg-black/80 border border-[#C9A227]/40 flex items-center justify-center p-2 shadow-lg">
                 <Image
                   src="/images/logo.png"
                   alt="Aegis Logo"
@@ -220,7 +220,7 @@ export default function LoginPage() {
                   height={36}
                   className="object-contain"
                 />
-              </div>
+              </div> */}
               <h1 className="text-xl font-extrabold text-white">
                 Welcome Back
               </h1>
