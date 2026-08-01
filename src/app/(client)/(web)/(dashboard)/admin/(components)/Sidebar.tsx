@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -182,9 +183,8 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ------------------------------------------------------------- */}
       {/* MOBILE TRIGGER BUTTON (TOP NAVBAR ITEM ON MOBILE) */}
-      {/* ------------------------------------------------------------- */}
+
       <div className="lg:hidden fixed top-3 left-4 z-40">
         <button
           onClick={() => setIsMobileOpen(true)}
@@ -195,9 +195,8 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* ------------------------------------------------------------- */}
       {/* MOBILE BACKDROP OVERLAY */}
-      {/* ------------------------------------------------------------- */}
+
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
@@ -210,9 +209,8 @@ export default function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* ------------------------------------------------------------- */}
       {/* MOBILE SLIDE-OVER SIDEBAR DRAWER */}
-      {/* ------------------------------------------------------------- */}
+
       <AnimatePresence>
         {isMobileOpen && (
           <motion.aside
@@ -220,7 +218,7 @@ export default function Sidebar() {
             animate={{ x: "0%" }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="lg:hidden fixed top-0 bottom-0 left-0 z-50 w-[280px] bg-[#050505]/98 backdrop-blur-2xl border-r border-white/10 rounded-tr-2xl rounded-br-2xl p-5 flex flex-col justify-between select-none shadow-[10px_0_30px_rgba(0,0,0,0.9)] overflow-y-auto"
+            className="lg:hidden fixed top-0 bottom-0 left-0 z-50 w-70 bg-[#050505]/98 backdrop-blur-2xl border-r border-white/10 rounded-tr-2xl rounded-br-2xl p-5 flex flex-col justify-between select-none shadow-[10px_0_30px_rgba(0,0,0,0.9)] overflow-y-auto"
           >
             <div>
               {/* Header */}
@@ -255,10 +253,7 @@ export default function Sidebar() {
               </div>
 
               {/* Mobile Navigation List */}
-              <nav
-                className="flex flex-col gap-6"
-                aria-label="Mobile Navigation"
-              >
+              <nav className="flex flex-col gap-6" aria-label="Mobile Navigation">
                 {NAV_GROUPS.map((group) => (
                   <div key={group.groupLabel} className="flex flex-col gap-1.5">
                     <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-zinc-500 uppercase px-3 mb-1">
@@ -279,17 +274,13 @@ export default function Sidebar() {
                           className={`relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium ${
                             isActive
                               ? "bg-[#C9A227]/15 text-white font-semibold border border-[#C9A227]/30 shadow-[0_0_15px_rgba(201,162,39,0.15)]"
-                              : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+                              : "text-zinc-400 hover:text-white hover:bg-white/6"
                           }`}
                         >
                           {isActive && (
                             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#C9A227] rounded-r-full shadow-[0_0_8px_rgba(201,162,39,0.8)]" />
                           )}
-                          <span
-                            className={
-                              isActive ? "text-[#C9A227]" : "text-zinc-400"
-                            }
-                          >
+                          <span className={isActive ? "text-[#C9A227]" : "text-zinc-400"}>
                             {item.icon}
                           </span>
                           <span>{item.title}</span>
@@ -303,7 +294,7 @@ export default function Sidebar() {
 
             {/* Bottom Profile & Logout (Mobile) */}
             <div className="pt-4 mt-6 border-t border-white/10 flex flex-col gap-3">
-              <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/5">
+              <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/3 border border-white/5">
                 <div className="relative w-8 h-8 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/40 flex items-center justify-center text-[#C9A227] font-bold text-xs">
                   <span>A</span>
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#050505] absolute bottom-0 right-0" />
@@ -330,9 +321,8 @@ export default function Sidebar() {
         )}
       </AnimatePresence>
 
-      {/* ------------------------------------------------------------- */}
       {/* DESKTOP STICKY SIDEBAR (280px Expanded, 88px Collapsed) */}
-      {/* ------------------------------------------------------------- */}
+
       <motion.aside
         animate={{ width: isCollapsed ? 88 : 280 }}
         transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
@@ -345,10 +335,7 @@ export default function Sidebar() {
               isCollapsed ? "justify-center" : "justify-between px-2"
             }`}
           >
-            <Link
-              href="/admin"
-              className="flex items-center gap-3 group overflow-hidden"
-            >
+            <Link href="/admin" className="flex items-center gap-3 group overflow-hidden">
               <div className="relative w-9 h-9 rounded-xl bg-black/60 border border-[#C9A227]/30 flex items-center justify-center p-1.5 shadow-md shrink-0">
                 <Image
                   src="/images/logo.png"
@@ -437,7 +424,7 @@ export default function Sidebar() {
                         } ${
                           isActive
                             ? "bg-[#C9A227]/12 text-white font-semibold border border-[#C9A227]/25 shadow-[0_0_15px_rgba(201,162,39,0.12)]"
-                            : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+                            : "text-zinc-400 hover:text-white hover:bg-white/6"
                         }`}
                       >
                         {/* Active Left Indicator Line */}
@@ -471,7 +458,7 @@ export default function Sidebar() {
                           animate={{ opacity: 1, x: 0 }}
                           exit={{ opacity: 0, x: -10 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute left-[78px] top-1/2 -translate-y-1/2 z-50 px-3 py-1.5 rounded-lg bg-[#18181b] text-xs font-semibold text-white border border-[#C9A227]/30 shadow-xl whitespace-nowrap pointer-events-none"
+                          className="absolute left-19.5 top-1/2 -translate-y-1/2 z-50 px-3 py-1.5 rounded-lg bg-[#18181b] text-xs font-semibold text-white border border-[#C9A227]/30 shadow-xl whitespace-nowrap pointer-events-none"
                         >
                           {item.title}
                         </motion.div>
@@ -486,7 +473,7 @@ export default function Sidebar() {
           {/* Bottom Section: Profile & Logout */}
           <div className="pt-3 mt-3 border-t border-white/10 flex flex-col gap-2 shrink-0">
             <div
-              className={`flex items-center gap-3 rounded-xl bg-white/[0.03] border border-white/5 transition-all ${
+              className={`flex items-center gap-3 rounded-xl bg-white/3 border border-white/5 transition-all ${
                 isCollapsed ? "p-2 justify-center" : "p-2.5"
               }`}
             >
@@ -496,14 +483,17 @@ export default function Sidebar() {
               </div>
 
               {!isCollapsed && (
-                <div className="flex flex-col overflow-hidden whitespace-nowrap">
+                <Link
+                  href="/admin/profile"
+                  className="flex cursor-pointer flex-col overflow-hidden whitespace-nowrap"
+                >
                   <span className="text-xs font-bold text-white leading-tight text-ellipsis overflow-hidden">
                     Super Admin
                   </span>
                   <span className="text-[10px] font-mono text-zinc-400">
                     Administrator
                   </span>
-                </div>
+                </Link>
               )}
             </div>
 
