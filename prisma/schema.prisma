@@ -1,0 +1,198 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+}
+
+enum AccountStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Admin {
+  id           String         @id @default(cuid())
+  name         String
+  email        String         @unique
+  password     String
+  avatar       String?
+  role         AdminRole      @default(ADMIN)
+  status       AccountStatus  @default(ACTIVE)
+  lastLogin    DateTime?
+  activityLogs ActivityLog[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([email])
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String
+  email         String          @unique
+  phone         String?         @unique
+  discordName   String?         
+  password      String
+  avatar        String?
+  status        AccountStatus   @default(ACTIVE)
+  lastLogin     DateTime?
+  enrollment    Enrollment?
+  orders        Order[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([email])
+  @@index([phone])
+  @@index([discordName])
+}
+
+model Course {
+  id            String          @id @default(cuid())
+  title         String
+  slug          String          @unique
+  description   String?
+  thumbnail     String?
+  status        PublishStatus   @default(DRAFT)
+  displayOrder  Int             @default(0)
+  videos        Video[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([displayOrder])
+}
+
+model Video {
+  id            String          @id @default(cuid())
+  courseId      String
+  course        Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title         String
+  thumbnail     String?
+  videoUrl      String
+  duration      Int             // seconds
+  preview       Boolean         @default(false)
+  displayOrder  Int             @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([courseId])
+}
+
+model SubscriptionPlan {
+  id            String          @id @default(cuid())
+  name          String          @unique
+  price         Decimal         @db.Decimal(10,2)
+  durationDays  Int
+  description   String?
+  badge         String?
+  features      Json
+  status        PublishStatus   @default(PUBLISHED)
+  displayOrder  Int             @default(0)
+  enrollments   Enrollment[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Enrollment {
+  id                  String              @id @default(cuid())
+  userId              String              @unique
+  subscriptionPlanId  String
+  user                User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptionPlan    SubscriptionPlan    @relation(fields: [subscriptionPlanId], references: [id])
+  purchaseDate        DateTime
+  expiryDate          DateTime
+  status              SubscriptionStatus  @default(ACTIVE)
+  notes               String?
+  orders              Order[]
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  @@index([subscriptionPlanId])
+  @@index([status])
+}
+
+model Order {
+  id              String         @id @default(cuid())
+  userId          String
+  enrollmentId    String
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollment      Enrollment     @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  orderNumber     String         @unique
+  paymentId       String?
+  gateway         String?
+  amount          Decimal        @db.Decimal(10,2)
+  paymentMethod   String
+  paymentStatus   PaymentStatus  @default(PENDING)
+  transactionDate DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([enrollmentId])
+}
+
+model Testimonial {
+  id            String         @id @default(cuid())
+  image         String?
+  name          String
+  designation   String?
+  company       String?
+  rating        Int
+  review        String
+  status        PublishStatus  @default(PUBLISHED)
+  displayOrder  Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Certificate {
+  id            String         @id @default(cuid())
+  title         String
+  image         String
+  status        PublishStatus  @default(PUBLISHED)
+  displayOrder  Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model ActivityLog {
+  id          String    @id @default(cuid())
+  adminId     String
+  admin       Admin     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  action      String
+  module      String
+  description String?
+  targetId    String?
+  targetType  String?
+  ipAddress   String?
+  createdAt   DateTime  @default(now())
+
+  @@index([adminId])
+  @@index([module])
+}
