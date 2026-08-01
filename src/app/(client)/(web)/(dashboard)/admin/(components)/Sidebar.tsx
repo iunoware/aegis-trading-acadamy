@@ -52,15 +52,15 @@ const NAV_GROUPS: NavGroup[] = [
     groupLabel: "MANAGEMENT",
     items: [
       {
-        link: "/admin/products",
+        link: "/admin/courses",
         title: "Courses",
         icon: <BookOpen size={20} className="shrink-0" />,
       },
-      {
-        link: "/admin/categories",
-        title: "Categories",
-        icon: <FolderTree size={20} className="shrink-0" />,
-      },
+      // {
+      //   link: "/admin/categories",
+      //   title: "Categories",
+      //   icon: <FolderTree size={20} className="shrink-0" />,
+      // },
       {
         link: "/admin/pricing",
         title: "Pricing",
@@ -255,7 +255,10 @@ export default function Sidebar() {
               </div>
 
               {/* Mobile Navigation List */}
-              <nav className="flex flex-col gap-6" aria-label="Mobile Navigation">
+              <nav
+                className="flex flex-col gap-6"
+                aria-label="Mobile Navigation"
+              >
                 {NAV_GROUPS.map((group) => (
                   <div key={group.groupLabel} className="flex flex-col gap-1.5">
                     <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-zinc-500 uppercase px-3 mb-1">
@@ -273,15 +276,20 @@ export default function Sidebar() {
                           key={item.link}
                           href={item.link}
                           onClick={handleLinkClick}
-                          className={`relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium ${isActive
-                            ? "bg-[#C9A227]/15 text-white font-semibold border border-[#C9A227]/30 shadow-[0_0_15px_rgba(201,162,39,0.15)]"
-                            : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
-                            }`}
+                          className={`relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium ${
+                            isActive
+                              ? "bg-[#C9A227]/15 text-white font-semibold border border-[#C9A227]/30 shadow-[0_0_15px_rgba(201,162,39,0.15)]"
+                              : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
+                          }`}
                         >
                           {isActive && (
                             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-[#C9A227] rounded-r-full shadow-[0_0_8px_rgba(201,162,39,0.8)]" />
                           )}
-                          <span className={isActive ? "text-[#C9A227]" : "text-zinc-400"}>
+                          <span
+                            className={
+                              isActive ? "text-[#C9A227]" : "text-zinc-400"
+                            }
+                          >
                             {item.icon}
                           </span>
                           <span>{item.title}</span>
@@ -333,10 +341,14 @@ export default function Sidebar() {
         <div className="flex flex-col h-full overflow-hidden">
           {/* Header */}
           <div
-            className={`flex items-center pb-5 mb-3 border-b border-white/10 ${isCollapsed ? "justify-center" : "justify-between px-2"
-              }`}
+            className={`flex items-center pb-5 mb-3 border-b border-white/10 ${
+              isCollapsed ? "justify-center" : "justify-between px-2"
+            }`}
           >
-            <Link href="/admin" className="flex items-center gap-3 group overflow-hidden">
+            <Link
+              href="/admin"
+              className="flex items-center gap-3 group overflow-hidden"
+            >
               <div className="relative w-9 h-9 rounded-xl bg-black/60 border border-[#C9A227]/30 flex items-center justify-center p-1.5 shadow-md shrink-0">
                 <Image
                   src="/images/logo.png"
@@ -418,13 +430,15 @@ export default function Sidebar() {
                       <Link
                         href={item.link}
                         onClick={handleLinkClick}
-                        className={`relative flex items-center gap-3 rounded-xl transition-all duration-200 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A227] ${isCollapsed
-                          ? "h-11 w-11 mx-auto justify-center p-0"
-                          : "px-3.5 py-2.5"
-                          } ${isActive
+                        className={`relative flex items-center gap-3 rounded-xl transition-all duration-200 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A227] ${
+                          isCollapsed
+                            ? "h-11 w-11 mx-auto justify-center p-0"
+                            : "px-3.5 py-2.5"
+                        } ${
+                          isActive
                             ? "bg-[#C9A227]/12 text-white font-semibold border border-[#C9A227]/25 shadow-[0_0_15px_rgba(201,162,39,0.12)]"
                             : "text-zinc-400 hover:text-white hover:bg-white/[0.06]"
-                          }`}
+                        }`}
                       >
                         {/* Active Left Indicator Line */}
                         {isActive && (
@@ -433,8 +447,11 @@ export default function Sidebar() {
 
                         {/* Icon */}
                         <span
-                          className={`transition-transform duration-200 group-hover:translate-x-0.5 ${isActive ? "text-[#C9A227]" : "text-zinc-400 group-hover:text-zinc-200"
-                            }`}
+                          className={`transition-transform duration-200 group-hover:translate-x-0.5 ${
+                            isActive
+                              ? "text-[#C9A227]"
+                              : "text-zinc-400 group-hover:text-zinc-200"
+                          }`}
                         >
                           {item.icon}
                         </span>
@@ -469,8 +486,9 @@ export default function Sidebar() {
           {/* Bottom Section: Profile & Logout */}
           <div className="pt-3 mt-3 border-t border-white/10 flex flex-col gap-2 shrink-0">
             <div
-              className={`flex items-center gap-3 rounded-xl bg-white/[0.03] border border-white/5 transition-all ${isCollapsed ? "p-2 justify-center" : "p-2.5"
-                }`}
+              className={`flex items-center gap-3 rounded-xl bg-white/[0.03] border border-white/5 transition-all ${
+                isCollapsed ? "p-2 justify-center" : "p-2.5"
+              }`}
             >
               <div className="relative w-8 h-8 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/40 flex items-center justify-center text-[#C9A227] font-bold text-xs shrink-0 shadow-inner">
                 <span>A</span>
@@ -492,10 +510,11 @@ export default function Sidebar() {
             <button
               onClick={handleLogout}
               aria-label="Logout"
-              className={`flex items-center gap-2 rounded-xl border border-white/10 text-xs font-semibold text-zinc-300 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/30 transition-all duration-200 cursor-pointer ${isCollapsed
-                ? "w-11 h-10 mx-auto justify-center p-0"
-                : "w-full py-2.5 px-3 justify-center"
-                }`}
+              className={`flex items-center gap-2 rounded-xl border border-white/10 text-xs font-semibold text-zinc-300 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/30 transition-all duration-200 cursor-pointer ${
+                isCollapsed
+                  ? "w-11 h-10 mx-auto justify-center p-0"
+                  : "w-full py-2.5 px-3 justify-center"
+              }`}
             >
               <LogOut size={16} className="shrink-0" />
               {!isCollapsed && <span>Logout</span>}
