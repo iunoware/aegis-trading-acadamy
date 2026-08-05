@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { MessageSquareQuote, X, Star, Upload, Sparkles } from "lucide-react";
-import { Testimonial } from "./TestimonialsGrid";
+import { MessageSquareQuote, X, Star } from "lucide-react";
+// import { Testimonial } from "./TestimonialsGrid";
+import type { Testimonial } from "@/types/testimonial";
 import { TestimonialPreview } from "./TestimonialPreview";
 
 interface TestimonialFormModalProps {
@@ -58,12 +60,12 @@ export function TestimonialFormModal({
       gsap.fromTo(
         backdropRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 0.3, ease: "power2.out" }
+        { opacity: 1, duration: 0.3, ease: "power2.out" },
       );
       gsap.fromTo(
         modalRef.current,
         { scale: 0.96, opacity: 0, y: 15 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }
+        { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
       );
     }
   }, [isOpen]);
@@ -151,7 +153,11 @@ export function TestimonialFormModal({
         {/* 2-Column Grid: Form on Left, Live Preview on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 my-5">
           {/* Form Fields (7 Cols) */}
-          <form id="testimonial-form" onSubmit={handleSubmit} className="lg:col-span-7 space-y-4">
+          <form
+            id="testimonial-form"
+            onSubmit={handleSubmit}
+            className="lg:col-span-7 space-y-4"
+          >
             {/* Customer Name & Order */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="sm:col-span-2 space-y-1.5">
@@ -168,7 +174,7 @@ export function TestimonialFormModal({
                 />
               </div>
 
-              <div className="space-y-1.5">
+              {/* <div className="space-y-1.5">
                 <label className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300">
                   Display Order
                 </label>
@@ -176,10 +182,12 @@ export function TestimonialFormModal({
                   type="number"
                   min={1}
                   value={displayOrder}
-                  onChange={(e) => setDisplayOrder(Math.max(1, Number(e.target.value) || 1))}
+                  onChange={(e) =>
+                    setDisplayOrder(Math.max(1, Number(e.target.value) || 1))
+                  }
                   className="w-full bg-[#111113] border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white font-mono font-bold focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all"
                 />
-              </div>
+              </div> */}
             </div>
 
             {/* Designation & Company */}
@@ -213,7 +221,7 @@ export function TestimonialFormModal({
 
             {/* Photo URL & Rating */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="space-y-1.5">
+              {/* <div className="space-y-1.5">
                 <label className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300">
                   Customer Photo URL <span className="text-zinc-500">(Optional)</span>
                 </label>
@@ -224,7 +232,7 @@ export function TestimonialFormModal({
                   onChange={(e) => setAvatarUrl(e.target.value)}
                   className="w-full bg-[#111113] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all"
                 />
-              </div>
+              </div> */}
 
               <div className="space-y-1.5">
                 <label className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300">

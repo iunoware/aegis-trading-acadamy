@@ -6,9 +6,9 @@ import {
   Mail,
   Phone,
   ShieldCheck,
-  Calendar,
-  Clock,
-  User as UserIcon,
+  // Calendar,
+  // Clock,
+  // User as UserIcon,
 } from "lucide-react";
 import { DiscordIcon } from "@/components/Icons";
 
@@ -65,7 +65,7 @@ export function SubscriptionSummary({ enrollment }: SubscriptionSummaryProps) {
       </div>
 
       {/* Current Subscription Card */}
-      <div className="relative rounded-2xl bg-gradient-to-b from-[#151518] to-[#0d0d0f] border border-[#C9A227]/30 p-5 space-y-4 shadow-[0_10px_30px_rgba(0,0,0,0.6)] overflow-hidden">
+      <div className="relative rounded-2xl bg-linear-to-b from-[#151518] to-[#0d0d0f] border border-[#C9A227]/30 p-5 space-y-4 shadow-[0_10px_30px_rgba(0,0,0,0.6)] overflow-hidden">
         {/* Glow */}
         <div className="absolute top-0 right-0 w-40 h-40 bg-[#C9A227]/10 blur-[50px] pointer-events-none rounded-full" />
 
