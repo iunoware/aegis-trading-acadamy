@@ -118,7 +118,7 @@ export function FeatureList({ features, onChange }: FeatureListProps) {
                 title="Move Up"
                 className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-colors ${
                   idx === 0
-                    ? "bg-white/[0.02] border-white/5 text-zinc-700 cursor-not-allowed"
+                    ? "bg-white/2 border-white/5 text-zinc-700 cursor-not-allowed"
                     : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 text-zinc-400 hover:text-white cursor-pointer"
                 }`}
               >
@@ -132,7 +132,7 @@ export function FeatureList({ features, onChange }: FeatureListProps) {
                 title="Move Down"
                 className={`w-7 h-7 rounded-lg border flex items-center justify-center transition-colors ${
                   idx === features.length - 1
-                    ? "bg-white/[0.02] border-white/5 text-zinc-700 cursor-not-allowed"
+                    ? "bg-white/2 border-white/5 text-zinc-700 cursor-not-allowed"
                     : "bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10 text-zinc-400 hover:text-white cursor-pointer"
                 }`}
               >
