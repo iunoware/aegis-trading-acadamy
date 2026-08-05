@@ -15,6 +15,7 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     userName: "Aarav Sharma",
     userEmail: "aarav.sharma@gmail.com",
     userPhone: "+91 98765 43210",
+    discordName: "aarav_trades",
     currentPlan: "Yearly Plan",
     purchaseDate: "15 Jan 2026",
     expiryDate: "15 Jan 2027",
@@ -60,6 +61,7 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     userName: "Priya Patel",
     userEmail: "priya.patel@yahoo.com",
     userPhone: "+91 98123 45678",
+    discordName: "priya_patel",
     currentPlan: "Monthly Plan",
     purchaseDate: "10 Jul 2026",
     expiryDate: "10 Aug 2026",
@@ -105,6 +107,7 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     userName: "Rohan Verma",
     userEmail: "rohan.v@outlook.com",
     userPhone: "+91 97654 32109",
+    discordName: "rohan_fx",
     currentPlan: "Yearly Plan",
     purchaseDate: "28 Feb 2026",
     expiryDate: "28 Feb 2027",
@@ -135,6 +138,7 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     userName: "Sneha Reddy",
     userEmail: "sneha.reddy@gmail.com",
     userPhone: "+91 96543 21098",
+    discordName: "sneha_reddy",
     currentPlan: "Monthly Plan",
     purchaseDate: "01 Jun 2026",
     expiryDate: "01 Jul 2026",
@@ -172,6 +176,7 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     userName: "Vikram Malhotra",
     userEmail: "vikram.m@gmail.com",
     userPhone: "+91 95432 10987",
+    discordName: "vikram_alpha",
     currentPlan: "Yearly Plan",
     purchaseDate: "12 Jul 2026",
     expiryDate: "12 Jul 2027",
@@ -202,6 +207,7 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     userName: "Ananya Iyer",
     userEmail: "ananya.iyer@gmail.com",
     userPhone: "+91 94321 09876",
+    discordName: "ananya_fx",
     currentPlan: "Monthly Plan",
     purchaseDate: "25 Jul 2026",
     expiryDate: "25 Aug 2026",
@@ -232,6 +238,7 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     userName: "Devansh Nambiar",
     userEmail: "devansh.n@yahoo.com",
     userPhone: "+91 93210 98765",
+    discordName: "devansh_trade",
     currentPlan: "Monthly Plan",
     purchaseDate: "05 Apr 2026",
     expiryDate: "05 May 2026",
@@ -262,6 +269,7 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     userName: "Karan Mehta",
     userEmail: "karan.mehta@hotmail.com",
     userPhone: "+91 92109 87654",
+    discordName: "karan_mehta",
     currentPlan: "Yearly Plan",
     purchaseDate: "18 Jul 2026",
     expiryDate: "18 Jul 2027",
@@ -288,7 +296,6 @@ const INITIAL_ENROLLMENTS: Enrollment[] = [
     ],
   },
 ];
-
 export default function EnrollmentsPage() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>(INITIAL_ENROLLMENTS);
   const [selectedEnrollment, setSelectedEnrollment] = useState<Enrollment | null>(null);
@@ -308,7 +315,7 @@ export default function EnrollmentsPage() {
             duration: 0.4,
             stagger: 0.1,
             ease: "power2.out",
-          }
+          },
         );
       }
     }, pageRef);
@@ -320,7 +327,9 @@ export default function EnrollmentsPage() {
   const activeCount = enrollments.filter((e) => e.status === "Active").length;
   const monthlyCount = enrollments.filter((e) => e.currentPlan === "Monthly Plan").length;
   const yearlyCount = enrollments.filter((e) => e.currentPlan === "Yearly Plan").length;
-  const expiringSoonCount = enrollments.filter((e) => e.status === "Expiring Soon").length;
+  const expiringSoonCount = enrollments.filter(
+    (e) => e.status === "Expiring Soon",
+  ).length;
   const expiredCount = enrollments.filter((e) => e.status === "Expired").length;
 
   // Handlers
@@ -367,7 +376,7 @@ export default function EnrollmentsPage() {
           return updated;
         }
         return e;
-      })
+      }),
     );
 
     toast.success(`Extended subscription by ${days} days!`);
@@ -375,7 +384,7 @@ export default function EnrollmentsPage() {
 
   const handleChangePlan = (
     enrollmentId: string,
-    newPlan: "Monthly Plan" | "Yearly Plan"
+    newPlan: "Monthly Plan" | "Yearly Plan",
   ) => {
     setEnrollments((prev) =>
       prev.map((e) => {
@@ -403,7 +412,7 @@ export default function EnrollmentsPage() {
           return updated;
         }
         return e;
-      })
+      }),
     );
 
     toast.success(`Plan updated to ${newPlan}!`);
@@ -441,7 +450,7 @@ export default function EnrollmentsPage() {
           return updated;
         }
         return e;
-      })
+      }),
     );
 
     toast.info(`Subscription status updated.`);
@@ -473,7 +482,7 @@ export default function EnrollmentsPage() {
           return updated;
         }
         return e;
-      })
+      }),
     );
 
     toast.success("Admin notes saved successfully!");
@@ -486,8 +495,8 @@ export default function EnrollmentsPage() {
         .concat(
           enrollments.map(
             (e) =>
-              `"${e.id}","${e.userName}","${e.userEmail}","${e.userPhone}","${e.currentPlan}","${e.status}","${e.purchaseDate}","${e.expiryDate}"`
-          )
+              `"${e.id}","${e.userName}","${e.userEmail}","${e.userPhone}","${e.currentPlan}","${e.status}","${e.purchaseDate}","${e.expiryDate}"`,
+          ),
         )
         .join("\n");
 

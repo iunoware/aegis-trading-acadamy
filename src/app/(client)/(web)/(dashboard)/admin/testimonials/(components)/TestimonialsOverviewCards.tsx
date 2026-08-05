@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useEffect, useRef } from "react";
@@ -70,7 +71,7 @@ export function TestimonialsOverviewCards({
             duration: 0.4,
             stagger: 0.08,
             ease: "power2.out",
-          }
+          },
         );
       }
 
@@ -98,10 +99,7 @@ export function TestimonialsOverviewCards({
   }, [totalCount, publishedCount, hiddenCount]);
 
   return (
-    <div
-      ref={containerRef}
-      className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-    >
+    <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {kpis.map((kpi, idx) => {
         const IconComponent = kpi.icon;
         return (

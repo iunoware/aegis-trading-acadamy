@@ -214,6 +214,19 @@ enum UserRole {
   STUDENT
 }
 
+enum DeletionAction {
+  HARD_DELETE
+  ANONYMIZE
+}
+
+enum DeletionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  RESTORED
+}
+
 enum AccountStatus {
   ACTIVE
   INACTIVE
@@ -428,7 +441,8 @@ model User {
   deletedBy    User?   @relation("UserDeletedBy", fields: [deletedById], references: [id], onDelete: SetNull)
   deletedUsers User[]  @relation("UserDeletedBy")
 
-  deletedAt DateTime?
+  deletedAt    DateTime?
+  anonymizedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -440,6 +454,7 @@ model User {
   @@index([status])
   @@index([createdAt])
   @@index([deletedAt])
+  @@index([anonymizedAt])
   @@index([role, status])
 }
 
@@ -1156,22 +1171,26 @@ model DeletionQueue {
   entityType String
   entityId   String
 
+  action DeletionAction
+  status DeletionStatus @default(PENDING)
+
   deletedById String?
   deletedAt   DateTime @default(now())
 
-  // Usually deletedAt + 25 days
   scheduledPurgeAt DateTime
 
-  restoredAt DateTime?
-  purgedAt   DateTime?
+  processedAt DateTime?
+  restoredAt  DateTime?
+  failedAt    DateTime?
+
+  failureReason String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([entityType, entityId])
-  @@index([entityType])
-  @@index([entityId])
+  @@index([status])
+  @@index([action])
   @@index([scheduledPurgeAt])
-  @@index([restoredAt])
-  @@index([purgedAt])
+  @@index([status, scheduledPurgeAt])
 }

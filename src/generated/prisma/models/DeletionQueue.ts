@@ -28,11 +28,15 @@ export type DeletionQueueMinAggregateOutputType = {
   id: string | null
   entityType: string | null
   entityId: string | null
+  action: $Enums.DeletionAction | null
+  status: $Enums.DeletionStatus | null
   deletedById: string | null
   deletedAt: Date | null
   scheduledPurgeAt: Date | null
+  processedAt: Date | null
   restoredAt: Date | null
-  purgedAt: Date | null
+  failedAt: Date | null
+  failureReason: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -41,11 +45,15 @@ export type DeletionQueueMaxAggregateOutputType = {
   id: string | null
   entityType: string | null
   entityId: string | null
+  action: $Enums.DeletionAction | null
+  status: $Enums.DeletionStatus | null
   deletedById: string | null
   deletedAt: Date | null
   scheduledPurgeAt: Date | null
+  processedAt: Date | null
   restoredAt: Date | null
-  purgedAt: Date | null
+  failedAt: Date | null
+  failureReason: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,11 +62,15 @@ export type DeletionQueueCountAggregateOutputType = {
   id: number
   entityType: number
   entityId: number
+  action: number
+  status: number
   deletedById: number
   deletedAt: number
   scheduledPurgeAt: number
+  processedAt: number
   restoredAt: number
-  purgedAt: number
+  failedAt: number
+  failureReason: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -69,11 +81,15 @@ export type DeletionQueueMinAggregateInputType = {
   id?: true
   entityType?: true
   entityId?: true
+  action?: true
+  status?: true
   deletedById?: true
   deletedAt?: true
   scheduledPurgeAt?: true
+  processedAt?: true
   restoredAt?: true
-  purgedAt?: true
+  failedAt?: true
+  failureReason?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,11 +98,15 @@ export type DeletionQueueMaxAggregateInputType = {
   id?: true
   entityType?: true
   entityId?: true
+  action?: true
+  status?: true
   deletedById?: true
   deletedAt?: true
   scheduledPurgeAt?: true
+  processedAt?: true
   restoredAt?: true
-  purgedAt?: true
+  failedAt?: true
+  failureReason?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,11 +115,15 @@ export type DeletionQueueCountAggregateInputType = {
   id?: true
   entityType?: true
   entityId?: true
+  action?: true
+  status?: true
   deletedById?: true
   deletedAt?: true
   scheduledPurgeAt?: true
+  processedAt?: true
   restoredAt?: true
-  purgedAt?: true
+  failedAt?: true
+  failureReason?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -181,11 +205,15 @@ export type DeletionQueueGroupByOutputType = {
   id: string
   entityType: string
   entityId: string
+  action: $Enums.DeletionAction
+  status: $Enums.DeletionStatus
   deletedById: string | null
   deletedAt: Date
   scheduledPurgeAt: Date
+  processedAt: Date | null
   restoredAt: Date | null
-  purgedAt: Date | null
+  failedAt: Date | null
+  failureReason: string | null
   createdAt: Date
   updatedAt: Date
   _count: DeletionQueueCountAggregateOutputType | null
@@ -215,11 +243,15 @@ export type DeletionQueueWhereInput = {
   id?: Prisma.StringFilter<"DeletionQueue"> | string
   entityType?: Prisma.StringFilter<"DeletionQueue"> | string
   entityId?: Prisma.StringFilter<"DeletionQueue"> | string
+  action?: Prisma.EnumDeletionActionFilter<"DeletionQueue"> | $Enums.DeletionAction
+  status?: Prisma.EnumDeletionStatusFilter<"DeletionQueue"> | $Enums.DeletionStatus
   deletedById?: Prisma.StringNullableFilter<"DeletionQueue"> | string | null
   deletedAt?: Prisma.DateTimeFilter<"DeletionQueue"> | Date | string
   scheduledPurgeAt?: Prisma.DateTimeFilter<"DeletionQueue"> | Date | string
+  processedAt?: Prisma.DateTimeNullableFilter<"DeletionQueue"> | Date | string | null
   restoredAt?: Prisma.DateTimeNullableFilter<"DeletionQueue"> | Date | string | null
-  purgedAt?: Prisma.DateTimeNullableFilter<"DeletionQueue"> | Date | string | null
+  failedAt?: Prisma.DateTimeNullableFilter<"DeletionQueue"> | Date | string | null
+  failureReason?: Prisma.StringNullableFilter<"DeletionQueue"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DeletionQueue"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DeletionQueue"> | Date | string
 }
@@ -228,11 +260,15 @@ export type DeletionQueueOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
+  action?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   scheduledPurgeAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   restoredAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  purgedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  failureReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -245,11 +281,15 @@ export type DeletionQueueWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DeletionQueueWhereInput | Prisma.DeletionQueueWhereInput[]
   entityType?: Prisma.StringFilter<"DeletionQueue"> | string
   entityId?: Prisma.StringFilter<"DeletionQueue"> | string
+  action?: Prisma.EnumDeletionActionFilter<"DeletionQueue"> | $Enums.DeletionAction
+  status?: Prisma.EnumDeletionStatusFilter<"DeletionQueue"> | $Enums.DeletionStatus
   deletedById?: Prisma.StringNullableFilter<"DeletionQueue"> | string | null
   deletedAt?: Prisma.DateTimeFilter<"DeletionQueue"> | Date | string
   scheduledPurgeAt?: Prisma.DateTimeFilter<"DeletionQueue"> | Date | string
+  processedAt?: Prisma.DateTimeNullableFilter<"DeletionQueue"> | Date | string | null
   restoredAt?: Prisma.DateTimeNullableFilter<"DeletionQueue"> | Date | string | null
-  purgedAt?: Prisma.DateTimeNullableFilter<"DeletionQueue"> | Date | string | null
+  failedAt?: Prisma.DateTimeNullableFilter<"DeletionQueue"> | Date | string | null
+  failureReason?: Prisma.StringNullableFilter<"DeletionQueue"> | string | null
   createdAt?: Prisma.DateTimeFilter<"DeletionQueue"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"DeletionQueue"> | Date | string
 }, "id" | "entityType_entityId">
@@ -258,11 +298,15 @@ export type DeletionQueueOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
+  action?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   scheduledPurgeAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   restoredAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  purgedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  failureReason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DeletionQueueCountOrderByAggregateInput
@@ -277,11 +321,15 @@ export type DeletionQueueScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"DeletionQueue"> | string
   entityType?: Prisma.StringWithAggregatesFilter<"DeletionQueue"> | string
   entityId?: Prisma.StringWithAggregatesFilter<"DeletionQueue"> | string
+  action?: Prisma.EnumDeletionActionWithAggregatesFilter<"DeletionQueue"> | $Enums.DeletionAction
+  status?: Prisma.EnumDeletionStatusWithAggregatesFilter<"DeletionQueue"> | $Enums.DeletionStatus
   deletedById?: Prisma.StringNullableWithAggregatesFilter<"DeletionQueue"> | string | null
   deletedAt?: Prisma.DateTimeWithAggregatesFilter<"DeletionQueue"> | Date | string
   scheduledPurgeAt?: Prisma.DateTimeWithAggregatesFilter<"DeletionQueue"> | Date | string
+  processedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DeletionQueue"> | Date | string | null
   restoredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DeletionQueue"> | Date | string | null
-  purgedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DeletionQueue"> | Date | string | null
+  failedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DeletionQueue"> | Date | string | null
+  failureReason?: Prisma.StringNullableWithAggregatesFilter<"DeletionQueue"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DeletionQueue"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"DeletionQueue"> | Date | string
 }
@@ -290,11 +338,15 @@ export type DeletionQueueCreateInput = {
   id?: string
   entityType: string
   entityId: string
+  action: $Enums.DeletionAction
+  status?: $Enums.DeletionStatus
   deletedById?: string | null
   deletedAt?: Date | string
   scheduledPurgeAt: Date | string
+  processedAt?: Date | string | null
   restoredAt?: Date | string | null
-  purgedAt?: Date | string | null
+  failedAt?: Date | string | null
+  failureReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -303,11 +355,15 @@ export type DeletionQueueUncheckedCreateInput = {
   id?: string
   entityType: string
   entityId: string
+  action: $Enums.DeletionAction
+  status?: $Enums.DeletionStatus
   deletedById?: string | null
   deletedAt?: Date | string
   scheduledPurgeAt: Date | string
+  processedAt?: Date | string | null
   restoredAt?: Date | string | null
-  purgedAt?: Date | string | null
+  failedAt?: Date | string | null
+  failureReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -316,11 +372,15 @@ export type DeletionQueueUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.EnumDeletionActionFieldUpdateOperationsInput | $Enums.DeletionAction
+  status?: Prisma.EnumDeletionStatusFieldUpdateOperationsInput | $Enums.DeletionStatus
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduledPurgeAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   restoredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -329,11 +389,15 @@ export type DeletionQueueUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.EnumDeletionActionFieldUpdateOperationsInput | $Enums.DeletionAction
+  status?: Prisma.EnumDeletionStatusFieldUpdateOperationsInput | $Enums.DeletionStatus
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduledPurgeAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   restoredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -342,11 +406,15 @@ export type DeletionQueueCreateManyInput = {
   id?: string
   entityType: string
   entityId: string
+  action: $Enums.DeletionAction
+  status?: $Enums.DeletionStatus
   deletedById?: string | null
   deletedAt?: Date | string
   scheduledPurgeAt: Date | string
+  processedAt?: Date | string | null
   restoredAt?: Date | string | null
-  purgedAt?: Date | string | null
+  failedAt?: Date | string | null
+  failureReason?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -355,11 +423,15 @@ export type DeletionQueueUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.EnumDeletionActionFieldUpdateOperationsInput | $Enums.DeletionAction
+  status?: Prisma.EnumDeletionStatusFieldUpdateOperationsInput | $Enums.DeletionStatus
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduledPurgeAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   restoredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -368,11 +440,15 @@ export type DeletionQueueUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.EnumDeletionActionFieldUpdateOperationsInput | $Enums.DeletionAction
+  status?: Prisma.EnumDeletionStatusFieldUpdateOperationsInput | $Enums.DeletionStatus
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduledPurgeAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  processedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   restoredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  purgedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failureReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -386,11 +462,15 @@ export type DeletionQueueCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
+  action?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   scheduledPurgeAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrder
   restoredAt?: Prisma.SortOrder
-  purgedAt?: Prisma.SortOrder
+  failedAt?: Prisma.SortOrder
+  failureReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -399,11 +479,15 @@ export type DeletionQueueMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
+  action?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   scheduledPurgeAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrder
   restoredAt?: Prisma.SortOrder
-  purgedAt?: Prisma.SortOrder
+  failedAt?: Prisma.SortOrder
+  failureReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -412,13 +496,25 @@ export type DeletionQueueMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
+  action?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   scheduledPurgeAt?: Prisma.SortOrder
+  processedAt?: Prisma.SortOrder
   restoredAt?: Prisma.SortOrder
-  purgedAt?: Prisma.SortOrder
+  failedAt?: Prisma.SortOrder
+  failureReason?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type EnumDeletionActionFieldUpdateOperationsInput = {
+  set?: $Enums.DeletionAction
+}
+
+export type EnumDeletionStatusFieldUpdateOperationsInput = {
+  set?: $Enums.DeletionStatus
 }
 
 
@@ -427,11 +523,15 @@ export type DeletionQueueSelect<ExtArgs extends runtime.Types.Extensions.Interna
   id?: boolean
   entityType?: boolean
   entityId?: boolean
+  action?: boolean
+  status?: boolean
   deletedById?: boolean
   deletedAt?: boolean
   scheduledPurgeAt?: boolean
+  processedAt?: boolean
   restoredAt?: boolean
-  purgedAt?: boolean
+  failedAt?: boolean
+  failureReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["deletionQueue"]>
@@ -440,11 +540,15 @@ export type DeletionQueueSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   entityType?: boolean
   entityId?: boolean
+  action?: boolean
+  status?: boolean
   deletedById?: boolean
   deletedAt?: boolean
   scheduledPurgeAt?: boolean
+  processedAt?: boolean
   restoredAt?: boolean
-  purgedAt?: boolean
+  failedAt?: boolean
+  failureReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["deletionQueue"]>
@@ -453,11 +557,15 @@ export type DeletionQueueSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   id?: boolean
   entityType?: boolean
   entityId?: boolean
+  action?: boolean
+  status?: boolean
   deletedById?: boolean
   deletedAt?: boolean
   scheduledPurgeAt?: boolean
+  processedAt?: boolean
   restoredAt?: boolean
-  purgedAt?: boolean
+  failedAt?: boolean
+  failureReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["deletionQueue"]>
@@ -466,16 +574,20 @@ export type DeletionQueueSelectScalar = {
   id?: boolean
   entityType?: boolean
   entityId?: boolean
+  action?: boolean
+  status?: boolean
   deletedById?: boolean
   deletedAt?: boolean
   scheduledPurgeAt?: boolean
+  processedAt?: boolean
   restoredAt?: boolean
-  purgedAt?: boolean
+  failedAt?: boolean
+  failureReason?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DeletionQueueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "entityType" | "entityId" | "deletedById" | "deletedAt" | "scheduledPurgeAt" | "restoredAt" | "purgedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["deletionQueue"]>
+export type DeletionQueueOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "entityType" | "entityId" | "action" | "status" | "deletedById" | "deletedAt" | "scheduledPurgeAt" | "processedAt" | "restoredAt" | "failedAt" | "failureReason" | "createdAt" | "updatedAt", ExtArgs["result"]["deletionQueue"]>
 
 export type $DeletionQueuePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "DeletionQueue"
@@ -484,11 +596,15 @@ export type $DeletionQueuePayload<ExtArgs extends runtime.Types.Extensions.Inter
     id: string
     entityType: string
     entityId: string
+    action: $Enums.DeletionAction
+    status: $Enums.DeletionStatus
     deletedById: string | null
     deletedAt: Date
     scheduledPurgeAt: Date
+    processedAt: Date | null
     restoredAt: Date | null
-    purgedAt: Date | null
+    failedAt: Date | null
+    failureReason: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["deletionQueue"]>
@@ -917,11 +1033,15 @@ export interface DeletionQueueFieldRefs {
   readonly id: Prisma.FieldRef<"DeletionQueue", 'String'>
   readonly entityType: Prisma.FieldRef<"DeletionQueue", 'String'>
   readonly entityId: Prisma.FieldRef<"DeletionQueue", 'String'>
+  readonly action: Prisma.FieldRef<"DeletionQueue", 'DeletionAction'>
+  readonly status: Prisma.FieldRef<"DeletionQueue", 'DeletionStatus'>
   readonly deletedById: Prisma.FieldRef<"DeletionQueue", 'String'>
   readonly deletedAt: Prisma.FieldRef<"DeletionQueue", 'DateTime'>
   readonly scheduledPurgeAt: Prisma.FieldRef<"DeletionQueue", 'DateTime'>
+  readonly processedAt: Prisma.FieldRef<"DeletionQueue", 'DateTime'>
   readonly restoredAt: Prisma.FieldRef<"DeletionQueue", 'DateTime'>
-  readonly purgedAt: Prisma.FieldRef<"DeletionQueue", 'DateTime'>
+  readonly failedAt: Prisma.FieldRef<"DeletionQueue", 'DateTime'>
+  readonly failureReason: Prisma.FieldRef<"DeletionQueue", 'String'>
   readonly createdAt: Prisma.FieldRef<"DeletionQueue", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"DeletionQueue", 'DateTime'>
 }

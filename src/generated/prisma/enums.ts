@@ -18,6 +18,25 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const DeletionAction = {
+  HARD_DELETE: 'HARD_DELETE',
+  ANONYMIZE: 'ANONYMIZE'
+} as const
+
+export type DeletionAction = (typeof DeletionAction)[keyof typeof DeletionAction]
+
+
+export const DeletionStatus = {
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  RESTORED: 'RESTORED'
+} as const
+
+export type DeletionStatus = (typeof DeletionStatus)[keyof typeof DeletionStatus]
+
+
 export const AccountStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',

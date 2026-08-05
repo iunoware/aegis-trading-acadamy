@@ -80,9 +80,8 @@ export default function Footer() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* ========================================================= */}
         {/* TOP CTA BOX */}
-        {/* ========================================================= */}
+
         <div
           ref={ctaBoxRef}
           className="rounded-3xl glass-panel p-8 sm:p-12 border border-(--primary)/30 text-center flex flex-col items-center mb-20 shadow-[0_20px_50px_rgba(0,0,0,0.6),0_0_35px_rgba(212,175,55,0.15)]"
@@ -125,9 +124,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ========================================================= */}
         {/* FOOTER CONTENT (5 Columns Grid) */}
-        {/* ========================================================= */}
+
         <div
           ref={columnsRef}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-16 border-b border-white/10"
@@ -327,9 +325,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ========================================================= */}
         {/* BOTTOM BAR */}
-        {/* ========================================================= */}
+
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-zinc-400 gap-4">
           <div>
             &copy; {new Date().getFullYear()} Aegis Trading Academy. All rights reserved.

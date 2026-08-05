@@ -1,9 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Star, Quote, Eye, Sparkles } from "lucide-react";
-import { Testimonial } from "./TestimonialsGrid";
+import { Star, Quote, Eye } from "lucide-react";
+// import { Testimonial } from "./TestimonialsGrid";
+import type { Testimonial } from "@/types/testimonial";
 
 interface TestimonialPreviewProps {
   testimonial: Partial<Testimonial>;
@@ -35,7 +37,7 @@ export function TestimonialPreview({ testimonial }: TestimonialPreviewProps) {
       gsap.fromTo(
         cardRef.current,
         { scale: 0.98, opacity: 0.9 },
-        { scale: 1, opacity: 1, duration: 0.35, ease: "power2.out" }
+        { scale: 1, opacity: 1, duration: 0.35, ease: "power2.out" },
       );
     }
   }, [testimonial]);
@@ -63,14 +65,14 @@ export function TestimonialPreview({ testimonial }: TestimonialPreviewProps) {
               : "bg-zinc-500/15 text-zinc-400 border border-zinc-500/30"
           }`}
         >
-          {status === "Published" ? "Live Preview" : "Hidden Preview"}
+          {status === "Published" ? "Preview" : "Hidden Preview"}
         </span>
       </div>
 
       {/* Public Card Container */}
       <div
         ref={cardRef}
-        className="rounded-2xl bg-gradient-to-b from-[#141417] to-[#0a0a0c] border border-[#C9A227]/30 p-5 space-y-4 shadow-xl relative z-10"
+        className="rounded-2xl bg-linear-to-b from-[#141417] to-[#0a0a0c] border border-[#C9A227]/30 p-5 space-y-4 shadow-xl relative z-10"
       >
         {/* Top Quotes & Stars Row */}
         <div className="flex items-center justify-between">
@@ -91,7 +93,7 @@ export function TestimonialPreview({ testimonial }: TestimonialPreviewProps) {
         </div>
 
         {/* Review Content */}
-        <p className="text-xs text-zinc-200 leading-relaxed font-sans min-h-[56px] italic">
+        <p className="text-xs text-zinc-200 leading-relaxed font-sans min-h-14 italic">
           &ldquo;{reviewText}&rdquo;
         </p>
 
@@ -110,9 +112,7 @@ export function TestimonialPreview({ testimonial }: TestimonialPreviewProps) {
           )}
 
           <div className="overflow-hidden">
-            <h5 className="text-xs font-bold text-white font-sans truncate">
-              {name}
-            </h5>
+            <h5 className="text-xs font-bold text-white font-sans truncate">{name}</h5>
             <span className="text-[10px] font-mono text-[#C9A227] truncate block">
               {designation}
               {designation && company ? " • " : ""}

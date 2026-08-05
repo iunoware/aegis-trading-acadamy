@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import React from "react";
 import { User } from "./UsersTable";
 import { Mail, Phone, Calendar, Clock, User as UserIcon } from "lucide-react";
 
@@ -61,7 +61,9 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
           <div className="p-2.5 rounded-xl bg-[#09090b] border border-white/5 flex items-center gap-2">
             <Phone size={14} className="text-[#C9A227] shrink-0" />
             <div>
-              <span className="text-[10px] text-zinc-500 block uppercase">Phone Number</span>
+              <span className="text-[10px] text-zinc-500 block uppercase">
+                Phone Number
+              </span>
               <span className="text-zinc-200 font-medium">{user.phone}</span>
             </div>
           </div>
@@ -69,7 +71,9 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
           <div className="p-2.5 rounded-xl bg-[#09090b] border border-white/5 flex items-center gap-2">
             <Calendar size={14} className="text-[#C9A227] shrink-0" />
             <div>
-              <span className="text-[10px] text-zinc-500 block uppercase">Registration Date</span>
+              <span className="text-[10px] text-zinc-500 block uppercase">
+                Registration Date
+              </span>
               <span className="text-zinc-200 font-medium">{user.joinedDate}</span>
             </div>
           </div>
@@ -77,8 +81,10 @@ export function UserProfileCard({ user }: UserProfileCardProps) {
           <div className="p-2.5 rounded-xl bg-[#09090b] border border-white/5 flex items-center gap-2">
             <Clock size={14} className="text-[#C9A227] shrink-0" />
             <div>
-              <span className="text-[10px] text-zinc-500 block uppercase">Last Login</span>
-              <span className="text-zinc-200 font-medium">{user.lastLogin}</span>
+              {/* <span className="text-[10px] text-zinc-500 block uppercase">Last Login</span>
+              <span className="text-zinc-200 font-medium">{user.lastLogin}</span> */}
+              <span className="text-[10px] text-zinc-500 block uppercase">Discord</span>
+              <span className="text-zinc-200 font-medium">{user.discordName}</span>
             </div>
           </div>
         </div>

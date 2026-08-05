@@ -113,6 +113,7 @@ export const UserScalarFieldEnum = {
   paytmCustomerId: 'paytmCustomerId',
   deletedById: 'deletedById',
   deletedAt: 'deletedAt',
+  anonymizedAt: 'anonymizedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -541,11 +542,15 @@ export const DeletionQueueScalarFieldEnum = {
   id: 'id',
   entityType: 'entityType',
   entityId: 'entityId',
+  action: 'action',
+  status: 'status',
   deletedById: 'deletedById',
   deletedAt: 'deletedAt',
   scheduledPurgeAt: 'scheduledPurgeAt',
+  processedAt: 'processedAt',
   restoredAt: 'restoredAt',
-  purgedAt: 'purgedAt',
+  failedAt: 'failedAt',
+  failureReason: 'failureReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

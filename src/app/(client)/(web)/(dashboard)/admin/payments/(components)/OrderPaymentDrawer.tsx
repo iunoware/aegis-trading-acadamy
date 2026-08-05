@@ -17,6 +17,7 @@ import type {
   OrderPaymentRecord,
 } from "./types";
 import { ExtendExpiryForm } from "./ExtendExpiryForm";
+import { DiscordIcon } from "@/components/Icons";
 
 interface OrderPaymentDrawerProps {
   record: OrderPaymentRecord | null;
@@ -63,7 +64,7 @@ export function OrderPaymentDrawer({
   const closeDrawer = () => onClose();
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden ">
+    <div className="fixed inset-0 z-50 overflow-hidden">
       <div onClick={closeDrawer} className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
 
       <aside className="fixed bottom-0 right-0 top-0 z-50 w-full max-w-2xl overflow-y-auto border-l border-white/10 bg-[#050507]/95 p-5 shadow-[-10px_0_40px_rgba(0,0,0,0.9)] backdrop-blur-2xl sm:p-6">
@@ -99,6 +100,9 @@ export function OrderPaymentDrawer({
                   </p>
                   <p className="flex items-center gap-2">
                     <Phone size={12} /> {record.userPhone}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <DiscordIcon className="h-3.5" /> {record.discordName}
                   </p>
                 </div>
               </div>

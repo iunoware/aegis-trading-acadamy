@@ -1,85 +1,83 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import axios from "axios";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  Star,
-  ChevronLeft,
-  ChevronRight,
-  Quote,
-  ShieldCheck,
-} from "lucide-react";
-
+import { Star, ChevronLeft, ChevronRight, Quote, ShieldCheck } from "lucide-react";
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export interface TestimonialData {
+interface TestimonialData {
   id: string;
-  quote: string;
-  name: string;
-  role: string;
-  memberSince: string;
+  customerName: string;
+  designation?: string;
+  company?: string;
+  avatarUrl?: string;
   rating: number;
+  reviewText: string;
+  status: "Published" | "Hidden";
+  displayOrder: number;
+  createdAt: string;
 }
 
-const TESTIMONIALS: TestimonialData[] = [
-  {
-    id: "t1",
-    quote:
-      "I joined Aegis with almost no understanding of market structure. The structured roadmap and live sessions completely changed the way I approach trading.",
-    name: "Rohan Sharma",
-    role: "SWING TRADER",
-    memberSince: "Member Since 2024",
-    rating: 5,
-  },
-  {
-    id: "t2",
-    quote:
-      "Risk management was my biggest weakness. Aegis gave me the discipline and systematic process required to protect capital and trade with confidence.",
-    name: "Ananya Verma",
-    role: "INTRADAY TRADER",
-    memberSince: "Member Since 2025",
-    rating: 5,
-  },
-  {
-    id: "t3",
-    quote:
-      "The mentorship and community support are unmatched. Being able to review real market setups with experienced traders cut years off my learning curve.",
-    name: "Vikram Sengupta",
-    role: "QUANTITATIVE TRADER",
-    memberSince: "Member Since 2024",
-    rating: 5,
-  },
-  {
-    id: "t4",
-    quote:
-      "Aegis isn't selling dream promises or magical indicators. It's real institutional education focused on price action and discipline.",
-    name: "Karan Malhotra",
-    role: "PRICE ACTION TRADER",
-    memberSince: "Member Since 2025",
-    rating: 5,
-  },
-  {
-    id: "t5",
-    quote:
-      "From liquidity concepts to trading psychology, every single module is engineered with depth and precision. Worth every investment.",
-    name: "Priya Nair",
-    role: "INDEX TRADER",
-    memberSince: "Member Since 2024",
-    rating: 5,
-  },
-  {
-    id: "t6",
-    quote:
-      "The live market sessions gave me the confidence to execute my strategy under real market conditions without emotional bias.",
-    name: "Aditya Patel",
-    role: "OPTIONS TRADER",
-    memberSince: "Member Since 2025",
-    rating: 5,
-  },
-];
+// const TESTIMONIALS: TestimonialData[] = [
+//   {
+//     id: "t1",
+//     quote:
+//       "I joined Aegis with almost no understanding of market structure. The structured roadmap and live sessions completely changed the way I approach trading.",
+//     name: "Rohan Sharma",
+//     role: "SWING TRADER",
+//     memberSince: "Member Since 2024",
+//     rating: 5,
+//   },
+//   {
+//     id: "t2",
+//     quote:
+//       "Risk management was my biggest weakness. Aegis gave me the discipline and systematic process required to protect capital and trade with confidence.",
+//     name: "Ananya Verma",
+//     role: "INTRADAY TRADER",
+//     memberSince: "Member Since 2025",
+//     rating: 5,
+//   },
+//   {
+//     id: "t3",
+//     quote:
+//       "The mentorship and community support are unmatched. Being able to review real market setups with experienced traders cut years off my learning curve.",
+//     name: "Vikram Sengupta",
+//     role: "QUANTITATIVE TRADER",
+//     memberSince: "Member Since 2024",
+//     rating: 5,
+//   },
+//   {
+//     id: "t4",
+//     quote:
+//       "Aegis isn't selling dream promises or magical indicators. It's real institutional education focused on price action and discipline.",
+//     name: "Karan Malhotra",
+//     role: "PRICE ACTION TRADER",
+//     memberSince: "Member Since 2025",
+//     rating: 5,
+//   },
+//   {
+//     id: "t5",
+//     quote:
+//       "From liquidity concepts to trading psychology, every single module is engineered with depth and precision. Worth every investment.",
+//     name: "Priya Nair",
+//     role: "INDEX TRADER",
+//     memberSince: "Member Since 2024",
+//     rating: 5,
+//   },
+//   {
+//     id: "t6",
+//     quote:
+//       "The live market sessions gave me the confidence to execute my strategy under real market conditions without emotional bias.",
+//     name: "Aditya Patel",
+//     role: "OPTIONS TRADER",
+//     memberSince: "Member Since 2025",
+//     rating: 5,
+//   },
+// ];
 
 export default function Testimonials() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -90,22 +88,47 @@ export default function Testimonials() {
   const controlsRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
+  const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const handleNext = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await axios.get<TestimonialData[]>("/api/testimonial");
+
+        const publishedTestimonials = response.data.filter(
+          (testimonial) => testimonial.status === "Published",
+        );
+
+        setTestimonials(publishedTestimonials);
+      } catch (error) {
+        console.error("Failed to fetch testimonials:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTestimonials();
   }, []);
+
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) =>
+      testimonials.length > 0 ? (prev + 1) % testimonials.length : 0,
+    );
+  }, [testimonials.length]);
 
   const handlePrev = useCallback(() => {
-    setActiveIndex(
-      (prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length,
+    setActiveIndex((prev) =>
+      testimonials.length > 0
+        ? (prev - 1 + testimonials.length) % testimonials.length
+        : 0,
     );
-  }, []);
+  }, [testimonials.length]);
 
-  // -------------------------------------------------------------
   // Auto-Slide Loop (Every 6 Seconds, Pauses on Hover)
-  // -------------------------------------------------------------
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -119,9 +142,8 @@ export default function Testimonials() {
     return () => clearInterval(timer);
   }, [isPaused, handleNext]);
 
-  // -------------------------------------------------------------
   // GSAP Animations with ScrollTrigger
-  // -------------------------------------------------------------
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -160,11 +182,7 @@ export default function Testimonials() {
       tl.to(labelRef.current, { opacity: 1, y: 0, duration: 0.7 })
         .to(headingRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.4")
         .to(paragraphRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.5")
-        .to(
-          carouselFrameRef.current,
-          { opacity: 1, y: 0, duration: 0.9 },
-          "-=0.4",
-        )
+        .to(carouselFrameRef.current, { opacity: 1, y: 0, duration: 0.9 }, "-=0.4")
         .to(controlsRef.current, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");
 
       if (glowRef.current) {
@@ -185,15 +203,29 @@ export default function Testimonials() {
   }, []);
 
   // Compute indices for 3-card layout frame
-  const count = TESTIMONIALS.length;
-  const leftIdx = (activeIndex - 1 + count) % count;
-  const rightIdx = (activeIndex + 1) % count;
+  const count = testimonials.length;
 
-  const visibleCards = [
-    { data: TESTIMONIALS[leftIdx], position: "left" },
-    { data: TESTIMONIALS[activeIndex], position: "center" },
-    { data: TESTIMONIALS[rightIdx], position: "right" },
-  ];
+  const leftIdx = count > 0 ? (activeIndex - 1 + count) % count : 0;
+
+  const rightIdx = count > 0 ? (activeIndex + 1) % count : 0;
+
+  const visibleCards =
+    count > 0
+      ? [
+          {
+            data: testimonials[leftIdx],
+            position: "left",
+          },
+          {
+            data: testimonials[activeIndex],
+            position: "center",
+          },
+          {
+            data: testimonials[rightIdx],
+            position: "right",
+          },
+        ]
+      : [];
 
   return (
     <section
@@ -202,9 +234,8 @@ export default function Testimonials() {
       aria-label="Testimonials Section"
       className="relative w-full py-28 lg:py-20 bg-background text-white overflow-hidden select-none"
     >
-      {/* ------------------------------------------------------------- */}
       {/* BACKGROUND GLOW */}
-      {/* ------------------------------------------------------------- */}
+
       <div className="absolute inset-0 pointer-events-none z-0">
         <div
           ref={glowRef}
@@ -212,13 +243,12 @@ export default function Testimonials() {
         />
       </div>
 
-      {/* ------------------------------------------------------------- */}
       {/* SECTION CONTAINER */}
-      {/* ------------------------------------------------------------- */}
-      <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         {/* Small Label */}
         <div ref={labelRef} className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--primary)]/30 text-xs font-semibold tracking-widest text-[var(--primary)] font-mono uppercase bg-[var(--primary)]/5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-(--primary)/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-(--primary)/5">
             <ShieldCheck size={14} className="text-primary" />
             TESTIMONIALS
           </div>
@@ -236,17 +266,15 @@ export default function Testimonials() {
         {/* Supporting Paragraph (Max width 650px) */}
         <p
           ref={paragraphRef}
-          className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed text-zinc-300 max-w-[650px] text-center mb-16 sm:mb-20"
+          className="text-base sm:text-lg font-normal leading-relaxed text-zinc-300 max-w-162.5 text-center mb-16 sm:mb-20"
         >
-          Hear directly from traders who transformed their learning journey
-          through structured education, disciplined execution and continuous
-          mentorship at Aegis Trading Academy.
+          Hear directly from traders who transformed their learning journey through
+          structured education, disciplined execution and continuous mentorship at Aegis
+          Trading Academy.
         </p>
 
-        {/* ------------------------------------------------------------- */}
         {/* CAROUSEL CARDS FRAME */}
-        {/* ------------------------------------------------------------- */}
-        <div
+        {/* <div
           ref={carouselFrameRef}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
@@ -267,17 +295,15 @@ export default function Testimonials() {
                   <article
                     className={`relative rounded-[24px] glass-panel p-8 sm:p-9 flex flex-col justify-between h-full min-h-[300px] border transition-all duration-300 ${
                       isCenter
-                        ? "border-[var(--primary)]/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
+                        ? "border-(--primary)/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
                         : "border-white/10 bg-[#101010]/60"
                     } hover:-translate-y-1.5`}
                   >
-                    {/* Watermark Quote Icon */}
                     <div className="absolute top-4 right-6 text-white/5 pointer-events-none select-none">
                       <Quote size={64} />
                     </div>
 
                     <div>
-                      {/* 5 Gold Stars */}
                       <div
                         className="flex items-center gap-1.5 mb-5"
                         aria-label="5 out of 5 stars"
@@ -286,30 +312,28 @@ export default function Testimonials() {
                           <Star
                             key={i}
                             size={16}
-                            className="fill-[var(--primary)] text-[var(--primary)]"
+                            className="fill-[var(--primary)] text-primary"
                           />
                         ))}
                       </div>
 
-                      {/* Main Quote Text */}
                       <p className="text-base sm:text-lg text-zinc-200 leading-relaxed font-sans italic mb-6 relative z-10">
-                        &ldquo;{data.quote}&rdquo;
+                        &ldquo;{data.reviewText}&rdquo;
                       </p>
                     </div>
 
-                    {/* Student Metadata (No avatars, pure typography) */}
                     <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                       <div>
                         <h4 className="text-base font-bold text-white tracking-tight font-sans">
-                          {data.name}
+                          {data.customerName}
                         </h4>
-                        <span className="text-xs font-mono font-semibold text-[var(--muted)] uppercase tracking-wider block">
-                          {data.role}
+                        <span className="text-xs font-mono font-semibold text-muted uppercase tracking-wider block">
+                          {data.designation}
                         </span>
                       </div>
 
-                      <span className="text-xs font-mono text-[var(--primary)]/80 font-medium">
-                        {data.memberSince}
+                      <span className="text-xs font-mono text-(--primary)/80 font-medium">
+                        {data.company || "Aegis training academy"}
                       </span>
                     </div>
                   </article>
@@ -317,17 +341,95 @@ export default function Testimonials() {
               );
             })}
           </div>
+        </div> */}
+
+        <div
+          ref={carouselFrameRef}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          className="w-full relative max-w-300 mx-auto min-h-85 flex items-center justify-center mb-10"
+        >
+          {isLoading ? (
+            <p className="text-sm text-zinc-400">Loading testimonials...</p>
+          ) : visibleCards.length === 0 ? (
+            <p className="text-sm text-zinc-400">No testimonials available.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-center w-full">
+              {visibleCards.map(({ data, position }) => {
+                const isCenter = position === "center";
+
+                return (
+                  <div
+                    key={`${data.id}-${position}`}
+                    className={`transition-all duration-500 ease-out transform ${
+                      isCenter
+                        ? "scale-100 md:scale-105 opacity-100 z-20"
+                        : "hidden md:block scale-95 opacity-50 hover:opacity-75 z-10"
+                    }`}
+                  >
+                    <article
+                      className={`relative rounded-3xl glass-panel p-8 sm:p-9 flex flex-col justify-between h-full min-h-75 border transition-all duration-300 ${
+                        isCenter
+                          ? "border-(--primary)/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
+                          : "border-white/10 bg-[#101010]/60"
+                      } hover:-translate-y-1.5`}
+                    >
+                      <div className="absolute top-4 right-6 text-white/5 pointer-events-none select-none">
+                        <Quote size={64} />
+                      </div>
+
+                      <div>
+                        <div
+                          className="flex items-center gap-1.5 mb-5"
+                          aria-label={`${data.rating} out of 5 stars`}
+                        >
+                          {Array.from({
+                            length: data.rating,
+                          }).map((_, index) => (
+                            <Star
+                              key={index}
+                              size={16}
+                              className="fill-primary text-primary"
+                            />
+                          ))}
+                        </div>
+
+                        <p className="text-base sm:text-lg text-zinc-200 leading-relaxed font-sans italic mb-6 relative z-10">
+                          &ldquo;{data.reviewText}&rdquo;
+                        </p>
+                      </div>
+
+                      <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                        <div>
+                          <h4 className="text-base font-bold text-white tracking-tight font-sans">
+                            {data.customerName}
+                          </h4>
+
+                          <span className="text-xs font-mono font-semibold text-muted uppercase tracking-wider block">
+                            {data.designation || "Aegis Academy Student"}
+                          </span>
+                        </div>
+
+                        <span className="text-xs font-mono text-primary/80 font-medium">
+                          {data.company || "Aegis Trading Academy"}
+                        </span>
+                      </div>
+                    </article>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
-        {/* ------------------------------------------------------------- */}
         {/* CAROUSEL CONTROLS: ARROWS + PAGINATION DOTS */}
-        {/* ------------------------------------------------------------- */}
+
         <div ref={controlsRef} className="flex items-center gap-6">
           {/* Previous Button */}
           <button
             onClick={handlePrev}
             aria-label="Previous Testimonial"
-            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-[var(--primary)] hover:border-[var(--primary)]/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
+            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-primary hover:border-(--primary)/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
           >
             <ChevronLeft size={20} />
           </button>
@@ -337,7 +439,7 @@ export default function Testimonials() {
             className="flex items-center gap-2.5"
             aria-label="Testimonial Carousel Pagination"
           >
-            {TESTIMONIALS.map((item, idx) => {
+            {testimonials.map((item, idx) => {
               const isActive = idx === activeIndex;
               return (
                 <button
@@ -346,7 +448,7 @@ export default function Testimonials() {
                   aria-label={`Go to testimonial ${idx + 1}`}
                   className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                     isActive
-                      ? "w-8 bg-[var(--primary)] shadow-[0_0_12px_rgba(212,175,55,0.6)]"
+                      ? "w-8 bg-primary shadow-[0_0_12px_rgba(212,175,55,0.6)]"
                       : "w-2.5 bg-white/20 hover:bg-white/40"
                   }`}
                 />
@@ -358,7 +460,7 @@ export default function Testimonials() {
           <button
             onClick={handleNext}
             aria-label="Next Testimonial"
-            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-[var(--primary)] hover:border-[var(--primary)]/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
+            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-primary hover:border-(--primary)/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
           >
             <ChevronRight size={20} />
           </button>

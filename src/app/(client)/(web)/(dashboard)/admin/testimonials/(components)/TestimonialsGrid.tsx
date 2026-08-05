@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import {
   Search,
@@ -14,19 +14,7 @@ import {
   // Building2,
   // User as UserIcon,
 } from "lucide-react";
-
-export interface Testimonial {
-  id: string;
-  customerName: string;
-  designation?: string;
-  company?: string;
-  avatarUrl?: string;
-  rating: number; // 1-5
-  reviewText: string;
-  status: "Published" | "Hidden";
-  displayOrder: number;
-  createdAt: string;
-}
+import type { Testimonial } from "@/types/testimonial";
 
 interface TestimonialsGridProps {
   testimonials: Testimonial[];
@@ -57,7 +45,7 @@ export function TestimonialsGrid({
           duration: 0.35,
           stagger: 0.06,
           ease: "power2.out",
-        }
+        },
       );
     }
   }, [searchQuery, filterOption, testimonials]);
@@ -78,7 +66,8 @@ export function TestimonialsGrid({
       else if (filterOption === "FIVE_STARS") matchesFilter = t.rating === 5;
       else if (filterOption === "FOUR_STARS") matchesFilter = t.rating === 4;
       else if (filterOption === "RECENT") {
-        matchesFilter = new Date(t.createdAt).getTime() > new Date("2026-07-01").getTime();
+        matchesFilter =
+          new Date(t.createdAt).getTime() > new Date("2026-07-01").getTime();
       }
 
       return matchesSearch && matchesFilter;
@@ -112,21 +101,30 @@ export function TestimonialsGrid({
             onChange={(e) => setFilterOption(e.target.value)}
             className="bg-transparent text-xs text-white font-medium focus:outline-none cursor-pointer"
           >
-            <option value="ALL" className="bg-[#111113]">All Testimonials</option>
-            <option value="PUBLISHED" className="bg-[#111113]">Published Only</option>
-            <option value="HIDDEN" className="bg-[#111113]">Hidden Only</option>
-            <option value="FIVE_STARS" className="bg-[#111113]">5 Stars Only</option>
-            <option value="FOUR_STARS" className="bg-[#111113]">4 Stars Only</option>
-            <option value="RECENT" className="bg-[#111113]">Recently Added</option>
+            <option value="ALL" className="bg-[#111113]">
+              All Testimonials
+            </option>
+            <option value="PUBLISHED" className="bg-[#111113]">
+              Published Only
+            </option>
+            <option value="HIDDEN" className="bg-[#111113]">
+              Hidden Only
+            </option>
+            <option value="FIVE_STARS" className="bg-[#111113]">
+              5 Stars Only
+            </option>
+            <option value="FOUR_STARS" className="bg-[#111113]">
+              4 Stars Only
+            </option>
+            <option value="RECENT" className="bg-[#111113]">
+              Recently Added
+            </option>
           </select>
         </div>
       </div>
 
       {/* Testimonials Grid (Desktop: 3 cols, Tablet: 2 cols, Mobile: 1 col) */}
-      <div
-        ref={gridRef}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
+      <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredTestimonials.length > 0 ? (
           filteredTestimonials.map((testimonial) => (
             <TestimonialCardItem
@@ -170,11 +168,11 @@ function TestimonialCardItem({
       <div>
         {/* Top Header: Order Badge & Status Badge */}
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded-md bg-[#C9A227]/10 border border-[#C9A227]/30 text-[10px] font-mono font-bold text-[#C9A227]">
               Order #{testimonial.displayOrder}
             </span>
-          </div>
+          </div> */}
 
           <span
             className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${
@@ -247,21 +245,30 @@ function TestimonialCardItem({
       {/* Card Actions Footer */}
       <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
         <span className="text-[10px] font-mono text-zinc-500">
-          Added {testimonial.createdAt}
+          Added {testimonial.createdAt.split("T", 1)}
+          {/* Added {testimonial.createdAt} */}
         </span>
 
         <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={onToggleStatus}
-            title={testimonial.status === "Published" ? "Hide Testimonial" : "Publish Testimonial"}
+            title={
+              testimonial.status === "Published"
+                ? "Hide Testimonial"
+                : "Publish Testimonial"
+            }
             className={`w-7 h-7 rounded-lg border flex items-center justify-center cursor-pointer transition-colors ${
               testimonial.status === "Published"
                 ? "bg-white/5 border-white/10 hover:border-amber-500/40 text-zinc-400 hover:text-amber-400"
                 : "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
             }`}
           >
-            {testimonial.status === "Published" ? <EyeOff size={13} /> : <Eye size={13} />}
+            {testimonial.status === "Published" ? (
+              <EyeOff size={13} />
+            ) : (
+              <Eye size={13} />
+            )}
           </button>
 
           <button

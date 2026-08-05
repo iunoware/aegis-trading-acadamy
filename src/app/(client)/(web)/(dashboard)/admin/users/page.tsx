@@ -14,6 +14,7 @@ const INITIAL_USERS: User[] = [
     id: "usr-1001",
     firstName: "Aarav",
     lastName: "Sharma",
+    discordName: "aarav_trades",
     name: "Aarav Sharma",
     email: "aarav.sharma@gmail.com",
     phone: "+91 98765 43210",
@@ -52,6 +53,7 @@ const INITIAL_USERS: User[] = [
     id: "usr-1002",
     firstName: "Priya",
     lastName: "Patel",
+    discordName: "priya_patel",
     name: "Priya Patel",
     email: "priya.patel@yahoo.com",
     phone: "+91 98123 45678",
@@ -84,6 +86,7 @@ const INITIAL_USERS: User[] = [
     id: "usr-1003",
     firstName: "Rohan",
     lastName: "Verma",
+    discordName: "rohan_fx",
     name: "Rohan Verma",
     email: "rohan.v@outlook.com",
     phone: "+91 97654 32109",
@@ -110,6 +113,7 @@ const INITIAL_USERS: User[] = [
     id: "usr-1004",
     firstName: "Sneha",
     lastName: "Reddy",
+    discordName: "sneha_reddy",
     name: "Sneha Reddy",
     email: "sneha.reddy@gmail.com",
     phone: "+91 96543 21098",
@@ -136,6 +140,7 @@ const INITIAL_USERS: User[] = [
     id: "usr-1005",
     firstName: "Vikram",
     lastName: "Malhotra",
+    discordName: "vikram_alpha",
     name: "Vikram Malhotra",
     email: "vikram.m@gmail.com",
     phone: "+91 95432 10987",
@@ -162,6 +167,7 @@ const INITIAL_USERS: User[] = [
     id: "usr-1006",
     firstName: "Ananya",
     lastName: "Iyer",
+    discordName: "ananya_fx",
     name: "Ananya Iyer",
     email: "ananya.iyer@gmail.com",
     phone: "+91 94321 09876",
@@ -188,6 +194,7 @@ const INITIAL_USERS: User[] = [
     id: "usr-1007",
     firstName: "Devansh",
     lastName: "Nambiar",
+    discordName: "devansh_trade",
     name: "Devansh Nambiar",
     email: "devansh.n@yahoo.com",
     phone: "+91 93210 98765",
@@ -214,6 +221,7 @@ const INITIAL_USERS: User[] = [
     id: "usr-1008",
     firstName: "Karan",
     lastName: "Mehta",
+    discordName: "karan_mehta",
     name: "Karan Mehta",
     email: "karan.mehta@hotmail.com",
     phone: "+91 92109 87654",
@@ -257,7 +265,7 @@ export default function UserManagementPage() {
             duration: 0.4,
             stagger: 0.1,
             ease: "power2.out",
-          }
+          },
         );
       }
     }, pageRef);
@@ -272,14 +280,12 @@ export default function UserManagementPage() {
   const newThisMonth = users.filter(
     (u) =>
       u.joinedDate.toLowerCase().includes("jul 2026") ||
-      u.joinedDate.toLowerCase().includes("aug 2026")
+      u.joinedDate.toLowerCase().includes("aug 2026"),
   ).length;
 
   // Handlers
   const handleEditSave = (updatedUser: User) => {
-    setUsers((prev) =>
-      prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
-    );
+    setUsers((prev) => prev.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
     if (selectedUser?.id === updatedUser.id) {
       setSelectedUser(updatedUser);
     }
@@ -312,7 +318,7 @@ export default function UserManagementPage() {
           return updatedUser;
         }
         return u;
-      })
+      }),
     );
 
     toast.info(`Account status updated.`);
@@ -336,8 +342,8 @@ export default function UserManagementPage() {
             (u) =>
               `"${u.id}","${u.firstName}","${u.lastName}","${u.email}","${u.phone}","${
                 u.isSubscribed ? "Subscribed" : "Not Subscribed"
-              }","${u.accountStatus}","${u.joinedDate}","${u.lastLogin}"`
-          )
+              }","${u.accountStatus}","${u.joinedDate}","${u.lastLogin}"`,
+          ),
         )
         .join("\n");
 
@@ -359,10 +365,7 @@ export default function UserManagementPage() {
       className="w-full max-w-[1600px] mx-auto space-y-8 pb-12"
     >
       {/* 1. Header */}
-      <UsersHeader
-        totalCount={users.length}
-        onExport={handleExportUsers}
-      />
+      <UsersHeader totalCount={users.length} onExport={handleExportUsers} />
 
       {/* 2. Overview KPI Cards */}
       <UserOverviewCards

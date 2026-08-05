@@ -1,13 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Eye, Filter, Search } from "lucide-react";
+import { Eye, Filter, Search, Mail, Phone } from "lucide-react";
 import type {
   AccessStatus,
   OrderPaymentRecord,
   PaymentStatus,
   SubscriptionPlan,
 } from "./types";
+import { DiscordIcon } from "@/components/Icons";
 
 interface OrdersPaymentsTableProps {
   records: OrderPaymentRecord[];
@@ -143,8 +144,10 @@ export function OrdersPaymentsTable({ records, onSelect }: OrdersPaymentsTablePr
         <div className="hidden overflow-x-auto md:block">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-white/10 bg-[#09090b]/80 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+              <tr className="border-b border-white/10 text-nowrap bg-[#09090b]/80 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
                 <th className="px-4 py-3.5">User</th>
+                <th className="px-4 py-3.5">Discord</th>
+                <th className="px-4 py-3.5">Contact Details</th>
                 <th className="px-4 py-3.5">Order ID</th>
                 <th className="px-4 py-3.5">Package</th>
                 <th className="px-4 py-3.5">Amount</th>
@@ -181,11 +184,36 @@ export function OrdersPaymentsTable({ records, onSelect }: OrdersPaymentsTablePr
                             {record.userName}
                           </p>
                           <p className="font-mono text-[10px] text-zinc-500">
-                            {record.userEmail}
+                            {record.id}
                           </p>
                         </div>
                       </div>
                     </td>
+
+                    {/* Discord name */}
+                    <td className="py-3.5 px-4">
+                      <div className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-[11px] text-zinc-400">
+                        <DiscordIcon className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
+                        <span className="py-3.5 font-mono text-[11px] text-zinc-400">
+                          {record.discordName}
+                        </span>
+                      </div>
+                    </td>
+
+                    {/* Contact Details */}
+                    <td className="py-3.5 px-4">
+                      <div className="flex flex-col gap-0.5 font-mono text-[11px]">
+                        <span className="flex items-center gap-1 text-zinc-300">
+                          <Mail size={11} className="text-zinc-500" />
+                          {record.userEmail}
+                        </span>
+                        <span className="flex items-center gap-1 text-zinc-400">
+                          <Phone size={11} className="text-zinc-500" />
+                          {record.userPhone}
+                        </span>
+                      </div>
+                    </td>
+
                     <td className="px-4 py-3.5 font-mono text-[11px] text-zinc-400">
                       {record.orderId}
                     </td>
