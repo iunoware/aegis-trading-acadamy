@@ -2,7 +2,15 @@
 
 import React from "react";
 import { Enrollment } from "./EnrollmentsTable";
-import { Mail, Phone, ShieldCheck, Calendar, Clock, User as UserIcon } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  ShieldCheck,
+  Calendar,
+  Clock,
+  User as UserIcon,
+} from "lucide-react";
+import { DiscordIcon } from "@/components/Icons";
 
 interface SubscriptionSummaryProps {
   enrollment: Enrollment;
@@ -38,7 +46,7 @@ export function SubscriptionSummary({ enrollment }: SubscriptionSummaryProps) {
             <h3 className="text-base font-black text-white font-sans">
               {enrollment.userName}
             </h3>
-            <div className="flex items-center gap-3 text-xs font-mono text-zinc-400 mt-0.5">
+            <div className="flex flex-wrap mt-2 items-center gap-4 text-xs font-mono text-zinc-400">
               <span className="flex items-center gap-1">
                 <Mail size={12} className="text-zinc-500" />
                 {enrollment.userEmail}
@@ -46,6 +54,10 @@ export function SubscriptionSummary({ enrollment }: SubscriptionSummaryProps) {
               <span className="flex items-center gap-1">
                 <Phone size={12} className="text-zinc-500" />
                 {enrollment.userPhone}
+              </span>
+              <span className="flex items-center gap-1">
+                <DiscordIcon className="text-zinc-500 h-4" />
+                {enrollment.discordName}
               </span>
             </div>
           </div>
@@ -77,10 +89,10 @@ export function SubscriptionSummary({ enrollment }: SubscriptionSummaryProps) {
               enrollment.status === "Active"
                 ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
                 : enrollment.status === "Expiring Soon"
-                ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
-                : enrollment.status === "Expired"
-                ? "bg-zinc-500/15 text-zinc-400 border border-zinc-500/30"
-                : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
+                  ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+                  : enrollment.status === "Expired"
+                    ? "bg-zinc-500/15 text-zinc-400 border border-zinc-500/30"
+                    : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
             }`}
           >
             {enrollment.status}
@@ -99,9 +111,7 @@ export function SubscriptionSummary({ enrollment }: SubscriptionSummaryProps) {
           </div>
 
           <div className="p-2.5 rounded-xl bg-[#09090b]/80 border border-white/5">
-            <span className="text-[10px] text-zinc-500 uppercase block">
-              Expiry Date
-            </span>
+            <span className="text-[10px] text-zinc-500 uppercase block">Expiry Date</span>
             <span className="text-xs text-white font-semibold">
               {enrollment.expiryDate}
             </span>

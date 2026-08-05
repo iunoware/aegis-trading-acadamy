@@ -45,6 +45,7 @@ export type UserMinAggregateOutputType = {
   paytmCustomerId: string | null
   deletedById: string | null
   deletedAt: Date | null
+  anonymizedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -70,6 +71,7 @@ export type UserMaxAggregateOutputType = {
   paytmCustomerId: string | null
   deletedById: string | null
   deletedAt: Date | null
+  anonymizedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -95,6 +97,7 @@ export type UserCountAggregateOutputType = {
   paytmCustomerId: number
   deletedById: number
   deletedAt: number
+  anonymizedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -122,6 +125,7 @@ export type UserMinAggregateInputType = {
   paytmCustomerId?: true
   deletedById?: true
   deletedAt?: true
+  anonymizedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -147,6 +151,7 @@ export type UserMaxAggregateInputType = {
   paytmCustomerId?: true
   deletedById?: true
   deletedAt?: true
+  anonymizedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -172,6 +177,7 @@ export type UserCountAggregateInputType = {
   paytmCustomerId?: true
   deletedById?: true
   deletedAt?: true
+  anonymizedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -270,6 +276,7 @@ export type UserGroupByOutputType = {
   paytmCustomerId: string | null
   deletedById: string | null
   deletedAt: Date | null
+  anonymizedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -316,6 +323,7 @@ export type UserWhereInput = {
   paytmCustomerId?: Prisma.StringNullableFilter<"User"> | string | null
   deletedById?: Prisma.StringNullableFilter<"User"> | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   sessions?: Prisma.AuthSessionListRelationFilter
@@ -357,6 +365,7 @@ export type UserOrderByWithRelationInput = {
   paytmCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   sessions?: Prisma.AuthSessionOrderByRelationAggregateInput
@@ -401,6 +410,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   deletedById?: Prisma.StringNullableFilter<"User"> | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   sessions?: Prisma.AuthSessionListRelationFilter
@@ -442,6 +452,7 @@ export type UserOrderByWithAggregationInput = {
   paytmCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -473,6 +484,7 @@ export type UserScalarWhereWithAggregatesInput = {
   paytmCustomerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   deletedById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  anonymizedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -497,6 +509,7 @@ export type UserCreateInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -538,6 +551,7 @@ export type UserUncheckedCreateInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -577,6 +591,7 @@ export type UserUpdateInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -618,6 +633,7 @@ export type UserUncheckedUpdateInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -658,6 +674,7 @@ export type UserCreateManyInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -682,6 +699,7 @@ export type UserUpdateManyMutationInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -707,6 +725,7 @@ export type UserUncheckedUpdateManyInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -747,6 +766,7 @@ export type UserCountOrderByAggregateInput = {
   paytmCustomerId?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -772,6 +792,7 @@ export type UserMaxOrderByAggregateInput = {
   paytmCustomerId?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -797,6 +818,7 @@ export type UserMinOrderByAggregateInput = {
   paytmCustomerId?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -1110,6 +1132,7 @@ export type UserCreateWithoutDeletedUsersInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -1150,6 +1173,7 @@ export type UserUncheckedCreateWithoutDeletedUsersInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1193,6 +1217,7 @@ export type UserCreateWithoutDeletedByInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -1232,6 +1257,7 @@ export type UserUncheckedCreateWithoutDeletedByInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1292,6 +1318,7 @@ export type UserUpdateWithoutDeletedUsersInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -1332,6 +1359,7 @@ export type UserUncheckedUpdateWithoutDeletedUsersInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1390,6 +1418,7 @@ export type UserScalarWhereInput = {
   paytmCustomerId?: Prisma.StringNullableFilter<"User"> | string | null
   deletedById?: Prisma.StringNullableFilter<"User"> | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
@@ -1414,6 +1443,7 @@ export type UserCreateWithoutSessionsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
@@ -1454,6 +1484,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1508,6 +1539,7 @@ export type UserUpdateWithoutSessionsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
@@ -1548,6 +1580,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1586,6 +1619,7 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -1626,6 +1660,7 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1680,6 +1715,7 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -1720,6 +1756,7 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1758,6 +1795,7 @@ export type UserCreateWithoutCourseProgressInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -1798,6 +1836,7 @@ export type UserUncheckedCreateWithoutCourseProgressInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1852,6 +1891,7 @@ export type UserUpdateWithoutCourseProgressInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -1892,6 +1932,7 @@ export type UserUncheckedUpdateWithoutCourseProgressInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1930,6 +1971,7 @@ export type UserCreateWithoutLessonProgressInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -1970,6 +2012,7 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -2024,6 +2067,7 @@ export type UserUpdateWithoutLessonProgressInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -2064,6 +2108,7 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -2102,6 +2147,7 @@ export type UserCreateWithoutSubscriptionsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -2142,6 +2188,7 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -2196,6 +2243,7 @@ export type UserUpdateWithoutSubscriptionsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -2236,6 +2284,7 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -2274,6 +2323,7 @@ export type UserCreateWithoutSubscriptionExtensionsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -2314,6 +2364,7 @@ export type UserUncheckedCreateWithoutSubscriptionExtensionsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -2368,6 +2419,7 @@ export type UserUpdateWithoutSubscriptionExtensionsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -2408,6 +2460,7 @@ export type UserUncheckedUpdateWithoutSubscriptionExtensionsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -2446,6 +2499,7 @@ export type UserCreateWithoutSubscriptionNotesInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -2486,6 +2540,7 @@ export type UserUncheckedCreateWithoutSubscriptionNotesInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -2540,6 +2595,7 @@ export type UserUpdateWithoutSubscriptionNotesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -2580,6 +2636,7 @@ export type UserUncheckedUpdateWithoutSubscriptionNotesInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -2618,6 +2675,7 @@ export type UserCreateWithoutSubscriptionEventsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -2658,6 +2716,7 @@ export type UserUncheckedCreateWithoutSubscriptionEventsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -2712,6 +2771,7 @@ export type UserUpdateWithoutSubscriptionEventsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -2752,6 +2812,7 @@ export type UserUncheckedUpdateWithoutSubscriptionEventsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -2790,6 +2851,7 @@ export type UserCreateWithoutOrdersInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -2830,6 +2892,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -2884,6 +2947,7 @@ export type UserUpdateWithoutOrdersInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -2924,6 +2988,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -2962,6 +3027,7 @@ export type UserCreateWithoutPaymentsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -3002,6 +3068,7 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -3056,6 +3123,7 @@ export type UserUpdateWithoutPaymentsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -3096,6 +3164,7 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -3134,6 +3203,7 @@ export type UserCreateWithoutRefundsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -3174,6 +3244,7 @@ export type UserUncheckedCreateWithoutRefundsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -3228,6 +3299,7 @@ export type UserUpdateWithoutRefundsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -3268,6 +3340,7 @@ export type UserUncheckedUpdateWithoutRefundsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -3306,6 +3379,7 @@ export type UserCreateWithoutAccountActivitiesInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -3346,6 +3420,7 @@ export type UserUncheckedCreateWithoutAccountActivitiesInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -3389,6 +3464,7 @@ export type UserCreateWithoutPerformedActivitiesInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -3429,6 +3505,7 @@ export type UserUncheckedCreateWithoutPerformedActivitiesInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -3483,6 +3560,7 @@ export type UserUpdateWithoutAccountActivitiesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -3523,6 +3601,7 @@ export type UserUncheckedUpdateWithoutAccountActivitiesInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -3572,6 +3651,7 @@ export type UserUpdateWithoutPerformedActivitiesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -3612,6 +3692,7 @@ export type UserUncheckedUpdateWithoutPerformedActivitiesInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -3650,6 +3731,7 @@ export type UserCreateWithoutActivityLogsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
@@ -3690,6 +3772,7 @@ export type UserUncheckedCreateWithoutActivityLogsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
@@ -3744,6 +3827,7 @@ export type UserUpdateWithoutActivityLogsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -3784,6 +3868,7 @@ export type UserUncheckedUpdateWithoutActivityLogsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -3822,6 +3907,7 @@ export type UserCreateManyDeletedByInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
+  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -3846,6 +3932,7 @@ export type UserUpdateWithoutDeletedByInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
@@ -3885,6 +3972,7 @@ export type UserUncheckedUpdateWithoutDeletedByInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -3924,6 +4012,7 @@ export type UserUncheckedUpdateManyWithoutDeletedByInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -4106,6 +4195,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   paytmCustomerId?: boolean
   deletedById?: boolean
   deletedAt?: boolean
+  anonymizedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -4148,6 +4238,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   paytmCustomerId?: boolean
   deletedById?: boolean
   deletedAt?: boolean
+  anonymizedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedBy?: boolean | Prisma.User$deletedByArgs<ExtArgs>
@@ -4174,6 +4265,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   paytmCustomerId?: boolean
   deletedById?: boolean
   deletedAt?: boolean
+  anonymizedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedBy?: boolean | Prisma.User$deletedByArgs<ExtArgs>
@@ -4200,11 +4292,12 @@ export type UserSelectScalar = {
   paytmCustomerId?: boolean
   deletedById?: boolean
   deletedAt?: boolean
+  anonymizedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "name" | "email" | "phone" | "discordName" | "password" | "avatarUrl" | "role" | "status" | "emailVerifiedAt" | "phoneVerifiedAt" | "lastLoginAt" | "passwordChangedAt" | "razorpayCustomerId" | "stripeCustomerId" | "paytmCustomerId" | "deletedById" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "name" | "email" | "phone" | "discordName" | "password" | "avatarUrl" | "role" | "status" | "emailVerifiedAt" | "phoneVerifiedAt" | "lastLoginAt" | "passwordChangedAt" | "razorpayCustomerId" | "stripeCustomerId" | "paytmCustomerId" | "deletedById" | "deletedAt" | "anonymizedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
@@ -4272,6 +4365,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     paytmCustomerId: string | null
     deletedById: string | null
     deletedAt: Date | null
+    anonymizedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -4733,6 +4827,7 @@ export interface UserFieldRefs {
   readonly paytmCustomerId: Prisma.FieldRef<"User", 'String'>
   readonly deletedById: Prisma.FieldRef<"User", 'String'>
   readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly anonymizedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

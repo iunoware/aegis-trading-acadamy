@@ -10,12 +10,13 @@ import {
   Settings,
   Mail,
   Phone,
-  ShieldCheck,
-  AlertTriangle,
-  Clock,
-  Ban,
-  Calendar,
+  // ShieldCheck,
+  // AlertTriangle,
+  // Clock,
+  // Ban,
+  // Calendar,
 } from "lucide-react";
+import { DiscordIcon } from "@/components/Icons";
 
 export interface PaymentRecord {
   id: string;
@@ -31,7 +32,14 @@ export interface TimelineRecord {
   action: string;
   date: string;
   details: string;
-  type: "purchase" | "renew" | "plan_change" | "extend" | "cancel" | "reactivate" | "note";
+  type:
+    | "purchase"
+    | "renew"
+    | "plan_change"
+    | "extend"
+    | "cancel"
+    | "reactivate"
+    | "note";
 }
 
 export interface Enrollment {
@@ -39,6 +47,7 @@ export interface Enrollment {
   userName: string;
   userEmail: string;
   userPhone: string;
+  discordName: string;
   avatar?: string;
   currentPlan: "Monthly Plan" | "Yearly Plan";
   purchaseDate: string;
@@ -63,7 +72,9 @@ export function EnrollmentsTable({
   const [searchQuery, setSearchQuery] = useState("");
   const [planFilter, setPlanFilter] = useState<string>("ALL");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
-  const [sortBy, setSortBy] = useState<"purchaseDate" | "expiryDate" | "name">("purchaseDate");
+  const [sortBy, setSortBy] = useState<"purchaseDate" | "expiryDate" | "name">(
+    "purchaseDate",
+  );
   const tableRef = useRef<HTMLDivElement>(null);
 
   // GSAP animation on search/filter/sort updates
@@ -72,7 +83,7 @@ export function EnrollmentsTable({
       gsap.fromTo(
         tableRef.current,
         { opacity: 0.85, y: 5 },
-        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
       );
     }
   }, [searchQuery, planFilter, statusFilter, sortBy]);
@@ -152,9 +163,15 @@ export function EnrollmentsTable({
               onChange={(e) => setPlanFilter(e.target.value)}
               className="bg-transparent text-xs text-white font-medium focus:outline-none cursor-pointer"
             >
-              <option value="ALL" className="bg-[#111113]">All Subscription Plans</option>
-              <option value="MONTHLY" className="bg-[#111113]">Monthly Plan</option>
-              <option value="YEARLY" className="bg-[#111113]">Yearly Plan</option>
+              <option value="ALL" className="bg-[#111113]">
+                All Subscription Plans
+              </option>
+              <option value="MONTHLY" className="bg-[#111113]">
+                Monthly Plan
+              </option>
+              <option value="YEARLY" className="bg-[#111113]">
+                Yearly Plan
+              </option>
             </select>
           </div>
 
@@ -165,11 +182,21 @@ export function EnrollmentsTable({
               onChange={(e) => setStatusFilter(e.target.value)}
               className="bg-transparent text-xs text-white font-medium focus:outline-none cursor-pointer"
             >
-              <option value="ALL" className="bg-[#111113]">All Statuses</option>
-              <option value="ACTIVE" className="bg-[#111113]">Active</option>
-              <option value="EXPIRING_SOON" className="bg-[#111113]">Expiring Soon</option>
-              <option value="EXPIRED" className="bg-[#111113]">Expired</option>
-              <option value="CANCELLED" className="bg-[#111113]">Cancelled</option>
+              <option value="ALL" className="bg-[#111113]">
+                All Statuses
+              </option>
+              <option value="ACTIVE" className="bg-[#111113]">
+                Active
+              </option>
+              <option value="EXPIRING_SOON" className="bg-[#111113]">
+                Expiring Soon
+              </option>
+              <option value="EXPIRED" className="bg-[#111113]">
+                Expired
+              </option>
+              <option value="CANCELLED" className="bg-[#111113]">
+                Cancelled
+              </option>
             </select>
           </div>
 
@@ -178,12 +205,20 @@ export function EnrollmentsTable({
             <ArrowUpDown size={13} className="text-zinc-400" />
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as "purchaseDate" | "expiryDate" | "name")}
+              onChange={(e) =>
+                setSortBy(e.target.value as "purchaseDate" | "expiryDate" | "name")
+              }
               className="bg-transparent text-xs text-white font-medium focus:outline-none cursor-pointer"
             >
-              <option value="purchaseDate" className="bg-[#111113]">Sort: Purchase Date</option>
-              <option value="expiryDate" className="bg-[#111113]">Sort: Expiry Date</option>
-              <option value="name" className="bg-[#111113]">Sort: Name</option>
+              <option value="purchaseDate" className="bg-[#111113]">
+                Sort: Purchase Date
+              </option>
+              <option value="expiryDate" className="bg-[#111113]">
+                Sort: Expiry Date
+              </option>
+              <option value="name" className="bg-[#111113]">
+                Sort: Name
+              </option>
             </select>
           </div>
         </div>
@@ -197,8 +232,10 @@ export function EnrollmentsTable({
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-white/10 bg-[#09090b]/80 text-[11px] font-mono uppercase tracking-wider text-zinc-400">
+              <tr className="border-b whitespace-nowrap border-white/10 bg-[#09090b]/80 text-[11px] font-mono uppercase tracking-wider text-zinc-400">
                 <th className="py-3.5 px-4 font-semibold">Enrolled User</th>
+                <th className="py-3.5 px-4 font-semibold">Discord</th>
+                <th className="py-3.5 px-4 font-semibold">Contact Details</th>
                 <th className="py-3.5 px-4 font-semibold">Current Plan</th>
                 <th className="py-3.5 px-4 font-semibold">Purchase Date</th>
                 <th className="py-3.5 px-4 font-semibold">Expiry Date</th>
@@ -223,10 +260,10 @@ export function EnrollmentsTable({
                     <tr
                       key={item.id}
                       onClick={() => onManageSubscription(item)}
-                      className="hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                      className="hover:bg-white/4 transition-colors whitespace-nowrap cursor-pointer group"
                     >
                       {/* Avatar & User Details */}
-                      <td className="py-3.5 px-4">
+                      {/* <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
                           <div className="relative w-9 h-9 rounded-full bg-[#C9A227]/15 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] font-bold text-xs shrink-0 shadow-inner group-hover:scale-105 transition-transform">
                             {initials}
@@ -239,6 +276,43 @@ export function EnrollmentsTable({
                               {item.userEmail}
                             </span>
                           </div>
+                        </div>
+                      </td> */}
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-3">
+                          <div className="relative w-9 h-9 rounded-full bg-[#C9A227]/15 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] font-bold text-xs shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                            {initials}
+                          </div>
+                          <div>
+                            <span className="font-bold text-white block leading-tight group-hover:text-[#C9A227] transition-colors">
+                              {item.userName}
+                            </span>
+                            <span className="text-[10px] font-mono text-zinc-500">
+                              ID: {item.id}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Discord name */}
+                      <td className="py-3.5 px-4">
+                        <div className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-[11px] text-zinc-400">
+                          <DiscordIcon className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
+                          <span>{item.discordName}</span>
+                        </div>
+                      </td>
+
+                      {/* Contact Details */}
+                      <td className="py-3.5 px-4">
+                        <div className="flex flex-col gap-0.5 font-mono text-[11px]">
+                          <span className="flex items-center gap-1 text-zinc-300">
+                            <Mail size={11} className="text-zinc-500" />
+                            {item.userEmail}
+                          </span>
+                          <span className="flex items-center gap-1 text-zinc-400">
+                            <Phone size={11} className="text-zinc-500" />
+                            {item.userPhone}
+                          </span>
                         </div>
                       </td>
 
@@ -272,8 +346,8 @@ export function EnrollmentsTable({
                             item.status === "Active"
                               ? "text-emerald-400"
                               : item.status === "Expiring Soon"
-                              ? "text-amber-400"
-                              : "text-zinc-500"
+                                ? "text-amber-400"
+                                : "text-zinc-500"
                           }
                         >
                           {remainingDays > 0 ? `${remainingDays} Days` : "0 Days"}
@@ -287,10 +361,10 @@ export function EnrollmentsTable({
                             item.status === "Active"
                               ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
                               : item.status === "Expiring Soon"
-                              ? "bg-amber-500/15 text-amber-400 border border-amber-500/30 animate-pulse"
-                              : item.status === "Expired"
-                              ? "bg-zinc-500/15 text-zinc-400 border border-zinc-500/30"
-                              : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
+                                ? "bg-amber-500/15 text-amber-400 border border-amber-500/30 animate-pulse"
+                                : item.status === "Expired"
+                                  ? "bg-zinc-500/15 text-zinc-400 border border-zinc-500/30"
+                                  : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
                           }`}
                         >
                           <span
@@ -298,10 +372,10 @@ export function EnrollmentsTable({
                               item.status === "Active"
                                 ? "bg-emerald-400 animate-pulse"
                                 : item.status === "Expiring Soon"
-                                ? "bg-amber-400"
-                                : item.status === "Expired"
-                                ? "bg-zinc-400"
-                                : "bg-rose-400"
+                                  ? "bg-amber-400"
+                                  : item.status === "Expired"
+                                    ? "bg-zinc-400"
+                                    : "bg-rose-400"
                             }`}
                           />
                           {item.status}
@@ -355,7 +429,7 @@ export function EnrollmentsTable({
               <div
                 key={item.id}
                 onClick={() => onManageSubscription(item)}
-                className="p-4 space-y-3 hover:bg-white/[0.03] transition-colors cursor-pointer"
+                className="p-4 space-y-3 hover:bg-white/3 transition-colors cursor-pointer"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -375,8 +449,8 @@ export function EnrollmentsTable({
                       item.status === "Active"
                         ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
                         : item.status === "Expiring Soon"
-                        ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
-                        : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
+                          ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+                          : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
                     }`}
                   >
                     {item.status}

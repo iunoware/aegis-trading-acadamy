@@ -44,6 +44,7 @@ export interface OrderPaymentRecord {
   orderId: string;
   userId: string;
   userName: string;
+  discordName: string;
   userEmail: string;
   userPhone: string;
 

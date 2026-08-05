@@ -2201,6 +2201,7 @@ export const UserScalarFieldEnum = {
   paytmCustomerId: 'paytmCustomerId',
   deletedById: 'deletedById',
   deletedAt: 'deletedAt',
+  anonymizedAt: 'anonymizedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2629,11 +2630,15 @@ export const DeletionQueueScalarFieldEnum = {
   id: 'id',
   entityType: 'entityType',
   entityId: 'entityId',
+  action: 'action',
+  status: 'status',
   deletedById: 'deletedById',
   deletedAt: 'deletedAt',
   scheduledPurgeAt: 'scheduledPurgeAt',
+  processedAt: 'processedAt',
   restoredAt: 'restoredAt',
-  purgedAt: 'purgedAt',
+  failedAt: 'failedAt',
+  failureReason: 'failureReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2993,6 +2998,34 @@ export type EnumActivityActorTypeFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'ActivityActorType[]'
  */
 export type ListEnumActivityActorTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ActivityActorType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DeletionAction'
+ */
+export type EnumDeletionActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeletionAction'>
+    
+
+
+/**
+ * Reference to a field of type 'DeletionAction[]'
+ */
+export type ListEnumDeletionActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeletionAction[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DeletionStatus'
+ */
+export type EnumDeletionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeletionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DeletionStatus[]'
+ */
+export type ListEnumDeletionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeletionStatus[]'>
     
 
 

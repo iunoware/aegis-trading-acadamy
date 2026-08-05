@@ -15,6 +15,7 @@ import {
   // ShieldAlert,
   // User as UserIcon,
 } from "lucide-react";
+import { DiscordIcon } from "@/components/Icons";
 
 export interface ActivityRecord {
   id: string;
@@ -27,6 +28,7 @@ export interface User {
   id: string;
   firstName: string;
   lastName: string;
+  discordName: string;
   name: string;
   email: string;
   phone: string;
@@ -61,7 +63,7 @@ export function UsersTable({
       gsap.fromTo(
         tableRef.current,
         { opacity: 0.85, y: 5 },
-        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
       );
     }
   }, [searchQuery, filterOption, sortBy]);
@@ -80,9 +82,11 @@ export function UsersTable({
       if (filterOption === "SUBSCRIBED") matchesFilter = u.isSubscribed;
       else if (filterOption === "NOT_SUBSCRIBED") matchesFilter = !u.isSubscribed;
       else if (filterOption === "ACTIVE") matchesFilter = u.accountStatus === "Active";
-      else if (filterOption === "SUSPENDED") matchesFilter = u.accountStatus === "Suspended";
+      else if (filterOption === "SUSPENDED")
+        matchesFilter = u.accountStatus === "Suspended";
       else if (filterOption === "RECENT") {
-        matchesFilter = new Date(u.joinedDate).getTime() > new Date("2026-07-01").getTime();
+        matchesFilter =
+          new Date(u.joinedDate).getTime() > new Date("2026-07-01").getTime();
       }
 
       return matchesSearch && matchesFilter;
@@ -129,12 +133,24 @@ export function UsersTable({
               onChange={(e) => setFilterOption(e.target.value)}
               className="bg-transparent text-xs text-white font-medium focus:outline-none cursor-pointer"
             >
-              <option value="ALL" className="bg-[#111113]">All Users</option>
-              <option value="SUBSCRIBED" className="bg-[#111113]">Subscribed</option>
-              <option value="NOT_SUBSCRIBED" className="bg-[#111113]">Not Subscribed</option>
-              <option value="ACTIVE" className="bg-[#111113]">Active Accounts</option>
-              <option value="SUSPENDED" className="bg-[#111113]">Suspended Accounts</option>
-              <option value="RECENT" className="bg-[#111113]">Recently Joined</option>
+              <option value="ALL" className="bg-[#111113]">
+                All Users
+              </option>
+              <option value="SUBSCRIBED" className="bg-[#111113]">
+                Subscribed
+              </option>
+              <option value="NOT_SUBSCRIBED" className="bg-[#111113]">
+                Not Subscribed
+              </option>
+              <option value="ACTIVE" className="bg-[#111113]">
+                Active Accounts
+              </option>
+              <option value="SUSPENDED" className="bg-[#111113]">
+                Suspended Accounts
+              </option>
+              <option value="RECENT" className="bg-[#111113]">
+                Recently Joined
+              </option>
             </select>
           </div>
 
@@ -146,9 +162,15 @@ export function UsersTable({
               onChange={(e) => setSortBy(e.target.value as "newest" | "oldest" | "name")}
               className="bg-transparent text-xs text-white font-medium focus:outline-none cursor-pointer"
             >
-              <option value="newest" className="bg-[#111113]">Sort: Newest</option>
-              <option value="oldest" className="bg-[#111113]">Sort: Oldest</option>
-              <option value="name" className="bg-[#111113]">Sort: Alphabetical</option>
+              <option value="newest" className="bg-[#111113]">
+                Sort: Newest
+              </option>
+              <option value="oldest" className="bg-[#111113]">
+                Sort: Oldest
+              </option>
+              <option value="name" className="bg-[#111113]">
+                Sort: Alphabetical
+              </option>
             </select>
           </div>
         </div>
@@ -164,6 +186,7 @@ export function UsersTable({
             <thead>
               <tr className="border-b border-white/10 bg-[#09090b]/80 text-[11px] font-mono uppercase tracking-wider text-zinc-400">
                 <th className="py-3.5 px-4 font-semibold">User</th>
+                <th className="py-3.5 px-4 font-semibold">Discord</th>
                 <th className="py-3.5 px-4 font-semibold">Contact Details</th>
                 <th className="py-3.5 px-4 font-semibold">Subscription</th>
                 <th className="py-3.5 px-4 font-semibold">Joined Date</th>
@@ -175,7 +198,8 @@ export function UsersTable({
             <tbody className="divide-y divide-white/5 text-xs text-zinc-300">
               {filteredUsers.length > 0 ? (
                 filteredUsers.map((user) => {
-                  const initials = `${user.firstName[0] || ""}${user.lastName[0] || ""}`.toUpperCase();
+                  const initials =
+                    `${user.firstName[0] || ""}${user.lastName[0] || ""}`.toUpperCase();
 
                   return (
                     <tr
@@ -197,6 +221,16 @@ export function UsersTable({
                               ID: {user.id}
                             </span>
                           </div>
+                        </div>
+                      </td>
+
+                      {/* Discord name */}
+                      <td className="py-3.5 px-4">
+                        <div className="flex flex-col gap-0.5 font-mono text-[11px]">
+                          <span className="flex items-center gap-1 text-zinc-400">
+                            <DiscordIcon className="text-zinc-500 h-3.5" />
+                            {user.discordName}
+                          </span>
                         </div>
                       </td>
 
