@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -10,8 +11,8 @@ import {
   EyeOff,
   Edit2,
   Trash2,
-  Building2,
-  User as UserIcon,
+  // Building2,
+  // User as UserIcon,
 } from "lucide-react";
 
 export interface Testimonial {
@@ -238,7 +239,7 @@ function TestimonialCardItem({
         </div>
 
         {/* Review Text Preview */}
-        <p className="text-xs text-zinc-300 leading-relaxed italic line-clamp-4 min-h-[64px] bg-[#09090b]/50 p-3 rounded-xl border border-white/5">
+        <p className="text-xs text-zinc-300 leading-relaxed italic line-clamp-4 min-h-16 bg-[#09090b]/50 p-3 rounded-xl border border-white/5">
           &ldquo;{testimonial.reviewText}&rdquo;
         </p>
       </div>

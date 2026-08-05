@@ -26,11 +26,17 @@ export default function Footer() {
   const columnsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     const ctx = gsap.context(() => {
       if (prefersReducedMotion) {
-        gsap.set([ctaBoxRef.current, columnsRef.current?.children], { opacity: 1, y: 0, scale: 1 });
+        gsap.set([ctaBoxRef.current, columnsRef.current?.children], {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+        });
         return;
       }
 
@@ -54,7 +60,7 @@ export default function Footer() {
         tl.to(
           columnsRef.current.children,
           { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 },
-          "-=0.4"
+          "-=0.4",
         );
       }
     }, footerRef);
@@ -66,24 +72,23 @@ export default function Footer() {
     <footer
       ref={footerRef}
       aria-label="Aegis Trading Academy Footer"
-      className="relative w-full bg-[#070707] text-white pt-20 pb-12 overflow-hidden select-none"
+      className="relative w-full bg-[#070707] text-white pt-20 pb-12 overflow-hidden"
     >
       {/* Background Soft Glow */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] gold-radial-glow opacity-20 blur-3xl" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-225 h-125 gold-radial-glow opacity-20 blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-        
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ========================================================= */}
         {/* TOP CTA BOX */}
         {/* ========================================================= */}
         <div
           ref={ctaBoxRef}
-          className="rounded-[24px] glass-panel p-8 sm:p-12 border border-[var(--primary)]/30 text-center flex flex-col items-center mb-20 shadow-[0_20px_50px_rgba(0,0,0,0.6),0_0_35px_rgba(212,175,55,0.15)]"
+          className="rounded-3xl glass-panel p-8 sm:p-12 border border-(--primary)/30 text-center flex flex-col items-center mb-20 shadow-[0_20px_50px_rgba(0,0,0,0.6),0_0_35px_rgba(212,175,55,0.15)]"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--primary)]/30 text-xs font-semibold tracking-widest text-[var(--primary)] font-mono uppercase bg-[var(--primary)]/5 mb-4">
-            <ShieldCheck size={14} className="text-[var(--primary)]" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-(--primary)/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-(--primary)/5 mb-4">
+            <ShieldCheck size={14} className="text-primary" />
             START YOUR TRANSFORMATION
           </div>
 
@@ -93,23 +98,27 @@ export default function Footer() {
           </h2>
 
           <p className="text-base sm:text-lg text-zinc-300 max-w-xl font-normal leading-relaxed mb-8">
-            Join Aegis Trading Academy today and start learning through structured education, live mentorship and disciplined trading principles.
+            Join Aegis Trading Academy today and start learning through structured
+            education, live mentorship and disciplined trading principles.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
             {/* Primary Button */}
             <a
               href="#pricing"
-              className="group inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-bold text-sm sm:text-base tracking-wide bg-gradient-to-r from-[var(--primary-light)] via-[var(--primary)] to-[var(--primary-dark)] text-black shadow-[0_0_25px_rgba(212,175,55,0.35)] hover:shadow-[0_0_40px_rgba(212,175,55,0.55)] transition-all duration-300 transform hover:-translate-y-0.5 w-full sm:w-auto text-center"
+              className="group inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-bold text-sm sm:text-base tracking-wide bg-linear-to-r from-primary-light via-primary to-primary-dark text-black shadow-[0_0_25px_rgba(212,175,55,0.35)] hover:shadow-[0_0_40px_rgba(212,175,55,0.55)] transition-all duration-300 transform hover:-translate-y-0.5 w-full sm:w-auto text-center"
             >
               <span>Join Academy</span>
-              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight
+                size={18}
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              />
             </a>
 
             {/* Secondary Button */}
             <a
               href="#contact"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold text-sm sm:text-base tracking-wide glass-panel text-white hover:text-[var(--primary)] border border-white/15 hover:border-[var(--primary)]/40 transition-all duration-300 hover:-translate-y-0.5 w-full sm:w-auto text-center"
+              className="inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold text-sm sm:text-base tracking-wide glass-panel text-white hover:text-primary border border-white/15 hover:border-(--primary)/40 transition-all duration-300 hover:-translate-y-0.5 w-full sm:w-auto text-center"
             >
               Contact Us
             </a>
@@ -127,7 +136,12 @@ export default function Footer() {
           <div className="lg:col-span-1 space-y-4">
             <div className="flex items-center gap-3">
               <div className="relative w-9 h-9">
-                <Image src="/images/logo.png" alt="Aegis Logo" fill className="object-contain" />
+                <Image
+                  src="/images/logo.png"
+                  alt="Aegis Logo"
+                  fill
+                  className="object-contain"
+                />
               </div>
               <span className="text-lg font-extrabold text-white tracking-wider">
                 AEGIS
@@ -135,68 +149,135 @@ export default function Footer() {
             </div>
 
             <p className="text-xs sm:text-sm text-zinc-400 font-normal leading-relaxed">
-              Building disciplined traders through structured education and real market experience.
+              Building disciplined traders through structured education and real market
+              experience.
             </p>
           </div>
 
           {/* Column 2: Quick Links */}
           <div className="space-y-3">
-            <h3 className="text-xs font-mono font-bold text-[var(--primary)] uppercase tracking-widest">
+            <h3 className="text-xs font-mono font-bold text-primary uppercase tracking-widest">
               Quick Links
             </h3>
             <ul className="space-y-2 text-sm text-zinc-300">
-              <li><a href="#" className="hover:text-[var(--primary)] transition-colors">Home</a></li>
-              <li><a href="#why-choose-aegis" className="hover:text-[var(--primary)] transition-colors">About</a></li>
-              <li><a href="#pricing" className="hover:text-[var(--primary)] transition-colors">Pricing</a></li>
-              <li><a href="#testimonials" className="hover:text-[var(--primary)] transition-colors">Testimonials</a></li>
-              <li><a href="#faq" className="hover:text-[var(--primary)] transition-colors">FAQ</a></li>
-              <li><a href="#contact" className="hover:text-[var(--primary)] transition-colors">Contact</a></li>
+              <li>
+                <a href="#" className="hover:text-primary transition-colors">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#why-choose-aegis"
+                  className="hover:text-primary transition-colors"
+                >
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="#pricing" className="hover:text-primary transition-colors">
+                  Pricing
+                </a>
+              </li>
+              <li>
+                <a href="#testimonials" className="hover:text-primary transition-colors">
+                  Testimonials
+                </a>
+              </li>
+              <li>
+                <a href="#faq" className="hover:text-primary transition-colors">
+                  FAQ
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="hover:text-primary transition-colors">
+                  Contact
+                </a>
+              </li>
             </ul>
           </div>
 
           {/* Column 3: Learning */}
           <div className="space-y-3">
-            <h3 className="text-xs font-mono font-bold text-[var(--primary)] uppercase tracking-widest">
+            <h3 className="text-xs font-mono font-bold text-primary uppercase tracking-widest">
               Learning
             </h3>
             <ul className="space-y-2 text-sm text-zinc-300">
-              <li><a href="#login" className="hover:text-[var(--primary)] transition-colors">Member Login</a></li>
-              <li><a href="#learning-journey" className="hover:text-[var(--primary)] transition-colors">Learning Journey</a></li>
-              <li><a href="#pricing" className="hover:text-[var(--primary)] transition-colors">Pricing Plans</a></li>
-              <li><a href="#community" className="hover:text-[var(--primary)] transition-colors">Community</a></li>
-              <li><a href="#support" className="hover:text-[var(--primary)] transition-colors">Support</a></li>
+              <li>
+                <a href="#login" className="hover:text-primary transition-colors">
+                  Member Login
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#learning-journey"
+                  className="hover:text-primary transition-colors"
+                >
+                  Learning Journey
+                </a>
+              </li>
+              <li>
+                <a href="#pricing" className="hover:text-primary transition-colors">
+                  Pricing Plans
+                </a>
+              </li>
+              <li>
+                <a href="#community" className="hover:text-primary transition-colors">
+                  Community
+                </a>
+              </li>
+              <li>
+                <a href="#support" className="hover:text-primary transition-colors">
+                  Support
+                </a>
+              </li>
             </ul>
           </div>
 
           {/* Column 4: Legal */}
           <div className="space-y-3">
-            <h3 className="text-xs font-mono font-bold text-[var(--primary)] uppercase tracking-widest">
+            <h3 className="text-xs font-mono font-bold text-primary uppercase tracking-widest">
               Legal
             </h3>
             <ul className="space-y-2 text-sm text-zinc-300">
-              <li><a href="#privacy" className="hover:text-[var(--primary)] transition-colors">Privacy Policy</a></li>
-              <li><a href="#terms" className="hover:text-[var(--primary)] transition-colors">Terms &amp; Conditions</a></li>
-              <li><a href="#refund" className="hover:text-[var(--primary)] transition-colors">Refund Policy</a></li>
-              <li><a href="#disclaimer" className="hover:text-[var(--primary)] transition-colors">Risk Disclaimer</a></li>
+              <li>
+                <a href="#privacy" className="hover:text-primary transition-colors">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#terms" className="hover:text-primary transition-colors">
+                  Terms &amp; Conditions
+                </a>
+              </li>
+              <li>
+                <a href="#refund" className="hover:text-primary transition-colors">
+                  Refund Policy
+                </a>
+              </li>
+              <li>
+                <a href="#disclaimer" className="hover:text-primary transition-colors">
+                  Risk Disclaimer
+                </a>
+              </li>
             </ul>
           </div>
 
           {/* Column 5: Contact & Socials */}
           <div className="space-y-4">
-            <h3 className="text-xs font-mono font-bold text-[var(--primary)] uppercase tracking-widest">
+            <h3 className="text-xs font-mono font-bold text-primary uppercase tracking-widest">
               Contact Us
             </h3>
             <ul className="space-y-2.5 text-xs sm:text-sm text-zinc-300">
               <li className="flex items-center gap-2.5">
-                <Mail size={16} className="text-[var(--primary)]" />
+                <Mail size={16} className="text-primary" />
                 <span>support@aegistrading.com</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <Phone size={16} className="text-[var(--primary)]" />
+                <Phone size={16} className="text-primary" />
                 <span>+91 98765 43210</span>
               </li>
               <li className="flex items-center gap-2.5">
-                <MapPin size={16} className="text-[var(--primary)]" />
+                <MapPin size={16} className="text-primary" />
                 <span>Mumbai, India</span>
               </li>
             </ul>
@@ -208,7 +289,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-[var(--primary)] hover:border-[var(--primary)]/40 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-(--primary)/40 transition-colors"
               >
                 <Globe size={16} />
               </a>
@@ -218,7 +299,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-[var(--primary)] hover:border-[var(--primary)]/40 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-(--primary)/40 transition-colors"
               >
                 <Video size={16} />
               </a>
@@ -228,7 +309,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-[var(--primary)] hover:border-[var(--primary)]/40 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-(--primary)/40 transition-colors"
               >
                 <Share2 size={16} />
               </a>
@@ -238,7 +319,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Telegram"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-[var(--primary)] hover:border-[var(--primary)]/40 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-(--primary)/40 transition-colors"
               >
                 <Send size={16} />
               </a>
@@ -254,11 +335,8 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Aegis Trading Academy. All rights reserved.
           </div>
 
-          <div className="text-[var(--primary)]/80">
-            Designed with precision.
-          </div>
+          <div className="text-primary/80">Designed with precision.</div>
         </div>
-
       </div>
     </footer>
   );

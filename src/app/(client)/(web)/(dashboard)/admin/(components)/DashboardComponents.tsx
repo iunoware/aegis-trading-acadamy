@@ -14,26 +14,24 @@ import {
   Plus,
   Calendar,
   Clock,
-  ArrowUpRight,
-  CheckCircle2,
+  // ArrowUpRight,
+  // CheckCircle2,
   AlertCircle,
-  RefreshCw,
-  CreditCard,
+  // RefreshCw,
+  // CreditCard,
   UserPlus,
-  FileCheck,
-  Filter,
-  Download,
+  // FileCheck,
+  // Filter,
+  // Download,
   ChevronRight,
-  MoreVertical,
-  Star,
+  // MoreVertical,
+  // Star,
   MessageSquareQuote,
   FolderTree,
   UserRound,
 } from "lucide-react";
 
-// ============================================================================
 // DUMMY PLACEHOLDER DATA STRUCTURES (Ready for API integration)
-// ============================================================================
 
 export interface KpiItem {
   id: string;
@@ -505,11 +503,7 @@ export function KPISection() {
                     : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                 }`}
               >
-                {kpi.isUp ? (
-                  <TrendingUp size={12} />
-                ) : (
-                  <TrendingDown size={12} />
-                )}
+                {kpi.isUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                 <span>{kpi.trend}</span>
               </div>
             </div>
@@ -520,9 +514,7 @@ export function KPISection() {
                 {kpi.title}
               </span>
               <div className="text-2xl font-extrabold text-white font-sans tracking-tight flex items-baseline gap-0.5">
-                {kpi.prefix && (
-                  <span className="text-[#C9A227]">{kpi.prefix}</span>
-                )}
+                {kpi.prefix && <span className="text-[#C9A227]">{kpi.prefix}</span>}
                 <span
                   ref={(el) => {
                     numberRefs.current[idx] = el;
@@ -589,7 +581,7 @@ export function AnalyticsRow() {
         </div>
 
         {/* SVG Line Chart Placeholder */}
-        <div className="relative w-full h-[240px] flex items-end">
+        <div className="relative w-full h-60 flex items-end">
           <svg
             className="w-full h-full overflow-visible"
             viewBox="0 0 700 220"
@@ -705,11 +697,8 @@ export function AnalyticsRow() {
         </div>
 
         {/* SVG Donut Chart Placeholder */}
-        <div className="relative w-full h-[180px] my-4 flex items-center justify-center">
-          <svg
-            className="w-[170px] h-[170px] transform -rotate-90"
-            viewBox="0 0 100 100"
-          >
+        <div className="relative w-full h-45 my-4 flex items-center justify-center">
+          <svg className="w-42.5 h-42.5 transform -rotate-90" viewBox="0 0 100 100">
             {/* Background Track */}
             <circle
               cx="50"
@@ -755,9 +744,7 @@ export function AnalyticsRow() {
 
           {/* Center Total Count */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-2xl font-extrabold text-white font-sans">
-              340
-            </span>
+            <span className="text-2xl font-extrabold text-white font-sans">340</span>
             <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">
               Total Plans
             </span>
@@ -785,9 +772,7 @@ export function AnalyticsRow() {
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-zinc-600" />
-              <span className="text-zinc-300 font-medium">
-                Expired / Inactive
-              </span>
+              <span className="text-zinc-300 font-medium">Expired / Inactive</span>
             </div>
             <span className="font-mono text-zinc-400">35 (10%)</span>
           </div>
@@ -842,14 +827,11 @@ export function SecondRowCharts() {
                   statusStyle =
                     "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
                 else if (order.status === "Pending")
-                  statusStyle =
-                    "bg-amber-500/10 text-amber-400 border-amber-500/30";
+                  statusStyle = "bg-amber-500/10 text-amber-400 border-amber-500/30";
                 else if (order.status === "Failed")
-                  statusStyle =
-                    "bg-rose-500/10 text-rose-400 border-rose-500/30";
+                  statusStyle = "bg-rose-500/10 text-rose-400 border-rose-500/30";
                 else if (order.status === "Refunded")
-                  statusStyle =
-                    "bg-purple-500/10 text-purple-400 border-purple-500/30";
+                  statusStyle = "bg-purple-500/10 text-purple-400 border-purple-500/30";
 
                 return (
                   <tr
@@ -860,9 +842,7 @@ export function SecondRowCharts() {
                       {order.id}
                     </td>
                     <td className="py-3 px-3">
-                      <div className="font-semibold text-white">
-                        {order.student}
-                      </div>
+                      <div className="font-semibold text-white">{order.student}</div>
                       <div className="text-[10px] text-zinc-400 font-mono">
                         {order.email}
                       </div>
@@ -903,10 +883,10 @@ export function SecondRowCharts() {
           {TOP_COURSES.map((course) => (
             <div
               key={course.id}
-              className="flex flex-col gap-1.5 p-3 rounded-xl bg-white/[0.03] border border-white/5"
+              className="flex flex-col gap-1.5 p-3 rounded-xl bg-white/3 border border-white/5"
             >
               <div className="flex items-center justify-between text-xs sm:text-sm">
-                <span className="font-semibold text-white truncate max-w-[260px]">
+                <span className="font-semibold text-white truncate max-w-65">
                   {course.title}
                 </span>
                 <span className="font-mono text-[#C9A227] font-bold">
@@ -916,7 +896,7 @@ export function SecondRowCharts() {
 
               <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
                 <div
-                  className="bg-gradient-to-r from-[#e6c55a] to-[#C9A227] h-full rounded-full"
+                  className="bg-linear-to-r from-[#e6c55a] to-[#C9A227] h-full rounded-full"
                   style={{ width: course.completion }}
                 />
               </div>
@@ -962,7 +942,7 @@ export function ThirdRow() {
           {LATEST_USERS.map((usr) => (
             <div
               key={usr.id}
-              className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/5 hover:bg-white/[0.06] transition-colors"
+              className="flex items-center justify-between p-3 rounded-xl bg-white/3 border border-white/5 hover:bg-white/6 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white font-bold text-xs shrink-0">
@@ -970,9 +950,7 @@ export function ThirdRow() {
                 </div>
                 <div>
                   <div className="text-xs font-bold text-white">{usr.name}</div>
-                  <div className="text-[11px] text-zinc-400 font-mono">
-                    {usr.email}
-                  </div>
+                  <div className="text-[11px] text-zinc-400 font-mono">{usr.email}</div>
                 </div>
               </div>
 
@@ -980,9 +958,7 @@ export function ThirdRow() {
                 <div className="text-xs font-semibold text-[#C9A227] font-mono">
                   {usr.plan}
                 </div>
-                <div className="text-[10px] font-mono text-zinc-500">
-                  {usr.joined}
-                </div>
+                <div className="text-[10px] font-mono text-zinc-500">{usr.joined}</div>
               </div>
             </div>
           ))}
@@ -1012,17 +988,15 @@ export function ThirdRow() {
           {RECENT_ENROLLMENTS.map((item) => (
             <div
               key={item.id}
-              className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/5 hover:border-[#C9A227]/30 transition-all duration-200"
+              className="flex items-center justify-between p-3 rounded-xl bg-white/3 border border-white/5 hover:border-[#C9A227]/30 transition-all duration-200"
             >
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/40 flex items-center justify-center text-[#C9A227] font-bold text-xs shrink-0">
                   {item.avatar}
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-white">
-                    {item.student}
-                  </div>
-                  <div className="text-[11px] text-zinc-400 truncate max-w-[200px]">
+                  <div className="text-xs font-bold text-white">{item.student}</div>
+                  <div className="text-[11px] text-zinc-400 truncate max-w-50">
                     {item.course}
                   </div>
                 </div>
@@ -1032,9 +1006,7 @@ export function ThirdRow() {
                 <span className="inline-block px-2 py-0.5 rounded-md bg-[#C9A227]/10 text-[#C9A227] text-[10px] font-mono border border-[#C9A227]/20 mb-1">
                   {item.plan}
                 </span>
-                <div className="text-[10px] font-mono text-zinc-500">
-                  {item.time}
-                </div>
+                <div className="text-[10px] font-mono text-zinc-500">{item.time}</div>
               </div>
             </div>
           ))}
@@ -1068,17 +1040,13 @@ export function FourthRow() {
             return (
               <div key={act.id} className="relative flex flex-col gap-0.5">
                 {/* Timeline Connector Dot */}
-                <div className="absolute -left-[31px] top-0.5 w-6 h-6 rounded-full bg-[#111113] border border-white/20 flex items-center justify-center text-xs">
+                <div className="absolute -left-7.75 top-0.5 w-6 h-6 rounded-full bg-[#111113] border border-white/20 flex items-center justify-center text-xs">
                   <IconComp size={12} className={act.color} />
                 </div>
 
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white font-sans">
-                    {act.title}
-                  </span>
-                  <span className="text-[10px] font-mono text-zinc-500">
-                    {act.time}
-                  </span>
+                  <span className="font-bold text-white font-sans">{act.title}</span>
+                  <span className="text-[10px] font-mono text-zinc-500">{act.time}</span>
                 </div>
                 <p className="text-xs text-zinc-400 font-normal leading-relaxed">
                   {act.detail}
@@ -1112,13 +1080,11 @@ export function BottomSection() {
           {TOP_PLANS.map((plan) => (
             <div
               key={plan.id}
-              className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.03] border border-white/5"
+              className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
             >
               <div>
                 <div className="text-xs font-bold text-white">{plan.name}</div>
-                <div className="text-[11px] font-mono text-zinc-400">
-                  {plan.billing}
-                </div>
+                <div className="text-[11px] font-mono text-zinc-400">{plan.billing}</div>
               </div>
 
               <div className="text-right">
@@ -1137,9 +1103,7 @@ export function BottomSection() {
       {/* Top Courses Summary (6 Cols) */}
       <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <div className="mb-4">
-          <h3 className="text-lg font-bold text-white font-sans">
-            Top Enrolled Courses
-          </h3>
+          <h3 className="text-lg font-bold text-white font-sans">Top Enrolled Courses</h3>
           <p className="text-xs text-zinc-400 mt-0.5">
             Highest engagement trading modules.
           </p>
@@ -1149,14 +1113,14 @@ export function BottomSection() {
           {TOP_COURSES.map((crs) => (
             <div
               key={crs.id}
-              className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.03] border border-white/5"
+              className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-black/60 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] shrink-0 font-mono text-xs font-bold">
                   CRS
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-white truncate max-w-[220px]">
+                  <div className="text-xs font-bold text-white truncate max-w-55">
                     {crs.title}
                   </div>
                   <div className="text-[11px] font-mono text-zinc-400">
@@ -1197,14 +1161,9 @@ export function FooterStats() {
               <span className="text-[10px] font-mono text-zinc-400 uppercase block mb-0.5">
                 {stat.label}
               </span>
-              <span className="text-xs font-bold text-white font-sans">
-                {stat.value}
-              </span>
+              <span className="text-xs font-bold text-white font-sans">{stat.value}</span>
             </div>
-            <IconComp
-              size={16}
-              className="text-[#C9A227] shrink-0 opacity-80"
-            />
+            <IconComp size={16} className="text-[#C9A227] shrink-0 opacity-80" />
           </div>
         );
       })}

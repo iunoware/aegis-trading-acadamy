@@ -12,8 +12,8 @@ import {
   Phone,
   Mail,
   ShieldCheck,
-  ShieldAlert,
-  User as UserIcon,
+  // ShieldAlert,
+  // User as UserIcon,
 } from "lucide-react";
 
 export interface ActivityRecord {
@@ -181,7 +181,7 @@ export function UsersTable({
                     <tr
                       key={user.id}
                       onClick={() => onSelectUser(user)}
-                      className="hover:bg-white/[0.04] transition-colors cursor-pointer group"
+                      className="hover:bg-white/4 transition-colors cursor-pointer group"
                     >
                       {/* Avatar & Name */}
                       <td className="py-3.5 px-4">
@@ -306,7 +306,7 @@ export function UsersTable({
               <div
                 key={user.id}
                 onClick={() => onSelectUser(user)}
-                className="p-4 space-y-3 hover:bg-white/[0.03] transition-colors cursor-pointer"
+                className="p-4 space-y-3 hover:bg-white/3 transition-colors cursor-pointer"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
