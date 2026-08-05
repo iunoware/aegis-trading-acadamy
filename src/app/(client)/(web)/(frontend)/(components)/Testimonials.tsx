@@ -245,10 +245,10 @@ export default function Testimonials() {
 
       {/* SECTION CONTAINER */}
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         {/* Small Label */}
         <div ref={labelRef} className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--primary)]/30 text-xs font-semibold tracking-widest text-[var(--primary)] font-mono uppercase bg-[var(--primary)]/5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-(--primary)/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-(--primary)/5">
             <ShieldCheck size={14} className="text-primary" />
             TESTIMONIALS
           </div>
@@ -266,7 +266,7 @@ export default function Testimonials() {
         {/* Supporting Paragraph (Max width 650px) */}
         <p
           ref={paragraphRef}
-          className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed text-zinc-300 max-w-[650px] text-center mb-16 sm:mb-20"
+          className="text-base sm:text-lg font-normal leading-relaxed text-zinc-300 max-w-162.5 text-center mb-16 sm:mb-20"
         >
           Hear directly from traders who transformed their learning journey through
           structured education, disciplined execution and continuous mentorship at Aegis
@@ -295,7 +295,7 @@ export default function Testimonials() {
                   <article
                     className={`relative rounded-[24px] glass-panel p-8 sm:p-9 flex flex-col justify-between h-full min-h-[300px] border transition-all duration-300 ${
                       isCenter
-                        ? "border-[var(--primary)]/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
+                        ? "border-(--primary)/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
                         : "border-white/10 bg-[#101010]/60"
                     } hover:-translate-y-1.5`}
                   >
@@ -347,7 +347,7 @@ export default function Testimonials() {
           ref={carouselFrameRef}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          className="w-full relative max-w-[1200px] mx-auto min-h-[340px] flex items-center justify-center mb-10"
+          className="w-full relative max-w-300 mx-auto min-h-85 flex items-center justify-center mb-10"
         >
           {isLoading ? (
             <p className="text-sm text-zinc-400">Loading testimonials...</p>
@@ -368,9 +368,9 @@ export default function Testimonials() {
                     }`}
                   >
                     <article
-                      className={`relative rounded-[24px] glass-panel p-8 sm:p-9 flex flex-col justify-between h-full min-h-[300px] border transition-all duration-300 ${
+                      className={`relative rounded-3xl glass-panel p-8 sm:p-9 flex flex-col justify-between h-full min-h-75 border transition-all duration-300 ${
                         isCenter
-                          ? "border-[var(--primary)]/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
+                          ? "border-(--primary)/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
                           : "border-white/10 bg-[#101010]/60"
                       } hover:-translate-y-1.5`}
                     >
@@ -389,7 +389,7 @@ export default function Testimonials() {
                             <Star
                               key={index}
                               size={16}
-                              className="fill-[var(--primary)] text-[var(--primary)]"
+                              className="fill-primary text-primary"
                             />
                           ))}
                         </div>
@@ -405,12 +405,12 @@ export default function Testimonials() {
                             {data.customerName}
                           </h4>
 
-                          <span className="text-xs font-mono font-semibold text-[var(--muted)] uppercase tracking-wider block">
+                          <span className="text-xs font-mono font-semibold text-muted uppercase tracking-wider block">
                             {data.designation || "Aegis Academy Student"}
                           </span>
                         </div>
 
-                        <span className="text-xs font-mono text-[var(--primary)]/80 font-medium">
+                        <span className="text-xs font-mono text-primary/80 font-medium">
                           {data.company || "Aegis Trading Academy"}
                         </span>
                       </div>
@@ -429,7 +429,7 @@ export default function Testimonials() {
           <button
             onClick={handlePrev}
             aria-label="Previous Testimonial"
-            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-[var(--primary)] hover:border-[var(--primary)]/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
+            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-primary hover:border-(--primary)/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
           >
             <ChevronLeft size={20} />
           </button>
@@ -448,7 +448,7 @@ export default function Testimonials() {
                   aria-label={`Go to testimonial ${idx + 1}`}
                   className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
                     isActive
-                      ? "w-8 bg-[var(--primary)] shadow-[0_0_12px_rgba(212,175,55,0.6)]"
+                      ? "w-8 bg-primary shadow-[0_0_12px_rgba(212,175,55,0.6)]"
                       : "w-2.5 bg-white/20 hover:bg-white/40"
                   }`}
                 />
@@ -460,7 +460,7 @@ export default function Testimonials() {
           <button
             onClick={handleNext}
             aria-label="Next Testimonial"
-            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-[var(--primary)] hover:border-[var(--primary)]/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
+            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-primary hover:border-(--primary)/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
           >
             <ChevronRight size={20} />
           </button>
