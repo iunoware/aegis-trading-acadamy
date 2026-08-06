@@ -80,50 +80,43 @@ const ROADMAP_STEPS = [
   {
     stepNumber: "01",
     title: "Market Fundamentals",
-    description:
-      "Understand how financial markets work before placing your first trade.",
+    description: "Understand how financial markets work before placing your first trade.",
     icon: Compass,
   },
   {
     stepNumber: "02",
     title: "Market Structure",
-    description:
-      "Learn trends, swings, support and resistance with clarity.",
+    description: "Learn trends, swings, support and resistance with clarity.",
     icon: Layers,
   },
   {
     stepNumber: "03",
     title: "Price Action",
-    description:
-      "Read candlesticks and market behavior without indicators.",
+    description: "Read candlesticks and market behavior without indicators.",
     icon: Activity,
   },
   {
     stepNumber: "04",
     title: "Liquidity Concepts",
-    description:
-      "Understand where institutions enter and exit the market.",
+    description: "Understand where institutions enter and exit the market.",
     icon: Target,
   },
   {
     stepNumber: "05",
     title: "Risk Management",
-    description:
-      "Protect your capital with disciplined position sizing.",
+    description: "Protect your capital with disciplined position sizing.",
     icon: ShieldCheck,
   },
   {
     stepNumber: "06",
     title: "Trading Psychology",
-    description:
-      "Build emotional control and consistency.",
+    description: "Build emotional control and consistency.",
     icon: Brain,
   },
   {
     stepNumber: "07",
     title: "Live Market Sessions",
-    description:
-      "Apply everything in practical market environments.",
+    description: "Apply everything in practical market environments.",
     icon: Radio,
   },
   {
@@ -146,7 +139,7 @@ export default function LearningJourney() {
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     const ctx = gsap.context(() => {
@@ -158,7 +151,7 @@ export default function LearningJourney() {
             paragraphRef.current,
             roadmapContainerRef.current?.children,
           ],
-          { opacity: 1, y: 0 }
+          { opacity: 1, y: 0 },
         );
         if (lineRef.current) gsap.set(lineRef.current, { scaleY: 1 });
         return;
@@ -188,7 +181,11 @@ export default function LearningJourney() {
         .to(paragraphRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.5");
 
       if (lineRef.current) {
-        tl.to(lineRef.current, { scaleY: 1, duration: 1.4, ease: "power2.inOut" }, "-=0.3");
+        tl.to(
+          lineRef.current,
+          { scaleY: 1, duration: 1.4, ease: "power2.inOut" },
+          "-=0.3",
+        );
       }
 
       if (roadmapContainerRef.current) {
@@ -201,7 +198,7 @@ export default function LearningJourney() {
             stagger: 0.15,
             ease: "back.out(1.2)",
           },
-          "-=1.1"
+          "-=1.1",
         );
       }
 
@@ -226,7 +223,7 @@ export default function LearningJourney() {
     <section
       ref={sectionRef}
       aria-label="Learning Journey Section"
-      className="relative w-full py-28 lg:py-36 bg-[var(--background)] text-white overflow-hidden select-none"
+      className="relative w-full py-28 lg:py-36 bg-[var(--background)] text-white overflow-hidden "
     >
       <div className="absolute inset-0 pointer-events-none z-0">
         <div
@@ -255,7 +252,9 @@ export default function LearningJourney() {
           ref={paragraphRef}
           className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed text-zinc-300 max-w-[650px] text-center mb-16 sm:mb-24"
         >
-          Our curriculum is carefully structured to build your confidence step by step. Every stage prepares you for the next, ensuring you develop the discipline, mindset, and technical skills required to trade real markets.
+          Our curriculum is carefully structured to build your confidence step by step.
+          Every stage prepares you for the next, ensuring you develop the discipline,
+          mindset, and technical skills required to trade real markets.
         </p>
 
         <div className="relative w-full">

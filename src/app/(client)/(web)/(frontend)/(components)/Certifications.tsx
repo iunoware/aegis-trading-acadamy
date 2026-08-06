@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -5,6 +6,7 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
+import axios from "axios";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -15,61 +17,60 @@ if (typeof window !== "undefined") {
 export interface Certificate {
   id: string;
   title: string;
-  organization: string;
-  image: string;
-  issuedYear: string;
-  description?: string;
+  imageUrl: string;
+  status: "Published" | "Hidden";
   displayOrder: number;
-  isPublished: boolean;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 // Sample dataset
-const INITIAL_CERTIFICATES: Certificate[] = [
-  {
-    id: "cert-1",
-    title: "NISM Series VIII - Equity Derivatives Certification",
-    organization: "NATIONAL INSTITUTE OF SECURITIES MARKETS (NISM)",
-    image: "/images/cert-nism.png",
-    issuedYear: "2024",
-    description:
-      "Advanced accreditation covering derivative trading strategies, risk containment mechanisms, and regulatory compliance.",
-    displayOrder: 1,
-    isPublished: true,
-  },
-  {
-    id: "cert-2",
-    title: "Chartered Market Technician (CMT) Level II",
-    organization: "CMT ASSOCIATION, USA",
-    image: "/images/cert-cmt.png",
-    issuedYear: "2023",
-    description:
-      "Institutional technical analysis charter certifying deep market structure expertise, trend identification, and quantitative risk management.",
-    displayOrder: 2,
-    isPublished: true,
-  },
-  {
-    id: "cert-3",
-    title: "CFA Institute Investment Foundations",
-    organization: "CFA INSTITUTE, USA",
-    image: "/images/cert-cfa.png",
-    issuedYear: "2024",
-    description:
-      "Global standard qualification covering macroeconomic analysis, portfolio management, and ethical trading standards.",
-    displayOrder: 3,
-    isPublished: true,
-  },
-  {
-    id: "cert-4",
-    title: "Advanced Price Action & Liquidity Specialist",
-    organization: "GLOBAL TRADING INSTITUTE",
-    image: "/images/cert-nism.png",
-    issuedYear: "2025",
-    description:
-      "Specialized accreditation in institutional order flow, market profile dynamics, and smart money liquidity concepts.",
-    displayOrder: 4,
-    isPublished: true,
-  },
-];
+// const INITIAL_CERTIFICATES: Certificate[] = [
+//   {
+//     id: "cert-1",
+//     title: "NISM Series VIII - Equity Derivatives Certification",
+//     organization: "NATIONAL INSTITUTE OF SECURITIES MARKETS (NISM)",
+//     image: "/images/cert-nism.png",
+//     issuedYear: "2024",
+//     description:
+//       "Advanced accreditation covering derivative trading strategies, risk containment mechanisms, and regulatory compliance.",
+//     displayOrder: 1,
+//     isPublished: true,
+//   },
+//   {
+//     id: "cert-2",
+//     title: "Chartered Market Technician (CMT) Level II",
+//     organization: "CMT ASSOCIATION, USA",
+//     image: "/images/cert-cmt.png",
+//     issuedYear: "2023",
+//     description:
+//       "Institutional technical analysis charter certifying deep market structure expertise, trend identification, and quantitative risk management.",
+//     displayOrder: 2,
+//     isPublished: true,
+//   },
+//   {
+//     id: "cert-3",
+//     title: "CFA Institute Investment Foundations",
+//     organization: "CFA INSTITUTE, USA",
+//     image: "/images/cert-cfa.png",
+//     issuedYear: "2024",
+//     description:
+//       "Global standard qualification covering macroeconomic analysis, portfolio management, and ethical trading standards.",
+//     displayOrder: 3,
+//     isPublished: true,
+//   },
+//   {
+//     id: "cert-4",
+//     title: "Advanced Price Action & Liquidity Specialist",
+//     organization: "GLOBAL TRADING INSTITUTE",
+//     image: "/images/cert-nism.png",
+//     issuedYear: "2025",
+//     description:
+//       "Specialized accreditation in institutional order flow, market profile dynamics, and smart money liquidity concepts.",
+//     displayOrder: 4,
+//     isPublished: true,
+//   },
+// ];
 
 // Faint floating particle positions for background ambiance
 const PARTICLES = Array.from({ length: 14 }).map((_, i) => ({
@@ -92,17 +93,14 @@ export default function Certifications() {
   const progressBarsRef = useRef<(HTMLDivElement | null)[]>([]);
   const particlesRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Clean, sorted certificates list
-  const [certificates] = useState<Certificate[]>(() =>
-    INITIAL_CERTIFICATES.filter((c) => c.isPublished).sort(
-      (a, b) => a.displayOrder - b.displayOrder,
-    ),
-  );
-
+  // Certificate data
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+
   const total = certificates.length;
 
-  // Animation & state tracking refs
+  // Animation and state tracking refs
   const activeIndexRef = useRef(0);
   const isPausedRef = useRef(false);
   const isAnimatingRef = useRef(false);
@@ -110,10 +108,58 @@ export default function Certifications() {
   const transitionTimelineRef = useRef<gsap.core.Timeline | null>(null);
   const touchStartXRef = useRef<number | null>(null);
 
-  // Keep activeIndexRef synced
+  const fetchCertificates = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const response = await axios.get<Certificate[]>("/api/certificates");
+
+      const publishedCertificates = response.data
+        .filter((certificate) => certificate.status === "Published")
+        .sort((a, b) => a.displayOrder - b.displayOrder);
+
+      setCertificates(publishedCertificates);
+    } catch (error) {
+      console.error("Failed to fetch certificates:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCertificates();
+  }, [fetchCertificates]);
+
+  // Reset the carousel index if the certificate list changes
+  useEffect(() => {
+    if (certificates.length === 0) {
+      activeIndexRef.current = 0;
+      return;
+    }
+
+    if (activeIndex >= certificates.length) {
+      setActiveIndex(0);
+      activeIndexRef.current = 0;
+    }
+  }, [certificates.length, activeIndex]);
+
+  // Keep the ref synchronized with state
   useEffect(() => {
     activeIndexRef.current = activeIndex;
   }, [activeIndex]);
+
+  // Animation & state tracking refs
+  // const activeIndexRef = useRef(0);
+  // const isPausedRef = useRef(false);
+  // const isAnimatingRef = useRef(false);
+  // const progressTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  // const transitionTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  // const touchStartXRef = useRef<number | null>(null);
+
+  // Keep activeIndexRef synced
+  // useEffect(() => {
+  //   activeIndexRef.current = activeIndex;
+  // }, [activeIndex]);
 
   // GSAP Slide Change Transition Timeline
 
@@ -311,10 +357,7 @@ export default function Certifications() {
     }
   };
 
-  const handleArrowMouseEnter = (
-    arrowEl: HTMLButtonElement | null,
-    isRight = false,
-  ) => {
+  const handleArrowMouseEnter = (arrowEl: HTMLButtonElement | null, isRight = false) => {
     if (!arrowEl) return;
     gsap.to(arrowEl, {
       scale: 1.08,
@@ -378,6 +421,14 @@ export default function Certifications() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleNext, handlePrev]);
 
+  if (isLoading) {
+    return (
+      <section className="flex min-h-100 items-center justify-center bg-(--background,#090909)">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-[#C8A84A]" />
+      </section>
+    );
+  }
+
   if (total === 0) return null;
 
   const currentCert = certificates[activeIndex];
@@ -386,7 +437,7 @@ export default function Certifications() {
     <section
       ref={sectionRef}
       aria-label="Professional Certifications Section"
-      className="relative w-full  flex flex-col items-center justify-center py-6 sm:py-8 lg:py-10 bg-(--background,#090909) text-white select-none"
+      className="relative w-full  flex flex-col items-center justify-center py-6 sm:py-8 lg:py-10 bg-(--background,#090909) text-white "
     >
       {/* BACKGROUND AMBIANCE: VIGNETTE, RADIAL GLOW & FAINT PARTICLES */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
@@ -440,12 +491,8 @@ export default function Certifications() {
           <button
             ref={leftArrowDesktopRef}
             onClick={handlePrev}
-            onMouseEnter={() =>
-              handleArrowMouseEnter(leftArrowDesktopRef.current, false)
-            }
-            onMouseLeave={() =>
-              handleArrowMouseLeave(leftArrowDesktopRef.current)
-            }
+            onMouseEnter={() => handleArrowMouseEnter(leftArrowDesktopRef.current, false)}
+            onMouseLeave={() => handleArrowMouseLeave(leftArrowDesktopRef.current)}
             aria-label="Previous Certificate"
             className="hidden md:flex absolute -left-12 lg:-left-16 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-[#121215]/80 backdrop-blur-xl border border-[#C8A84A]/40 items-center justify-center text-[#C8A84A] hover:text-white hover:border-[#C8A84A] hover:bg-[#C8A84A]/20 transition-colors duration-300 shadow-[0_0_15px_rgba(200,168,74,0.15)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C8A84A]"
           >
@@ -467,7 +514,7 @@ export default function Certifications() {
             {/* Certificate Image Frame (Focused ~55-65% container width, 280-340px height) */}
             <div className="relative w-[90%] sm:w-[75%] lg:w-[75%] h-60 sm:h-75 lg:h-82.5 rounded-xl sm:rounded-2xl overflow-hidden border border-[#C8A84A]/30 bg-black/80 shadow-xl group">
               <Image
-                src={currentCert.image}
+                src={currentCert.imageUrl}
                 alt={currentCert.title}
                 fill
                 priority
@@ -487,12 +534,8 @@ export default function Certifications() {
           <button
             ref={rightArrowDesktopRef}
             onClick={handleNext}
-            onMouseEnter={() =>
-              handleArrowMouseEnter(rightArrowDesktopRef.current, true)
-            }
-            onMouseLeave={() =>
-              handleArrowMouseLeave(rightArrowDesktopRef.current)
-            }
+            onMouseEnter={() => handleArrowMouseEnter(rightArrowDesktopRef.current, true)}
+            onMouseLeave={() => handleArrowMouseLeave(rightArrowDesktopRef.current)}
             aria-label="Next Certificate"
             className="hidden md:flex absolute -right-12 lg:-right-16 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full bg-[#121215]/80 backdrop-blur-xl border border-[#C8A84A]/40 items-center justify-center text-[#C8A84A] hover:text-white hover:border-[#C8A84A] hover:bg-[#C8A84A]/20 transition-colors duration-300 shadow-[0_0_15px_rgba(200,168,74,0.15)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C8A84A]"
           >
@@ -510,9 +553,7 @@ export default function Certifications() {
               onMouseEnter={() =>
                 handleArrowMouseEnter(leftArrowMobileRef.current, false)
               }
-              onMouseLeave={() =>
-                handleArrowMouseLeave(leftArrowMobileRef.current)
-              }
+              onMouseLeave={() => handleArrowMouseLeave(leftArrowMobileRef.current)}
               aria-label="Previous Certificate"
               className="w-10 h-10 rounded-full bg-[#121215]/90 backdrop-blur-xl border border-[#C8A84A]/40 flex items-center justify-center text-[#C8A84A] active:bg-[#C8A84A]/20 shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C8A84A]"
             >
@@ -529,9 +570,7 @@ export default function Certifications() {
               onMouseEnter={() =>
                 handleArrowMouseEnter(rightArrowMobileRef.current, true)
               }
-              onMouseLeave={() =>
-                handleArrowMouseLeave(rightArrowMobileRef.current)
-              }
+              onMouseLeave={() => handleArrowMouseLeave(rightArrowMobileRef.current)}
               aria-label="Next Certificate"
               className="w-10 h-10 rounded-full bg-[#121215]/90 backdrop-blur-xl border border-[#C8A84A]/40 flex items-center justify-center text-[#C8A84A] active:bg-[#C8A84A]/20 shadow-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C8A84A]"
             >

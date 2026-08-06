@@ -65,11 +65,7 @@ export default function Navbar() {
     const ctx = gsap.context(() => {
       if (prefersReducedMotion) {
         gsap.set(
-          [
-            logoRef.current,
-            itemsContainerRef.current?.children,
-            buttonsRef.current,
-          ],
+          [logoRef.current, itemsContainerRef.current?.children, buttonsRef.current],
           {
             opacity: 1,
             y: 0,
@@ -154,9 +150,7 @@ export default function Navbar() {
           >
             {NAV_ITEMS.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+                item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
               return (
                 <Link
@@ -212,7 +206,7 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div
           ref={mobileMenuRef}
-          className="fixed inset-0 z-50 bg-[#090909]/98 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-8 select-none"
+          className="fixed inset-0 z-50 bg-[#090909]/98 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-8 "
         >
           {/* Top Bar inside Mobile Panel */}
           <div className="flex items-center justify-between pb-6 border-b border-white/10">
@@ -243,9 +237,7 @@ export default function Navbar() {
           <div className="flex flex-col space-y-5 my-8">
             {NAV_ITEMS.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+                item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
               return (
                 <Link

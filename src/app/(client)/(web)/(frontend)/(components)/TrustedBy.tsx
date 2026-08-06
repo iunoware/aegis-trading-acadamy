@@ -121,7 +121,7 @@ export default function TrustedBy() {
     <section
       ref={sectionRef}
       aria-label="Trusted By Section"
-      className="relative w-full py-28 lg:py-20 bg-background text-white overflow-hidden select-none"
+      className="relative w-full py-28 lg:py-20 bg-background text-white overflow-hidden "
     >
       {/* ------------------------------------------------------------- */}
       {/* BACKGROUND GLOW (No grid, no charts, no noise) */}
@@ -159,9 +159,9 @@ export default function TrustedBy() {
           ref={textRef}
           className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed max-w-[600px] mb-16 sm:mb-20"
         >
-          Every successful trader starts with the right foundation. Aegis
-          Trading Academy has helped aspiring traders build confidence through
-          structured learning, disciplined execution and continuous mentorship.
+          Every successful trader starts with the right foundation. Aegis Trading Academy
+          has helped aspiring traders build confidence through structured learning,
+          disciplined execution and continuous mentorship.
         </p>
 
         {/* ------------------------------------------------------------- */}

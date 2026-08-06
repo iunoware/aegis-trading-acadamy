@@ -4,12 +4,12 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import {
   Calendar,
-  Sparkles,
+  // Sparkles,
   ToggleLeft,
   ToggleRight,
   BadgePercent,
-  IndianRupee,
-  ShieldAlert,
+  // IndianRupee,
+  // ShieldAlert,
 } from "lucide-react";
 import { FeatureList, PlanFeature } from "./FeatureList";
 
@@ -46,7 +46,7 @@ export function SubscriptionPlanCard({
       gsap.fromTo(
         cardRef.current,
         { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }
+        { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
       );
     }
   }, []);
@@ -68,14 +68,14 @@ export function SubscriptionPlanCard({
       gsap.fromTo(
         savingsRef.current,
         { scale: 0.97 },
-        { scale: 1, duration: 0.3, ease: "power2.out" }
+        { scale: 1, duration: 0.3, ease: "power2.out" },
       );
     }
   }, [plan.price, monthlyPriceForSavings, plan.id]);
 
   const handleFieldChange = <K extends keyof SubscriptionPlan>(
     key: K,
-    value: SubscriptionPlan[K]
+    value: SubscriptionPlan[K],
   ) => {
     onChange({
       ...plan,
@@ -151,20 +151,20 @@ export function SubscriptionPlanCard({
           {/* Plan Price */}
           <div className="space-y-1.5">
             <label className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300">
-              Plan Price (₹)
+              Plan Price ($)
             </label>
             <div className="relative flex items-center">
               <span className="absolute left-3.5 text-[#C9A227] font-bold text-sm">
-                ₹
+                $
               </span>
               <input
                 type="number"
-                min={0}
+                // min={0}
                 value={plan.price}
                 onChange={(e) =>
                   handleFieldChange("price", Math.max(0, Number(e.target.value) || 0))
                 }
-                placeholder="0"
+                // placeholder="0"
                 className="w-full bg-[#09090b] border border-white/15 rounded-xl pl-8 pr-3.5 py-2.5 text-sm text-white font-extrabold font-mono focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all"
               />
             </div>
@@ -182,7 +182,7 @@ export function SubscriptionPlanCard({
               type="text"
               value={plan.billingCycle}
               readOnly
-              className="w-full bg-[#09090b]/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-zinc-400 font-mono font-medium cursor-not-allowed select-none"
+              className="w-full bg-[#09090b]/60 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-zinc-400 font-mono font-medium cursor-not-allowed "
             />
           </div>
 
@@ -194,10 +194,7 @@ export function SubscriptionPlanCard({
             <select
               value={plan.badge}
               onChange={(e) =>
-                handleFieldChange(
-                  "badge",
-                  e.target.value as SubscriptionPlan["badge"]
-                )
+                handleFieldChange("badge", e.target.value as SubscriptionPlan["badge"])
               }
               className="w-full bg-[#09090b] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-medium focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all cursor-pointer"
             >
@@ -229,7 +226,7 @@ export function SubscriptionPlanCard({
                     <>
                       Customer saves{" "}
                       <span className="text-[#C9A227] font-extrabold font-mono">
-                        ₹{savingsAmount.toLocaleString("en-IN")}
+                        ${savingsAmount.toLocaleString("en-IN")}
                       </span>{" "}
                       annually
                       {savingsPercentage > 0 && (

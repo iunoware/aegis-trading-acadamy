@@ -56,7 +56,8 @@ const INITIAL_COURSES: Course[] = [
     id: "crs-1",
     name: "Introduction to Trading",
     coverImage: "/images/cert-nism.png",
-    description: "Fundamental market concepts, trading terminology, order types, and discipline basics.",
+    description:
+      "Fundamental market concepts, trading terminology, order types, and discipline basics.",
     status: "Published",
     createdAt: "10 Jul 2026",
     updatedAt: "28 Jul 2026",
@@ -91,7 +92,8 @@ const INITIAL_COURSES: Course[] = [
     id: "crs-2",
     name: "Price Action & Order Flow",
     coverImage: "/images/cert-cmt.png",
-    description: "Master institutional liquidity pools, order blocks, premium/discount arrays, and entry models.",
+    description:
+      "Master institutional liquidity pools, order blocks, premium/discount arrays, and entry models.",
     status: "Published",
     createdAt: "15 Jul 2026",
     updatedAt: "30 Jul 2026",
@@ -118,7 +120,8 @@ const INITIAL_COURSES: Course[] = [
     id: "crs-3",
     name: "Options Trading Blueprint",
     coverImage: "/images/cert-cfa.png",
-    description: "Options Greeks, Delta hedging, IV crush, and high-probability directional scalping setups.",
+    description:
+      "Options Greeks, Delta hedging, IV crush, and high-probability directional scalping setups.",
     status: "Published",
     createdAt: "18 Jul 2026",
     updatedAt: "31 Jul 2026",
@@ -137,7 +140,8 @@ const INITIAL_COURSES: Course[] = [
     id: "crs-4",
     name: "Swing Trading Strategies",
     coverImage: "/images/cert-nism.png",
-    description: "Multi-day trend holding, breakout confirmations, position sizing, and trailing stop strategies.",
+    description:
+      "Multi-day trend holding, breakout confirmations, position sizing, and trailing stop strategies.",
     status: "Draft",
     createdAt: "22 Jul 2026",
     updatedAt: "22 Jul 2026",
@@ -147,7 +151,8 @@ const INITIAL_COURSES: Course[] = [
     id: "crs-5",
     name: "Risk Management & Psychology",
     coverImage: "/images/cert-cmt.png",
-    description: "Capital preservation protocols, max daily loss limits, risk-reward ratios, and emotional discipline.",
+    description:
+      "Capital preservation protocols, max daily loss limits, risk-reward ratios, and emotional discipline.",
     status: "Published",
     createdAt: "25 Jul 2026",
     updatedAt: "29 Jul 2026",
@@ -197,7 +202,7 @@ export default function CourseCMS() {
             duration: 0.45,
             stagger: 0.08,
             ease: "power2.out",
-          }
+          },
         );
       }
     }, [activeCourseId, isCourseModalOpen, isVideoModalOpen]);
@@ -255,8 +260,8 @@ export default function CourseCMS() {
                 status: courseStatus,
                 updatedAt: "Today",
               }
-            : c
-        )
+            : c,
+        ),
       );
       toast.success("Course updated successfully");
     } else {
@@ -328,12 +333,12 @@ export default function CourseCMS() {
                       isPreview: videoIsPreview,
                       order: videoOrder,
                     }
-                  : v
+                  : v,
               ),
             };
           }
           return c;
-        })
+        }),
       );
       toast.success("Video updated");
     } else {
@@ -351,7 +356,7 @@ export default function CourseCMS() {
             return { ...c, videos: [...c.videos, newVideo] };
           }
           return c;
-        })
+        }),
       );
       toast.success("Video added to course");
     }
@@ -370,13 +375,13 @@ export default function CourseCMS() {
           };
         }
         return c;
-      })
+      }),
     );
     toast.info("Video deleted");
   };
 
   return (
-    <div ref={containerRef} className="w-full max-w-[1400px] mx-auto space-y-6 pb-16 select-none">
+    <div ref={containerRef} className="w-full max-w-[1400px] mx-auto space-y-6 pb-16 ">
       {/* ------------------------------------------------------------- */}
       {/* VIEW 1: COURSES LIST VIEW (When activeCourseId is null) */}
       {/* ------------------------------------------------------------- */}
@@ -399,7 +404,7 @@ export default function CourseCMS() {
               onClick={handleOpenCreateCourse}
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black shadow-[0_0_20px_rgba(201,162,39,0.35)] hover:shadow-[0_0_30px_rgba(201,162,39,0.55)] transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
             >
-              <Plus size={16} className="stroke-[3]" />
+              <Plus size={16} className="stroke-3" />
               <span>Add Course</span>
             </button>
           </div>
@@ -407,7 +412,10 @@ export default function CourseCMS() {
           {/* Search & Filter Bar */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="relative w-full sm:w-80">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+              <Search
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400"
+              />
               <input
                 type="text"
                 value={searchQuery}
@@ -525,7 +533,9 @@ export default function CourseCMS() {
             <div className="rounded-2xl bg-[#111113]/80 border border-white/10 p-12 text-center flex flex-col items-center justify-center">
               <FileQuestion size={40} className="text-zinc-600 mb-3" />
               <h4 className="text-sm font-bold text-white">No Courses Found</h4>
-              <p className="text-xs text-zinc-400 mt-1 mb-4">Create your first academy course to get started.</p>
+              <p className="text-xs text-zinc-400 mt-1 mb-4">
+                Create your first academy course to get started.
+              </p>
               <button
                 onClick={handleOpenCreateCourse}
                 className="px-4 py-2 rounded-xl bg-[#C9A227] text-black font-bold text-xs shadow-md"
@@ -627,7 +637,9 @@ export default function CourseCMS() {
                       <h4 className="text-sm font-bold text-white font-sans group-hover:text-[#C9A227] transition-colors">
                         {vid.title}
                       </h4>
-                      <span className="text-xs font-mono text-zinc-400">{vid.videoUrl}</span>
+                      <span className="text-xs font-mono text-zinc-400">
+                        {vid.videoUrl}
+                      </span>
                     </div>
                   </div>
 
@@ -669,7 +681,8 @@ export default function CourseCMS() {
 
               {activeCourse.videos.length === 0 && (
                 <div className="rounded-2xl border border-dashed border-white/10 p-8 text-center text-xs font-mono text-zinc-500">
-                  No videos added to this course yet. Click &quot;Add Video&quot; above to upload video content.
+                  No videos added to this course yet. Click &quot;Add Video&quot; above to
+                  upload video content.
                 </div>
               )}
             </div>
@@ -842,7 +855,9 @@ export default function CourseCMS() {
               <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white">Free Preview</div>
-                  <div className="text-[11px] text-zinc-400">Allow non-enrolled users to watch this lesson.</div>
+                  <div className="text-[11px] text-zinc-400">
+                    Allow non-enrolled users to watch this lesson.
+                  </div>
                 </div>
 
                 <button

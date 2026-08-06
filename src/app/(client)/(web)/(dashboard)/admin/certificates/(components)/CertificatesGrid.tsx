@@ -1,15 +1,17 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import {
-  Search,
-  Filter,
+  // Search,
+  // Filter,
   Eye,
   EyeOff,
   Edit2,
   Trash2,
-  Award,
+  // Award,
   Maximize2,
 } from "lucide-react";
 import { CertificateImageLightbox } from "./CertificateImageLightbox";
@@ -21,6 +23,7 @@ export interface Certificate {
   status: "Published" | "Hidden";
   displayOrder: number;
   createdAt: string;
+  updatedAt?: string;
 }
 
 interface CertificatesGridProps {
@@ -38,8 +41,9 @@ export function CertificatesGrid({
 }: CertificatesGridProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOption, setFilterOption] = useState<string>("ALL");
-  const [previewingCertificate, setPreviewingCertificate] =
-    useState<Certificate | null>(null);
+  const [previewingCertificate, setPreviewingCertificate] = useState<Certificate | null>(
+    null,
+  );
   const gridRef = useRef<HTMLDivElement>(null);
 
   // GSAP animation on search/filter update
@@ -66,10 +70,8 @@ export function CertificatesGrid({
       const matchesSearch = !q || item.title.toLowerCase().includes(q);
 
       let matchesFilter = true;
-      if (filterOption === "PUBLISHED")
-        matchesFilter = item.status === "Published";
-      else if (filterOption === "HIDDEN")
-        matchesFilter = item.status === "Hidden";
+      if (filterOption === "PUBLISHED") matchesFilter = item.status === "Published";
+      else if (filterOption === "HIDDEN") matchesFilter = item.status === "Hidden";
       else if (filterOption === "RECENT") {
         matchesFilter =
           new Date(item.createdAt).getTime() > new Date("2026-07-01").getTime();
@@ -123,10 +125,7 @@ export function CertificatesGrid({
       </div> */}
 
       {/* Grid Showcase (Desktop: 3 cols, Tablet: 2 cols, Mobile: 1 col) */}
-      <div
-        ref={gridRef}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
+      <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCertificates.length > 0 ? (
           filteredCertificates.map((cert) => (
             <CertificateCardItem
@@ -167,6 +166,12 @@ function CertificateCardItem({
   onToggleStatus: () => void;
   onDelete: () => void;
 }) {
+  const formattedCreatedAt = new Date(certificate.createdAt).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
   return (
     <div className="group relative rounded-2xl bg-[#111113]/90 backdrop-blur-xl border border-white/10 p-5 flex flex-col justify-between hover:border-[#C9A227]/40 hover:bg-[#151518] transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.5)] overflow-hidden">
       <div>
@@ -212,7 +217,7 @@ function CertificateCardItem({
         </div>
 
         {/* Certificate Title */}
-        <h4 className="text-sm font-extrabold text-white font-sans tracking-tight leading-snug group-hover:text-[#C9A227] transition-colors min-h-[40px] line-clamp-2">
+        <h4 className="text-sm font-extrabold text-white font-sans tracking-tight leading-snug group-hover:text-[#C9A227] transition-colors min-h-10 line-clamp-2">
           {certificate.title}
         </h4>
       </div>

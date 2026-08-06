@@ -68,7 +68,7 @@ export default function Mentors() {
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     const ctx = gsap.context(() => {
@@ -80,7 +80,7 @@ export default function Mentors() {
             paragraphRef.current,
             cardsGridRef.current?.children,
           ],
-          { opacity: 1, y: 0, scale: 1 }
+          { opacity: 1, y: 0, scale: 1 },
         );
         return;
       }
@@ -119,7 +119,7 @@ export default function Mentors() {
             stagger: 0.15,
             ease: "back.out(1.2)",
           },
-          "-=0.4"
+          "-=0.4",
         );
       }
 
@@ -145,7 +145,7 @@ export default function Mentors() {
       ref={sectionRef}
       id="mentors"
       aria-label="Our Mentors Section"
-      className="relative w-full py-28 lg:py-36 bg-[var(--background)] text-white overflow-hidden select-none"
+      className="relative w-full py-28 lg:py-36 bg-[var(--background)] text-white overflow-hidden "
     >
       {/* ------------------------------------------------------------- */}
       {/* BACKGROUND GLOW */}
@@ -161,7 +161,6 @@ export default function Mentors() {
       {/* SECTION CONTAINER */}
       {/* ------------------------------------------------------------- */}
       <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-        
         {/* Small Label */}
         <div ref={labelRef} className="mb-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--primary)]/30 text-xs font-semibold tracking-widest text-[var(--primary)] font-mono uppercase bg-[var(--primary)]/5">
@@ -184,7 +183,9 @@ export default function Mentors() {
           ref={paragraphRef}
           className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed text-zinc-300 max-w-[650px] text-center mb-16 sm:mb-20"
         >
-          Our mentors combine practical market experience with structured education to help you build confidence, discipline and consistency in every stage of your trading journey.
+          Our mentors combine practical market experience with structured education to
+          help you build confidence, discipline and consistency in every stage of your
+          trading journey.
         </p>
 
         {/* ------------------------------------------------------------- */}
@@ -274,7 +275,6 @@ export default function Mentors() {
             </article>
           ))}
         </div>
-
       </div>
     </section>
   );

@@ -10,11 +10,7 @@ interface StickyActionBarProps {
   onSave: () => void;
 }
 
-export function StickyActionBar({
-  hasChanges,
-  onReset,
-  onSave,
-}: StickyActionBarProps) {
+export function StickyActionBar({ hasChanges, onReset, onSave }: StickyActionBarProps) {
   const barRef = useRef<HTMLDivElement>(null);
 
   // GSAP animation when changes status toggles
@@ -23,7 +19,7 @@ export function StickyActionBar({
       gsap.fromTo(
         barRef.current,
         { y: 30, opacity: 0.8 },
-        { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }
+        { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
       );
     }
   }, [hasChanges]);
@@ -63,7 +59,7 @@ export function StickyActionBar({
           className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
             hasChanges
               ? "bg-white/5 border border-white/15 text-zinc-300 hover:text-white hover:bg-white/10 hover:border-white/30 cursor-pointer"
-              : "bg-white/[0.02] border border-white/5 text-zinc-600 cursor-not-allowed"
+              : "bg-white/2 border border-white/5 text-zinc-600 cursor-not-allowed"
           }`}
         >
           <RotateCcw size={14} />

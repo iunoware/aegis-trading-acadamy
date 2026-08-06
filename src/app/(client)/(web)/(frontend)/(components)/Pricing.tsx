@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -14,6 +14,7 @@ import {
   Sparkles,
   LucideIcon,
 } from "lucide-react";
+import axios from "axios";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -66,18 +67,18 @@ const TrustItem: React.FC<TrustItemProps> = ({ icon: Icon, text }) => {
 
 // Sub-component: PaymentMethod
 
-interface PaymentMethodProps {
-  name: string;
-}
+// interface PaymentMethodProps {
+//   name: string;
+// }
 
-const PaymentMethod: React.FC<PaymentMethodProps> = ({ name }) => {
-  return (
-    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg glass-panel border border-white/10 text-xs font-mono font-semibold tracking-wider text-zinc-400 uppercase hover:text-primary hover:border-(--primary)/30 transition-colors duration-300">
-      <span className="w-1.5 h-1.5 rounded-full bg-(--primary)/60" />
-      <span>{name}</span>
-    </div>
-  );
-};
+// const PaymentMethod: React.FC<PaymentMethodProps> = ({ name }) => {
+//   return (
+//     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg glass-panel border border-white/10 text-xs font-mono font-semibold tracking-wider text-zinc-400 uppercase hover:text-primary hover:border-(--primary)/30 transition-colors duration-300">
+//       <span className="w-1.5 h-1.5 rounded-full bg-(--primary)/60" />
+//       <span>{name}</span>
+//     </div>
+//   );
+// };
 
 // Sub-component: PricingCard
 
@@ -92,6 +93,32 @@ interface PricingPlan {
   features: string[];
   buttonText: string;
   buttonHref: string;
+}
+
+interface ApiPlanFeature {
+  id: string;
+  text: string;
+}
+
+interface ApiPricingPlan {
+  id: "monthly" | "yearly";
+  databaseId: string;
+  name: string;
+  price: number;
+  billingCycle: "Monthly" | "Yearly";
+  badge: "Popular" | "Best Value" | "Recommended" | "None";
+  status: boolean;
+  description: string;
+  features: ApiPlanFeature[];
+}
+
+interface PricingApiResponse {
+  success: boolean;
+  message: string;
+  data: {
+    monthly: ApiPricingPlan | null;
+    yearly: ApiPricingPlan | null;
+  };
 }
 
 interface PricingCardProps {
@@ -186,43 +213,43 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
 };
 
 // Datasets
-const PRICING_PLANS: PricingPlan[] = [
-  {
-    id: "monthly",
-    title: "Monthly Membership",
-    price: "$49",
-    subtitle: "Per Month",
-    features: [
-      "Full Course Library",
-      "Live Trading Sessions",
-      "Community Access",
-      "Course Updates",
-      "Mobile & Desktop Access",
-    ],
-    buttonText: "Start Monthly Plan",
-    buttonHref: "#checkout-monthly",
-    isPopular: false,
-  },
-  {
-    id: "yearly",
-    title: "Yearly Membership",
-    price: "$300",
-    subtitle: "Per Year",
-    savingsLabel: "Save 20%",
-    isPopular: true,
-    popularBadgeText: "MOST POPULAR",
-    features: [
-      "Full Course Library",
-      "Live Trading Sessions",
-      "Community Access",
-      "Lifetime Course Updates During Subscription",
-      "Priority Support",
-      "Best Value",
-    ],
-    buttonText: "Start Yearly Plan",
-    buttonHref: "#checkout-yearly",
-  },
-];
+// const PRICING_PLANS: PricingPlan[] = [
+//   {
+//     id: "monthly",
+//     title: "Monthly Membership",
+//     price: "$49",
+//     subtitle: "Per Month",
+//     features: [
+//       "Full Course Library",
+//       "Live Trading Sessions",
+//       "Community Access",
+//       "Course Updates",
+//       "Mobile & Desktop Access",
+//     ],
+//     buttonText: "Start Monthly Plan",
+//     buttonHref: "#checkout-monthly",
+//     isPopular: false,
+//   },
+//   {
+//     id: "yearly",
+//     title: "Yearly Membership",
+//     price: "$300",
+//     subtitle: "Per Year",
+//     savingsLabel: "Save 20%",
+//     isPopular: true,
+//     popularBadgeText: "MOST POPULAR",
+//     features: [
+//       "Full Course Library",
+//       "Live Trading Sessions",
+//       "Community Access",
+//       "Lifetime Course Updates During Subscription",
+//       "Priority Support",
+//       "Best Value",
+//     ],
+//     buttonText: "Start Yearly Plan",
+//     buttonHref: "#checkout-yearly",
+//   },
+// ];
 
 const TRUST_ITEMS = [
   { id: "secure", icon: Lock, text: "Secure Payments" },
@@ -231,13 +258,62 @@ const TRUST_ITEMS = [
   { id: "renewal", icon: Mail, text: "Renewal Reminder Before Expiry" },
 ];
 
-const PAYMENT_METHODS = [
-  "Razorpay",
-  "Visa",
-  "Mastercard",
-  "UPI",
-  "Net Banking",
-];
+// const PAYMENT_METHODS = ["Razorpay", "Visa", "Mastercard", "UPI", "Net Banking"];
+
+function convertApiPlanToPricingPlan(
+  plan: ApiPricingPlan,
+  monthlyPrice?: number,
+): PricingPlan {
+  let savingsLabel: string | undefined;
+
+  if (plan.id === "yearly" && monthlyPrice) {
+    const yearlyMonthlyCost = monthlyPrice * 12;
+    const savingsAmount = yearlyMonthlyCost - plan.price;
+
+    if (savingsAmount > 0) {
+      const savingsPercentage = Math.round((savingsAmount / yearlyMonthlyCost) * 100);
+
+      savingsLabel = `Save ${savingsPercentage}%`;
+    }
+  }
+
+  return {
+    id: plan.id,
+    title: plan.name,
+    price: `$${plan.price.toLocaleString("en-US")}`,
+    subtitle: plan.id === "monthly" ? "Per Month" : "Per Year",
+    savingsLabel,
+    isPopular:
+      plan.badge === "Popular" ||
+      plan.badge === "Best Value" ||
+      plan.badge === "Recommended",
+    popularBadgeText: plan.badge === "None" ? undefined : plan.badge.toUpperCase(),
+    features: plan.features.map((feature) => feature.text),
+    buttonText: plan.id === "monthly" ? "Start Monthly Plan" : "Start Yearly Plan",
+    buttonHref: plan.id === "monthly" ? "#checkout-monthly" : "#checkout-yearly",
+  };
+}
+
+function PricingCardSkeleton() {
+  return (
+    <div className="mx-auto w-full max-w-130">
+      <div className="h-full min-h-130 animate-pulse rounded-3xl border border-white/10 bg-white/5 p-8 sm:p-10">
+        <div className="mb-8 h-7 w-40 rounded bg-white/10" />
+
+        <div className="mb-8 h-14 w-52 rounded bg-white/10" />
+
+        <div className="space-y-4">
+          <div className="h-5 w-full rounded bg-white/10" />
+          <div className="h-5 w-11/12 rounded bg-white/10" />
+          <div className="h-5 w-10/12 rounded bg-white/10" />
+          <div className="h-5 w-9/12 rounded bg-white/10" />
+        </div>
+
+        <div className="mt-12 h-14 w-full rounded-xl bg-white/10" />
+      </div>
+    </div>
+  );
+}
 
 export default function Pricing() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -246,9 +322,45 @@ export default function Pricing() {
   const paragraphRef = useRef<HTMLParagraphElement>(null);
   const cardsGridRef = useRef<HTMLDivElement>(null);
   const trustStripRef = useRef<HTMLDivElement>(null);
-  const paymentSectionRef = useRef<HTMLDivElement>(null);
+  // const paymentSectionRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
+  const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchPricing = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const response = await axios.get<PricingApiResponse>("/api/pricing");
+
+      const monthlyPlan = response.data.data.monthly;
+      const yearlyPlan = response.data.data.yearly;
+
+      const formattedPlans: PricingPlan[] = [];
+
+      if (monthlyPlan?.status) {
+        formattedPlans.push(convertApiPlanToPricingPlan(monthlyPlan));
+      }
+
+      if (yearlyPlan?.status) {
+        formattedPlans.push(convertApiPlanToPricingPlan(yearlyPlan, monthlyPlan?.price));
+      }
+
+      setPricingPlans(formattedPlans);
+    } catch (error) {
+      console.error("Failed to fetch pricing plans:", error);
+      setPricingPlans([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPricing();
+  }, [fetchPricing]);
+
+  // GSAP
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -263,7 +375,7 @@ export default function Pricing() {
             paragraphRef.current,
             cardsGridRef.current?.children,
             trustStripRef.current,
-            paymentSectionRef.current,
+            // paymentSectionRef.current,
           ],
           { opacity: 1, y: 0 },
         );
@@ -281,9 +393,9 @@ export default function Pricing() {
         });
       }
       gsap.set(trustStripRef.current, { opacity: 0, y: 20 });
-      if (paymentSectionRef.current) {
-        gsap.set(paymentSectionRef.current.children, { opacity: 0, y: 15 });
-      }
+      // if (paymentSectionRef.current) {
+      //   gsap.set(paymentSectionRef.current.children, { opacity: 0, y: 15 });
+      // }
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -313,24 +425,20 @@ export default function Pricing() {
         );
       }
 
-      tl.to(
-        trustStripRef.current,
-        { opacity: 1, y: 0, duration: 0.7 },
-        "-=0.3",
-      );
+      tl.to(trustStripRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.3");
 
-      if (paymentSectionRef.current) {
-        tl.to(
-          paymentSectionRef.current.children,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            stagger: 0.1,
-          },
-          "-=0.4",
-        );
-      }
+      // if (paymentSectionRef.current) {
+      //   tl.to(
+      //     paymentSectionRef.current.children,
+      //     {
+      //       opacity: 1,
+      //       y: 0,
+      //       duration: 0.6,
+      //       stagger: 0.1,
+      //     },
+      //     "-=0.4",
+      //   );
+      // }
 
       if (glowRef.current) {
         gsap.to(glowRef.current, {
@@ -383,20 +491,43 @@ export default function Pricing() {
           ref={paragraphRef}
           className="text-base sm:text-lg text-text font-normal leading-relaxed max-w-162.5 text-center mb-16 sm:mb-20"
         >
-          Choose the membership plan that fits your learning journey. Every
-          subscription gives you access to our structured curriculum, live
-          sessions, community, and continuous course updates.
+          Choose the membership plan that fits your learning journey. Every subscription
+          gives you access to our structured curriculum, live sessions, community, and
+          continuous course updates.
         </p>
 
-        <div
+        {/* <div
           ref={cardsGridRef}
           className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-220 mx-auto items-stretch mb-16 sm:mb-20"
         >
-          {PRICING_PLANS.map((plan) => (
+          {pricingPlans.map((plan) => (
             <div key={plan.id} className="w-full max-w-130 mx-auto">
               <PricingCard plan={plan} />
             </div>
           ))}
+        </div> */}
+        <div
+          ref={cardsGridRef}
+          className="mb-16 grid w-full max-w-220 grid-cols-1 items-stretch gap-8 sm:mb-20 md:grid-cols-2 lg:gap-10"
+        >
+          {isLoading ? (
+            <>
+              <PricingCardSkeleton />
+              <PricingCardSkeleton />
+            </>
+          ) : pricingPlans.length > 0 ? (
+            pricingPlans.map((plan) => (
+              <div key={plan.id} className="mx-auto w-full max-w-130">
+                <PricingCard plan={plan} />
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
+              <p className="text-sm text-zinc-400">
+                No active pricing plans are currently available.
+              </p>
+            </div>
+          )}
         </div>
 
         <div
