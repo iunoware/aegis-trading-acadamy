@@ -146,7 +146,7 @@ export default function Hero() {
     <section
       ref={sectionRef}
       aria-label="Pricing Hero Section"
-      className="relative w-full h-[82vh] min-h-150 max-h-212.5 bg-(--background,#090909) text-white overflow-hidden flex flex-col items-center justify-between select-none pt-20 pb-8"
+      className="relative w-full h-[82vh] min-h-150 max-h-212.5 bg-(--background,#090909) text-white overflow-hidden flex flex-col items-center justify-between  pt-20 pb-8"
     >
       {/* BACKGROUND EFFECTS: VIGNETTE, RADIAL GLOW, GRID & CANDLESTICKS */}
 

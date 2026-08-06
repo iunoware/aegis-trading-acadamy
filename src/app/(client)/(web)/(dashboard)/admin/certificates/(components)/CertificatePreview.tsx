@@ -1,8 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Eye, Award, Sparkles } from "lucide-react";
+import { Eye, Award } from "lucide-react";
 import { Certificate } from "./CertificatesGrid";
 
 interface CertificatePreviewProps {
@@ -25,7 +26,7 @@ export function CertificatePreview({ certificate }: CertificatePreviewProps) {
       gsap.fromTo(
         cardRef.current,
         { scale: 0.98, opacity: 0.9 },
-        { scale: 1, opacity: 1, duration: 0.35, ease: "power2.out" }
+        { scale: 1, opacity: 1, duration: 0.35, ease: "power2.out" },
       );
     }
   }, [certificate]);
@@ -53,14 +54,14 @@ export function CertificatePreview({ certificate }: CertificatePreviewProps) {
               : "bg-zinc-500/15 text-zinc-400 border border-zinc-500/30"
           }`}
         >
-          {status === "Published" ? "Live Preview" : "Hidden Preview"}
+          {status === "Published" ? "Preview" : "Hidden Preview"}
         </span>
       </div>
 
       {/* Public Showcase Card Container */}
       <div
         ref={cardRef}
-        className="rounded-2xl bg-gradient-to-b from-[#141417] to-[#0a0a0c] border border-[#C9A227]/30 p-4 space-y-3 shadow-xl relative z-10"
+        className="rounded-2xl bg-linear-to-b from-[#141417] to-[#0a0a0c] border border-[#C9A227]/30 p-4 space-y-3 shadow-xl relative z-10"
       >
         <div className="flex items-center justify-between text-xs font-mono text-zinc-400 pb-2 border-b border-white/5">
           <span className="flex items-center gap-1 text-[#C9A227] font-semibold">
@@ -72,11 +73,7 @@ export function CertificatePreview({ certificate }: CertificatePreviewProps) {
 
         {/* Image Preview Box */}
         <div className="relative w-full h-44 rounded-xl bg-black border border-[#C9A227]/20 overflow-hidden flex items-center justify-center">
-          <img
-            src={imageUrl}
-            alt={title}
-            className="w-full h-full object-cover"
-          />
+          <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
         </div>
 
         {/* Certificate Title */}

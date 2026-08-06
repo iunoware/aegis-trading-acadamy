@@ -218,7 +218,7 @@ export default function Sidebar() {
             animate={{ x: "0%" }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="lg:hidden fixed top-0 bottom-0 left-0 z-50 w-70 bg-[#050505]/98 backdrop-blur-2xl border-r border-white/10 rounded-tr-2xl rounded-br-2xl p-5 flex flex-col justify-between select-none shadow-[10px_0_30px_rgba(0,0,0,0.9)] overflow-y-auto"
+            className="lg:hidden fixed top-0 bottom-0 left-0 z-50 w-70 bg-[#050505]/98 backdrop-blur-2xl border-r border-white/10 rounded-tr-2xl rounded-br-2xl p-5 flex flex-col justify-between shadow-[10px_0_30px_rgba(0,0,0,0.9)] overflow-y-auto"
           >
             <div>
               {/* Header */}
@@ -326,7 +326,7 @@ export default function Sidebar() {
       <motion.aside
         animate={{ width: isCollapsed ? 88 : 280 }}
         transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-        className="hidden lg:flex sticky top-0 h-screen shrink-0 bg-[#050505]/95 backdrop-blur-2xl border-r border-white/10 rounded-tr-2xl rounded-br-2xl p-4 flex-col justify-between z-30 select-none shadow-[10px_0_30px_rgba(0,0,0,0.8)] overflow-hidden"
+        className="hidden lg:flex sticky top-0 h-screen shrink-0 bg-[#050505]/95 backdrop-blur-2xl border-r border-white/10 rounded-tr-2xl rounded-br-2xl p-4 flex-col justify-between z-30 shadow-[10px_0_30px_rgba(0,0,0,0.8)] overflow-hidden"
       >
         <div className="flex flex-col h-full overflow-hidden">
           {/* Header */}

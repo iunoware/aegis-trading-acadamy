@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useEffect, useRef } from "react";
@@ -67,7 +69,7 @@ export function CertificateImageLightbox({
         </div>
 
         {/* High Res Image Showcase */}
-        <div className="p-6 bg-[#050505] flex items-center justify-center min-h-[300px]">
+        <div className="p-6 bg-[#050505] flex items-center justify-center min-h-75">
           <img
             src={certificate.imageUrl}
             alt={certificate.title}

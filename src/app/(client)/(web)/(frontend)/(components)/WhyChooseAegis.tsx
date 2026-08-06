@@ -44,15 +44,15 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
             <Icon size={24} />
           </div>
 
-          <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[var(--muted)] group-hover:text-[var(--primary)] group-hover:border-[var(--primary)]/40 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300">
+          <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted group-hover:text-primary group-hover:border-[var(--primary)]/40 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300">
             <ArrowUpRight size={18} />
           </div>
         </div>
 
-        <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white mb-2.5 font-sans group-hover:text-[var(--primary-light)] transition-colors duration-300">
+        <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white mb-2.5 font-sans group-hover:text-primary-light transition-colors duration-300">
           {heading}
         </h3>
-        <p className="text-sm sm:text-base text-[var(--text)] font-normal leading-relaxed text-zinc-300 line-clamp-3">
+        <p className="text-sm sm:text-base text-text font-normal leading-relaxed line-clamp-3">
           {description}
         </p>
       </div>
@@ -109,7 +109,7 @@ export default function WhyChooseAegis() {
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     const ctx = gsap.context(() => {
@@ -159,7 +159,7 @@ export default function WhyChooseAegis() {
             setHoursCount(Math.floor(statsObj.hours));
           },
         },
-        "-=0.9"
+        "-=0.9",
       );
 
       if (cardsGridRef.current) {
@@ -173,7 +173,7 @@ export default function WhyChooseAegis() {
             stagger: 0.12,
             ease: "back.out(1.2)",
           },
-          "-=1.5"
+          "-=1.5",
         );
 
         Array.from(cardsGridRef.current.children).forEach((card, index) => {
@@ -199,21 +199,21 @@ export default function WhyChooseAegis() {
       ref={sectionRef}
       id="why-choose-aegis"
       aria-label="Why Choose Aegis Section"
-      className="relative w-full py-28 lg:py-36 bg-[var(--background)] text-white overflow-hidden select-none"
+      className="relative w-full py-28 lg:py-36 bg-background text-white overflow-hidden "
     >
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,_rgba(30,30,30,0.6)_0%,_var(--background)_75%)]" />
-        <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] gold-radial-glow opacity-30 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[550px] h-[550px] gold-radial-glow opacity-20 blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_40%,_var(--background)_100%)] opacity-80" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(30,30,30,0.6)_0%,var(--background)_75%)]" />
+        <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-150 h-150 gold-radial-glow opacity-30 blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-137.5 h-137.5 gold-radial-glow opacity-20 blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,var(--background)_100%)] opacity-80" />
       </div>
 
-      <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           <div className="lg:col-span-5 flex flex-col items-start text-left space-y-6 sm:space-y-8">
             <div ref={labelRef}>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-[var(--primary)]/30 text-xs font-semibold tracking-widest text-[var(--primary)] uppercase font-mono shadow-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 WHY CHOOSE AEGIS
               </div>
             </div>
@@ -230,9 +230,9 @@ export default function WhyChooseAegis() {
               ref={paragraphRef}
               className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed text-zinc-300 max-w-[520px]"
             >
-              At Aegis Trading Academy, we don&apos;t sell shortcuts or false promises.
-              We build disciplined traders through structured education, practical
-              market experience and continuous mentorship.
+              At Aegis Trading Academy, we don&apos;t sell shortcuts or false promises. We
+              build disciplined traders through structured education, practical market
+              experience and continuous mentorship.
             </p>
 
             <div
@@ -243,7 +243,7 @@ export default function WhyChooseAegis() {
                 <span className="block text-2xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">
                   {membersCount}+
                 </span>
-                <span className="text-xs sm:text-sm text-[var(--muted)] font-medium">
+                <span className="text-xs sm:text-sm text-muted font-medium">
                   Active Members
                 </span>
               </div>
@@ -252,7 +252,7 @@ export default function WhyChooseAegis() {
                 <span className="block text-2xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">
                   {yearsCount}+
                 </span>
-                <span className="text-xs sm:text-sm text-[var(--muted)] font-medium">
+                <span className="text-xs sm:text-sm text-muted font-medium">
                   Years Experience
                 </span>
               </div>
@@ -261,7 +261,7 @@ export default function WhyChooseAegis() {
                 <span className="block text-2xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">
                   {hoursCount}+
                 </span>
-                <span className="text-xs sm:text-sm text-[var(--muted)] font-medium">
+                <span className="text-xs sm:text-sm text-muted font-medium">
                   Hours of Learning
                 </span>
               </div>

@@ -69,7 +69,7 @@ export default function MarketTicker() {
   return (
     <section
       aria-label="Live Financial Market Ticker"
-      className="relative w-full z-40 bg-[#090909]/90 backdrop-blur-md border-y border-(--primary)/20 py-3 overflow-hidden select-none"
+      className="relative w-full z-40 bg-[#090909]/90 backdrop-blur-md border-y border-(--primary)/20 py-3 overflow-hidden "
     >
       <div
         ref={tickerContainerRef}
@@ -77,10 +77,7 @@ export default function MarketTicker() {
         onMouseLeave={handleMouseLeave}
         className="w-full overflow-hidden flex items-center"
       >
-        <div
-          ref={trackRef}
-          className="flex items-center whitespace-nowrap transform-gpu"
-        >
+        <div ref={trackRef} className="flex items-center whitespace-nowrap transform-gpu">
           {duplicatedItems.map((item, idx) => (
             <MarketTickerItem key={`${item.id}-${idx}`} item={item} />
           ))}

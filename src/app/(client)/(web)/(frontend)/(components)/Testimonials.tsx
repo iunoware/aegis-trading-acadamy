@@ -232,7 +232,7 @@ export default function Testimonials() {
       ref={sectionRef}
       id="testimonials"
       aria-label="Testimonials Section"
-      className="relative w-full py-28 lg:py-20 bg-background text-white overflow-hidden select-none"
+      className="relative w-full py-28 lg:py-20 bg-background text-white overflow-hidden "
     >
       {/* BACKGROUND GLOW */}
 
@@ -299,7 +299,7 @@ export default function Testimonials() {
                         : "border-white/10 bg-[#101010]/60"
                     } hover:-translate-y-1.5`}
                   >
-                    <div className="absolute top-4 right-6 text-white/5 pointer-events-none select-none">
+                    <div className="absolute top-4 right-6 text-white/5 pointer-events-none ">
                       <Quote size={64} />
                     </div>
 
@@ -374,7 +374,7 @@ export default function Testimonials() {
                           : "border-white/10 bg-[#101010]/60"
                       } hover:-translate-y-1.5`}
                     >
-                      <div className="absolute top-4 right-6 text-white/5 pointer-events-none select-none">
+                      <div className="absolute top-4 right-6 text-white/5 pointer-events-none ">
                         <Quote size={64} />
                       </div>
 
