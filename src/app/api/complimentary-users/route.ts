@@ -424,3 +424,140 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+// export async function DELETE(request: NextRequest) {
+//   try {
+//     const adminUser = await getRequiredSuperAdmin();
+
+//     const body = await request.json();
+
+//     const userId = typeof body.userId === "string" ? body.userId : "";
+
+//     if (!userId) {
+//       return NextResponse.json(
+//         {
+//           success: false,
+//           message: "User ID is required.",
+//         },
+//         { status: 400 },
+//       );
+//     }
+
+//     const user = await prisma.user.findUnique({
+//       where: {
+//         id: userId,
+//       },
+//       select: {
+//         id: true,
+//         role: true,
+//         deletedAt: true,
+//         subscriptions: {
+//           where: {
+//             source: SubscriptionSource.COMPLIMENTARY,
+//             deletedAt: null,
+//           },
+//           select: {
+//             id: true,
+//           },
+//         },
+//       },
+//     });
+
+//     if (!user || user.deletedAt) {
+//       return NextResponse.json(
+//         {
+//           success: false,
+//           message: "Complimentary student not found.",
+//         },
+//         { status: 404 },
+//       );
+//     }
+
+//     if (user.role !== UserRole.STUDENT) {
+//       return NextResponse.json(
+//         {
+//           success: false,
+//           message: "Only student accounts can be deleted here.",
+//         },
+//         { status: 400 },
+//       );
+//     }
+
+//     if (user.subscriptions.length === 0) {
+//       return NextResponse.json(
+//         {
+//           success: false,
+//           message: "This is not a complimentary student account.",
+//         },
+//         { status: 400 },
+//       );
+//     }
+
+//     await prisma.$transaction(async (tx) => {
+//       await tx.subscription.updateMany({
+//         where: {
+//           userId: user.id,
+//           source: SubscriptionSource.COMPLIMENTARY,
+//           deletedAt: null,
+//         },
+//         data: {
+//           deletedAt: new Date(),
+//         },
+//       });
+
+//       await tx.user.update({
+//         where: {
+//           id: user.id,
+//         },
+//         data: {
+//           deletedAt: new Date(),
+//         },
+//       });
+
+//       await tx.userActivity.create({
+//         data: {
+//           userId: user.id,
+//           actorId: adminUser.id,
+//           action: ActivityAction.ACCOUNT_DELETED,
+//           title: "Student account deleted",
+//           details: "A complimentary student account was deleted by an administrator.",
+//           metadata: {
+//             source: "COMPLIMENTARY",
+//           },
+//         },
+//       });
+
+//       await tx.activityLog.create({
+//         data: {
+//           actorId: adminUser.id,
+//           actorType: ActivityActorType.SUPER_ADMIN,
+//           action: ActivityAction.ACCOUNT_DELETED,
+//           module: "USERS",
+//           title: "Complimentary student account deleted",
+//           description: "A complimentary student account was deleted by an administrator.",
+//           targetId: user.id,
+//           targetType: "USER",
+//           afterData: {
+//             userId: user.id,
+//             subscriptionSource: SubscriptionSource.COMPLIMENTARY,
+//           },
+//         },
+//       });
+//     });
+
+//     return NextResponse.json({
+//       success: true,
+//       message: "Complimentary student deleted successfully.",
+//     });
+//   } catch (error) {
+//     console.error("DELETE complimentary user error:", error);
+
+//     return NextResponse.json(
+//       {
+//         success: false,
+//         message: "Failed to delete complimentary student.",
+//       },
+//       { status: 500 },
+//     );
+//   }
+// }
