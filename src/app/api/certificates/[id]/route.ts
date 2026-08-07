@@ -3,6 +3,7 @@ import path from "node:path";
 import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma";
+import { getRequiredSuperAdmin } from "@/lib/current-user";
 
 interface CertificateRouteContext {
   params: Promise<{
@@ -86,6 +87,8 @@ export async function PATCH(request: Request, context: CertificateRouteContext) 
   let newImageUrl: string | null = null;
 
   try {
+    await getRequiredSuperAdmin();
+
     const { id } = await context.params;
 
     const existingCertificate = await prisma.showcaseCertificate.findUnique({
@@ -224,6 +227,8 @@ export async function PATCH(request: Request, context: CertificateRouteContext) 
 // DELETE /api/certificates/[id]
 export async function DELETE(_request: Request, context: CertificateRouteContext) {
   try {
+    await getRequiredSuperAdmin();
+
     const { id } = await context.params;
 
     const certificate = await prisma.showcaseCertificate.findUnique({

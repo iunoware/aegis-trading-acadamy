@@ -1,7 +1,7 @@
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { NextResponse } from "next/server";
-
+import { getRequiredSuperAdmin } from "@/lib/current-user";
 import { prisma } from "@/lib/prisma";
 
 const CERTIFICATE_UPLOAD_DIRECTORY = path.join(
@@ -111,6 +111,8 @@ export async function POST(request: Request) {
   let uploadedImageUrl: string | null = null;
 
   try {
+    await getRequiredSuperAdmin();
+
     const formData = await request.formData();
 
     const titleValue = formData.get("title");

@@ -1,42 +1,34 @@
 "use client";
 
-import { useState } from "react";
 import {
   Check,
   Eye,
   EyeOff,
-  Globe2,
-  // LockKeyhole,
-  Mail,
   Plus,
   Save,
   Search,
   Settings2,
   ShieldCheck,
-  Smartphone,
   UserPlus,
-  UserRound,
   UsersRound,
   X,
 } from "lucide-react";
-// import Toggle from "@/components/Toggle";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface SettingsForm {
   academyName: string;
   supportEmail: string;
   supportPhone: string;
   websiteUrl: string;
-  monthlyPrice: string;
-  yearlyPrice: string;
-  courseAccess: "all" | "subscription";
-  renewalReminderDays: string;
-  emailNotifications: boolean;
-  paymentNotifications: boolean;
-  expiryNotifications: boolean;
-  courseNotifications: boolean;
-  maintenanceMode: boolean;
-  allowRegistrations: boolean;
 }
+
+const INITIAL_SETTINGS: SettingsForm = {
+  academyName: "Aegis Trading Academy",
+  supportEmail: "support@aegistrading.com",
+  supportPhone: "+91 98765 43210",
+  websiteUrl: "https://aegistrading.com",
+};
 
 interface ComplimentaryUser {
   id: string;
@@ -54,23 +46,6 @@ interface NewComplimentaryUserForm {
   password: string;
   status: "ACTIVE" | "INACTIVE";
 }
-
-const INITIAL_SETTINGS: SettingsForm = {
-  academyName: "Aegis Trading Academy",
-  supportEmail: "support@aegistrading.com",
-  supportPhone: "+91 98765 43210",
-  websiteUrl: "https://aegistrading.com",
-  monthlyPrice: "49",
-  yearlyPrice: "300",
-  courseAccess: "subscription",
-  renewalReminderDays: "3",
-  emailNotifications: true,
-  paymentNotifications: true,
-  expiryNotifications: true,
-  courseNotifications: false,
-  maintenanceMode: false,
-  allowRegistrations: true,
-};
 
 const INITIAL_COMPLIMENTARY_USERS: ComplimentaryUser[] = [
   {
@@ -105,11 +80,11 @@ function SettingsSection({
   children,
 }: SettingsSectionProps) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-white/10 bg-[#121212]/80">
-      <div className="border-b border-white/10 px-5 py-5 sm:px-6">
+    <section className="overflow-hidden rounded-2xl border border-white/10 bg-[#121212]">
+      <div className="border-b border-white/10 p-5 sm:p-6">
         <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-(--primary)/30 bg-primary/10 text-primary">
-            <Icon size={20} />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-(--primary)/20 bg-primary/10 text-primary">
+            <Icon size={19} />
           </div>
 
           <div>
@@ -133,9 +108,9 @@ interface FormFieldProps {
 
 function FormField({ label, description, children }: FormFieldProps) {
   return (
-    <div>
-      <div className="mb-2">
-        <label className="text-sm font-semibold text-zinc-200">{label}</label>
+    <div className="space-y-2">
+      <div>
+        <label className="text-sm font-semibold text-zinc-300">{label}</label>
 
         {description && (
           <p className="mt-1 text-xs leading-relaxed text-zinc-500">{description}</p>
@@ -147,69 +122,20 @@ function FormField({ label, description, children }: FormFieldProps) {
   );
 }
 
-// interface ToggleFieldProps {
-//   label: string;
-//   description: string;
-//   checked: boolean;
-//   onChange: (checked: boolean) => void;
-// }
-
-// function ToggleField({ label, description, checked, onChange }: ToggleFieldProps) {
-//   return (
-//     <div className="flex items-center justify-between gap-5 border-b border-white/8 py-4 last:border-b-0">
-//       <div>
-//         <p className="text-sm font-semibold text-zinc-200">{label}</p>
-
-//         <p className="mt-1 max-w-xl text-xs leading-relaxed text-zinc-500">
-//           {description}
-//         </p>
-//       </div>
-
-//       {/* <button
-//         type="button"
-//         role="switch"
-//         aria-checked={checked}
-//         onClick={() => onChange(!checked)}
-//         className={`relative h-6 w-12 shrink-0 rounded-full border transition-colors ${
-//           checked ? "border-primary bg-primary" : "border-white/15 bg-[#252525]"
-//         }`}
-//       >
-//         <span
-//           className={`absolute top-1 h-4 w-4 rounded-full transition-transform ${
-//             checked ? "translate-x-1 bg-black" : "-translate-x-5 bg-zinc-400"
-//           }`}
-//         />
-//       </button> */}
-
-//       {/* <label
-//         // type="button"
-//         role="switch"
-//         aria-checked={checked}
-//         onClick={() => onChange(!checked)}
-//         className="relative cursor-pointer block h-7 w-13 rounded-full bg-gray-300 transition-colors [-webkit-tap-highlight-color:transparent] has-checked:bg-primary dark:bg-gray-600 dark:has-checked:bg-primary"
-//       >
-//         <input type="checkbox" id="AcceptConditions" className="peer sr-only" />
-
-//         <span className="absolute inset-y-0 inset-s-0 m-1 size-5 rounded-full bg-white transition-[inset-inline-start] peer-checked:inset-s-6 dark:bg-gray-900"></span>
-//       </label> */}
-
-//       <Toggle checked={checked} onChange={onChange} />
-//     </div>
-//   );
-// }
-
 const inputClassName =
   "h-11 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-(--primary)/60";
 
 export default function AdminSettingsPage() {
+  // GENERAL SETTINGS
   const [settings, setSettings] = useState<SettingsForm>(INITIAL_SETTINGS);
 
-  const [isSaving, setIsSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [savedSettings, setSavedSettings] = useState<SettingsForm>(INITIAL_SETTINGS);
 
+  // COMPLIMENTARY STUDENT USERS
   const [complimentaryUsers, setComplimentaryUsers] = useState<ComplimentaryUser[]>(
     INITIAL_COMPLIMENTARY_USERS,
   );
+  const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -219,9 +145,42 @@ export default function AdminSettingsPage() {
     useState<NewComplimentaryUserForm>(INITIAL_USER_FORM);
 
   const [showPassword, setShowPassword] = useState(false);
+
   const [isCreatingUser, setIsCreatingUser] = useState(false);
 
-  function updateField<K extends keyof SettingsForm>(field: K, value: SettingsForm[K]) {
+  // SAVE STATE
+  const [isSaving, setIsSaving] = useState(false);
+
+  const [saved, setSaved] = useState(false);
+
+  // CHECK FOR GENERAL SETTINGS CHANGES
+  const hasChanges = JSON.stringify(settings) !== JSON.stringify(savedSettings);
+
+  useEffect(() => {
+    async function loadComplimentaryUsers() {
+      try {
+        setIsLoadingUsers(true);
+
+        const response = await axios.get("/api/complimentary-users");
+
+        const users = response.data.users ?? [];
+
+        setComplimentaryUsers(users);
+      } catch (error) {
+        console.error("Unable to fetch complimentary users:", error);
+      } finally {
+        setIsLoadingUsers(false);
+      }
+    }
+
+    loadComplimentaryUsers();
+  }, []);
+
+  // GENERAL SETTINGS UPDATE
+  function updateField(
+    field: keyof SettingsForm,
+    value: SettingsForm[keyof SettingsForm],
+  ) {
     setSettings((currentSettings) => ({
       ...currentSettings,
       [field]: value,
@@ -230,16 +189,19 @@ export default function AdminSettingsPage() {
     setSaved(false);
   }
 
+  // SAVE SETTINGS
   async function handleSave() {
+    if (!hasChanges) {
+      return;
+    }
+
     try {
       setIsSaving(true);
       setSaved(false);
 
-      // Replace this with your API request later.
-      // await axios.patch("/api/admin/settings", settings);
-
       await new Promise((resolve) => setTimeout(resolve, 700));
 
+      setSavedSettings(settings);
       setSaved(true);
     } catch (error) {
       console.error("Unable to save settings:", error);
@@ -248,9 +210,10 @@ export default function AdminSettingsPage() {
     }
   }
 
-  function updateNewUserField<K extends keyof NewComplimentaryUserForm>(
-    field: K,
-    value: NewComplimentaryUserForm[K],
+  // NEW STUDENT FORM UPDATE
+  function updateNewUserField(
+    field: keyof NewComplimentaryUserForm,
+    value: NewComplimentaryUserForm[keyof NewComplimentaryUserForm],
   ) {
     setNewUserForm((currentForm) => ({
       ...currentForm,
@@ -258,15 +221,19 @@ export default function AdminSettingsPage() {
     }));
   }
 
+  // CLOSE CREATE USER MODAL
   function closeAddUserModal() {
-    if (isCreatingUser) return;
+    if (isCreatingUser) {
+      return;
+    }
 
     setIsAddUserModalOpen(false);
     setNewUserForm(INITIAL_USER_FORM);
     setShowPassword(false);
   }
 
-  async function handleCreateComplimentaryUser(event: React.FormEvent<HTMLFormElement>) {
+  // CREATE COMPLIMENTARY STUDENT
+  async function handleCreateComplimentaryUser(event: React.FormEvent) {
     event.preventDefault();
 
     const name = newUserForm.name.trim();
@@ -281,42 +248,48 @@ export default function AdminSettingsPage() {
     try {
       setIsCreatingUser(true);
 
-      /*
-       * API integration will be added later.
-       *
-       * This user must always be sent as:
-       *
-       * role: "STUDENT"
-       * subscriptionSource: "ADMIN_CREATED"
-       *
-       * Never allow the role to be selected from this modal.
-       */
-
-      await new Promise((resolve) => setTimeout(resolve, 700));
-
-      const newUser: ComplimentaryUser = {
-        id: `student-${Date.now()}`,
+      const response = await axios.post("/api/complimentary-users", {
         name,
         email,
         phone,
+        password,
         status: newUserForm.status,
-        createdAt: new Date().toISOString(),
+      });
+
+      const createdUser = response.data.user;
+
+      const user: ComplimentaryUser = {
+        id: createdUser.id,
+        name: createdUser.name,
+        email: createdUser.email,
+        phone: createdUser.phone || "",
+        status: createdUser.status,
+        createdAt: createdUser.createdAt,
       };
 
-      setComplimentaryUsers((currentUsers) => [newUser, ...currentUsers]);
+      setComplimentaryUsers((currentUsers) => [user, ...currentUsers]);
 
       closeAddUserModal();
     } catch (error) {
       console.error("Unable to create complimentary user:", error);
+
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || "Failed to create student account.");
+      } else {
+        alert("Failed to create student account.");
+      }
     } finally {
       setIsCreatingUser(false);
     }
   }
 
+  // FILTER USERS
   const filteredComplimentaryUsers = complimentaryUsers.filter((user) => {
     const query = searchQuery.trim().toLowerCase();
 
-    if (!query) return true;
+    if (!query) {
+      return true;
+    }
 
     return (
       user.name.toLowerCase().includes(query) ||
@@ -326,17 +299,16 @@ export default function AdminSettingsPage() {
   });
 
   return (
-    <main className="min-h-screen bg-background px-4 py-8 text-white sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
-        {/* Header */}
-        <div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+    <main className="min-h-screen bg-[#0a0a0a]">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* HEADER */}
+        <div className="flex flex-col justify-between gap-5 border-b border-white/10 pb-6 sm:flex-row sm:items-end">
           <div>
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-(--primary)/30 bg-primary/5 px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-widest text-primary">
-              <ShieldCheck size={14} />
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
               Admin Panel
-            </div>
+            </p>
 
-            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
               Platform Settings
             </h1>
 
@@ -349,8 +321,8 @@ export default function AdminSettingsPage() {
           <button
             type="button"
             onClick={handleSave}
-            disabled={isSaving}
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-primary-light via-primary to-primary-dark px-5 text-sm font-bold text-black disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={isSaving || !hasChanges}
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-primary-light via-primary to-primary-dark px-5 text-sm font-bold text-black disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saved ? (
               <>
@@ -360,87 +332,15 @@ export default function AdminSettingsPage() {
             ) : (
               <>
                 <Save size={17} />
+
                 {isSaving ? "Saving..." : "Save Changes"}
               </>
             )}
           </button>
         </div>
 
-        <div className="space-y-6">
-          {/* General settings */}
-          <SettingsSection
-            icon={Settings2}
-            title="General Settings"
-            description="Update the primary information displayed across the academy platform."
-          >
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <FormField label="Academy Name">
-                <div className="relative">
-                  <UserRound
-                    size={16}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600"
-                  />
-
-                  <input
-                    type="text"
-                    value={settings.academyName}
-                    onChange={(event) => updateField("academyName", event.target.value)}
-                    className={`${inputClassName} pl-11`}
-                  />
-                </div>
-              </FormField>
-
-              <FormField label="Website URL">
-                <div className="relative">
-                  <Globe2
-                    size={16}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600"
-                  />
-
-                  <input
-                    type="url"
-                    value={settings.websiteUrl}
-                    onChange={(event) => updateField("websiteUrl", event.target.value)}
-                    className={`${inputClassName} pl-11`}
-                  />
-                </div>
-              </FormField>
-
-              <FormField label="Support Email">
-                <div className="relative">
-                  <Mail
-                    size={16}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600"
-                  />
-
-                  <input
-                    type="email"
-                    value={settings.supportEmail}
-                    onChange={(event) => updateField("supportEmail", event.target.value)}
-                    className={`${inputClassName} pl-11`}
-                  />
-                </div>
-              </FormField>
-
-              <FormField label="Support Phone">
-                <div className="relative">
-                  <Smartphone
-                    size={16}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600"
-                  />
-
-                  <input
-                    type="tel"
-                    value={settings.supportPhone}
-                    onChange={(event) => updateField("supportPhone", event.target.value)}
-                    className={`${inputClassName} pl-11`}
-                  />
-                </div>
-              </FormField>
-            </div>
-          </SettingsSection>
-
-          {/* User creation */}
+        <div className="mt-6 space-y-6">
+          {/* STUDENT ACCOUNT MANAGEMENT */}
           <SettingsSection
             icon={UsersRound}
             title="Student Account Management"
@@ -448,6 +348,7 @@ export default function AdminSettingsPage() {
           >
             <div className="space-y-5">
               {/* Header controls */}
+
               <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                 <div className="relative w-full lg:max-w-md">
                   <Search
@@ -610,30 +511,9 @@ export default function AdminSettingsPage() {
               </p>
             </div>
           </SettingsSection>
-
-          {/* Platform security */}
-          {/* <SettingsSection
-            icon={LockKeyhole}
-            title="Platform Controls"
-            description="Control registrations and temporary platform availability."
-          >
-            <ToggleField
-              label="Allow New Registrations"
-              description="Allow new users to create an account on the academy platform."
-              checked={settings.allowRegistrations}
-              onChange={(checked) => updateField("allowRegistrations", checked)}
-            />
-
-            <ToggleField
-              label="Maintenance Mode"
-              description="Temporarily prevent users from accessing the platform while maintenance is in progress."
-              checked={settings.maintenanceMode}
-              onChange={(checked) => updateField("maintenanceMode", checked)}
-            />
-          </SettingsSection> */}
         </div>
 
-        {/* Bottom save bar */}
+        {/* BOTTOM SAVE BAR */}
         <div className="sticky bottom-4 mt-8 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#121212]/95 p-4 shadow-[0_15px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl">
           <div className="hidden items-center gap-3 sm:flex">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -652,8 +532,8 @@ export default function AdminSettingsPage() {
           <button
             type="button"
             onClick={handleSave}
-            disabled={isSaving}
-            className="ml-auto inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-primary-light via-primary to-primary-dark px-6 text-sm font-bold text-black disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+            disabled={isSaving || !hasChanges}
+            className="ml-auto inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-primary-light via-primary to-primary-dark px-6 text-sm font-bold text-black disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {saved ? (
               <>
@@ -663,6 +543,7 @@ export default function AdminSettingsPage() {
             ) : (
               <>
                 <Save size={17} />
+
                 {isSaving ? "Saving..." : "Save Changes"}
               </>
             )}
@@ -670,6 +551,7 @@ export default function AdminSettingsPage() {
         </div>
       </div>
 
+      {/* CREATE STUDENT MODAL */}
       {isAddUserModalOpen && (
         <div
           className="fixed inset-0 z-100 flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
@@ -685,6 +567,7 @@ export default function AdminSettingsPage() {
             aria-labelledby="add-student-title"
             className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-[#121212] shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
           >
+            {/* Modal header */}
             <div className="flex items-start justify-between border-b border-white/10 px-5 py-5 sm:px-6">
               <div className="flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-(--primary)/30 bg-primary/10 text-primary">
@@ -707,14 +590,17 @@ export default function AdminSettingsPage() {
                 onClick={closeAddUserModal}
                 disabled={isCreatingUser}
                 aria-label="Close modal"
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <X size={17} />
               </button>
             </div>
 
+            {/* Modal form */}
             <form onSubmit={handleCreateComplimentaryUser}>
               <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2 sm:p-6">
+                {/* Full name */}
+
                 <FormField label="Full Name">
                   <input
                     type="text"
@@ -726,16 +612,7 @@ export default function AdminSettingsPage() {
                   />
                 </FormField>
 
-                {/* <FormField label="Email Address">
-                  <input
-                    type="email"
-                    value={newUserForm.email}
-                    onChange={(event) => updateNewUserField("email", event.target.value)}
-                    placeholder="Enter email address"
-                    required
-                    className={inputClassName}
-                  />
-                </FormField> */}
+                {/* Email */}
                 <FormField
                   label="New Login Email"
                   description="This email must not already belong to another account."
@@ -751,6 +628,7 @@ export default function AdminSettingsPage() {
                   />
                 </FormField>
 
+                {/* Phone */}
                 <FormField label="Phone Number" description="Optional contact number.">
                   <input
                     type="tel"
@@ -761,6 +639,7 @@ export default function AdminSettingsPage() {
                   />
                 </FormField>
 
+                {/* Status */}
                 <FormField label="Account Status">
                   <select
                     value={newUserForm.status}
@@ -782,35 +661,7 @@ export default function AdminSettingsPage() {
                   </select>
                 </FormField>
 
-                {/* <div className="sm:col-span-2">
-                  <FormField
-                    label="Temporary Password"
-                    description="The student can use this password to log in. Password reset can be added later."
-                  >
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        value={newUserForm.password}
-                        onChange={(event) =>
-                          updateNewUserField("password", event.target.value)
-                        }
-                        placeholder="Enter temporary password"
-                        minLength={8}
-                        required
-                        className={`${inputClassName} pr-12`}
-                      />
-
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword((current) => !current)}
-                        aria-label={showPassword ? "Hide password" : "Show password"}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors hover:text-white"
-                      >
-                        {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
-                      </button>
-                    </div>
-                  </FormField>
-                </div> */}
+                {/* Password */}
                 <div className="sm:col-span-2">
                   <FormField
                     label="New Login Password"
@@ -842,6 +693,7 @@ export default function AdminSettingsPage() {
                   </FormField>
                 </div>
 
+                {/* Student role information */}
                 <div className="sm:col-span-2">
                   <div className="rounded-xl border border-white/10 bg-[#0d0d0d] p-4">
                     <div className="flex items-start gap-3">
@@ -862,6 +714,7 @@ export default function AdminSettingsPage() {
                 </div>
               </div>
 
+              {/* Modal footer */}
               <div className="flex flex-col-reverse gap-3 border-t border-white/10 px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
                 <button
                   type="button"
@@ -872,15 +725,6 @@ export default function AdminSettingsPage() {
                   Cancel
                 </button>
 
-                {/* <button
-                  type="submit"
-                  disabled={isCreatingUser}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-primary-light via-primary to-primary-dark px-5 text-sm font-bold text-black disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <UserPlus size={17} />
-
-                  {isCreatingUser ? "Creating..." : "Create Student"}
-                </button> */}
                 <button
                   type="submit"
                   disabled={isCreatingUser}

@@ -694,7 +694,7 @@ model Payment {
   gateway PaymentGateway?
 
   amount   Decimal @db.Decimal(10, 2)
-  currency String  @default("INR") @db.Char(3)
+  currency String  @default("USD") @db.Char(3)
 
   transactionId String? @unique
 
