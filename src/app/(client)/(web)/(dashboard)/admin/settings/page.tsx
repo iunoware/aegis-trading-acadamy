@@ -281,17 +281,6 @@ export default function AdminSettingsPage() {
     try {
       setIsCreatingUser(true);
 
-      /*
-       * API integration will be added later.
-       *
-       * This user must always be sent as:
-       *
-       * role: "STUDENT"
-       * subscriptionSource: "ADMIN_CREATED"
-       *
-       * Never allow the role to be selected from this modal.
-       */
-
       await new Promise((resolve) => setTimeout(resolve, 700));
 
       const newUser: ComplimentaryUser = {

@@ -16,7 +16,7 @@ export const NAV_ITEMS: NavItemConfig[] = [
   { label: "Home", href: "/" },
   { label: "Pricing", href: "/pricing" },
   { label: "Courses", href: "/courses" },
-  { label: "Contact", href: "/contact" },
+  // { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
