@@ -8,6 +8,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { gsap } from "gsap";
 
+// for pulling in the logo and other assets, you can use the Image component from next/image
+
 export default function LoginPage() {
   const router = useRouter();
 
