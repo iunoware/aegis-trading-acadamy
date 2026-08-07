@@ -19,6 +19,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [discordName, setDiscordName] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
@@ -26,12 +27,12 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       gsap.fromTo(
         backdropRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 0.3, ease: "power2.out" }
+        { opacity: 1, duration: 0.3, ease: "power2.out" },
       );
       gsap.fromTo(
         modalRef.current,
         { scale: 0.95, opacity: 0, y: 10 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }
+        { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
       );
     }
   }, [isOpen]);
@@ -56,6 +57,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
       name: fullName,
       email: email.trim(),
       phone: phone.trim() || "+91 98765 43210",
+      discordName: discordName.trim(),
       isSubscribed,
       accountStatus: "Active",
       joinedDate: todayStr,
@@ -75,6 +77,7 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
     setLastName("");
     setEmail("");
     setPhone("");
+    setDiscordName("");
     onClose();
   };
 
@@ -164,6 +167,20 @@ export function AddUserModal({ isOpen, onClose, onAddUser }: AddUserModalProps) 
               placeholder="e.g. +91 98765 43210"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              className="w-full bg-[#111113] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300">
+              Discord Name
+            </label>
+
+            <input
+              type="text"
+              placeholder="e.g. aaravsharma"
+              value={discordName}
+              onChange={(e) => setDiscordName(e.target.value)}
               className="w-full bg-[#111113] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all"
             />
           </div>
