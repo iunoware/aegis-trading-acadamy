@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getRequiredSuperAdmin } from "@/lib/current-user";
 
 type PricingPlanPayload = {
   id: "monthly" | "yearly";
@@ -94,6 +95,8 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
+    await getRequiredSuperAdmin();
+
     const body = (await request.json()) as Partial<PricingPayload>;
 
     const monthly = body.monthly;

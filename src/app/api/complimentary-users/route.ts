@@ -1,0 +1,426 @@
+import { NextRequest, NextResponse } from "next/server";
+import { randomBytes, scryptSync } from "crypto";
+import { prisma } from "@/lib/prisma";
+import {
+  AccountStatus,
+  ActivityAction,
+  ActivityActorType,
+  SubscriptionEventType,
+  SubscriptionSource,
+  SubscriptionStatus,
+  UserRole,
+} from "@/generated/prisma/client";
+import { getRequiredSuperAdmin } from "@/lib/current-user";
+
+function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+
+  const hash = scryptSync(password, salt, 64).toString("hex");
+
+  return `${salt}:${hash}`;
+}
+
+function getNameParts(name: string) {
+  const parts = name.trim().split(/\s+/);
+
+  const firstName = parts.shift() || "";
+  const lastName = parts.length > 0 ? parts.join(" ") : null;
+
+  return {
+    firstName,
+    lastName,
+  };
+}
+
+export async function GET() {
+  try {
+    await getRequiredSuperAdmin();
+
+    const users = await prisma.user.findMany({
+      where: {
+        role: UserRole.STUDENT,
+        deletedAt: null,
+        subscriptions: {
+          some: {
+            source: SubscriptionSource.COMPLIMENTARY,
+            deletedAt: null,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        name: true,
+        email: true,
+        phone: true,
+        status: true,
+        createdAt: true,
+        subscriptions: {
+          where: {
+            source: SubscriptionSource.COMPLIMENTARY,
+            deletedAt: null,
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+          take: 1,
+          select: {
+            id: true,
+            status: true,
+            source: true,
+            currentExpiryDate: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        users,
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error("GET complimentary users error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to fetch complimentary users.",
+      },
+      { status: 500 },
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const adminUser = await getRequiredSuperAdmin();
+
+    const body = await request.json();
+
+    const name = typeof body.name === "string" ? body.name.trim() : "";
+
+    const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+
+    const phone = typeof body.phone === "string" ? body.phone.trim() : "";
+
+    const password = typeof body.password === "string" ? body.password : "";
+
+    const status =
+      body.status === "INACTIVE" ? AccountStatus.INACTIVE : AccountStatus.ACTIVE;
+
+    if (!name) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Full name is required.",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (!email) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Email address is required.",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (!password) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Password is required.",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (password.length < 8) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Password must be at least 8 characters long.",
+        },
+        { status: 400 },
+      );
+    }
+
+    // Check existing email
+
+    const existingEmail = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+        email: true,
+        deletedAt: true,
+      },
+    });
+
+    if (existingEmail && !existingEmail.deletedAt) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "An account with this email already exists.",
+        },
+        { status: 409 },
+      );
+    }
+
+    // Check existing phone
+
+    if (phone) {
+      const existingPhone = await prisma.user.findUnique({
+        where: {
+          phone,
+        },
+        select: {
+          id: true,
+          phone: true,
+          deletedAt: true,
+        },
+      });
+
+      if (existingPhone && !existingPhone.deletedAt) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "An account with this phone number already exists.",
+          },
+          { status: 409 },
+        );
+      }
+    }
+
+    // Find an active subscription plan
+
+    const plan = await prisma.subscriptionPlan.findUnique({
+      where: {
+        type: "YEARLY",
+      },
+      select: {
+        id: true,
+        type: true,
+        name: true,
+        durationMonths: true,
+        active: true,
+        deletedAt: true,
+      },
+    });
+
+    if (!plan || !plan.active || plan.deletedAt) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "The yearly subscription plan is not available.",
+        },
+        { status: 400 },
+      );
+    }
+
+    // if (!plan) {
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       message:
+    //         "No active subscription plan exists. Create an active plan before creating a complimentary student.",
+    //     },
+    //     { status: 400 },
+    //   );
+    // }
+
+    // Prepare user data
+
+    const { firstName, lastName } = getNameParts(name);
+
+    const hashedPassword = hashPassword(password);
+
+    const now = new Date();
+
+    const expiryDate = new Date(now);
+
+    expiryDate.setMonth(expiryDate.getMonth() + plan.durationMonths);
+
+    // Create User + Complimentary Subscription + Logs
+
+    const result = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          firstName,
+          lastName,
+          name,
+          email,
+          phone: phone || null,
+          password: hashedPassword,
+          role: UserRole.STUDENT,
+          status,
+
+          passwordChangedAt: now,
+        },
+      });
+
+      const subscription = await tx.subscription.create({
+        data: {
+          userId: user.id,
+          planId: plan.id,
+
+          status:
+            status === AccountStatus.ACTIVE
+              ? SubscriptionStatus.ACTIVE
+              : SubscriptionStatus.CANCELLED,
+
+          source: SubscriptionSource.COMPLIMENTARY,
+
+          purchaseDate: now,
+          startDate: now,
+
+          originalExpiryDate: expiryDate,
+          currentExpiryDate: expiryDate,
+
+          autoRenew: false,
+        },
+      });
+
+      await tx.subscriptionEvent.create({
+        data: {
+          subscriptionId: subscription.id,
+
+          type: SubscriptionEventType.PURCHASED,
+
+          title: "Complimentary access created",
+
+          description: "Complimentary course access was created by an administrator.",
+
+          metadata: {
+            source: "COMPLIMENTARY",
+            planId: plan.id,
+            planType: plan.type,
+            planName: plan.name,
+          },
+        },
+      });
+
+      await tx.userActivity.create({
+        data: {
+          userId: user.id,
+          actorId: adminUser.id,
+
+          action: ActivityAction.ACCOUNT_CREATED,
+
+          title: "Student account created",
+
+          details: "A complimentary student account was created.",
+
+          metadata: {
+            source: "COMPLIMENTARY",
+            subscriptionId: subscription.id,
+            planId: plan.id,
+          },
+        },
+      });
+
+      await tx.activityLog.create({
+        data: {
+          actorId: adminUser.id,
+          actorType: ActivityActorType.SUPER_ADMIN,
+
+          action: ActivityAction.ACCOUNT_CREATED,
+
+          module: "USERS",
+
+          title: "Complimentary student account created",
+
+          description: "A student account with complimentary course access was created.",
+
+          targetId: user.id,
+          targetType: "USER",
+
+          afterData: {
+            userId: user.id,
+            email: user.email,
+            role: user.role,
+            status: user.status,
+            subscriptionId: subscription.id,
+            subscriptionSource: SubscriptionSource.COMPLIMENTARY,
+            planId: plan.id,
+          },
+        },
+      });
+
+      return {
+        user,
+        subscription,
+      };
+    });
+
+    // Response
+
+    return NextResponse.json(
+      {
+        success: true,
+
+        message: "Complimentary student account created successfully.",
+
+        user: {
+          id: result.user.id,
+          firstName: result.user.firstName,
+          lastName: result.user.lastName,
+          name: result.user.name,
+          email: result.user.email,
+          phone: result.user.phone,
+          role: result.user.role,
+          status: result.user.status,
+          createdAt: result.user.createdAt,
+        },
+
+        subscription: {
+          id: result.subscription.id,
+          status: result.subscription.status,
+          source: result.subscription.source,
+          startDate: result.subscription.startDate,
+          currentExpiryDate: result.subscription.currentExpiryDate,
+        },
+      },
+      { status: 201 },
+    );
+  } catch (error: unknown) {
+    console.error("POST complimentary user error:", error);
+
+    /*
+     * Prisma unique constraint handling
+     */
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "P2002"
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "An account with the provided email or phone already exists.",
+        },
+        { status: 409 },
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to create complimentary student account.",
+      },
+      { status: 500 },
+    );
+  }
+}

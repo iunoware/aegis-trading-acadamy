@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getRequiredSuperAdmin } from "@/lib/current-user";
 
 interface RouteProps {
   params: Promise<{
@@ -9,6 +10,8 @@ interface RouteProps {
 
 export async function PATCH(request: Request, { params }: RouteProps) {
   try {
+    await getRequiredSuperAdmin();
+
     const { id } = await params;
     const body = await request.json();
 
@@ -62,6 +65,8 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 
 export async function DELETE(_request: Request, { params }: RouteProps) {
   try {
+    await getRequiredSuperAdmin();
+
     const { id } = await params;
 
     await prisma.testimonial.update({
