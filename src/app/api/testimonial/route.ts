@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getRequiredSuperAdmin } from "@/lib/current-user";
 
 export async function GET() {
   try {
@@ -35,6 +36,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    await getRequiredSuperAdmin();
+
     const body = await request.json();
 
     const testimonial = await prisma.testimonial.create({

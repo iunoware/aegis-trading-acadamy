@@ -39,7 +39,7 @@ export default function RootLayout({
 
             classNames: {
               toast:
-                "min-w-xs w-fit flex p-3 gap-3 justify-start items-center rounded-lg shadow-lg",
+                "min-w-xs w-fit flex p-3 select-none gap-3 justify-start items-center rounded-lg shadow-lg",
               title: "line-clamp-3",
             },
           }}
