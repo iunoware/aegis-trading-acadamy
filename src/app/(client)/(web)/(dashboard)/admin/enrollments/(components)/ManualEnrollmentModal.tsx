@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Plus, X, ShieldCheck } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { Enrollment } from "./EnrollmentsTable";
 
 interface ManualEnrollmentModalProps {
@@ -22,6 +22,7 @@ export function ManualEnrollmentModal({
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPhone, setUserPhone] = useState("");
+  const [discordName, setDiscordName] = useState("");
   const [plan, setPlan] = useState<"Monthly Plan" | "Yearly Plan">("Monthly Plan");
   const [adminNotes, setAdminNotes] = useState("");
 
@@ -30,12 +31,12 @@ export function ManualEnrollmentModal({
       gsap.fromTo(
         backdropRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 0.3, ease: "power2.out" }
+        { opacity: 1, duration: 0.3, ease: "power2.out" },
       );
       gsap.fromTo(
         modalRef.current,
         { scale: 0.95, opacity: 0, y: 10 },
-        { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }
+        { scale: 1, opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
       );
     }
   }, [isOpen]);
@@ -70,6 +71,7 @@ export function ManualEnrollmentModal({
       userName: userName.trim(),
       userEmail: userEmail.trim(),
       userPhone: userPhone.trim() || "+91 98765 43210",
+      discordName: discordName.trim(),
       currentPlan: plan,
       purchaseDate: todayStr,
       expiryDate: expiryStr,
@@ -100,6 +102,7 @@ export function ManualEnrollmentModal({
     setUserName("");
     setUserEmail("");
     setUserPhone("");
+    setDiscordName("");
     setAdminNotes("");
     onClose();
   };
@@ -175,6 +178,20 @@ export function ManualEnrollmentModal({
               placeholder="e.g. +91 98765 43210"
               value={userPhone}
               onChange={(e) => setUserPhone(e.target.value)}
+              className="w-full bg-[#111113] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300">
+              Discord Name
+            </label>
+
+            <input
+              type="text"
+              placeholder="e.g. aaravsharma"
+              value={discordName}
+              onChange={(e) => setDiscordName(e.target.value)}
               className="w-full bg-[#111113] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all"
             />
           </div>
