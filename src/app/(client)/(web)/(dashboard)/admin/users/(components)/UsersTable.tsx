@@ -33,7 +33,7 @@ export interface User {
   email: string;
   phone: string;
   isSubscribed: boolean;
-  accountStatus: "Active" | "Suspended";
+  accountStatus: "Active" | "Suspended" | "Inactive";
   joinedDate: string;
   lastLogin: string;
   activityTimeline: ActivityRecord[];
