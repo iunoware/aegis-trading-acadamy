@@ -20,7 +20,7 @@ export function EditUserModal({ user, onClose, onSave }: EditUserModalProps) {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [accountStatus, setAccountStatus] = useState<"Active" | "Suspended">("Active");
+  const [accountStatus, setAccountStatus] = useState<"Active" | "Suspended" | "Inactive">("Active");
 
   useEffect(() => {
     if (user) {
@@ -186,11 +186,12 @@ export function EditUserModal({ user, onClose, onSave }: EditUserModalProps) {
               </label>
               <select
                 value={accountStatus}
-                onChange={(e) => setAccountStatus(e.target.value as "Active" | "Suspended")}
+                onChange={(e) => setAccountStatus(e.target.value as "Active" | "Suspended" | "Inactive")}
                 className="w-full bg-[#111113] border border-white/15 rounded-xl px-3 py-2 text-xs text-white cursor-pointer"
               >
                 <option value="Active" className="bg-[#111113]">Active</option>
                 <option value="Suspended" className="bg-[#111113]">Suspended</option>
+                <option value="Inactive" className="bg-[#111113]">Inactive</option>
               </select>
             </div>
           </div>

@@ -9,248 +9,35 @@ import { UsersTable, User } from "./(components)/UsersTable";
 import { UserDetailsDrawer } from "./(components)/UserDetailsDrawer";
 import { EditUserModal } from "./(components)/EditUserModal";
 
-const INITIAL_USERS: User[] = [
-  {
-    id: "usr-1001",
-    firstName: "Aarav",
-    lastName: "Sharma",
-    discordName: "aarav_trades",
-    name: "Aarav Sharma",
-    email: "aarav.sharma@gmail.com",
-    phone: "+91 98765 43210",
-    isSubscribed: true,
-    accountStatus: "Active",
-    joinedDate: "15 Jan 2026",
-    lastLogin: "10 mins ago",
-    activityTimeline: [
-      {
-        id: "act-1",
-        action: "Logged In",
-        date: "01 Aug 2026",
-        details: "Authenticated via Web Browser from Mumbai, IN.",
-      },
-      {
-        id: "act-2",
-        action: "Updated Profile",
-        date: "12 May 2026",
-        details: "Updated primary phone number and contact details.",
-      },
-      {
-        id: "act-3",
-        action: "Changed Password",
-        date: "10 Mar 2026",
-        details: "Account security password updated.",
-      },
-      {
-        id: "act-4",
-        action: "Account Created",
-        date: "15 Jan 2026",
-        details: "Registered account on Aegis Trading Academy.",
-      },
-    ],
-  },
-  {
-    id: "usr-1002",
-    firstName: "Priya",
-    lastName: "Patel",
-    discordName: "priya_patel",
-    name: "Priya Patel",
-    email: "priya.patel@yahoo.com",
-    phone: "+91 98123 45678",
-    isSubscribed: true,
-    accountStatus: "Active",
-    joinedDate: "10 Jun 2026",
-    lastLogin: "1 hour ago",
-    activityTimeline: [
-      {
-        id: "act-5",
-        action: "Logged In",
-        date: "01 Aug 2026",
-        details: "Web session started.",
-      },
-      {
-        id: "act-6",
-        action: "Changed Password",
-        date: "20 Jun 2026",
-        details: "Security password updated.",
-      },
-      {
-        id: "act-7",
-        action: "Account Created",
-        date: "10 Jun 2026",
-        details: "Registered account on Aegis Trading Academy.",
-      },
-    ],
-  },
-  {
-    id: "usr-1003",
-    firstName: "Rohan",
-    lastName: "Verma",
-    discordName: "rohan_fx",
-    name: "Rohan Verma",
-    email: "rohan.v@outlook.com",
-    phone: "+91 97654 32109",
-    isSubscribed: false,
-    accountStatus: "Active",
-    joinedDate: "28 Feb 2026",
-    lastLogin: "3 hours ago",
-    activityTimeline: [
-      {
-        id: "act-8",
-        action: "Logged In",
-        date: "01 Aug 2026",
-        details: "Logged in via Chrome desktop browser.",
-      },
-      {
-        id: "act-9",
-        action: "Account Created",
-        date: "28 Feb 2026",
-        details: "Registered account on Aegis Trading Academy.",
-      },
-    ],
-  },
-  {
-    id: "usr-1004",
-    firstName: "Sneha",
-    lastName: "Reddy",
-    discordName: "sneha_reddy",
-    name: "Sneha Reddy",
-    email: "sneha.reddy@gmail.com",
-    phone: "+91 96543 21098",
-    isSubscribed: false,
-    accountStatus: "Active",
-    joinedDate: "01 May 2026",
-    lastLogin: "5 days ago",
-    activityTimeline: [
-      {
-        id: "act-10",
-        action: "Logged Out",
-        date: "27 Jul 2026",
-        details: "User session ended cleanly.",
-      },
-      {
-        id: "act-11",
-        action: "Account Created",
-        date: "01 May 2026",
-        details: "Registered account on Aegis Trading Academy.",
-      },
-    ],
-  },
-  {
-    id: "usr-1005",
-    firstName: "Vikram",
-    lastName: "Malhotra",
-    discordName: "vikram_alpha",
-    name: "Vikram Malhotra",
-    email: "vikram.m@gmail.com",
-    phone: "+91 95432 10987",
-    isSubscribed: true,
-    accountStatus: "Active",
-    joinedDate: "12 Jul 2026",
-    lastLogin: "Yesterday",
-    activityTimeline: [
-      {
-        id: "act-12",
-        action: "Logged In",
-        date: "31 Jul 2026",
-        details: "Web session active.",
-      },
-      {
-        id: "act-13",
-        action: "Account Created",
-        date: "12 Jul 2026",
-        details: "Registered account on Aegis Trading Academy.",
-      },
-    ],
-  },
-  {
-    id: "usr-1006",
-    firstName: "Ananya",
-    lastName: "Iyer",
-    discordName: "ananya_fx",
-    name: "Ananya Iyer",
-    email: "ananya.iyer@gmail.com",
-    phone: "+91 94321 09876",
-    isSubscribed: true,
-    accountStatus: "Active",
-    joinedDate: "25 Jul 2026",
-    lastLogin: "2 hours ago",
-    activityTimeline: [
-      {
-        id: "act-14",
-        action: "Logged In",
-        date: "01 Aug 2026",
-        details: "Logged in via Mobile Safari.",
-      },
-      {
-        id: "act-15",
-        action: "Account Created",
-        date: "25 Jul 2026",
-        details: "Registered account on Aegis Trading Academy.",
-      },
-    ],
-  },
-  {
-    id: "usr-1007",
-    firstName: "Devansh",
-    lastName: "Nambiar",
-    discordName: "devansh_trade",
-    name: "Devansh Nambiar",
-    email: "devansh.n@yahoo.com",
-    phone: "+91 93210 98765",
-    isSubscribed: false,
-    accountStatus: "Suspended",
-    joinedDate: "05 Mar 2026",
-    lastLogin: "2 weeks ago",
-    activityTimeline: [
-      {
-        id: "act-16",
-        action: "Account Suspended",
-        date: "10 May 2026",
-        details: "Account suspended by administrator.",
-      },
-      {
-        id: "act-17",
-        action: "Account Created",
-        date: "05 Mar 2026",
-        details: "Registered account on Aegis Trading Academy.",
-      },
-    ],
-  },
-  {
-    id: "usr-1008",
-    firstName: "Karan",
-    lastName: "Mehta",
-    discordName: "karan_mehta",
-    name: "Karan Mehta",
-    email: "karan.mehta@hotmail.com",
-    phone: "+91 92109 87654",
-    isSubscribed: true,
-    accountStatus: "Active",
-    joinedDate: "18 Jul 2026",
-    lastLogin: "4 hours ago",
-    activityTimeline: [
-      {
-        id: "act-18",
-        action: "Logged In",
-        date: "01 Aug 2026",
-        details: "Web session active.",
-      },
-      {
-        id: "act-19",
-        action: "Account Created",
-        date: "18 Jul 2026",
-        details: "Registered account on Aegis Trading Academy.",
-      },
-    ],
-  },
-];
-
 export default function UserManagementPage() {
-  const [users, setUsers] = useState<User[]>(INITIAL_USERS);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
+
+  // Fetch users from API
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/users");
+      const data = await res.json();
+      if (data.success && Array.isArray(data.users)) {
+        setUsers(data.users);
+      } else {
+        toast.error(data.message || "Failed to load user directory");
+      }
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+      toast.error("Failed to connect to backend server");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   // GSAP Entrance Animation
   useEffect(() => {
@@ -271,72 +58,126 @@ export default function UserManagementPage() {
     }, pageRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [loading]);
 
   // Compute KPI Values
   const totalRegistered = users.length;
   const subscribedCount = users.filter((u) => u.isSubscribed).length;
   const nonSubscribedCount = users.filter((u) => !u.isSubscribed).length;
-  const newThisMonth = users.filter(
-    (u) =>
-      u.joinedDate.toLowerCase().includes("jul 2026") ||
-      u.joinedDate.toLowerCase().includes("aug 2026"),
-  ).length;
+
+  const now = new Date();
+  const currentMonthStr = now
+    .toLocaleString("en-US", { month: "short" })
+    .toLowerCase();
+  const currentYearStr = now.getFullYear().toString();
+
+  const newThisMonth = users.filter((u) => {
+    if (!u.joinedDate) return false;
+    const joinedLower = u.joinedDate.toLowerCase();
+    return (
+      (joinedLower.includes(currentMonthStr) &&
+        joinedLower.includes(currentYearStr)) ||
+      joinedLower.includes("jul 2026") ||
+      joinedLower.includes("aug 2026")
+    );
+  }).length;
 
   // Handlers
-  const handleEditSave = (updatedUser: User) => {
-    setUsers((prev) => prev.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
-    if (selectedUser?.id === updatedUser.id) {
-      setSelectedUser(updatedUser);
-    }
-    toast.success(`User profile for "${updatedUser.name}" updated!`);
-  };
+  const handleEditSave = async (updatedUser: User) => {
+    try {
+      const res = await fetch(`/api/users/${updatedUser.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          phone: updatedUser.phone,
+          discordName: updatedUser.discordName,
+          accountStatus: updatedUser.accountStatus,
+        }),
+      });
 
-  const handleToggleAccountStatus = (userId: string) => {
-    setUsers((prev) =>
-      prev.map((u) => {
-        if (u.id === userId) {
-          const newStatus = u.accountStatus === "Active" ? "Suspended" : "Active";
-          const updatedUser: User = {
-            ...u,
-            accountStatus: newStatus,
-            activityTimeline: [
-              {
-                id: `act-status-${Date.now()}`,
-                action: `Account ${newStatus}`,
-                date: "01 Aug 2026",
-                details: `Admin changed account status to ${newStatus}.`,
-              },
-              ...u.activityTimeline,
-            ],
-          };
-
-          if (selectedUser?.id === userId) {
-            setSelectedUser(updatedUser);
-          }
-
-          return updatedUser;
+      const data = await res.json();
+      if (data.success && data.user) {
+        setUsers((prev) =>
+          prev.map((u) => (u.id === data.user.id ? data.user : u)),
+        );
+        if (selectedUser?.id === data.user.id) {
+          setSelectedUser(data.user);
         }
-        return u;
-      }),
-    );
-
-    toast.info(`Account status updated.`);
+        toast.success(`User profile for "${data.user.name}" updated!`);
+      } else {
+        toast.error(data.message || "Failed to update user profile");
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      toast.error("An error occurred while saving user changes");
+    }
   };
 
-  const handleDeleteUser = (userId: string) => {
-    const userToDelete = users.find((u) => u.id === userId);
-    setUsers((prev) => prev.filter((u) => u.id !== userId));
-    if (selectedUser?.id === userId) {
-      setSelectedUser(null);
+  const handleToggleAccountStatus = async (userId: string) => {
+    const targetUser = users.find((u) => u.id === userId);
+    if (!targetUser) return;
+
+    const newStatus =
+      targetUser.accountStatus === "Active" ? "Suspended" : "Active";
+
+    try {
+      const res = await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          accountStatus: newStatus,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.user) {
+        setUsers((prev) =>
+          prev.map((u) => (u.id === data.user.id ? data.user : u)),
+        );
+        if (selectedUser?.id === userId) {
+          setSelectedUser(data.user);
+        }
+        toast.info(`Account status updated to ${newStatus}.`);
+      } else {
+        toast.error(data.message || "Failed to update account status");
+      }
+    } catch (error) {
+      console.error("Error toggling account status:", error);
+      toast.error("Failed to update account status");
     }
-    toast.error(`User "${userToDelete?.name || "User"}" deleted.`);
+  };
+
+  const handleDeleteUser = async (userId: string) => {
+    const userToDelete = users.find((u) => u.id === userId);
+    try {
+      const res = await fetch(`/api/users/${userId}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setUsers((prev) => prev.filter((u) => u.id !== userId));
+        if (selectedUser?.id === userId) {
+          setSelectedUser(null);
+        }
+        toast.error(`User "${userToDelete?.name || "User"}" deleted.`);
+      } else {
+        toast.error(data.message || "Failed to delete user");
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    }
   };
 
   const handleExportUsers = () => {
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      ["ID,FirstName,LastName,Email,Phone,Subscribed,Status,JoinedDate,LastLogin"]
+      [
+        "ID,FirstName,LastName,Email,Phone,Subscribed,Status,JoinedDate,LastLogin",
+      ]
         .concat(
           users.map(
             (u) =>
@@ -376,12 +217,19 @@ export default function UserManagementPage() {
       />
 
       {/* 3. Master Users Table */}
-      <UsersTable
-        users={users}
-        onSelectUser={(user) => setSelectedUser(user)}
-        onEditUser={(user) => setEditingUser(user)}
-        onDeleteUser={handleDeleteUser}
-      />
+      {loading ? (
+        <div className="p-12 text-center rounded-2xl bg-[#111113]/80 border border-white/10 text-zinc-400 font-mono text-sm space-y-3">
+          <div className="inline-block w-6 h-6 border-2 border-[#C9A227] border-t-transparent rounded-full animate-spin" />
+          <p>Loading Users Directory...</p>
+        </div>
+      ) : (
+        <UsersTable
+          users={users}
+          onSelectUser={(user) => setSelectedUser(user)}
+          onEditUser={(user) => setEditingUser(user)}
+          onDeleteUser={handleDeleteUser}
+        />
+      )}
 
       {/* 4. User Details Drawer */}
       <UserDetailsDrawer

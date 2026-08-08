@@ -1,5 +1,6 @@
 import Hero from "./(components)/Hero";
-import MarketTicker from "./(components)/MarketTicker";
+import TradingTicker from "./(components)/TradingViewWidget";
+// import MarketTicker from "./(components)/MarketTicker";
 import WhyChooseAegis from "./(components)/WhyChooseAegis";
 import TrustedBy from "./(components)/TrustedBy";
 import LearningJourney from "./(components)/LearningJourney";
@@ -12,7 +13,8 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <MarketTicker />
+      <TradingTicker />
+      {/* <MarketTicker /> */}
       <WhyChooseAegis />
       <TrustedBy />
       <LearningJourney />
