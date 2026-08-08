@@ -1,3 +1,5 @@
+// admin login auth
+
 "use client";
 
 import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
@@ -49,7 +51,7 @@ export default function AdminLoginPage() {
     try {
       setIsSubmitting(true);
 
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("/api/admin/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,12 +70,11 @@ export default function AdminLoginPage() {
       }
 
       if (data.user?.role !== "SUPER_ADMIN") {
-        await fetch("/api/auth/logout", {
+        await fetch("/api/admin/auth/logout", {
           method: "POST",
         });
 
         toast.error("This login is only available to administrators.");
-
         return;
       }
 
