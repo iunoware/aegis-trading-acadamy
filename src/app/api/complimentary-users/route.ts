@@ -425,139 +425,272 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// export async function DELETE(request: NextRequest) {
-//   try {
-//     const adminUser = await getRequiredSuperAdmin();
+export async function PATCH(request: NextRequest) {
+  try {
+    const adminUser = await getRequiredSuperAdmin();
+    const body = await request.json();
 
-//     const body = await request.json();
+    const userId = typeof body.userId === "string" ? body.userId : "";
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, message: "User ID is required." },
+        { status: 400 },
+      );
+    }
 
-//     const userId = typeof body.userId === "string" ? body.userId : "";
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, role: true, deletedAt: true, phone: true, email: true },
+    });
 
-//     if (!userId) {
-//       return NextResponse.json(
-//         {
-//           success: false,
-//           message: "User ID is required.",
-//         },
-//         { status: 400 },
-//       );
-//     }
+    if (!existingUser || existingUser.deletedAt) {
+      return NextResponse.json(
+        { success: false, message: "Student not found." },
+        { status: 404 },
+      );
+    }
 
-//     const user = await prisma.user.findUnique({
-//       where: {
-//         id: userId,
-//       },
-//       select: {
-//         id: true,
-//         role: true,
-//         deletedAt: true,
-//         subscriptions: {
-//           where: {
-//             source: SubscriptionSource.COMPLIMENTARY,
-//             deletedAt: null,
-//           },
-//           select: {
-//             id: true,
-//           },
-//         },
-//       },
-//     });
+    if (existingUser.role !== UserRole.STUDENT) {
+      return NextResponse.json(
+        { success: false, message: "Only student accounts can be edited here." },
+        { status: 400 },
+      );
+    }
 
-//     if (!user || user.deletedAt) {
-//       return NextResponse.json(
-//         {
-//           success: false,
-//           message: "Complimentary student not found.",
-//         },
-//         { status: 404 },
-//       );
-//     }
+    const name = typeof body.name === "string" ? body.name.trim() : undefined;
+    const email =
+      typeof body.email === "string" ? body.email.trim().toLowerCase() : undefined;
+    const phone = typeof body.phone === "string" ? body.phone.trim() : undefined;
+    const status =
+      body.status === "ACTIVE" || body.status === "INACTIVE"
+        ? (body.status as AccountStatus)
+        : undefined;
 
-//     if (user.role !== UserRole.STUDENT) {
-//       return NextResponse.json(
-//         {
-//           success: false,
-//           message: "Only student accounts can be deleted here.",
-//         },
-//         { status: 400 },
-//       );
-//     }
+    if (name !== undefined && !name) {
+      return NextResponse.json(
+        { success: false, message: "Full name cannot be empty." },
+        { status: 400 },
+      );
+    }
 
-//     if (user.subscriptions.length === 0) {
-//       return NextResponse.json(
-//         {
-//           success: false,
-//           message: "This is not a complimentary student account.",
-//         },
-//         { status: 400 },
-//       );
-//     }
+    if (email !== undefined) {
+      if (!email) {
+        return NextResponse.json(
+          { success: false, message: "Email cannot be empty." },
+          { status: 400 },
+        );
+      }
 
-//     await prisma.$transaction(async (tx) => {
-//       await tx.subscription.updateMany({
-//         where: {
-//           userId: user.id,
-//           source: SubscriptionSource.COMPLIMENTARY,
-//           deletedAt: null,
-//         },
-//         data: {
-//           deletedAt: new Date(),
-//         },
-//       });
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        return NextResponse.json(
+          { success: false, message: "Enter a valid email address." },
+          { status: 400 },
+        );
+      }
 
-//       await tx.user.update({
-//         where: {
-//           id: user.id,
-//         },
-//         data: {
-//           deletedAt: new Date(),
-//         },
-//       });
+      if (email !== existingUser.email) {
+        const existingEmail = await prisma.user.findUnique({
+          where: { email },
+          select: { id: true, deletedAt: true },
+        });
 
-//       await tx.userActivity.create({
-//         data: {
-//           userId: user.id,
-//           actorId: adminUser.id,
-//           action: ActivityAction.ACCOUNT_DELETED,
-//           title: "Student account deleted",
-//           details: "A complimentary student account was deleted by an administrator.",
-//           metadata: {
-//             source: "COMPLIMENTARY",
-//           },
-//         },
-//       });
+        if (existingEmail && !existingEmail.deletedAt && existingEmail.id !== userId) {
+          return NextResponse.json(
+            { success: false, message: "An account with this email already exists." },
+            { status: 409 },
+          );
+        }
+      }
+    }
 
-//       await tx.activityLog.create({
-//         data: {
-//           actorId: adminUser.id,
-//           actorType: ActivityActorType.SUPER_ADMIN,
-//           action: ActivityAction.ACCOUNT_DELETED,
-//           module: "USERS",
-//           title: "Complimentary student account deleted",
-//           description: "A complimentary student account was deleted by an administrator.",
-//           targetId: user.id,
-//           targetType: "USER",
-//           afterData: {
-//             userId: user.id,
-//             subscriptionSource: SubscriptionSource.COMPLIMENTARY,
-//           },
-//         },
-//       });
-//     });
+    if (phone && phone !== existingUser.phone) {
+      const existingPhone = await prisma.user.findUnique({
+        where: { phone },
+        select: { id: true, deletedAt: true },
+      });
 
-//     return NextResponse.json({
-//       success: true,
-//       message: "Complimentary student deleted successfully.",
-//     });
-//   } catch (error) {
-//     console.error("DELETE complimentary user error:", error);
+      if (existingPhone && !existingPhone.deletedAt && existingPhone.id !== userId) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "An account with this phone number already exists.",
+          },
+          { status: 409 },
+        );
+      }
+    }
 
-//     return NextResponse.json(
-//       {
-//         success: false,
-//         message: "Failed to delete complimentary student.",
-//       },
-//       { status: 500 },
-//     );
-//   }
-// }
+    const { firstName, lastName } = name
+      ? getNameParts(name)
+      : { firstName: undefined, lastName: undefined };
+
+    const updatedUser = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.update({
+        where: { id: userId },
+        data: {
+          ...(name !== undefined ? { name, firstName, lastName } : {}),
+          ...(email !== undefined ? { email } : {}),
+          ...(phone !== undefined ? { phone: phone || null } : {}),
+          ...(status !== undefined ? { status } : {}),
+        },
+      });
+
+      if (status !== undefined) {
+        await tx.subscription.updateMany({
+          where: { userId, source: SubscriptionSource.COMPLIMENTARY, deletedAt: null },
+          data: {
+            status:
+              status === AccountStatus.ACTIVE
+                ? SubscriptionStatus.ACTIVE
+                : SubscriptionStatus.CANCELLED,
+          },
+        });
+      }
+
+      await tx.activityLog.create({
+        data: {
+          actorId: adminUser.id,
+          actorType: ActivityActorType.SUPER_ADMIN,
+          action: ActivityAction.ACCOUNT_UPDATED, // confirm this exists in your enum
+          module: "USERS",
+          title: "Complimentary student account updated",
+          description: "A complimentary student account was updated by an administrator.",
+          targetId: userId,
+          targetType: "USER",
+          afterData: { userId, name, email, phone, status },
+        },
+      });
+
+      return user;
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: "Student account updated successfully.",
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        status: updatedUser.status,
+        createdAt: updatedUser.createdAt,
+      },
+    });
+  } catch (error: unknown) {
+    console.error("PATCH complimentary user error:", error);
+
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "P2002"
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "An account with the provided email or phone already exists.",
+        },
+        { status: 409 },
+      );
+    }
+
+    return NextResponse.json(
+      { success: false, message: "Failed to update student account." },
+      { status: 500 },
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const adminUser = await getRequiredSuperAdmin();
+    const body = await request.json();
+
+    const userId = typeof body.userId === "string" ? body.userId : "";
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, message: "User ID is required." },
+        { status: 400 },
+      );
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        role: true,
+        deletedAt: true,
+        subscriptions: {
+          where: { source: SubscriptionSource.COMPLIMENTARY, deletedAt: null },
+          select: { id: true },
+        },
+      },
+    });
+
+    if (!user || user.deletedAt) {
+      return NextResponse.json(
+        { success: false, message: "Complimentary student not found." },
+        { status: 404 },
+      );
+    }
+
+    if (user.role !== UserRole.STUDENT) {
+      return NextResponse.json(
+        { success: false, message: "Only student accounts can be deleted here." },
+        { status: 400 },
+      );
+    }
+
+    if (user.subscriptions.length === 0) {
+      return NextResponse.json(
+        { success: false, message: "This is not a complimentary student account." },
+        { status: 400 },
+      );
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.subscription.updateMany({
+        where: {
+          userId: user.id,
+          source: SubscriptionSource.COMPLIMENTARY,
+          deletedAt: null,
+        },
+        data: { deletedAt: new Date() },
+      });
+
+      await tx.user.update({
+        where: { id: user.id },
+        data: { deletedAt: new Date() },
+      });
+
+      await tx.activityLog.create({
+        data: {
+          actorId: adminUser.id,
+          actorType: ActivityActorType.SUPER_ADMIN,
+          action: ActivityAction.ACCOUNT_DELETED,
+          module: "USERS",
+          title: "Complimentary student account deleted",
+          description: "A complimentary student account was deleted by an administrator.",
+          targetId: user.id,
+          targetType: "USER",
+          afterData: {
+            userId: user.id,
+            subscriptionSource: SubscriptionSource.COMPLIMENTARY,
+          },
+        },
+      });
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: "Complimentary student deleted successfully.",
+    });
+  } catch (error) {
+    console.error("DELETE complimentary user error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to delete complimentary student." },
+      { status: 500 },
+    );
+  }
+}
