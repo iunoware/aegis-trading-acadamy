@@ -12,6 +12,8 @@ import {
   UserPlus,
   UsersRound,
   X,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -155,6 +157,97 @@ export default function AdminSettingsPage() {
 
   // CHECK FOR GENERAL SETTINGS CHANGES
   const hasChanges = JSON.stringify(settings) !== JSON.stringify(savedSettings);
+
+  // EDIT STUDENT
+  const [editingUser, setEditingUser] = useState<ComplimentaryUser | null>(null);
+  const [editForm, setEditForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    status: "ACTIVE" as "ACTIVE" | "INACTIVE",
+  });
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+
+  // DELETE STUDENT
+  const [deletingUser, setDeletingUser] = useState<ComplimentaryUser | null>(null);
+  const [isDeletingUser, setIsDeletingUser] = useState(false);
+
+  function openEditModal(user: ComplimentaryUser) {
+    setEditingUser(user);
+    setEditForm({
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      status: user.status,
+    });
+  }
+
+  function closeEditModal() {
+    if (isSavingEdit) return;
+    setEditingUser(null);
+  }
+
+  async function handleUpdateUser(event: React.FormEvent) {
+    event.preventDefault();
+    if (!editingUser) return;
+
+    const name = editForm.name.trim();
+    const email = editForm.email.trim().toLowerCase();
+
+    if (!name || !email) return;
+
+    try {
+      setIsSavingEdit(true);
+
+      const response = await axios.patch("/api/complimentary-users", {
+        userId: editingUser.id,
+        name,
+        email,
+        phone: editForm.phone.trim(),
+        status: editForm.status,
+      });
+
+      const updated = response.data.user;
+
+      setComplimentaryUsers((current) =>
+        current.map((u) => (u.id === updated.id ? { ...u, ...updated } : u)),
+      );
+
+      setEditingUser(null);
+    } catch (error) {
+      console.error("Unable to update complimentary user:", error);
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || "Failed to update student account.");
+      } else {
+        alert("Failed to update student account.");
+      }
+    } finally {
+      setIsSavingEdit(false);
+    }
+  }
+  async function handleDeleteUser() {
+    if (!deletingUser) return;
+
+    try {
+      setIsDeletingUser(true);
+
+      await axios.delete("/api/complimentary-users", {
+        data: { userId: deletingUser.id },
+      });
+
+      setComplimentaryUsers((current) => current.filter((u) => u.id !== deletingUser.id));
+      setDeletingUser(null);
+    } catch (error) {
+      console.error("Unable to delete complimentary user:", error);
+      if (axios.isAxiosError(error)) {
+        alert(error.response?.data?.message || "Failed to delete student account.");
+      } else {
+        alert("Failed to delete student account.");
+      }
+    } finally {
+      setIsDeletingUser(false);
+    }
+  }
 
   useEffect(() => {
     async function loadComplimentaryUsers() {
@@ -318,7 +411,7 @@ export default function AdminSettingsPage() {
             </p>
           </div>
 
-          <button
+          {/* <button
             type="button"
             onClick={handleSave}
             disabled={isSaving || !hasChanges}
@@ -336,7 +429,7 @@ export default function AdminSettingsPage() {
                 {isSaving ? "Saving..." : "Save Changes"}
               </>
             )}
-          </button>
+          </button> */}
         </div>
 
         <div className="mt-6 space-y-6">
@@ -421,6 +514,10 @@ export default function AdminSettingsPage() {
                         <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">
                           Created
                         </th>
+
+                        <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
 
@@ -479,6 +576,28 @@ export default function AdminSettingsPage() {
                               year: "numeric",
                             })}
                           </td>
+
+                          <td className="px-5 py-4">
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => openEditModal(user)}
+                                aria-label="Edit student"
+                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-400 transition-colors hover:bg-white/10 hover:text-white"
+                              >
+                                <Pencil size={14} />
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => setDeletingUser(user)}
+                                aria-label="Delete student"
+                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-500/20 bg-red-500/10 text-red-400 transition-colors hover:bg-red-500/20"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </td>
                         </tr>
                       ))}
 
@@ -514,7 +633,7 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* BOTTOM SAVE BAR */}
-        <div className="sticky bottom-4 mt-8 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#121212]/95 p-4 shadow-[0_15px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+        {/* <div className="sticky bottom-4 mt-8 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#121212]/95 p-4 shadow-[0_15px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl">
           <div className="hidden items-center gap-3 sm:flex">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <Settings2 size={17} />
@@ -548,7 +667,7 @@ export default function AdminSettingsPage() {
               </>
             )}
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* CREATE STUDENT MODAL */}
@@ -570,7 +689,7 @@ export default function AdminSettingsPage() {
             {/* Modal header */}
             <div className="flex items-start justify-between border-b border-white/10 px-5 py-5 sm:px-6">
               <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-(--primary)/30 bg-primary/10 text-primary">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 text-primary">
                   <UserPlus size={20} />
                 </div>
 
@@ -736,6 +855,165 @@ export default function AdminSettingsPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {editingUser && (
+        <div
+          className="fixed inset-0 z-100 flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) closeEditModal();
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-[#121212] shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
+          >
+            <div className="flex items-start justify-between border-b border-white/10 px-5 py-5 sm:px-6">
+              <div>
+                <h2 className="text-lg font-bold text-white">Edit Student Account</h2>
+                <p className="mt-1 text-sm text-zinc-500">
+                  Update this student&apos;s account details.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeEditModal}
+                disabled={isSavingEdit}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white disabled:opacity-50"
+              >
+                <X size={17} />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdateUser}>
+              <div className="space-y-5 p-5 sm:p-6">
+                <FormField label="Full Name">
+                  <input
+                    type="text"
+                    value={editForm.name}
+                    onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
+                    required
+                    className={inputClassName}
+                  />
+                </FormField>
+
+                <FormField
+                  label="Login Email"
+                  description="Changing this updates the email the student logs in with."
+                >
+                  <input
+                    type="email"
+                    value={editForm.email}
+                    onChange={(e) =>
+                      setEditForm((f) => ({ ...f, email: e.target.value }))
+                    }
+                    autoComplete="off"
+                    required
+                    className={inputClassName}
+                  />
+                </FormField>
+
+                <FormField label="Phone Number">
+                  <input
+                    type="tel"
+                    value={editForm.phone}
+                    onChange={(e) =>
+                      setEditForm((f) => ({ ...f, phone: e.target.value }))
+                    }
+                    className={inputClassName}
+                  />
+                </FormField>
+
+                <FormField label="Account Status">
+                  <select
+                    value={editForm.status}
+                    onChange={(e) =>
+                      setEditForm((f) => ({
+                        ...f,
+                        status: e.target.value as "ACTIVE" | "INACTIVE",
+                      }))
+                    }
+                    className={inputClassName}
+                  >
+                    <option value="ACTIVE" className="bg-[#121212]">
+                      Active
+                    </option>
+                    <option value="INACTIVE" className="bg-[#121212]">
+                      Inactive
+                    </option>
+                  </select>
+                </FormField>
+              </div>
+
+              <div className="flex flex-col-reverse gap-3 border-t border-white/10 px-5 py-4 sm:flex-row sm:justify-end sm:px-6">
+                <button
+                  type="button"
+                  onClick={closeEditModal}
+                  disabled={isSavingEdit}
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isSavingEdit}
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-primary-light via-primary to-primary-dark px-5 text-sm font-bold text-black disabled:opacity-60"
+                >
+                  {isSavingEdit ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {deletingUser && (
+        <div
+          className="fixed inset-0 z-100 flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget && !isDeletingUser)
+              setDeletingUser(null);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#121212] shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
+          >
+            <div className="p-6">
+              <h2 className="text-lg font-bold text-white">Delete Student Account</h2>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-500">
+                This will permanently remove{" "}
+                <span className="text-white">{deletingUser.name}</span>'s account (
+                {deletingUser.email}) and revoke their complimentary access. This can't be
+                undone.
+              </p>
+            </div>
+
+            <div className="flex flex-col-reverse gap-3 border-t border-white/10 px-6 py-4 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setDeletingUser(null)}
+                disabled={isDeletingUser}
+                className="inline-flex h-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white disabled:opacity-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDeleteUser}
+                disabled={isDeletingUser}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-bold text-white hover:bg-red-600 disabled:opacity-60"
+              >
+                {isDeletingUser ? "Deleting..." : "Delete Account"}
+              </button>
+            </div>
           </div>
         </div>
       )}
