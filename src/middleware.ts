@@ -75,80 +75,89 @@
 //   matcher: ["/admin/:path*", "/api/admin/:path*", "/login"],
 // };
 
-import { jwtVerify } from "jose";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-const ADMIN_SESSION_COOKIE_NAME = "aegis_admin_session";
-
-function getAuthSecret() {
-  const secret = process.env.AUTH_SECRET;
-
-  if (!secret) {
-    throw new Error("AUTH_SECRET is not set");
-  }
-
-  return new TextEncoder().encode(secret);
-}
-
-async function getAdminSession(token: string | undefined) {
-  if (!token) {
-    return null;
-  }
-
-  try {
-    const { payload } = await jwtVerify(token, getAuthSecret());
-
-    if (payload.type !== "ADMIN" || payload.role !== "SUPER_ADMIN") {
-      return null;
-    }
-
-    return payload;
-  } catch {
-    return null;
-  }
-}
+import { NextRequest, NextResponse } from "next/server";
+import { SESSION_COOKIE_NAME, verifySession } from "@/lib/auth/session";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const token = request.cookies.get(ADMIN_SESSION_COOKIE_NAME)?.value;
+  const token = request.cookies.get(SESSION_COOKIE_NAME)?.value;
 
-  const adminSession = await getAdminSession(token);
+  const session = await verifySession(token);
 
-  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+  const isLoggedIn = !!session;
 
-  const isAdminApiRoute = pathname === "/api/admin" || pathname.startsWith("/api/admin/");
+  const isAdminPage = pathname === "/admin" || pathname.startsWith("/admin/");
 
-  const isAdminLoginPage = pathname === "/admin-login";
+  const isAdminApi = pathname === "/api/admin" || pathname.startsWith("/api/admin/");
 
-  if (isAdminRoute && !adminSession) {
-    const loginUrl = new URL("/admin-login", request.url);
+  const isAdminLogin = pathname === "/admin/login";
 
-    const response = NextResponse.redirect(loginUrl);
+  const isUserLogin = pathname === "/login";
 
-    response.cookies.delete(ADMIN_SESSION_COOKIE_NAME);
+  if (isAdminLogin) {
+    if (!session) {
+      return NextResponse.next();
+    }
 
-    return response;
+    if (session.role === "SUPER_ADMIN") {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
+
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (isAdminApiRoute && !adminSession) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Unauthorized",
-      },
-      { status: 401 },
-    );
+  if (isAdminPage) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
+    }
+
+    if (session.role !== "SUPER_ADMIN") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    return NextResponse.next();
   }
 
-  if (isAdminLoginPage && adminSession) {
-    return NextResponse.redirect(new URL("/admin", request.url));
+  if (isAdminApi) {
+    if (!session) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unauthorized",
+        },
+        { status: 401 },
+      );
+    }
+
+    if (session.role !== "SUPER_ADMIN") {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Forbidden",
+        },
+        { status: 403 },
+      );
+    }
+
+    return NextResponse.next();
+  }
+
+  if (isUserLogin) {
+    if (!session) {
+      return NextResponse.next();
+    }
+
+    if (session.role === "SUPER_ADMIN") {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
+
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*", "/admin-login"],
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/login", "/admin/login"],
 };

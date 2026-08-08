@@ -1,20 +1,86 @@
-import "server-only";
+// import "server-only";
 
-import { prisma } from "@/db/prisma";
-import { getSession } from "@/lib/auth/session";
+// import { prisma } from "@/db/prisma";
+// import { getSession } from "@/lib/auth/session";
 
-export type CurrentUser = {
-  id: string;
-  name: string;
-  email: string;
-  role: "SUPER_ADMIN" | "ADMIN" | "STUDENT";
-  status: "ACTIVE" | "INACTIVE" | "SUSPENDED";
-};
+// export type CurrentUser = {
+//   id: string;
+//   name: string;
+//   email: string;
+//   role: "SUPER_ADMIN" | "ADMIN" | "STUDENT";
+//   status: "ACTIVE" | "INACTIVE" | "SUSPENDED";
+// };
 
-export async function getCurrentUser(): Promise<CurrentUser | null> {
-  const session = await getSession();
+// export async function getCurrentUser(): Promise<CurrentUser | null> {
+//   const session = await getSession();
 
-  if (!session?.userId) {
+//   if (!session?.userId) {
+//     return null;
+//   }
+
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       id: session.userId,
+//     },
+//     select: {
+//       id: true,
+//       name: true,
+//       email: true,
+//       role: true,
+//       status: true,
+//     },
+//   });
+
+//   if (!user) {
+//     return null;
+//   }
+
+//   return {
+//     id: user.id,
+//     name: user.name,
+//     email: user.email,
+//     role: user.role,
+//     status: user.status,
+//   };
+// }
+
+// export async function getRequiredCurrentUser(): Promise<CurrentUser> {
+//   const user = await getCurrentUser();
+
+//   if (!user) {
+//     throw new Error("UNAUTHORIZED");
+//   }
+
+//   return user;
+// }
+
+// export async function getRequiredSuperAdmin(): Promise<CurrentUser> {
+//   const user = await getRequiredCurrentUser();
+
+//   if (user.role !== "SUPER_ADMIN") {
+//     throw new Error("FORBIDDEN");
+//   }
+
+//   if (user.status !== "ACTIVE") {
+//     throw new Error("FORBIDDEN");
+//   }
+
+//   return user;
+// }
+
+import { cookies } from "next/headers";
+import { prisma } from "@/lib/prisma";
+import { AccountStatus, UserRole } from "@/generated/prisma/client";
+import { SESSION_COOKIE_NAME, verifySession } from "@/lib/auth/session";
+
+export async function getCurrentUser() {
+  const cookieStore = await cookies();
+
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+
+  const session = await verifySession(token);
+
+  if (!session) {
     return null;
   }
 
@@ -24,10 +90,16 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     },
     select: {
       id: true,
+      firstName: true,
+      lastName: true,
       name: true,
       email: true,
+      phone: true,
+      password: true,
       role: true,
       status: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
@@ -35,16 +107,14 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     return null;
   }
 
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    status: user.status,
-  };
+  if (user.status !== AccountStatus.ACTIVE) {
+    return null;
+  }
+
+  return user;
 }
 
-export async function getRequiredCurrentUser(): Promise<CurrentUser> {
+export async function getRequiredUser() {
   const user = await getCurrentUser();
 
   if (!user) {
@@ -54,14 +124,14 @@ export async function getRequiredCurrentUser(): Promise<CurrentUser> {
   return user;
 }
 
-export async function getRequiredSuperAdmin(): Promise<CurrentUser> {
-  const user = await getRequiredCurrentUser();
+export async function getRequiredSuperAdmin() {
+  const user = await getCurrentUser();
 
-  if (user.role !== "SUPER_ADMIN") {
-    throw new Error("FORBIDDEN");
+  if (!user) {
+    throw new Error("UNAUTHORIZED");
   }
 
-  if (user.status !== "ACTIVE") {
+  if (user.role !== UserRole.SUPER_ADMIN) {
     throw new Error("FORBIDDEN");
   }
 
