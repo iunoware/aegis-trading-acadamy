@@ -3,304 +3,41 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { toast } from "sonner";
+import axios from "@/lib/axios";
 import { EnrollmentsHeader } from "./(components)/EnrollmentsHeader";
 import { EnrollmentOverviewCards } from "./(components)/EnrollmentOverviewCards";
 import { EnrollmentsTable, Enrollment } from "./(components)/EnrollmentsTable";
-import { ManageSubscriptionDrawer } from "./(components)/ManageSubscriptionDrawer";
+import { EnrollmentSidebar } from "@/components/sidebar/EnrollmentSidebar";
 import { ManualEnrollmentModal } from "./(components)/ManualEnrollmentModal";
 
-const INITIAL_ENROLLMENTS: Enrollment[] = [
-  {
-    id: "enr-2001",
-    userName: "Aarav Sharma",
-    userEmail: "aarav.sharma@gmail.com",
-    userPhone: "+91 98765 43210",
-    discordName: "aarav_trades",
-    currentPlan: "Yearly Plan",
-    purchaseDate: "15 Jan 2026",
-    expiryDate: "15 Jan 2027",
-    status: "Active",
-    adminNotes: "VIP Trader Pass member. Manual upgrade granted.",
-    paymentHistory: [
-      {
-        id: "pay-301",
-        plan: "Yearly Plan",
-        amount: "₹7,999",
-        purchaseDate: "15 Jan 2026",
-        status: "Paid",
-        transactionId: "TXN-9842100",
-      },
-      {
-        id: "pay-300",
-        plan: "Monthly Plan",
-        amount: "₹999",
-        purchaseDate: "15 Dec 2025",
-        status: "Paid",
-        transactionId: "TXN-9821045",
-      },
-    ],
-    subscriptionTimeline: [
-      {
-        id: "tl-101",
-        action: "Changed to Yearly Plan",
-        date: "15 Jan 2026",
-        details: "Upgraded from Monthly Plan to Yearly Plan (₹7,999).",
-        type: "plan_change",
-      },
-      {
-        id: "tl-100",
-        action: "Purchased Monthly Plan",
-        date: "15 Dec 2025",
-        details: "Initial monthly subscription pass activated.",
-        type: "purchase",
-      },
-    ],
-  },
-  {
-    id: "enr-2002",
-    userName: "Priya Patel",
-    userEmail: "priya.patel@yahoo.com",
-    userPhone: "+91 98123 45678",
-    discordName: "priya_patel",
-    currentPlan: "Monthly Plan",
-    purchaseDate: "10 Jul 2026",
-    expiryDate: "10 Aug 2026",
-    status: "Expiring Soon",
-    adminNotes: "Auto-renew attempt scheduled for Aug 10.",
-    paymentHistory: [
-      {
-        id: "pay-302",
-        plan: "Monthly Plan",
-        amount: "₹999",
-        purchaseDate: "10 Jul 2026",
-        status: "Paid",
-        transactionId: "TXN-9856112",
-      },
-      {
-        id: "pay-301-b",
-        plan: "Monthly Plan",
-        amount: "₹999",
-        purchaseDate: "10 Jun 2026",
-        status: "Paid",
-        transactionId: "TXN-9831990",
-      },
-    ],
-    subscriptionTimeline: [
-      {
-        id: "tl-102",
-        action: "Renewed Subscription",
-        date: "10 Jul 2026",
-        details: "Monthly Plan renewed for 30 days (₹999).",
-        type: "renew",
-      },
-      {
-        id: "tl-101-b",
-        action: "Purchased Monthly Plan",
-        date: "10 Jun 2026",
-        details: "First monthly pass activated.",
-        type: "purchase",
-      },
-    ],
-  },
-  {
-    id: "enr-2003",
-    userName: "Rohan Verma",
-    userEmail: "rohan.v@outlook.com",
-    userPhone: "+91 97654 32109",
-    discordName: "rohan_fx",
-    currentPlan: "Yearly Plan",
-    purchaseDate: "28 Feb 2026",
-    expiryDate: "28 Feb 2027",
-    status: "Active",
-    adminNotes: "Institutional cohort group student.",
-    paymentHistory: [
-      {
-        id: "pay-303",
-        plan: "Yearly Plan",
-        amount: "₹7,999",
-        purchaseDate: "28 Feb 2026",
-        status: "Paid",
-        transactionId: "TXN-9800142",
-      },
-    ],
-    subscriptionTimeline: [
-      {
-        id: "tl-103",
-        action: "Purchased Yearly Plan",
-        date: "28 Feb 2026",
-        details: "Subscribed to Aegis Annual Pass.",
-        type: "purchase",
-      },
-    ],
-  },
-  {
-    id: "enr-2004",
-    userName: "Sneha Reddy",
-    userEmail: "sneha.reddy@gmail.com",
-    userPhone: "+91 96543 21098",
-    discordName: "sneha_reddy",
-    currentPlan: "Monthly Plan",
-    purchaseDate: "01 Jun 2026",
-    expiryDate: "01 Jul 2026",
-    status: "Expired",
-    adminNotes: "Payment retry failed on July 1.",
-    paymentHistory: [
-      {
-        id: "pay-304",
-        plan: "Monthly Plan",
-        amount: "₹999",
-        purchaseDate: "01 Jun 2026",
-        status: "Paid",
-        transactionId: "TXN-9799812",
-      },
-    ],
-    subscriptionTimeline: [
-      {
-        id: "tl-104",
-        action: "Subscription Expired",
-        date: "01 Jul 2026",
-        details: "Monthly Plan expired due to non-renewal.",
-        type: "cancel",
-      },
-      {
-        id: "tl-103-b",
-        action: "Purchased Monthly Plan",
-        date: "01 Jun 2026",
-        details: "Monthly pass activated.",
-        type: "purchase",
-      },
-    ],
-  },
-  {
-    id: "enr-2005",
-    userName: "Vikram Malhotra",
-    userEmail: "vikram.m@gmail.com",
-    userPhone: "+91 95432 10987",
-    discordName: "vikram_alpha",
-    currentPlan: "Yearly Plan",
-    purchaseDate: "12 Jul 2026",
-    expiryDate: "12 Jul 2027",
-    status: "Active",
-    adminNotes: "Regular options scalper member.",
-    paymentHistory: [
-      {
-        id: "pay-305",
-        plan: "Yearly Plan",
-        amount: "₹7,999",
-        purchaseDate: "12 Jul 2026",
-        status: "Paid",
-        transactionId: "TXN-9860012",
-      },
-    ],
-    subscriptionTimeline: [
-      {
-        id: "tl-105",
-        action: "Purchased Yearly Plan",
-        date: "12 Jul 2026",
-        details: "Annual subscription activated.",
-        type: "purchase",
-      },
-    ],
-  },
-  {
-    id: "enr-2006",
-    userName: "Ananya Iyer",
-    userEmail: "ananya.iyer@gmail.com",
-    userPhone: "+91 94321 09876",
-    discordName: "ananya_fx",
-    currentPlan: "Monthly Plan",
-    purchaseDate: "25 Jul 2026",
-    expiryDate: "25 Aug 2026",
-    status: "Active",
-    adminNotes: "",
-    paymentHistory: [
-      {
-        id: "pay-306",
-        plan: "Monthly Plan",
-        amount: "₹999",
-        purchaseDate: "25 Jul 2026",
-        status: "Paid",
-        transactionId: "TXN-9871109",
-      },
-    ],
-    subscriptionTimeline: [
-      {
-        id: "tl-106",
-        action: "Purchased Monthly Plan",
-        date: "25 Jul 2026",
-        details: "Initial monthly pass activated.",
-        type: "purchase",
-      },
-    ],
-  },
-  {
-    id: "enr-2007",
-    userName: "Devansh Nambiar",
-    userEmail: "devansh.n@yahoo.com",
-    userPhone: "+91 93210 98765",
-    discordName: "devansh_trade",
-    currentPlan: "Monthly Plan",
-    purchaseDate: "05 Apr 2026",
-    expiryDate: "05 May 2026",
-    status: "Cancelled",
-    adminNotes: "Cancelled per customer request.",
-    paymentHistory: [
-      {
-        id: "pay-307",
-        plan: "Monthly Plan",
-        amount: "₹999",
-        purchaseDate: "05 Apr 2026",
-        status: "Paid",
-        transactionId: "TXN-9740019",
-      },
-    ],
-    subscriptionTimeline: [
-      {
-        id: "tl-107",
-        action: "Cancelled Subscription",
-        date: "05 May 2026",
-        details: "Subscription cancelled by user request.",
-        type: "cancel",
-      },
-    ],
-  },
-  {
-    id: "enr-2008",
-    userName: "Karan Mehta",
-    userEmail: "karan.mehta@hotmail.com",
-    userPhone: "+91 92109 87654",
-    discordName: "karan_mehta",
-    currentPlan: "Yearly Plan",
-    purchaseDate: "18 Jul 2026",
-    expiryDate: "18 Jul 2027",
-    status: "Active",
-    adminNotes: "",
-    paymentHistory: [
-      {
-        id: "pay-308",
-        plan: "Yearly Plan",
-        amount: "₹7,999",
-        purchaseDate: "18 Jul 2026",
-        status: "Paid",
-        transactionId: "TXN-9865510",
-      },
-    ],
-    subscriptionTimeline: [
-      {
-        id: "tl-108",
-        action: "Purchased Yearly Plan",
-        date: "18 Jul 2026",
-        details: "Subscribed to Aegis Yearly Plan.",
-        type: "purchase",
-      },
-    ],
-  },
-];
 export default function EnrollmentsPage() {
-  const [enrollments, setEnrollments] = useState<Enrollment[]>(INITIAL_ENROLLMENTS);
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedEnrollment, setSelectedEnrollment] = useState<Enrollment | null>(null);
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
+
+  // Fetch enrollments from API using axios
+  const fetchEnrollments = async () => {
+    setLoading(true);
+    try {
+      const res: any = await axios.get("/enrollments");
+      if (res.success && Array.isArray(res.enrollments)) {
+        setEnrollments(res.enrollments);
+      } else {
+        toast.error(res.message || "Failed to load enrollments directory");
+      }
+    } catch (error: any) {
+      console.error("Failed to fetch enrollments:", error);
+      toast.error(error?.message || "Failed to connect to backend server");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEnrollments();
+  }, []);
 
   // GSAP Entrance Animations
   useEffect(() => {
@@ -321,7 +58,7 @@ export default function EnrollmentsPage() {
     }, pageRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [loading]);
 
   // Compute Overview KPI Metrics
   const activeCount = enrollments.filter((e) => e.status === "Active").length;
@@ -332,160 +69,106 @@ export default function EnrollmentsPage() {
   ).length;
   const expiredCount = enrollments.filter((e) => e.status === "Expired").length;
 
-  // Handlers
-  const handleManualEnroll = (newEnrollment: Enrollment) => {
-    setEnrollments((prev) => [newEnrollment, ...prev]);
-    toast.success(`User "${newEnrollment.userName}" enrolled!`, {
-      description: `Granted ${newEnrollment.currentPlan}.`,
-    });
+  // Handlers connected to backend via axios
+  const handleManualEnroll = async (newEnrollmentData: any) => {
+    try {
+      const res: any = await axios.post("/enrollments/manual", newEnrollmentData);
+      if (res.success && res.enrollment) {
+        setEnrollments((prev) => [res.enrollment, ...prev]);
+        toast.success(`User "${res.enrollment.userName}" enrolled!`, {
+          description: `Granted ${res.enrollment.currentPlan}.`,
+        });
+        setIsManualModalOpen(false);
+      } else {
+        toast.error(res.message || "Failed to complete manual enrollment");
+      }
+    } catch (error: any) {
+      console.error("Error creating manual enrollment:", error);
+      toast.error(error?.message || "Failed to enroll user manually");
+    }
   };
 
-  const handleExtendSubscription = (enrollmentId: string, days: number) => {
-    setEnrollments((prev) =>
-      prev.map((e) => {
-        if (e.id === enrollmentId) {
-          const currentExp = new Date(e.expiryDate);
-          const baseDate = isNaN(currentExp.getTime()) ? new Date() : currentExp;
-          baseDate.setDate(baseDate.getDate() + days);
-          const newExpiryStr = baseDate.toLocaleDateString("en-US", {
-            month: "short",
-            day: "2-digit",
-            year: "numeric",
-          });
-
-          const updated: Enrollment = {
-            ...e,
-            status: "Active",
-            expiryDate: newExpiryStr,
-            subscriptionTimeline: [
-              {
-                id: `tl-ext-${Date.now()}`,
-                action: `Extended ${days} Days`,
-                date: "01 Aug 2026",
-                details: `Admin extended subscription period until ${newExpiryStr}.`,
-                type: "extend",
-              },
-              ...e.subscriptionTimeline,
-            ],
-          };
-
-          if (selectedEnrollment?.id === enrollmentId) {
-            setSelectedEnrollment(updated);
-          }
-
-          return updated;
+  const handleExtendSubscription = async (enrollmentId: string, days: number) => {
+    try {
+      const res: any = await axios.patch(`/enrollments/${enrollmentId}/extend`, { days });
+      if (res.success && res.enrollment) {
+        setEnrollments((prev) =>
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+        );
+        if (selectedEnrollment?.id === enrollmentId) {
+          setSelectedEnrollment(res.enrollment);
         }
-        return e;
-      }),
-    );
-
-    toast.success(`Extended subscription by ${days} days!`);
+        toast.success(res.message || `Extended subscription by ${days} days!`);
+      } else {
+        toast.error(res.message || "Failed to extend subscription");
+      }
+    } catch (error: any) {
+      console.error("Error extending subscription:", error);
+      toast.error(error?.message || "Failed to extend subscription");
+    }
   };
 
-  const handleChangePlan = (
+  const handleChangePlan = async (
     enrollmentId: string,
     newPlan: "Monthly Plan" | "Yearly Plan",
   ) => {
-    setEnrollments((prev) =>
-      prev.map((e) => {
-        if (e.id === enrollmentId) {
-          const updated: Enrollment = {
-            ...e,
-            currentPlan: newPlan,
-            status: "Active",
-            subscriptionTimeline: [
-              {
-                id: `tl-plan-${Date.now()}`,
-                action: `Changed to ${newPlan}`,
-                date: "01 Aug 2026",
-                details: `Admin updated subscription plan to ${newPlan}.`,
-                type: "plan_change",
-              },
-              ...e.subscriptionTimeline,
-            ],
-          };
-
-          if (selectedEnrollment?.id === enrollmentId) {
-            setSelectedEnrollment(updated);
-          }
-
-          return updated;
+    try {
+      const res: any = await axios.patch(`/enrollments/${enrollmentId}/plan`, { newPlan });
+      if (res.success && res.enrollment) {
+        setEnrollments((prev) =>
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+        );
+        if (selectedEnrollment?.id === enrollmentId) {
+          setSelectedEnrollment(res.enrollment);
         }
-        return e;
-      }),
-    );
-
-    toast.success(`Plan updated to ${newPlan}!`);
+        toast.success(res.message || `Plan updated to ${newPlan}!`);
+      } else {
+        toast.error(res.message || "Failed to update plan");
+      }
+    } catch (error: any) {
+      console.error("Error changing plan:", error);
+      toast.error(error?.message || "Failed to update plan");
+    }
   };
 
-  const handleToggleStatus = (enrollmentId: string) => {
-    setEnrollments((prev) =>
-      prev.map((e) => {
-        if (e.id === enrollmentId) {
-          const isCancelled = e.status === "Cancelled";
-          const newStatus = isCancelled ? "Active" : "Cancelled";
-          const actionTitle = isCancelled
-            ? "Reactivated Subscription"
-            : "Cancelled Subscription";
-
-          const updated: Enrollment = {
-            ...e,
-            status: newStatus,
-            subscriptionTimeline: [
-              {
-                id: `tl-status-${Date.now()}`,
-                action: actionTitle,
-                date: "01 Aug 2026",
-                details: `Subscription status set to ${newStatus} by admin.`,
-                type: isCancelled ? "reactivate" : "cancel",
-              },
-              ...e.subscriptionTimeline,
-            ],
-          };
-
-          if (selectedEnrollment?.id === enrollmentId) {
-            setSelectedEnrollment(updated);
-          }
-
-          return updated;
+  const handleToggleStatus = async (enrollmentId: string) => {
+    try {
+      const res: any = await axios.patch(`/enrollments/${enrollmentId}/status`);
+      if (res.success && res.enrollment) {
+        setEnrollments((prev) =>
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+        );
+        if (selectedEnrollment?.id === enrollmentId) {
+          setSelectedEnrollment(res.enrollment);
         }
-        return e;
-      }),
-    );
-
-    toast.info(`Subscription status updated.`);
+        toast.info(res.message || "Subscription status updated.");
+      } else {
+        toast.error(res.message || "Failed to update status");
+      }
+    } catch (error: any) {
+      console.error("Error toggling status:", error);
+      toast.error(error?.message || "Failed to update status");
+    }
   };
 
-  const handleSaveNotes = (enrollmentId: string, notes: string) => {
-    setEnrollments((prev) =>
-      prev.map((e) => {
-        if (e.id === enrollmentId) {
-          const updated: Enrollment = {
-            ...e,
-            adminNotes: notes,
-            subscriptionTimeline: [
-              {
-                id: `tl-note-${Date.now()}`,
-                action: "Admin Note Saved",
-                date: "01 Aug 2026",
-                details: `Internal note updated: "${notes.substring(0, 40)}..."`,
-                type: "note",
-              },
-              ...e.subscriptionTimeline,
-            ],
-          };
-
-          if (selectedEnrollment?.id === enrollmentId) {
-            setSelectedEnrollment(updated);
-          }
-
-          return updated;
+  const handleSaveNotes = async (enrollmentId: string, notes: string) => {
+    try {
+      const res: any = await axios.patch(`/enrollments/${enrollmentId}/notes`, { notes });
+      if (res.success && res.enrollment) {
+        setEnrollments((prev) =>
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+        );
+        if (selectedEnrollment?.id === enrollmentId) {
+          setSelectedEnrollment(res.enrollment);
         }
-        return e;
-      }),
-    );
-
-    toast.success("Admin notes saved successfully!");
+        toast.success(res.message || "Admin notes saved successfully!");
+      } else {
+        toast.error(res.message || "Failed to save notes");
+      }
+    } catch (error: any) {
+      console.error("Error saving notes:", error);
+      toast.error(error?.message || "Failed to save notes");
+    }
   };
 
   const handleExportEnrollments = () => {
@@ -534,15 +217,23 @@ export default function EnrollmentsPage() {
       />
 
       {/* 3. Enrollments Table */}
-      <EnrollmentsTable
-        enrollments={enrollments}
-        onSelectEnrollment={(item) => setSelectedEnrollment(item)}
-        onManageSubscription={(item) => setSelectedEnrollment(item)}
-      />
+      {loading ? (
+        <div className="p-12 text-center rounded-2xl bg-[#111113]/80 border border-white/10 text-zinc-400 font-mono text-sm space-y-3">
+          <div className="inline-block w-6 h-6 border-2 border-[#C9A227] border-t-transparent rounded-full animate-spin" />
+          <p>Loading Enrollments Directory...</p>
+        </div>
+      ) : (
+        <EnrollmentsTable
+          enrollments={enrollments}
+          onSelectEnrollment={(item) => setSelectedEnrollment(item)}
+          onManageSubscription={(item) => setSelectedEnrollment(item)}
+        />
+      )}
 
       {/* 4. Manage Subscription Right-Side Drawer */}
-      <ManageSubscriptionDrawer
-        enrollment={selectedEnrollment}
+      <EnrollmentSidebar
+        isOpen={!!selectedEnrollment}
+        data={selectedEnrollment}
         onClose={() => setSelectedEnrollment(null)}
         onExtendSubscription={handleExtendSubscription}
         onChangePlan={handleChangePlan}

@@ -6,8 +6,13 @@ import { toast } from "sonner";
 import { UsersHeader } from "./(components)/UsersHeader";
 import { UserOverviewCards } from "./(components)/UserOverviewCards";
 import { UsersTable, User } from "./(components)/UsersTable";
-import { UserDetailsDrawer } from "./(components)/UserDetailsDrawer";
+import { UserSidebar } from "@/components/sidebar/UserSidebar";
 import { EditUserModal } from "./(components)/EditUserModal";
+import {
+  getUsers,
+  updateUser,
+  deleteUser,
+} from "@/lib/services/users.service";
 
 export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -16,20 +21,20 @@ export default function UserManagementPage() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
-  // Fetch users from API
+  // Fetch users from API using users.service
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/users");
-      const data = await res.json();
+      const data = await getUsers();
       if (data.success && Array.isArray(data.users)) {
         setUsers(data.users);
+        console.log("Fetched users:", data.users);
       } else {
         toast.error(data.message || "Failed to load user directory");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to fetch users:", error);
-      toast.error("Failed to connect to backend server");
+      toast.error(error?.message || "Failed to connect to backend server");
     } finally {
       setLoading(false);
     }
@@ -85,19 +90,14 @@ export default function UserManagementPage() {
   // Handlers
   const handleEditSave = async (updatedUser: User) => {
     try {
-      const res = await fetch(`/api/users/${updatedUser.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: updatedUser.firstName,
-          lastName: updatedUser.lastName,
-          phone: updatedUser.phone,
-          discordName: updatedUser.discordName,
-          accountStatus: updatedUser.accountStatus,
-        }),
+      const data = await updateUser(updatedUser.id, {
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        phone: updatedUser.phone,
+        discordName: updatedUser.discordName,
+        accountStatus: updatedUser.accountStatus,
       });
 
-      const data = await res.json();
       if (data.success && data.user) {
         setUsers((prev) =>
           prev.map((u) => (u.id === data.user.id ? data.user : u)),
@@ -109,9 +109,9 @@ export default function UserManagementPage() {
       } else {
         toast.error(data.message || "Failed to update user profile");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating user:", error);
-      toast.error("An error occurred while saving user changes");
+      toast.error(error?.message || "An error occurred while saving user changes");
     }
   };
 
@@ -123,15 +123,10 @@ export default function UserManagementPage() {
       targetUser.accountStatus === "Active" ? "Suspended" : "Active";
 
     try {
-      const res = await fetch(`/api/users/${userId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          accountStatus: newStatus,
-        }),
+      const data = await updateUser(userId, {
+        accountStatus: newStatus,
       });
 
-      const data = await res.json();
       if (data.success && data.user) {
         setUsers((prev) =>
           prev.map((u) => (u.id === data.user.id ? data.user : u)),
@@ -143,20 +138,17 @@ export default function UserManagementPage() {
       } else {
         toast.error(data.message || "Failed to update account status");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error toggling account status:", error);
-      toast.error("Failed to update account status");
+      toast.error(error?.message || "Failed to update account status");
     }
   };
 
   const handleDeleteUser = async (userId: string) => {
     const userToDelete = users.find((u) => u.id === userId);
     try {
-      const res = await fetch(`/api/users/${userId}`, {
-        method: "DELETE",
-      });
+      const data = await deleteUser(userId);
 
-      const data = await res.json();
       if (data.success) {
         setUsers((prev) => prev.filter((u) => u.id !== userId));
         if (selectedUser?.id === userId) {
@@ -166,9 +158,9 @@ export default function UserManagementPage() {
       } else {
         toast.error(data.message || "Failed to delete user");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting user:", error);
-      toast.error("Failed to delete user");
+      toast.error(error?.message || "Failed to delete user");
     }
   };
 
@@ -231,8 +223,9 @@ export default function UserManagementPage() {
         />
       )}
 
-      {/* 4. User Details Drawer */}
-      <UserDetailsDrawer
+      {/* 4. User Details Sidebar */}
+      <UserSidebar
+        isOpen={!!selectedUser}
         user={selectedUser}
         onClose={() => setSelectedUser(null)}
         onEditUser={(user) => setEditingUser(user)}
@@ -249,3 +242,4 @@ export default function UserManagementPage() {
     </div>
   );
 }
+

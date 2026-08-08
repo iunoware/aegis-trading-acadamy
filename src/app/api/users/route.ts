@@ -12,6 +12,7 @@ export async function GET(request: Request) {
 
     const whereClause: Record<string, unknown> = {
       deletedAt: null,
+      role: { not: UserRole.SUPER_ADMIN }, // Exclude admin users
     };
 
     if (search) {
@@ -25,11 +26,19 @@ export async function GET(request: Request) {
       ];
     }
 
-    if (statusParam && Object.values(AccountStatus).includes(statusParam.toUpperCase() as AccountStatus)) {
+    if (
+      statusParam &&
+      Object.values(AccountStatus).includes(
+        statusParam.toUpperCase() as AccountStatus,
+      )
+    ) {
       whereClause.status = statusParam.toUpperCase() as AccountStatus;
     }
 
-    if (roleParam && Object.values(UserRole).includes(roleParam.toUpperCase() as UserRole)) {
+    if (
+      roleParam &&
+      Object.values(UserRole).includes(roleParam.toUpperCase() as UserRole)
+    ) {
       whereClause.role = roleParam.toUpperCase() as UserRole;
     }
 
@@ -66,7 +75,7 @@ export async function GET(request: Request) {
     console.error("GET /api/users error:", error);
     return NextResponse.json(
       { success: false, message: "Failed to fetch users" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
