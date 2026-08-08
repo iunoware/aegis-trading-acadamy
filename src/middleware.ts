@@ -89,7 +89,12 @@ export async function middleware(request: NextRequest) {
 
   const isAdminPage = pathname === "/admin" || pathname.startsWith("/admin/");
 
-  const isAdminApi = pathname === "/api/admin" || pathname.startsWith("/api/admin/");
+  const isAdminAuthApi =
+    pathname === "/api/admin/auth/login" || pathname === "/api/admin/auth/logout";
+
+  // const isAdminApi = pathname === "/api/admin" || pathname.startsWith("/api/admin/");
+  const isAdminApi =
+    (pathname === "/api/admin" || pathname.startsWith("/api/admin/")) && !isAdminAuthApi;
 
   const isAdminLogin = pathname === "/admin/login";
 

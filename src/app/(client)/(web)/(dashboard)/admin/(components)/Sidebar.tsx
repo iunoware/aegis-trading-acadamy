@@ -26,6 +26,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
+import router from "next/router";
 
 interface NavItem {
   link: string;
@@ -121,6 +122,30 @@ const NAV_GROUPS: NavGroup[] = [
   },
 ];
 
+async function handleLogout() {
+  try {
+    const response = await fetch("/api/admin/auth/logout", {
+      method: "POST",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      toast.error(data.message || "Failed to logout.");
+      return;
+    }
+
+    toast.success("Logged out successfully.");
+
+    router.replace("/admin/login");
+    // router.refresh();
+    window.location.reload();
+  } catch (error) {
+    console.error("Logout error:", error);
+    toast.error("Something went wrong while logging out.");
+  }
+}
+
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -158,7 +183,7 @@ export default function Sidebar() {
   // Logout handler
   async function handleLogout() {
     try {
-      const response = await fetch("/api/auth/logout", {
+      const response = await fetch("/api/admin/auth/logout", {
         method: "POST",
       });
 
