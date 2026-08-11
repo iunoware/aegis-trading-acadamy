@@ -6,6 +6,7 @@ import {
   ContentStatus,
 } from "@/generated/prisma/client";
 import { getRequiredSuperAdmin } from "@/lib/current-user";
+import { saveThumbnail } from "@/lib/video-storage";
 
 function slugify(title: string) {
   return title
@@ -53,15 +54,15 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const adminUser = await getRequiredSuperAdmin();
-    const body = await request.json();
+    const formData = await request.formData();
 
-    const title = typeof body.title === "string" ? body.title.trim() : "";
-    const description =
-      typeof body.description === "string" ? body.description.trim() : "";
-    const thumbnailUrl =
-      typeof body.thumbnailUrl === "string" ? body.thumbnailUrl.trim() : "";
+    const title = formData.get("title")?.toString().trim() || "";
+    const description = formData.get("description")?.toString().trim() || "";
     const status =
-      body.status === "PUBLISHED" ? ContentStatus.PUBLISHED : ContentStatus.DRAFT;
+      formData.get("status") === "PUBLISHED"
+        ? ContentStatus.PUBLISHED
+        : ContentStatus.DRAFT;
+    const thumbnailFile = formData.get("thumbnail");
 
     if (!title) {
       return NextResponse.json(
@@ -70,28 +71,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    let thumbnailUrl: string | null = null;
+    if (thumbnailFile instanceof File) {
+      thumbnailUrl = await saveThumbnail(thumbnailFile);
+    }
+
     const baseSlug = slugify(title);
     let slug = baseSlug;
     let suffix = 1;
-
     while (await prisma.course.findUnique({ where: { slug } })) {
       slug = `${baseSlug}-${suffix++}`;
     }
 
     const maxOrder = await prisma.course.aggregate({
       _max: { displayOrder: true },
-      where: { deletedAt: null },
+      where: {},
     });
 
     const now = new Date();
 
-    const result = await prisma.$transaction(async (tx) => {
-      const course = await tx.course.create({
+    const course = await prisma.$transaction(async (tx) => {
+      const created = await tx.course.create({
         data: {
           title,
           slug,
           description: description || null,
-          thumbnailUrl: thumbnailUrl || null,
+          thumbnailUrl,
           status,
           displayOrder: (maxOrder._max.displayOrder ?? 0) + 1,
           createdById: adminUser.id,
@@ -106,31 +111,26 @@ export async function POST(request: NextRequest) {
           action: ActivityAction.COURSE_CREATED,
           module: "COURSES",
           title: "Course created",
-          description: `Course "${course.title}" was created.`,
-          targetId: course.id,
+          description: `Course "${created.title}" was created.`,
+          targetId: created.id,
           targetType: "COURSE",
           afterData: {
-            courseId: course.id,
-            title: course.title,
-            status: course.status,
+            courseId: created.id,
+            title: created.title,
+            status: created.status,
           },
         },
       });
 
-      return course;
+      return created;
     });
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "Course created successfully.",
-        course: result,
-      },
+      { success: true, message: "Course created successfully.", course },
       { status: 201 },
     );
   } catch (error: unknown) {
     console.error("POST course error:", error);
-
     if (
       typeof error === "object" &&
       error !== null &&
@@ -142,7 +142,6 @@ export async function POST(request: NextRequest) {
         { status: 409 },
       );
     }
-
     return NextResponse.json(
       { success: false, message: "Failed to create course." },
       { status: 500 },

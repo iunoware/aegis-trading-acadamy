@@ -6,45 +6,50 @@ import {
   ContentStatus,
 } from "@/generated/prisma/client";
 import { getRequiredSuperAdmin } from "@/lib/current-user";
-import { deleteVideoFile } from "@/lib/video-storage";
+import { deleteVideoFile, saveThumbnail } from "@/lib/video-storage";
+import { deleteThumbnailFile } from "@/lib/thumbnail-storage";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ coursesId: string }> },
+  { params }: { params: Promise<{ courseId: string }> },
 ) {
   try {
     const adminUser = await getRequiredSuperAdmin();
-    const { coursesId } = await params;
-    const courseId = coursesId;
-    const body = await request.json();
+    const { courseId } = await params;
+    const formData = await request.formData();
 
     const existing = await prisma.course.findUnique({
       where: { id: courseId },
-      select: { id: true, title: true, status: true, deletedAt: true },
+      select: { id: true, title: true, status: true, thumbnailUrl: true },
     });
 
-    if (!existing || existing.deletedAt) {
+    if (!existing) {
       return NextResponse.json(
         { success: false, message: "Course not found." },
         { status: 404 },
       );
     }
 
-    const title = typeof body.title === "string" ? body.title.trim() : undefined;
-    const description =
-      typeof body.description === "string" ? body.description.trim() : undefined;
-    const thumbnailUrl =
-      typeof body.thumbnailUrl === "string" ? body.thumbnailUrl.trim() : undefined;
+    const title = formData.get("title")?.toString().trim();
+    const description = formData.get("description")?.toString().trim();
+    const statusRaw = formData.get("status")?.toString();
     const status =
-      body.status === "PUBLISHED" || body.status === "DRAFT" || body.status === "HIDDEN"
-        ? (body.status as ContentStatus)
+      statusRaw === "PUBLISHED" || statusRaw === "DRAFT" || statusRaw === "HIDDEN"
+        ? (statusRaw as ContentStatus)
         : undefined;
+    const thumbnailFile = formData.get("thumbnail");
 
     if (title !== undefined && !title) {
       return NextResponse.json(
         { success: false, message: "Course title cannot be empty." },
         { status: 400 },
       );
+    }
+
+    let thumbnailUrl: string | undefined;
+    if (thumbnailFile instanceof File) {
+      thumbnailUrl = await saveThumbnail(thumbnailFile);
+      await deleteThumbnailFile(existing.thumbnailUrl); // clean up the replaced file
     }
 
     const now = new Date();
@@ -55,7 +60,7 @@ export async function PATCH(
         data: {
           ...(title !== undefined ? { title } : {}),
           ...(description !== undefined ? { description: description || null } : {}),
-          ...(thumbnailUrl !== undefined ? { thumbnailUrl: thumbnailUrl || null } : {}),
+          ...(thumbnailUrl !== undefined ? { thumbnailUrl } : {}),
           ...(status !== undefined ? { status } : {}),
           updatedById: adminUser.id,
           ...(status === ContentStatus.PUBLISHED &&
@@ -90,7 +95,6 @@ export async function PATCH(
     });
   } catch (error: unknown) {
     console.error("PATCH course error:", error);
-
     if (
       typeof error === "object" &&
       error !== null &&
@@ -102,7 +106,6 @@ export async function PATCH(
         { status: 409 },
       );
     }
-
     return NextResponse.json(
       { success: false, message: "Failed to update course." },
       { status: 500 },
@@ -119,16 +122,34 @@ export async function DELETE(
     const { coursesId } = await params;
     const courseId = coursesId;
 
+    // const existing = await prisma.course.findUnique({
+    //   where: { id: courseId },
+    //   select: {
+    //     id: true,
+    //     title: true,
+    //     lessons: {
+    //       select: { id: true, title: true, videoUrl: true },
+    //     },
+    //   },
+    // });
     const existing = await prisma.course.findUnique({
       where: { id: courseId },
       select: {
         id: true,
         title: true,
-        lessons: {
-          select: { id: true, title: true, videoUrl: true },
-        },
+        thumbnailUrl: true,
+        lessons: { select: { id: true, title: true, videoUrl: true } },
       },
     });
+    // ...
+    await deleteThumbnailFile(existing?.thumbnailUrl);
+
+    const localFiles = existing?.lessons.filter((l) => !l.videoUrl.startsWith("http"));
+    await Promise.all(
+      localFiles.map((l) =>
+        deleteVideoFile(l.videoUrl).catch((err) => console.error(err)),
+      ),
+    );
 
     if (!existing) {
       return NextResponse.json(
@@ -139,7 +160,7 @@ export async function DELETE(
 
     // Delete any locally-uploaded video files before removing DB rows.
     // External URLs (videoUrl starting with "http") have nothing to unlink.
-    const localFiles = existing.lessons.filter((l) => !l.videoUrl.startsWith("http"));
+    // const localFiles = existing.lessons.filter((l) => !l.videoUrl.startsWith("http"));
 
     await Promise.all(
       localFiles.map((l) =>
