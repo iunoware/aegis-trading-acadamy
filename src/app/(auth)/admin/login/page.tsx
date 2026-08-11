@@ -69,7 +69,7 @@ export default function AdminLoginPage() {
         return;
       }
 
-      if (data.user?.role !== "SUPER_ADMIN") {
+      if (data.user?.role !== "SUPER_ADMIN" && data.user?.role !== "ADMIN") {
         await fetch("/api/admin/auth/logout", {
           method: "POST",
         });

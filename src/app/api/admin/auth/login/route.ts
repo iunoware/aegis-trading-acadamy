@@ -294,7 +294,7 @@ export async function POST(request: NextRequest) {
     //     { status: 403 },
     //   );
     // }
-    if (user.role !== UserRole.SUPER_ADMIN) {
+    if (user.role !== UserRole.SUPER_ADMIN && user.role !== UserRole.ADMIN) {
       console.log("ADMIN LOGIN FAILED: WRONG ROLE", user.role);
 
       return NextResponse.json(

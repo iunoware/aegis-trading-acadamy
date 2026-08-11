@@ -18,13 +18,10 @@ export interface SafeUser {
 interface AuthContextType {
   user: SafeUser | null;
   isAuthenticated: boolean;
+  isStudent: boolean;
+  isAdmin: boolean;
   isLoading: boolean;
-  isAuthModalOpen: boolean;
-  authModalView: "login" | "signup";
-  openLoginModal: () => void;
-  openSignupModal: () => void;
-  closeAuthModal: () => void;
-  setAuthUser: (user: SafeUser) => void;
+  setAuthUser: (user: SafeUser | null) => void;
   logout: () => Promise<void>;
   refreshSession: () => Promise<void>;
 }
@@ -35,8 +32,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<SafeUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalView, setAuthModalView] = useState<"login" | "signup">("login");
 
   const refreshSession = useCallback(async () => {
     try {
@@ -91,23 +86,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const openLoginModal = useCallback(() => {
-    setAuthModalView("login");
-    setIsAuthModalOpen(true);
-  }, []);
-
-  const openSignupModal = useCallback(() => {
-    setAuthModalView("signup");
-    setIsAuthModalOpen(true);
-  }, []);
-
-  const closeAuthModal = useCallback(() => {
-    setIsAuthModalOpen(false);
-  }, []);
-
-  const setAuthUser = useCallback((user: SafeUser) => {
+  const setAuthUser = useCallback((user: SafeUser | null) => {
     setUser(user);
-    setIsAuthModalOpen(false);
   }, []);
 
   const logout = useCallback(async () => {
@@ -121,17 +101,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [router]);
 
+  const isStudent = user?.role === "STUDENT";
+  const isAdmin = user?.role === "ADMIN" || user?.role === "SUPER_ADMIN";
+
   return (
     <AuthContext.Provider
       value={{
         user,
         isAuthenticated: !!user,
+        isStudent,
+        isAdmin,
         isLoading,
-        isAuthModalOpen,
-        authModalView,
-        openLoginModal,
-        openSignupModal,
-        closeAuthModal,
         setAuthUser,
         logout,
         refreshSession,

@@ -21,7 +21,7 @@ export const NAV_ITEMS: NavItemConfig[] = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { isAuthenticated, openLoginModal } = useAuth();
+  const { isStudent } = useAuth();
 
   const navRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
@@ -179,7 +179,7 @@ export default function Navbar() {
             ref={buttonsRef}
             className="hidden gold-radial-glow md:flex items-center gap-4"
           >
-            {isAuthenticated ? (
+            {isStudent ? (
               <Link
                 href="/student"
                 className={`px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 ${
@@ -192,12 +192,16 @@ export default function Navbar() {
                 <span>Profile</span>
               </Link>
             ) : (
-              <button
-                onClick={openLoginModal}
-                className="px-6 py-2.5 bg-linear-to-r from-primary-light via-primary to-primary-dark rounded-xl text-sm font-bold tracking-wide text-black transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-[0_0_20px_rgba(212,175,55,0.4)] cursor-pointer"
+              <Link
+                href="/login"
+                className={`px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${
+                  pathname === "/login"
+                    ? "border-white/15 text-surface hover:text-primary hover:border-(--primary)/40 bg-black/40 backdrop-blur-md"
+                    : "bg-linear-to-r from-primary-light via-primary to-primary-dark text-black border-transparent shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                }`}
               >
                 Login
-              </button>
+              </Link>
             )}
           </div>
 
@@ -273,7 +277,7 @@ export default function Navbar() {
 
           {/* Bottom Action Buttons */}
           <div className="flex flex-col space-y-3 pt-6 border-t border-white/10">
-            {isAuthenticated ? (
+            {isStudent ? (
               <Link
                 href="/student"
                 onClick={() => setMobileMenuOpen(false)}
@@ -283,15 +287,17 @@ export default function Navbar() {
                 <span>Profile</span>
               </Link>
             ) : (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  openLoginModal();
-                }}
-                className="w-full text-center py-3.5 rounded-xl bg-linear-to-r from-primary-light via-primary to-primary-dark text-black font-bold text-base transition-colors cursor-pointer"
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`w-full text-center py-3.5 rounded-xl border text-base font-semibold transition-colors ${
+                  pathname === "/login"
+                    ? "bg-primary text-black font-bold border-primary shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                    : "border-white/15 text-white hover:border-(--primary)/40"
+                }`}
               >
                 Login
-              </button>
+              </Link>
             )}
           </div>
         </div>

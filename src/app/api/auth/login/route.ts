@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/auth/password";
 import { createSession, SESSION_COOKIE_NAME } from "@/lib/auth/session";
-import { AccountStatus } from "@/generated/prisma/client";
+import { AccountStatus, UserRole } from "@/generated/prisma/client";
 
 export const runtime = "nodejs";
 
@@ -57,6 +57,16 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: "This account has been deleted.",
+        },
+        { status: 403 },
+      );
+    }
+
+    if (user.role !== UserRole.STUDENT) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "This account cannot sign in through the student portal.",
         },
         { status: 403 },
       );
