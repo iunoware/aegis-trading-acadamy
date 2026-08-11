@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { ProfileForm } from "./(components)/ProfileForm";
 import { ProfileHeader } from "./(components)/ProfileHeader";
 import { ProfileSummary } from "./(components)/ProfileSummary";
 import { MOCK_PROFILE } from "./(components)/mock-data";
+
+// import { useAuth } from "@/context/AuthContext";
 import type { ProfileRecord, ProfileUpdateRequest } from "./(components)/types";
 
 export default function ProfilePage() {
@@ -42,7 +44,9 @@ export default function ProfilePage() {
       const containsSpecialCharacter = /[^a-zA-Z0-9]/.test(newPassword);
 
       if (!containsNumber || !containsSpecialCharacter) {
-        toast.error("Password must contain one number and one special character");
+        toast.error(
+          "Password must contain one number and one special character",
+        );
         return;
       }
 
