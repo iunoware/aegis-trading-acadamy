@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/set-state-in-effect */
 // "use client";
 
 // import CourseCMS from "./CourseCMS";
@@ -30,7 +32,8 @@ import {
   Link as LinkIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import apiClient from "@/lib/axios";
+// import apiClient from "@/lib/axios";
+import axios from "axios";
 
 // Kept as local literal types (not imported from @/generated/prisma/client)
 // so the Prisma client's runtime code never gets pulled into the browser bundle.
@@ -105,12 +108,55 @@ export default function CourseCMS() {
   const [videoDurationSeconds, setVideoDurationSeconds] = useState(0);
   const [videoIsPreview, setVideoIsPreview] = useState(false);
 
+  const [courseThumbnailFile, setCourseThumbnailFile] = useState<File | null>(null);
+  const [courseThumbnailPreview, setCourseThumbnailPreview] = useState<string>("");
+
+  const [confirmModal, setConfirmModal] = useState<{
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  } | null>(null);
+
+  const handleSaveCourse = async () => {
+    if (!courseTitle.trim()) {
+      toast.error("Course title is required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", courseTitle);
+    formData.append("description", courseDesc);
+    formData.append("status", courseStatus);
+    if (courseThumbnailFile) formData.append("thumbnail", courseThumbnailFile);
+
+    setIsSavingCourse(true);
+    try {
+      if (editingCourse) {
+        const res = await axios.patch(`/api/admin/courses/${editingCourse.id}`, formData);
+        setCourses((prev) =>
+          prev.map((c) => (c.id === editingCourse.id ? { ...c, ...res.data.course } : c)),
+        );
+        toast.success(res.data.message);
+      } else {
+        const res = await axios.post("/api/admin/courses", formData);
+        setCourses((prev) => [{ ...res.data.course, lessons: [] }, ...prev]);
+        toast.success(res.data.message);
+      }
+      setIsCourseModalOpen(false);
+    } catch (err) {
+      const msg = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
+      toast.error(msg || "Failed to save course");
+    } finally {
+      setIsSavingCourse(false);
+    }
+  };
+
   // Fetch courses from the DB
   const fetchCourses = useCallback(async () => {
     setIsLoading(true);
     try {
-      const data = await apiClient.get("/admin/courses");
-      setCourses(data.courses);
+      const res = await axios.get("/api/admin/courses");
+      setCourses(res.data.courses ?? []);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to load courses");
     } finally {
@@ -168,61 +214,119 @@ export default function CourseCMS() {
     setIsCourseModalOpen(true);
   };
 
-  const handleSaveCourse = async () => {
-    if (!courseTitle.trim()) {
-      toast.error("Course title is required");
-      return;
-    }
+  // const handleSaveCourse = async () => {
+  //   if (!courseTitle.trim()) {
+  //     toast.error("Course title is required");
+  //     return;
+  //   }
 
-    setIsSavingCourse(true);
-    try {
-      if (editingCourse) {
-        const data = await apiClient.patch(`/admin/courses/${editingCourse.id}`, {
-          title: courseTitle,
-          description: courseDesc,
-          thumbnailUrl: courseThumbnail,
-          status: courseStatus,
-        });
-        setCourses((prev) =>
-          prev.map((c) => (c.id === editingCourse.id ? { ...c, ...data.course } : c)),
-        );
-        toast.success(data.message);
-      } else {
-        const data = await apiClient.post("/admin/courses", {
-          title: courseTitle,
-          description: courseDesc,
-          thumbnailUrl: courseThumbnail,
-          status: courseStatus,
-        });
-        setCourses((prev) => [{ ...data.course, lessons: [] }, ...prev]);
-        toast.success(data.message);
-      }
-      setIsCourseModalOpen(false);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save course");
-    } finally {
-      setIsSavingCourse(false);
-    }
-  };
+  //   setIsSavingCourse(true);
+  //   try {
+  //     if (editingCourse) {
+  //       const data = await apiClient.patch(`/admin/courses/${editingCourse.id}`, {
+  //         title: courseTitle,
+  //         description: courseDesc,
+  //         thumbnailUrl: courseThumbnail,
+  //         status: courseStatus,
+  //       });
+  //       setCourses((prev) =>
+  //         prev.map((c) => (c.id === editingCourse.id ? { ...c, ...data.course } : c)),
+  //       );
+  //       toast.success(data.message);
+  //     } else {
+  //       const data = await apiClient.post("/admin/courses", {
+  //         title: courseTitle,
+  //         description: courseDesc,
+  //         thumbnailUrl: courseThumbnail,
+  //         status: courseStatus,
+  //       });
+  //       setCourses((prev) => [{ ...data.course, lessons: [] }, ...prev]);
+  //       toast.success(data.message);
+  //     }
+  //     setIsCourseModalOpen(false);
+  //   } catch (err) {
+  //     toast.error(err instanceof Error ? err.message : "Failed to save course");
+  //   } finally {
+  //     setIsSavingCourse(false);
+  //   }
+  // };
 
-  const handleDeleteCourse = async (e: React.MouseEvent, courseId: string) => {
+  // const handleDeleteCourse = async (e: React.MouseEvent, courseId: string) => {
+  //   e.stopPropagation();
+  //   if (
+  //     !window.confirm(
+  //       "Delete this course and all its videos permanently? This cannot be undone.",
+  //     )
+  //   ) {
+  //     return;
+  //   }
+  //   try {
+  //     const res = await axios.delete(`/api/admin/courses/${courseId}`);
+  //     setCourses((prev) => prev.filter((c) => c.id !== courseId));
+  //     if (activeCourseId === courseId) setActiveCourseId(null);
+  //     toast.success(res.data.message);
+  //   } catch (err) {
+  //     toast.error(err instanceof Error ? err.message : "Failed to delete course");
+  //   }
+  // };
+  const handleDeleteCourse = (
+    e: React.MouseEvent,
+    courseId: string,
+    courseTitle: string,
+  ) => {
     e.stopPropagation();
-    if (
-      !window.confirm(
-        "Delete this course and all its videos permanently? This cannot be undone.",
-      )
-    ) {
-      return;
-    }
-    try {
-      const data = await apiClient.delete(`/admin/courses/${courseId}`);
-      setCourses((prev) => prev.filter((c) => c.id !== courseId));
-      if (activeCourseId === courseId) setActiveCourseId(null);
-      toast.success(data.message);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to delete course");
-    }
+    setConfirmModal({
+      title: "Delete Course",
+      message: `Delete "${courseTitle}" and all its videos permanently? This cannot be undone.`,
+      onConfirm: async () => {
+        try {
+          const res = await axios.delete(`/api/admin/courses/${courseId}`);
+          setCourses((prev) => prev.filter((c) => c.id !== courseId));
+          if (activeCourseId === courseId) setActiveCourseId(null);
+          toast.success(res.data.message);
+        } catch (err) {
+          toast.error(
+            axios.isAxiosError(err)
+              ? err.response?.data?.message
+              : "Failed to delete course",
+          );
+        } finally {
+          setConfirmModal(null);
+        }
+      },
+    });
   };
+
+  // const handleDeleteVideo = (videoId: string, videoTitle: string) => {
+  //   if (!activeCourseId) return;
+  //   setConfirmModal({
+  //     title: "Delete Video",
+  //     message: `Delete "${videoTitle}" permanently? The uploaded file will also be removed.`,
+  //     onConfirm: async () => {
+  //       try {
+  //         const res = await axios.delete(
+  //           `/api/admin/courses/${activeCourseId}/lessons/${videoId}`,
+  //         );
+  //         setCourses((prev) =>
+  //           prev.map((c) =>
+  //             c.id === activeCourseId
+  //               ? { ...c, lessons: c.lessons.filter((v) => v.id !== videoId) }
+  //               : c,
+  //           ),
+  //         );
+  //         toast.success(res.data.message);
+  //       } catch (err) {
+  //         toast.error(
+  //           axios.isAxiosError(err)
+  //             ? err.response?.data?.message
+  //             : "Failed to delete video",
+  //         );
+  //       } finally {
+  //         setConfirmModal(null);
+  //       }
+  //     },
+  //   });
+  // };
 
   //  Video Handlers
 
@@ -276,8 +380,8 @@ export default function CourseCMS() {
     if (editingVideo) {
       setIsSavingVideo(true);
       try {
-        const data = await apiClient.patch(
-          `/admin/courses/${activeCourseId}/lessons/${editingVideo.id}`,
+        const res = await axios.patch(
+          `/api/admin/courses/${activeCourseId}/lessons/${editingVideo.id}`,
           {
             title: videoTitle,
             ...(videoMode === "url" && videoUrl.trim()
@@ -293,13 +397,13 @@ export default function CourseCMS() {
               ? {
                   ...c,
                   lessons: c.lessons.map((l) =>
-                    l.id === editingVideo.id ? data.lesson : l,
+                    l.id === editingVideo.id ? res.data.lesson : l,
                   ),
                 }
               : c,
           ),
         );
-        toast.success(data.message);
+        toast.success(res.data.message);
         setIsVideoModalOpen(false);
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Failed to update video");
@@ -323,19 +427,21 @@ export default function CourseCMS() {
         formData.append("isPreview", String(videoIsPreview));
         formData.append("durationSeconds", String(videoDurationSeconds));
 
-        const data = await apiClient.post(
-          `/admin/courses/${activeCourseId}/lessons/upload`,
+        const res = await axios.post(
+          `/api/admin/courses/${activeCourseId}/lessons/upload`,
           formData,
           // Let the browser set the multipart boundary itself
-          { headers: { "Content-Type": undefined } },
+          // { headers: { "Content-Type": undefined } },
         );
 
         setCourses((prev) =>
           prev.map((c) =>
-            c.id === activeCourseId ? { ...c, lessons: [...c.lessons, data.lesson] } : c,
+            c.id === activeCourseId
+              ? { ...c, lessons: [...c.lessons, res.data.lesson] }
+              : c,
           ),
         );
-        toast.success(data.message);
+        toast.success(res.data.message);
         setIsVideoModalOpen(false);
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Failed to upload video");
@@ -352,7 +458,7 @@ export default function CourseCMS() {
     }
     setIsSavingVideo(true);
     try {
-      const data = await apiClient.post(`/admin/courses/${activeCourseId}/lessons`, {
+      const res = await axios.post(`/api/admin/courses/${activeCourseId}/lessons`, {
         title: videoTitle,
         videoUrl: videoUrl.trim(),
         durationSeconds: videoDurationSeconds,
@@ -360,10 +466,12 @@ export default function CourseCMS() {
       });
       setCourses((prev) =>
         prev.map((c) =>
-          c.id === activeCourseId ? { ...c, lessons: [...c.lessons, data.lesson] } : c,
+          c.id === activeCourseId
+            ? { ...c, lessons: [...c.lessons, res.data.lesson] }
+            : c,
         ),
       );
-      toast.success(data.message);
+      toast.success(res.data.message);
       setIsVideoModalOpen(false);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to add video");
@@ -372,30 +480,35 @@ export default function CourseCMS() {
     }
   };
 
-  const handleDeleteVideo = async (videoId: string) => {
+  const handleDeleteVideo = (videoId: string, videoTitle: string) => {
     if (!activeCourseId) return;
-    if (
-      !window.confirm(
-        "Delete this video permanently? The uploaded file will also be removed.",
-      )
-    ) {
-      return;
-    }
-    try {
-      const data = await apiClient.delete(
-        `/admin/courses/${activeCourseId}/lessons/${videoId}`,
-      );
-      setCourses((prev) =>
-        prev.map((c) =>
-          c.id === activeCourseId
-            ? { ...c, lessons: c.lessons.filter((v) => v.id !== videoId) }
-            : c,
-        ),
-      );
-      toast.success(data.message);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to delete video");
-    }
+    setConfirmModal({
+      title: "Delete Video",
+      message: `Delete "${videoTitle}" permanently? The uploaded file will also be removed.`,
+      onConfirm: async () => {
+        try {
+          const res = await axios.delete(
+            `/api/admin/courses/${activeCourseId}/lessons/${videoId}`,
+          );
+          setCourses((prev) =>
+            prev.map((c) =>
+              c.id === activeCourseId
+                ? { ...c, lessons: c.lessons.filter((v) => v.id !== videoId) }
+                : c,
+            ),
+          );
+          toast.success(res.data.message);
+        } catch (err) {
+          toast.error(
+            axios.isAxiosError(err)
+              ? err.response?.data?.message
+              : "Failed to delete video",
+          );
+        } finally {
+          setConfirmModal(null);
+        }
+      },
+    });
   };
 
   //  Render
@@ -532,7 +645,8 @@ export default function CourseCMS() {
                     </button>
 
                     <button
-                      onClick={(e) => handleDeleteCourse(e, course.id)}
+                      // onClick={(e) => handleDeleteCourse(e, course.id)}
+                      onClick={(e) => handleDeleteCourse(e, course.id, course.title)}
                       className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 transition-colors"
                       title="Delete Course"
                     >
@@ -690,7 +804,8 @@ export default function CourseCMS() {
                       </button>
 
                       <button
-                        onClick={() => handleDeleteVideo(vid.id)}
+                        // onClick={() => handleDeleteVideo(vid.id)}
+                        onClick={() => handleDeleteVideo(vid.id, vid.title)}
                         className="p-1.5 rounded-xl bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 transition-colors cursor-pointer"
                         title="Delete Video"
                       >
@@ -712,10 +827,9 @@ export default function CourseCMS() {
       )}
 
       {/* MODAL 1: CREATE / EDIT COURSE */}
-
       {isCourseModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-[#111113] border border-[#C9A227]/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
+          <div className="w-full max-w-lg max-h-[90vh] overflow-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-500 rounded-2xl bg-[#111113] border border-[#C9A227]/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <h3 className="text-lg font-bold text-white font-sans">
                 {editingCourse ? "Edit Course" : "Create New Course"}
@@ -755,7 +869,7 @@ export default function CourseCMS() {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1">
                   Thumbnail URL
                 </label>
@@ -765,6 +879,32 @@ export default function CourseCMS() {
                   onChange={(e) => setCourseThumbnail(e.target.value)}
                   placeholder="/images/course-cover.png or https://..."
                   className="w-full px-4 py-2.5 rounded-xl bg-[#09090b] border border-white/15 text-xs font-mono text-zinc-300 focus:outline-none focus:border-[#C9A227]"
+                />
+              </div> */}
+              <div>
+                <label className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1">
+                  Course Thumbnail
+                </label>
+                {courseThumbnailPreview && (
+                  <div className="relative w-full aspect-16/10 rounded-xl overflow-hidden bg-black border border-white/10 mb-2">
+                    <Image
+                      src={courseThumbnailPreview}
+                      alt="Preview"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/avif"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setCourseThumbnailFile(file);
+                    setCourseThumbnailPreview(URL.createObjectURL(file));
+                  }}
+                  className="w-full text-xs text-zinc-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#C9A227] file:text-black hover:file:bg-[#e6c55a] cursor-pointer"
                 />
               </div>
 
@@ -813,7 +953,6 @@ export default function CourseCMS() {
       )}
 
       {/* MODAL 2: ADD / EDIT VIDEO */}
-
       {isVideoModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="w-full max-w-lg rounded-2xl bg-[#111113] border border-[#C9A227]/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
@@ -942,7 +1081,7 @@ export default function CourseCMS() {
                   <button
                     type="button"
                     onClick={() => setVideoIsPreview(!videoIsPreview)}
-                    className={`w-full h-[42px] rounded-xl border text-xs font-mono font-semibold cursor-pointer transition-colors ${
+                    className={`w-full h-10.5 rounded-xl border text-xs font-mono font-semibold cursor-pointer transition-colors ${
                       videoIsPreview
                         ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
                         : "bg-black/40 border-white/10 text-zinc-400"
@@ -969,6 +1108,37 @@ export default function CourseCMS() {
               >
                 {isSavingVideo && <Loader2 size={13} className="animate-spin" />}
                 {editingVideo ? "Save Video" : "Add Video"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL 3: DELETE CONFIRMATION */}
+      {confirmModal && (
+        <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-[#111113] border border-rose-500/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
+            <div>
+              <h3 className="text-lg font-bold text-white font-sans mb-2">
+                {confirmModal.title}
+              </h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                {confirmModal.message}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setConfirmModal(null)}
+                className="px-4 py-2 rounded-xl border border-white/15 text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmModal.onConfirm}
+                className="px-5 py-2 rounded-xl bg-rose-500 text-white font-bold text-xs shadow-md hover:bg-rose-600 transition-colors cursor-pointer"
+              >
+                Delete
               </button>
             </div>
           </div>
