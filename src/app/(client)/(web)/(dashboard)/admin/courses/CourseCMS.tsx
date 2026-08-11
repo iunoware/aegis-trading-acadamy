@@ -12,23 +12,19 @@ import {
   Clock,
   Trash2,
   Edit,
-  Eye,
-  EyeOff,
-  Upload,
-  Folder,
-  Layers,
+  // Eye,
+  // EyeOff,
+  // Upload,
+  // Folder,
+  // Layers,
   X,
-  Check,
+  // Check,
   Play,
   FileQuestion,
   ShieldCheck,
   Calendar,
 } from "lucide-react";
 import { toast } from "sonner";
-
-// ============================================================================
-// DATA MODELS & MOCK DATA
-// ============================================================================
 
 export interface VideoItem {
   id: string;
@@ -381,10 +377,9 @@ export default function CourseCMS() {
   };
 
   return (
-    <div ref={containerRef} className="w-full max-w-[1400px] mx-auto space-y-6 pb-16 ">
-      {/* ------------------------------------------------------------- */}
+    <div ref={containerRef} className="w-full max-w-350 mx-auto space-y-6 pb-16 ">
       {/* VIEW 1: COURSES LIST VIEW (When activeCourseId is null) */}
-      {/* ------------------------------------------------------------- */}
+
       {!activeCourseId && (
         <>
           {/* Header */}
@@ -402,7 +397,7 @@ export default function CourseCMS() {
 
             <button
               onClick={handleOpenCreateCourse}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black shadow-[0_0_20px_rgba(201,162,39,0.35)] hover:shadow-[0_0_30px_rgba(201,162,39,0.55)] transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black shadow-[0_0_20px_rgba(201,162,39,0.35)] hover:shadow-[0_0_30px_rgba(201,162,39,0.55)] transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
             >
               <Plus size={16} className="stroke-3" />
               <span>Add Course</span>
@@ -456,14 +451,14 @@ export default function CourseCMS() {
               >
                 <div>
                   {/* Cover Image Frame */}
-                  <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden bg-black/80 border border-white/10 mb-4 group-hover:border-[#C9A227]/30 transition-colors">
+                  <div className="relative w-full aspect-16/10 rounded-xl overflow-hidden bg-black/80 border border-white/10 mb-4 group-hover:border-[#C9A227]/30 transition-colors">
                     <Image
                       src={course.coverImage}
                       alt={course.name}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 pointer-events-none" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-60 pointer-events-none" />
 
                     {/* Status Badge */}
                     <div className="absolute top-3 right-3">
@@ -547,9 +542,8 @@ export default function CourseCMS() {
         </>
       )}
 
-      {/* ------------------------------------------------------------- */}
       {/* VIEW 2: OPEN COURSE DETAIL VIEW (When activeCourse is selected) */}
-      {/* ------------------------------------------------------------- */}
+
       {activeCourse && (
         <div className="space-y-6">
           {/* Header Bar */}
@@ -574,16 +568,16 @@ export default function CourseCMS() {
 
             <button
               onClick={handleOpenCreateVideo}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-gradient-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black shadow-[0_0_20px_rgba(201,162,39,0.35)] hover:shadow-[0_0_30px_rgba(201,162,39,0.55)] transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black shadow-[0_0_20px_rgba(201,162,39,0.35)] hover:shadow-[0_0_30px_rgba(201,162,39,0.55)] transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
             >
-              <Plus size={16} className="stroke-[3]" />
+              <Plus size={16} className="stroke-3" />
               <span>Add Video</span>
             </button>
           </div>
 
           {/* Course Banner Info Box */}
           <div className="rounded-2xl bg-[#111113]/90 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col md:flex-row items-center gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-            <div className="relative w-full md:w-64 aspect-[16/10] rounded-xl overflow-hidden bg-black border border-white/10 shrink-0">
+            <div className="relative w-full md:w-64 aspect-16/10 rounded-xl overflow-hidden bg-black border border-white/10 shrink-0">
               <Image
                 src={activeCourse.coverImage}
                 alt={activeCourse.name}
@@ -690,9 +684,8 @@ export default function CourseCMS() {
         </div>
       )}
 
-      {/* ------------------------------------------------------------- */}
       {/* MODAL 1: CREATE / EDIT COURSE MODAL */}
-      {/* ------------------------------------------------------------- */}
+
       {isCourseModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="w-full max-w-lg rounded-2xl bg-[#111113] border border-[#C9A227]/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
@@ -778,9 +771,8 @@ export default function CourseCMS() {
         </div>
       )}
 
-      {/* ------------------------------------------------------------- */}
       {/* MODAL 2: ADD / EDIT VIDEO MODAL */}
-      {/* ------------------------------------------------------------- */}
+
       {isVideoModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="w-full max-w-lg rounded-2xl bg-[#111113] border border-[#C9A227]/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
@@ -852,7 +844,7 @@ export default function CourseCMS() {
               </div>
 
               {/* Free Preview Toggle */}
-              <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
+              <div className="p-3.5 rounded-xl bg-white/3 border border-white/10 flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white">Free Preview</div>
                   <div className="text-[11px] text-zinc-400">

@@ -1,3 +1,5 @@
+// this is the route to create students with free courses access
+
 import { NextRequest, NextResponse } from "next/server";
 import { randomBytes, scryptSync } from "crypto";
 import { prisma } from "@/lib/prisma";
