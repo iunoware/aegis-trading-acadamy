@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
 
 export interface SafeUser {
@@ -36,8 +42,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refreshSession = useCallback(async () => {
     try {
       const response = await fetch("/api/auth/session", { cache: "no-store" });
+
       if (response.ok) {
         const data = await response.json();
+        console.log("user data:", data);
         if (data.authenticated && data.user) {
           setUser(data.user);
         } else {
@@ -59,7 +67,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     async function loadSession() {
       try {
-        const response = await fetch("/api/auth/session", { cache: "no-store" });
+        const response = await fetch("/api/auth/session", {
+          cache: "no-store",
+        });
         if (response.ok) {
           const data = await response.json();
           if (isMounted) {

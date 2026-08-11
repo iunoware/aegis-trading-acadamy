@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -233,8 +234,8 @@ export default function Hero() {
             ref={buttonRef}
             className="pointer-events-auto flex justify-center md:justify-end w-full md:w-auto md:self-end mb-4 md:mb-8 z-30"
           >
-            <a
-              href="#courses"
+            <Link
+              href="/courses"
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-sm sm:text-base tracking-wide bg-linear-to-r from-primary-light via-primary to-primary-dark text-black shadow-[0_0_25px_rgba(212,175,55,0.35)] hover:shadow-[0_0_40px_rgba(212,175,55,0.55)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
             >
               <span>Start Now</span>
@@ -242,7 +243,7 @@ export default function Hero() {
                 size={18}
                 className="transition-transform duration-300 group-hover:translate-x-1"
               />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

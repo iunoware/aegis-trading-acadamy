@@ -8,8 +8,6 @@ import {
   AnalyticsRow,
   SecondRowCharts,
   ThirdRow,
-  FourthRow,
-  BottomSection,
   FooterStats,
 } from "./(components)/DashboardComponents";
 

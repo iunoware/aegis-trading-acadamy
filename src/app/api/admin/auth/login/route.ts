@@ -182,7 +182,7 @@ import { scryptSync, timingSafeEqual } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { AccountStatus, UserRole } from "@/generated/prisma/client";
 
-import { SESSION_COOKIE_NAME, createSession } from "@/lib/auth/session";
+import { ADMIN_SESSION_COOKIE, createSession } from "@/lib/auth/session";
 
 export const runtime = "nodejs";
 
@@ -354,8 +354,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create the shared application session.
-    const token = await createSession(user.id, user.role);
+    // Create the admin session.
+    const token = await createSession(user.id, user.role, "ADMIN");
 
     const response = NextResponse.json(
       {
@@ -375,7 +375,7 @@ export async function POST(request: NextRequest) {
     );
 
     response.cookies.set({
-      name: SESSION_COOKIE_NAME,
+      name: ADMIN_SESSION_COOKIE,
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

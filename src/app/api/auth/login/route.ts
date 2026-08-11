@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/auth/password";
-import { createSession, SESSION_COOKIE_NAME } from "@/lib/auth/session";
+import { createSession, STUDENT_SESSION_COOKIE } from "@/lib/auth/session";
 import { AccountStatus, UserRole } from "@/generated/prisma/client";
 
 export const runtime = "nodejs";
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const token = await createSession(user.id, user.role);
+    const token = await createSession(user.id, user.role, "STUDENT");
 
     const response = NextResponse.json(
       {
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
     );
 
     response.cookies.set({
-      name: SESSION_COOKIE_NAME,
+      name: STUDENT_SESSION_COOKIE,
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

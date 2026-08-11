@@ -2,7 +2,17 @@
 
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
-import { User, LogOut, Shield, Award, Activity, Mail, Phone, MessageSquare, ArrowLeft } from "lucide-react";
+import {
+  User,
+  LogOut,
+  Shield,
+  Award,
+  Activity,
+  Mail,
+  Phone,
+  MessageSquare,
+  ArrowLeft,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function StudentDashboardPage() {
@@ -13,14 +23,16 @@ export default function StudentDashboardPage() {
       <main className="min-h-screen bg-[#050505] text-white flex items-center justify-center p-6">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-          <span className="text-xs font-mono text-zinc-400">Loading student profile...</span>
+          <span className="text-xs font-mono text-zinc-400">
+            Loading student profile...
+          </span>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white selection:bg-primary/30 py-10 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen pt-20 bg-[#050505] text-white selection:bg-primary/30 py-10 px-4 sm:px-6 lg:px-8">
       {/* Background Decorative Glows */}
       <div className="fixed top-0 left-1/4 w-96 h-96 bg-primary/10 blur-[130px] pointer-events-none rounded-full" />
       <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 blur-[130px] pointer-events-none rounded-full" />
@@ -69,14 +81,18 @@ export default function StudentDashboardPage() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white">Profile Info</h3>
-                <span className="text-[10px] font-mono text-zinc-500 uppercase">Account Details</span>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                  Account Details
+                </span>
               </div>
             </div>
 
             <div className="space-y-3 text-xs">
               <div className="flex items-center gap-2 text-zinc-300">
                 <Mail size={14} className="text-zinc-500 shrink-0" />
-                <span className="truncate">{user?.email || "Not specified"}</span>
+                <span className="truncate">
+                  {user?.email || "Not specified"}
+                </span>
               </div>
 
               {user?.phone && (
@@ -110,14 +126,20 @@ export default function StudentDashboardPage() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white">Subscription</h3>
-                <span className="text-[10px] font-mono text-zinc-500 uppercase">Membership Status</span>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                  Membership Status
+                </span>
               </div>
             </div>
 
             <div className="space-y-3">
               <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
-                <span className="text-[10px] font-mono text-zinc-400 uppercase block">Active Plan</span>
-                <p className="text-xs font-bold text-white">Academy Student Access</p>
+                <span className="text-[10px] font-mono text-zinc-400 uppercase block">
+                  Active Plan
+                </span>
+                <p className="text-xs font-bold text-white">
+                  Academy Student Access
+                </p>
               </div>
 
               <p className="text-xs text-zinc-400">
@@ -134,14 +156,20 @@ export default function StudentDashboardPage() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white">My Activity</h3>
-                <span className="text-[10px] font-mono text-zinc-500 uppercase">Recent Session</span>
+                <span className="text-[10px] font-mono text-zinc-500 uppercase">
+                  Recent Session
+                </span>
               </div>
             </div>
 
             <div className="space-y-2 text-xs">
               <div className="p-3 rounded-xl bg-black/40 border border-white/5">
-                <p className="text-zinc-300">Successfully authenticated as student.</p>
-                <span className="text-[10px] text-zinc-500 font-mono mt-1 block">Session Active</span>
+                <p className="text-zinc-300">
+                  Successfully authenticated as student.
+                </p>
+                <span className="text-[10px] text-zinc-500 font-mono mt-1 block">
+                  Session Active
+                </span>
               </div>
             </div>
           </div>
