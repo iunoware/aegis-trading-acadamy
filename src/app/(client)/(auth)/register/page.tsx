@@ -59,11 +59,28 @@ export default function RegisterPage() {
     try {
       setIsSubmitting(true);
 
-      // Placeholder registration submit flow ready for backend API integration
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName,
+          email,
+          phone,
+          discordName,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || "Registration failed");
+        return;
+      }
 
       toast.success("Account created successfully!");
-      router.replace("/login");
+      router.replace("/student");
+      router.refresh();
     } catch {
       toast.error("Something went wrong with registration");
     } finally {

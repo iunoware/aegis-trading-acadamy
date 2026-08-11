@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { AuthProvider } from "@/context/AuthContext";
+import AuthModal from "@/components/auth/AuthModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,20 +32,22 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {children}{" "}
-        <Toaster
-          position="top-right"
-          richColors
-          toastOptions={{
-            unstyled: true,
-
-            classNames: {
-              toast:
-                "min-w-xs w-fit flex p-3 select-none gap-3 justify-start items-center rounded-lg shadow-lg",
-              title: "line-clamp-3",
-            },
-          }}
-        />
+        <AuthProvider>
+          {children}
+          <AuthModal />
+          <Toaster
+            position="top-right"
+            richColors
+            toastOptions={{
+              unstyled: true,
+              classNames: {
+                toast:
+                  "min-w-xs w-fit flex p-3 select-none gap-3 justify-start items-center rounded-lg shadow-lg",
+                title: "line-clamp-3",
+              },
+            }}
+          />
+        </AuthProvider>
       </body>
     </html>
   );

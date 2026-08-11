@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
         password: true,
         role: true,
         status: true,
+        deletedAt: true,
       },
     });
 
@@ -48,6 +49,16 @@ export async function POST(request: NextRequest) {
           error: "Invalid email or password.",
         },
         { status: 401 },
+      );
+    }
+
+    if (user.deletedAt) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "This account has been deleted.",
+        },
+        { status: 403 },
       );
     }
 
