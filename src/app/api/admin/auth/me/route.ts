@@ -3,10 +3,9 @@ import { jwtVerify } from "jose";
 
 import { prisma } from "@/lib/prisma";
 import { AccountStatus, UserRole } from "@/generated/prisma/client";
+import { ADMIN_SESSION_COOKIE } from "@/lib/auth/session";
 
 export const runtime = "nodejs";
-
-const ADMIN_SESSION_COOKIE = "aegis_admin_session";
 
 function getAuthSecret() {
   const secret = process.env.AUTH_SECRET;
@@ -36,7 +35,7 @@ export async function GET(request: NextRequest) {
 
     if (
       payload.type !== "ADMIN" ||
-      payload.role !== "SUPER_ADMIN" ||
+      (payload.role !== "SUPER_ADMIN" && payload.role !== "ADMIN") ||
       typeof payload.userId !== "string"
     ) {
       return NextResponse.json(
@@ -65,7 +64,7 @@ export async function GET(request: NextRequest) {
     if (
       !user ||
       user.deletedAt ||
-      user.role !== UserRole.SUPER_ADMIN ||
+      (user.role !== UserRole.SUPER_ADMIN && user.role !== UserRole.ADMIN) ||
       user.status !== AccountStatus.ACTIVE
     ) {
       return NextResponse.json(
