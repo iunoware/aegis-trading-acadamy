@@ -10,11 +10,12 @@ import { deleteVideoFile } from "@/lib/video-storage";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ courseId: string }> },
+  { params }: { params: Promise<{ coursesId: string }> },
 ) {
   try {
     const adminUser = await getRequiredSuperAdmin();
-    const { courseId } = await params;
+    const { coursesId } = await params;
+    const courseId = coursesId;
     const body = await request.json();
 
     const existing = await prisma.course.findUnique({
@@ -111,11 +112,12 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ courseId: string }> },
+  { params }: { params: Promise<{ coursesId: string }> },
 ) {
   try {
     const adminUser = await getRequiredSuperAdmin();
-    const { courseId } = await params;
+    const { coursesId } = await params;
+    const courseId = coursesId;
 
     const existing = await prisma.course.findUnique({
       where: { id: courseId },

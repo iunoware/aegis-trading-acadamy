@@ -7,11 +7,12 @@ import { getRequiredUser } from "@/lib/current-user";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ lessonId: string }> },
+  { params }: { params: Promise<{ coursesId: string; lessonsId: string }> },
 ) {
   try {
     const student = await getRequiredUser();
-    const { lessonId } = await params;
+    const { lessonsId } = await params;
+    const lessonId = lessonsId;
     const body = await request.json();
 
     const positionSeconds =

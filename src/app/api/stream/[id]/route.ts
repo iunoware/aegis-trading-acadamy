@@ -19,9 +19,10 @@ const MIME_BY_EXT: Record<string, string> = {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ lessonId: string }> },
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const { lessonId } = await params;
+  const { id } = await params;
+  const lessonId = id;
 
   const lesson = await prisma.lesson.findFirst({
     where: { id: lessonId, deletedAt: null },
