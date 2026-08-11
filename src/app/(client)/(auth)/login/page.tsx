@@ -36,12 +36,12 @@ export default function LoginPage() {
   useEffect(() => {
     async function checkExistingSession() {
       try {
-        const response = await fetch("/api/auth/me", {
+        const response = await fetch("/api/auth/session", {
           cache: "no-store",
         });
 
         if (response.ok) {
-          router.replace("/");
+          router.replace("/student");
           return;
         }
       } catch {
@@ -84,7 +84,7 @@ export default function LoginPage() {
       }
 
       toast.success("Login successful");
-      router.replace("/admin");
+      router.replace("/student");
       router.refresh();
     } catch {
       toast.error("Something went wrong");

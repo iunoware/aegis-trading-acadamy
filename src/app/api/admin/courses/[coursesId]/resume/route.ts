@@ -6,11 +6,12 @@ import { getRequiredUser } from "@/lib/current-user";
 
 export async function GET(
   _request: Request,
-  { params }: { params: Promise<{ courseId: string }> },
+  { params }: { params: Promise<{ coursesId: string }> },
 ) {
   try {
     const student = await getRequiredUser();
-    const { courseId } = await params;
+    const { coursesId } = await params;
+    const courseId = coursesId;
 
     const courseProgress = await prisma.courseProgress.findUnique({
       where: { userId_courseId: { userId: student.id, courseId } },

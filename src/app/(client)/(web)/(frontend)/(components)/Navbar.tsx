@@ -3,9 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export interface NavItemConfig {
   label: string;
@@ -16,11 +17,12 @@ export const NAV_ITEMS: NavItemConfig[] = [
   { label: "Home", href: "/" },
   { label: "Pricing", href: "/pricing" },
   { label: "Courses", href: "/courses" },
-  // { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { isStudent } = useAuth();
+
   const navRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const itemsContainerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +61,7 @@ export default function Navbar() {
   // GSAP Initial Page Load Entrance Animation
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
+      "(prefers-reduced-motion: reduce)"
     ).matches;
 
     const ctx = gsap.context(() => {
@@ -69,7 +71,7 @@ export default function Navbar() {
           {
             opacity: 1,
             y: 0,
-          },
+          }
         );
         return;
       }
@@ -90,7 +92,7 @@ export default function Navbar() {
         tl.to(
           itemsContainerRef.current.children,
           { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 },
-          "-=0.5",
+          "-=0.5"
         );
       }
       tl.to(buttonsRef.current, { opacity: 1, x: 0, duration: 0.7 }, "-=0.4");
@@ -105,7 +107,7 @@ export default function Navbar() {
       gsap.fromTo(
         mobileMenuRef.current,
         { x: "100%", opacity: 0 },
-        { x: "0%", opacity: 1, duration: 0.4, ease: "power3.out" },
+        { x: "0%", opacity: 1, duration: 0.4, ease: "power3.out" }
       );
     }
   }, [mobileMenuOpen]);
@@ -172,21 +174,35 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* RIGHT: Login Button */}
+          {/* RIGHT: Login or Profile Button */}
           <div
             ref={buttonsRef}
             className="hidden gold-radial-glow md:flex items-center gap-4"
           >
-            <Link
-              href="/login"
-              className={`px-6 py-2.5 bg-primary rounded-xl  text-sm font-bold tracking-wide transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${
-                pathname === "/login"
-                  ? "border-white/15 text-surface hover:text-primary hover:border-(--primary)/40 bg-black/40 backdrop-blur-md"
-                  : "bg-linear-to-r from-primary-light via-primary to-primary-dark text-black border-transparent shadow-[0_0_20px_rgba(212,175,55,0.4)]"
-              }`}
-            >
-              Login
-            </Link>
+            {isStudent ? (
+              <Link
+                href="/student"
+                className={`px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 ${
+                  pathname.startsWith("/student")
+                    ? "bg-black/60 text-primary border border-primary/40 backdrop-blur-md"
+                    : "bg-linear-to-r from-primary-light via-primary to-primary-dark text-black border-transparent shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                }`}
+              >
+                <User size={16} />
+                <span>Profile</span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className={`px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${
+                  pathname === "/login"
+                    ? "border-white/15 text-surface hover:text-primary hover:border-(--primary)/40 bg-black/40 backdrop-blur-md"
+                    : "bg-linear-to-r from-primary-light via-primary to-primary-dark text-black border-transparent shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                }`}
+              >
+                Login
+              </Link>
+            )}
           </div>
 
           {/* MOBILE: Hamburger Button */}
@@ -206,7 +222,7 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div
           ref={mobileMenuRef}
-          className="fixed inset-0 z-50 bg-[#090909]/98 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-8 "
+          className="fixed inset-0 z-50 bg-[#090909]/98 backdrop-blur-2xl flex flex-col justify-between p-6 sm:p-8"
         >
           {/* Top Bar inside Mobile Panel */}
           <div className="flex items-center justify-between pb-6 border-b border-white/10">
@@ -261,17 +277,28 @@ export default function Navbar() {
 
           {/* Bottom Action Buttons */}
           <div className="flex flex-col space-y-3 pt-6 border-t border-white/10">
-            <Link
-              href="/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`w-full text-center py-3.5 rounded-xl border text-base font-semibold transition-colors ${
-                pathname === "/login"
-                  ? "bg-primary text-black font-bold border-primary shadow-[0_0_20px_rgba(212,175,55,0.4)]"
-                  : "border-white/15 text-white hover:border-(--primary)/40"
-              }`}
-            >
-              Login
-            </Link>
+            {isStudent ? (
+              <Link
+                href="/student"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-3.5 rounded-xl bg-linear-to-r from-primary-light via-primary to-primary-dark text-black font-bold text-base transition-colors flex items-center justify-center gap-2"
+              >
+                <User size={18} />
+                <span>Profile</span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`w-full text-center py-3.5 rounded-xl border text-base font-semibold transition-colors ${
+                  pathname === "/login"
+                    ? "bg-primary text-black font-bold border-primary shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+                    : "border-white/15 text-white hover:border-(--primary)/40"
+                }`}
+              >
+                Login
+              </Link>
+            )}
           </div>
         </div>
       )}

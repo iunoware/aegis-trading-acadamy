@@ -8,11 +8,13 @@ import { deleteVideoFile } from "@/lib/video-storage";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ courseId: string; lessonId: string }> },
+  { params }: { params: Promise<{ coursesId: string; lessonsId: string }> },
 ) {
   try {
     const adminUser = await getRequiredSuperAdmin();
-    const { courseId, lessonId } = await params;
+    const { coursesId, lessonsId } = await params;
+    const courseId = coursesId;
+    const lessonId = lessonsId;
     const body = await request.json();
 
     const existing = await prisma.lesson.findFirst({
@@ -109,11 +111,13 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ courseId: string; lessonId: string }> },
+  { params }: { params: Promise<{ coursesId: string; lessonsId: string }> },
 ) {
   try {
     const adminUser = await getRequiredSuperAdmin();
-    const { courseId, lessonId } = await params;
+    const { coursesId, lessonsId } = await params;
+    const courseId = coursesId;
+    const lessonId = lessonsId;
 
     const existing = await prisma.lesson.findFirst({
       where: { id: lessonId, courseId },

@@ -15,11 +15,12 @@ function slugify(title: string) {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ courseId: string }> },
+  { params }: { params: Promise<{ coursesId: string }> },
 ) {
   try {
     const adminUser = await getRequiredSuperAdmin();
-    const { courseId } = await params;
+    const { coursesId } = await params;
+    const courseId = coursesId;
     const body = await request.json();
 
     const title = typeof body.title === "string" ? body.title.trim() : "";
