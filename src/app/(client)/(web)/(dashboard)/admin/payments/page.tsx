@@ -1,30 +1,160 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+// "use client";
+
+// import { useMemo, useState } from "react";
+// import { toast } from "sonner";
+// import { OrderPaymentDrawer } from "./(components)/OrderPaymentDrawer";
+// import { OrdersPaymentsHeader } from "./(components)/OrdersPaymentsHeader";
+// import { OrdersPaymentsOverview } from "./(components)/OrdersPaymentsOverview";
+// import { OrdersPaymentsTable } from "./(components)/OrdersPaymentsTable";
+// import { MOCK_ORDER_PAYMENTS } from "./(components)/mock-data";
+// import type {
+//   AccessStatus,
+//   ExtensionRequest,
+//   OrderPaymentRecord,
+// } from "./(components)/types";
+
+// const calculateAccessStatus = (expiryDate: string): AccessStatus => {
+//   const remainingDays = Math.ceil(
+//     (new Date(expiryDate).getTime() - Date.now()) / 86_400_000,
+//   );
+
+//   if (remainingDays <= 0) return "Expired";
+//   if (remainingDays <= 7) return "Expiring Soon";
+//   return "Active";
+// };
+
+// export default function OrdersPaymentsPage() {
+//   const [records, setRecords] = useState<OrderPaymentRecord[]>(MOCK_ORDER_PAYMENTS);
+//   const [selectedRecordId, setSelectedRecordId] = useState<string | null>(null);
+
+//   const selectedRecord = useMemo(
+//     () => records.find((record) => record.id === selectedRecordId) ?? null,
+//     [records, selectedRecordId],
+//   );
+
+//   const handleExtendExpiry = (request: ExtensionRequest) => {
+//     setRecords((currentRecords) =>
+//       currentRecords.map((record) => {
+//         if (record.orderId !== request.orderId) return record;
+
+//         const previousExpiry = new Date(record.currentExpiryDate);
+//         const newExpiry = new Date(request.newExpiryDate);
+//         const extensionDays = Math.max(
+//           1,
+//           Math.ceil((newExpiry.getTime() - previousExpiry.getTime()) / 86_400_000),
+//         );
+//         const now = new Date().toISOString();
+
+//         return {
+//           ...record,
+//           currentExpiryDate: request.newExpiryDate,
+//           accessStatus: calculateAccessStatus(request.newExpiryDate),
+//           extensions: [
+//             {
+//               id: `extension-${Date.now()}`,
+//               previousExpiryDate: record.currentExpiryDate,
+//               newExpiryDate: request.newExpiryDate,
+//               extensionDays,
+//               reason: request.reason,
+//               extendedBy: "Super Admin",
+//               extendedAt: now,
+//             },
+//             ...record.extensions,
+//           ],
+//           timeline: [
+//             {
+//               id: `event-${Date.now()}`,
+//               type: "expiry_extended",
+//               title: "Expiry extended by Super Admin",
+//               description: `Access extended by ${extensionDays} days without additional payment. Reason: ${request.reason}`,
+//               createdAt: now,
+//             },
+//             ...record.timeline,
+//           ],
+//         };
+//       }),
+//     );
+
+//     toast.success("Expiry date extended successfully", {
+//       description: "No additional payment record was created.",
+//     });
+//   };
+
+//   const handleExport = () => {
+//     const rows = records.map((record) => ({
+//       orderId: record.orderId,
+//       userName: record.userName,
+//       email: record.userEmail,
+//       package: record.plan,
+//       amount: record.amount,
+//       paymentStatus: record.paymentStatus,
+//       purchaseDate: record.purchaseDate,
+//       expiryDate: record.currentExpiryDate,
+//     }));
+
+//     const headers = Object.keys(rows[0] ?? {});
+//     const csv = [
+//       headers.join(","),
+//       ...rows.map((row) =>
+//         headers
+//           .map((header) => JSON.stringify(row[header as keyof typeof row] ?? ""))
+//           .join(","),
+//       ),
+//     ].join("\n");
+
+//     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+//     const url = URL.createObjectURL(blob);
+//     const anchor = document.createElement("a");
+//     anchor.href = url;
+//     anchor.download = `orders-payments-${Date.now()}.csv`;
+//     anchor.click();
+//     URL.revokeObjectURL(url);
+
+//     toast.success("Orders and payments exported");
+//   };
+
+//   return (
+//     <div className="mx-auto w-full max-w-[1600px] space-y-8 pb-12">
+//       <div>
+//         <OrdersPaymentsHeader totalCount={records.length} onExport={handleExport} />
+//       </div>
+
+//       <div>
+//         <OrdersPaymentsOverview records={records} />
+//       </div>
+
+//       <div>
+//         <OrdersPaymentsTable
+//           records={records}
+//           onSelect={(record) => setSelectedRecordId(record.id)}
+//         />
+//       </div>
+
+//       <OrderPaymentDrawer
+//         record={selectedRecord}
+//         onClose={() => setSelectedRecordId(null)}
+//         onExtend={handleExtendExpiry}
+//       />
+//     </div>
+//   );
+// }
+
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import { toast } from "sonner";
 import { OrderPaymentDrawer } from "./(components)/OrderPaymentDrawer";
 import { OrdersPaymentsHeader } from "./(components)/OrdersPaymentsHeader";
 import { OrdersPaymentsOverview } from "./(components)/OrdersPaymentsOverview";
 import { OrdersPaymentsTable } from "./(components)/OrdersPaymentsTable";
-import { MOCK_ORDER_PAYMENTS } from "./(components)/mock-data";
-import type {
-  AccessStatus,
-  ExtensionRequest,
-  OrderPaymentRecord,
-} from "./(components)/types";
-
-const calculateAccessStatus = (expiryDate: string): AccessStatus => {
-  const remainingDays = Math.ceil(
-    (new Date(expiryDate).getTime() - Date.now()) / 86_400_000,
-  );
-
-  if (remainingDays <= 0) return "Expired";
-  if (remainingDays <= 7) return "Expiring Soon";
-  return "Active";
-};
+import { fetchOrdersPayments, extendOrderExpiry } from "./(components)/api";
+import type { ExtensionRequest, OrderPaymentRecord } from "./(components)/types";
 
 export default function OrdersPaymentsPage() {
-  const [records, setRecords] = useState<OrderPaymentRecord[]>(MOCK_ORDER_PAYMENTS);
+  const [records, setRecords] = useState<OrderPaymentRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedRecordId, setSelectedRecordId] = useState<string | null>(null);
 
   const selectedRecord = useMemo(
@@ -32,55 +162,44 @@ export default function OrdersPaymentsPage() {
     [records, selectedRecordId],
   );
 
-  const handleExtendExpiry = (request: ExtensionRequest) => {
-    setRecords((currentRecords) =>
-      currentRecords.map((record) => {
-        if (record.orderId !== request.orderId) return record;
+  const loadRecords = async () => {
+    try {
+      setIsLoading(true);
+      const data = await fetchOrdersPayments();
+      setRecords(data.records);
+    } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? (error.response?.data?.message ?? "Failed to load orders and payments")
+        : "Failed to load orders and payments";
+      toast.error(message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-        const previousExpiry = new Date(record.currentExpiryDate);
-        const newExpiry = new Date(request.newExpiryDate);
-        const extensionDays = Math.max(
-          1,
-          Math.ceil((newExpiry.getTime() - previousExpiry.getTime()) / 86_400_000),
-        );
-        const now = new Date().toISOString();
+  useEffect(() => {
+    loadRecords();
+  }, []);
 
-        return {
-          ...record,
-          currentExpiryDate: request.newExpiryDate,
-          accessStatus: calculateAccessStatus(request.newExpiryDate),
-          extensions: [
-            {
-              id: `extension-${Date.now()}`,
-              previousExpiryDate: record.currentExpiryDate,
-              newExpiryDate: request.newExpiryDate,
-              extensionDays,
-              reason: request.reason,
-              extendedBy: "Super Admin",
-              extendedAt: now,
-            },
-            ...record.extensions,
-          ],
-          timeline: [
-            {
-              id: `event-${Date.now()}`,
-              type: "expiry_extended",
-              title: "Expiry extended by Super Admin",
-              description: `Access extended by ${extensionDays} days without additional payment. Reason: ${request.reason}`,
-              createdAt: now,
-            },
-            ...record.timeline,
-          ],
-        };
-      }),
-    );
-
-    toast.success("Expiry date extended successfully", {
-      description: "No additional payment record was created.",
-    });
+  const handleExtendExpiry = async (request: ExtensionRequest) => {
+    try {
+      const data = await extendOrderExpiry(request);
+      toast.success(data.message, {
+        description: "No additional payment record was created.",
+      });
+      await loadRecords();
+      setSelectedRecordId(null);
+    } catch (error) {
+      const message = axios.isAxiosError(error)
+        ? (error.response?.data?.message ?? "Failed to extend expiry")
+        : "Failed to extend expiry";
+      toast.error(message);
+    }
   };
 
   const handleExport = () => {
+    if (records.length === 0) return;
+
     const rows = records.map((record) => ({
       orderId: record.orderId,
       userName: record.userName,
@@ -89,10 +208,10 @@ export default function OrdersPaymentsPage() {
       amount: record.amount,
       paymentStatus: record.paymentStatus,
       purchaseDate: record.purchaseDate,
-      expiryDate: record.currentExpiryDate,
+      expiryDate: record.currentExpiryDate ?? "",
     }));
 
-    const headers = Object.keys(rows[0] ?? {});
+    const headers = Object.keys(rows[0]);
     const csv = [
       headers.join(","),
       ...rows.map((row) =>
@@ -128,6 +247,9 @@ export default function OrdersPaymentsPage() {
           records={records}
           onSelect={(record) => setSelectedRecordId(record.id)}
         />
+        {isLoading && (
+          <p className="mt-3 font-mono text-[11px] text-zinc-500">Loading records…</p>
+        )}
       </div>
 
       <OrderPaymentDrawer

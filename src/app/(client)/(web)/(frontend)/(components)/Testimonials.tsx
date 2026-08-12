@@ -97,7 +97,7 @@ export default function Testimonials() {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const response = await axios.get<TestimonialData[]>("/api/testimonial");
+        const response = await axios.get<TestimonialData[]>("/api/admin/testimonial");
 
         const publishedTestimonials = response.data.filter(
           (testimonial) => testimonial.status === "Published",

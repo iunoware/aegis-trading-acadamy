@@ -112,7 +112,7 @@ export default function Certifications() {
     try {
       setIsLoading(true);
 
-      const response = await axios.get<Certificate[]>("/api/certificates");
+      const response = await axios.get<Certificate[]>("/api/admin/certificates");
 
       const publishedCertificates = response.data
         .filter((certificate) => certificate.status === "Published")

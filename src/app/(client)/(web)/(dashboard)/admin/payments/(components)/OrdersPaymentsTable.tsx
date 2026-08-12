@@ -2,12 +2,19 @@
 
 import { useMemo, useState } from "react";
 import { Eye, Filter, Search, Mail, Phone } from "lucide-react";
+// import type {
+//   AccessStatus,
+//   OrderPaymentRecord,
+//   PaymentStatus,
+//   SubscriptionPlan,
+// } from "./types";
 import type {
   AccessStatus,
   OrderPaymentRecord,
   PaymentStatus,
   SubscriptionPlan,
 } from "./types";
+import { paymentStatusBadge, paymentStatusLabel } from "./format";
 import { DiscordIcon } from "@/components/Icons";
 
 interface OrdersPaymentsTableProps {
@@ -34,12 +41,12 @@ const getRemainingDays = (expiryDate: string) => {
   return Math.max(0, Math.ceil(difference / 86_400_000));
 };
 
-const paymentBadge: Record<PaymentStatus, string> = {
-  Paid: "border-emerald-500/30 bg-emerald-500/15 text-emerald-400",
-  Pending: "border-amber-500/30 bg-amber-500/15 text-amber-400",
-  Failed: "border-rose-500/30 bg-rose-500/15 text-rose-400",
-  Refunded: "border-sky-500/30 bg-sky-500/15 text-sky-400",
-};
+// const paymentBadge: Record<PaymentStatus, string> = {
+//   Paid: "border-emerald-500/30 bg-emerald-500/15 text-emerald-400",
+//   Pending: "border-amber-500/30 bg-amber-500/15 text-amber-400",
+//   Failed: "border-rose-500/30 bg-rose-500/15 text-rose-400",
+//   Refunded: "border-sky-500/30 bg-sky-500/15 text-sky-400",
+// };
 
 const accessBadge: Record<AccessStatus, string> = {
   Active: "text-emerald-400",
@@ -124,7 +131,8 @@ export function OrdersPaymentsTable({ records, onSelect }: OrdersPaymentsTablePr
             <option value="ALL" className="bg-[#111113]">
               All Payment Statuses
             </option>
-            <option value="Paid" className="bg-[#111113]">
+
+            {/* <option value="Paid" className="bg-[#111113]">
               Paid
             </option>
             <option value="Pending" className="bg-[#111113]">
@@ -135,6 +143,31 @@ export function OrdersPaymentsTable({ records, onSelect }: OrdersPaymentsTablePr
             </option>
             <option value="Refunded" className="bg-[#111113]">
               Refunded
+            </option> */}
+
+            <option value="PAID" className="bg-[#111113]">
+              Paid
+            </option>
+            <option value="CAPTURED" className="bg-[#111113]">
+              Captured
+            </option>
+            <option value="PENDING" className="bg-[#111113]">
+              Pending
+            </option>
+            <option value="AUTHORIZED" className="bg-[#111113]">
+              Authorized
+            </option>
+            <option value="FAILED" className="bg-[#111113]">
+              Failed
+            </option>
+            <option value="CANCELLED" className="bg-[#111113]">
+              Cancelled
+            </option>
+            <option value="REFUNDED" className="bg-[#111113]">
+              Refunded
+            </option>
+            <option value="PARTIALLY_REFUNDED" className="bg-[#111113]">
+              Partially Refunded
             </option>
           </select>
         </div>
@@ -238,9 +271,11 @@ export function OrdersPaymentsTable({ records, onSelect }: OrdersPaymentsTablePr
                     </td>
                     <td className="px-4 py-3.5">
                       <span
-                        className={`inline-flex rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-semibold ${paymentBadge[record.paymentStatus]}`}
+                        // className={`inline-flex rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-semibold ${paymentBadge[record.paymentStatus]}`}
+                        className={`inline-flex rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-semibold ${paymentStatusBadge[record.paymentStatus]}`}
                       >
-                        {record.paymentStatus}
+                        {/* {record.paymentStatus} */}
+                        {paymentStatusLabel[record.paymentStatus]}
                       </span>
                     </td>
                     <td className="px-4 py-3.5 text-right">
@@ -277,9 +312,11 @@ export function OrdersPaymentsTable({ records, onSelect }: OrdersPaymentsTablePr
                   <p className="font-mono text-[10px] text-zinc-500">{record.orderId}</p>
                 </div>
                 <span
-                  className={`rounded-full border px-2 py-0.5 font-mono text-[10px] ${paymentBadge[record.paymentStatus]}`}
+                  // className={`rounded-full border px-2 py-0.5 font-mono text-[10px] ${paymentBadge[record.paymentStatus]}`}
+                  className={`rounded-full border px-2 py-0.5 font-mono text-[10px] ${paymentStatusBadge[record.paymentStatus]}`}
                 >
-                  {record.paymentStatus}
+                  {/* {record.paymentStatus} */}
+                  {paymentStatusLabel[record.paymentStatus]}
                 </span>
               </div>
 
