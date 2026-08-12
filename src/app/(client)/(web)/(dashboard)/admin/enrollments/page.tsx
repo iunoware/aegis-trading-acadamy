@@ -93,7 +93,7 @@ export default function EnrollmentsPage() {
       const res: any = await axios.patch(`/enrollments/${enrollmentId}/extend`, { days });
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
-          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
         );
         if (selectedEnrollment?.id === enrollmentId) {
           setSelectedEnrollment(res.enrollment);
@@ -113,10 +113,12 @@ export default function EnrollmentsPage() {
     newPlan: "Monthly Plan" | "Yearly Plan",
   ) => {
     try {
-      const res: any = await axios.patch(`/enrollments/${enrollmentId}/plan`, { newPlan });
+      const res: any = await axios.patch(`/enrollments/${enrollmentId}/plan`, {
+        newPlan,
+      });
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
-          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
         );
         if (selectedEnrollment?.id === enrollmentId) {
           setSelectedEnrollment(res.enrollment);
@@ -136,7 +138,7 @@ export default function EnrollmentsPage() {
       const res: any = await axios.patch(`/enrollments/${enrollmentId}/status`);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
-          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
         );
         if (selectedEnrollment?.id === enrollmentId) {
           setSelectedEnrollment(res.enrollment);
@@ -156,7 +158,7 @@ export default function EnrollmentsPage() {
       const res: any = await axios.patch(`/enrollments/${enrollmentId}/notes`, { notes });
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
-          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
         );
         if (selectedEnrollment?.id === enrollmentId) {
           setSelectedEnrollment(res.enrollment);

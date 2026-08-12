@@ -40,7 +40,7 @@ export default function CertificatesPage() {
     try {
       setIsLoading(true);
 
-      const response = await axios.get<Certificate[]>("/api/certificates");
+      const response = await axios.get<Certificate[]>("/api/admin/certificates");
 
       setCertificates(response.data);
     } catch (error) {
@@ -112,7 +112,7 @@ export default function CertificatesPage() {
 
       if (editingCertificate) {
         const response = await axios.patch<Certificate>(
-          `/api/certificates/${editingCertificate.id}`,
+          `/api/admin/certificates/${editingCertificate.id}`,
           formData,
         );
 
@@ -124,7 +124,10 @@ export default function CertificatesPage() {
 
         toast.success(`Certificate "${response.data.title}" updated successfully.`);
       } else {
-        const response = await axios.post<Certificate>("/api/certificates", formData);
+        const response = await axios.post<Certificate>(
+          "/api/admin/certificates",
+          formData,
+        );
 
         setCertificates((previousCertificates) => [
           response.data,
@@ -167,7 +170,7 @@ export default function CertificatesPage() {
       formData.append("status", newStatus);
 
       const response = await axios.patch<Certificate>(
-        `/api/certificates/${certificateId}`,
+        `/api/admin/certificates/${certificateId}`,
         formData,
       );
 
@@ -197,7 +200,7 @@ export default function CertificatesPage() {
     if (!shouldDelete) return;
 
     try {
-      await axios.delete(`/api/certificates/${certificateId}`);
+      await axios.delete(`/api/admin/certificates/${certificateId}`);
 
       setCertificates((previousCertificates) =>
         previousCertificates.filter((item) => item.id !== certificateId),

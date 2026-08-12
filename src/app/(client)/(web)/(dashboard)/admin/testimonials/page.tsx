@@ -114,7 +114,7 @@ export default function TestimonialsPage() {
       try {
         setIsLoading(true);
 
-        const response = await axios.get<Testimonial[]>("/api/testimonial");
+        const response = await axios.get<Testimonial[]>("/api/admin/testimonial");
 
         setTestimonials(response.data);
       } catch (error) {
@@ -168,7 +168,7 @@ export default function TestimonialsPage() {
     try {
       if (editingTestimonial) {
         const response = await axios.patch<Testimonial>(
-          `/api/testimonial/${savedItem.id}`,
+          `/api/admin/testimonial/${savedItem.id}`,
           savedItem,
         );
 
@@ -180,7 +180,10 @@ export default function TestimonialsPage() {
 
         toast.success(`Testimonial from "${response.data.customerName}" updated!`);
       } else {
-        const response = await axios.post<Testimonial>("/api/testimonial", savedItem);
+        const response = await axios.post<Testimonial>(
+          "/api/admin/testimonial",
+          savedItem,
+        );
 
         setTestimonials((prev) => [response.data, ...prev]);
 
@@ -201,7 +204,7 @@ export default function TestimonialsPage() {
 
     try {
       const response = await axios.patch<Testimonial>(
-        `/api/testimonial/${testimonialId}`,
+        `/api/admin/testimonial/${testimonialId}`,
         {
           status: newStatus,
         },
@@ -231,7 +234,7 @@ export default function TestimonialsPage() {
     try {
       setIsDeleting(true);
 
-      await axios.delete(`/api/testimonial/${deleteId}`);
+      await axios.delete(`/api/admin/testimonial/${deleteId}`);
 
       setTestimonials((prev) =>
         prev.filter((testimonial) => testimonial.id !== deleteId),

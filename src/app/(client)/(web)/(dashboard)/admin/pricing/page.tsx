@@ -103,7 +103,7 @@ export default function PricingManagementPage() {
     try {
       setIsLoading(true);
 
-      const response = await axios.get<PricingApiResponse>("/api/pricing");
+      const response = await axios.get<PricingApiResponse>("/api/admin/pricing");
 
       const monthly = response.data.data.monthly;
       const yearly = response.data.data.yearly;
@@ -141,7 +141,10 @@ export default function PricingManagementPage() {
     try {
       setIsSaving(true);
 
-      const response = await axios.put<PricingApiResponse>("/api/pricing", pricingState);
+      const response = await axios.put<PricingApiResponse>(
+        "/api/admin/pricing",
+        pricingState,
+      );
 
       const monthly = response.data.data.monthly;
       const yearly = response.data.data.yearly;

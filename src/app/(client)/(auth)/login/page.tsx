@@ -174,9 +174,8 @@ export default function LoginPage() {
           </div>
 
           <p className="text-sm text-zinc-300 leading-relaxed font-sans max-w-md">
-            Continue your trading journey with Aegis Trading Academy. Access
-            your live strategies, risk management tools, and institutional
-            market analytics.
+            Continue your trading journey with Aegis Trading Academy. Access your live
+            strategies, risk management tools, and institutional market analytics.
           </p>
 
           {/* Feature Highlights */}
@@ -223,9 +222,7 @@ export default function LoginPage() {
                   className="object-contain"
                 />
               </div> */}
-              <h1 className="text-xl font-extrabold text-white">
-                Welcome Back
-              </h1>
+              <h1 className="text-xl font-extrabold text-white">Welcome Back</h1>
               <p className="text-xs text-zinc-400 mt-1">
                 Continue your trading journey with Aegis Trading Academy
               </p>

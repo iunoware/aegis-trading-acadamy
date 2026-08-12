@@ -332,7 +332,7 @@ export default function Pricing() {
     try {
       setIsLoading(true);
 
-      const response = await axios.get<PricingApiResponse>("/api/pricing");
+      const response = await axios.get<PricingApiResponse>("/api/admin/pricing");
 
       const monthlyPlan = response.data.data.monthly;
       const yearlyPlan = response.data.data.yearly;

@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  Check,
+  // Check,
   Eye,
   EyeOff,
   Plus,
-  Save,
+  // Save,
   Search,
-  Settings2,
+  // Settings2,
   ShieldCheck,
   UserPlus,
   UsersRound,
@@ -85,7 +85,7 @@ function SettingsSection({
     <section className="overflow-hidden rounded-2xl border border-white/10 bg-[#121212]">
       <div className="border-b border-white/10 p-5 sm:p-6">
         <div className="flex items-start gap-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-(--primary)/20 bg-primary/10 text-primary">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
             <Icon size={19} />
           </div>
 
@@ -125,7 +125,7 @@ function FormField({ label, description, children }: FormFieldProps) {
 }
 
 const inputClassName =
-  "h-11 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-(--primary)/60";
+  "h-11 w-full rounded-xl border border-white/10 bg-[#0d0d0d] px-4 text-sm text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-primary/60";
 
 export default function AdminSettingsPage() {
   // GENERAL SETTINGS
@@ -199,7 +199,7 @@ export default function AdminSettingsPage() {
     try {
       setIsSavingEdit(true);
 
-      const response = await axios.patch("/api/complimentary-users", {
+      const response = await axios.patch("/api/admin/complimentary-users", {
         userId: editingUser.id,
         name,
         email,
@@ -231,7 +231,7 @@ export default function AdminSettingsPage() {
     try {
       setIsDeletingUser(true);
 
-      await axios.delete("/api/complimentary-users", {
+      await axios.delete("/api/admin/complimentary-users", {
         data: { userId: deletingUser.id },
       });
 
@@ -254,7 +254,7 @@ export default function AdminSettingsPage() {
       try {
         setIsLoadingUsers(true);
 
-        const response = await axios.get("/api/complimentary-users");
+        const response = await axios.get("/api/admin/complimentary-users");
 
         const users = response.data.users ?? [];
 
@@ -341,7 +341,7 @@ export default function AdminSettingsPage() {
     try {
       setIsCreatingUser(true);
 
-      const response = await axios.post("/api/complimentary-users", {
+      const response = await axios.post("/api/admin/complimentary-users", {
         name,
         email,
         phone,
@@ -469,8 +469,8 @@ export default function AdminSettingsPage() {
               </div>
 
               {/* Information box */}
-              <div className="flex items-start gap-3 rounded-xl border border-(--primary)/20 bg-primary/5 p-4">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-(--primary)/20 bg-primary/10 text-primary">
+              <div className="flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/5 p-4">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary">
                   <ShieldCheck size={17} />
                 </div>
 
@@ -529,7 +529,7 @@ export default function AdminSettingsPage() {
                         >
                           <td className="px-5 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-(--primary)/20 bg-primary/10 text-sm font-bold text-primary">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
                                 {user.name.charAt(0).toUpperCase()}
                               </div>
 
@@ -989,9 +989,9 @@ export default function AdminSettingsPage() {
               <h2 className="text-lg font-bold text-white">Delete Student Account</h2>
               <p className="mt-2 text-sm leading-relaxed text-zinc-500">
                 This will permanently remove{" "}
-                <span className="text-white">{deletingUser.name}</span>'s account (
-                {deletingUser.email}) and revoke their complimentary access. This can't be
-                undone.
+                <span className="text-white">{deletingUser.name}</span>&apos;s account (
+                {deletingUser.email}) and revoke their complimentary access. This
+                can&apos;t be undone.
               </p>
             </div>
 
