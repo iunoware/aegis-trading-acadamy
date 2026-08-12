@@ -100,7 +100,7 @@ export default function EnrollmentsPage() {
       const res = await extendSubscription(enrollmentId, days);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
-          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
         );
         if (selectedEnrollment?.id === enrollmentId) {
           setSelectedEnrollment(res.enrollment);
@@ -123,7 +123,7 @@ export default function EnrollmentsPage() {
       const res = await changeSubscriptionPlan(enrollmentId, newPlan);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
-          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
         );
         if (selectedEnrollment?.id === enrollmentId) {
           setSelectedEnrollment(res.enrollment);
@@ -143,7 +143,7 @@ export default function EnrollmentsPage() {
       const res = await toggleSubscriptionStatus(enrollmentId);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
-          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
         );
         if (selectedEnrollment?.id === enrollmentId) {
           setSelectedEnrollment(res.enrollment);
@@ -163,7 +163,7 @@ export default function EnrollmentsPage() {
       const res = await saveSubscriptionNotes(enrollmentId, notes);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
-          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e))
+          prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
         );
         if (selectedEnrollment?.id === enrollmentId) {
           setSelectedEnrollment(res.enrollment);

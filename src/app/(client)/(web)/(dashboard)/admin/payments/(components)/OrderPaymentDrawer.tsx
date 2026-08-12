@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import {
@@ -11,11 +12,18 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import type {
-  ExtensionRequest,
-  OrderPaymentEventType,
-  OrderPaymentRecord,
-} from "./types";
+// import type {
+//   ExtensionRequest,
+//   OrderPaymentEventType,
+//   OrderPaymentRecord,
+// } from "./types";
+import type { ExtensionRequest, OrderPaymentRecord } from "./types";
+import {
+  eventTypeDot,
+  eventTypeLabel,
+  paymentMethodLabel,
+  paymentStatusLabel,
+} from "./format";
 import { ExtendExpiryForm } from "./ExtendExpiryForm";
 import { DiscordIcon } from "@/components/Icons";
 
@@ -45,14 +53,14 @@ const formatCurrency = (value: number) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-const eventDot: Record<OrderPaymentEventType, string> = {
-  order_created: "bg-zinc-400",
-  payment_completed: "bg-emerald-400",
-  payment_failed: "bg-rose-400",
-  expiry_extended: "bg-[#C9A227]",
-  refund_completed: "bg-sky-400",
-  note: "bg-violet-400",
-};
+// const eventDot: Record<OrderPaymentEventType, string> = {
+//   order_created: "bg-zinc-400",
+//   payment_completed: "bg-emerald-400",
+//   payment_failed: "bg-rose-400",
+//   expiry_extended: "bg-[#C9A227]",
+//   refund_completed: "bg-sky-400",
+//   note: "bg-violet-400",
+// };
 
 export function OrderPaymentDrawer({
   record,
@@ -128,11 +136,19 @@ export function OrderPaymentDrawer({
                 <InfoCard label="Purchase Date" value={formatDate(record.purchaseDate)} />
                 <InfoCard
                   label="Original Expiry"
-                  value={formatDate(record.originalExpiryDate)}
+                  // value={formatDate(record.originalExpiryDate)}
+                  value={
+                    record.originalExpiryDate
+                      ? formatDate(record.originalExpiryDate)
+                      : "—"
+                  }
                 />
                 <InfoCard
                   label="Current Expiry"
-                  value={formatDate(record.currentExpiryDate)}
+                  // value={formatDate(record.currentExpiryDate)}
+                  value={
+                    record.currentExpiryDate ? formatDate(record.currentExpiryDate) : "—"
+                  }
                   highlighted
                 />
               </div>
@@ -145,8 +161,18 @@ export function OrderPaymentDrawer({
             <SectionTitle icon={CreditCard} title="Payment Information" />
             <div className="grid grid-cols-1 gap-3 rounded-2xl border border-white/10 bg-[#09090b] p-4 sm:grid-cols-2">
               <Detail label="Amount" value={formatCurrency(record.amount)} accent />
-              <Detail label="Payment Status" value={record.paymentStatus} />
-              <Detail label="Payment Method" value={record.paymentMethod} />
+              {/* <Detail label="Payment Status" value={record.paymentStatus} /> */}
+              {/* <Detail label="Payment Method" value={record.paymentMethod} /> */}+{" "}
+              <Detail
+                label="Payment Status"
+                value={paymentStatusLabel[record.paymentStatus]}
+              />
+              <Detail
+                label="Payment Method"
+                value={
+                  record.paymentMethod ? paymentMethodLabel[record.paymentMethod] : "—"
+                }
+              />
               <Detail label="Payment Gateway" value={record.paymentGateway ?? "—"} />
               <Detail label="Transaction ID" value={record.transactionId} />
               <Detail label="Gateway Payment ID" value={record.gatewayPaymentId ?? "—"} />
@@ -200,7 +226,8 @@ export function OrderPaymentDrawer({
               {record.timeline.map((event) => (
                 <article key={event.id} className="relative">
                   <span
-                    className={`absolute -left-5.25 top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-[#09090b] ${eventDot[event.type]}`}
+                    // className={`absolute -left-5.25 top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-[#09090b] ${eventDot[event.type]}`}
+                    className={`absolute -left-5.25 top-1.5 h-2.5 w-2.5 rounded-full ring-4 ring-[#09090b] ${eventTypeDot[event.type]}`}
                   />
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <h4 className="text-xs font-bold text-white">{event.title}</h4>
