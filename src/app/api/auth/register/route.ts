@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
-import { createSession, STUDENT_SESSION_COOKIE } from "@/lib/auth/session";
+import { generateOTP, hashOTP } from "@/lib/otp";
+import { sendRegistrationVerificationCode } from "@/lib/mail";
 import { AccountStatus, UserRole } from "@/generated/prisma/client";
 
 export const runtime = "nodejs";
@@ -12,7 +13,12 @@ export async function POST(request: NextRequest) {
 
     const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
     const password = typeof body.password === "string" ? body.password : "";
-    const fullName = typeof body.fullName === "string" ? body.fullName.trim() : (typeof body.name === "string" ? body.name.trim() : "");
+    const fullName =
+      typeof body.fullName === "string"
+        ? body.fullName.trim()
+        : typeof body.name === "string"
+        ? body.name.trim()
+        : "";
     const phone = typeof body.phone === "string" ? body.phone.trim() : null;
     const discordName = typeof body.discordName === "string" ? body.discordName.trim() : null;
 
@@ -36,21 +42,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if account already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "An account with this email address already exists.",
-        },
-        { status: 400 },
-      );
-    }
-
     // Derive firstName and lastName
     const nameParts = fullName.split(" ");
     const firstName = nameParts[0] || fullName;
@@ -58,6 +49,96 @@ export async function POST(request: NextRequest) {
 
     const passwordHash = hashPassword(password);
 
+    // Generate 6-digit plain OTP and its SHA-256 hash
+    const plainOTP = generateOTP();
+    const hashedOTP = hashOTP(plainOTP);
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + 10 * 60 * 1000); // 10 minutes expiry
+
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      if (existingUser.deletedAt) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "This account has been deleted.",
+          },
+          { status: 403 },
+        );
+      }
+
+      // If user exists and is already verified, reject duplicate registration
+      if (existingUser.emailVerified) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "An account with this email address already exists. Please sign in.",
+          },
+          { status: 400 },
+        );
+      }
+
+      // If unverified student is re-registering, update their credentials and refresh OTP
+      const updatedUser = await prisma.user.update({
+        where: { id: existingUser.id },
+        data: {
+          name: fullName,
+          firstName,
+          lastName,
+          phone: phone || existingUser.phone,
+          discordName: discordName || existingUser.discordName,
+          password: passwordHash,
+          emailVerificationCode: hashedOTP,
+          emailVerificationExpiresAt: expiresAt,
+          emailVerificationAttempts: 0,
+          emailVerificationLastSentAt: now,
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          name: true,
+          email: true,
+          phone: true,
+          discordName: true,
+          role: true,
+          status: true,
+          emailVerified: true,
+        },
+      });
+
+      // Send plain OTP via Nodemailer
+      const mailResult = await sendRegistrationVerificationCode(email, plainOTP);
+
+      if (!mailResult.success) {
+        console.error("REGISTER_SMTP_FAILED", mailResult.error);
+
+        return NextResponse.json(
+          {
+            success: false,
+            error: "We couldn't send the verification email. Please check your SMTP settings and try again.",
+          },
+          { status: 500 },
+        );
+      }
+
+      return NextResponse.json(
+        {
+          success: true,
+          requiresVerification: true,
+          email: updatedUser.email,
+          message: "Account updated! Please check your email for the new verification code.",
+          user: updatedUser,
+        },
+        { status: 201 },
+      );
+    }
+
+    // Create new student account with emailVerified=false
     const newUser = await prisma.user.create({
       data: {
         name: fullName,
@@ -69,6 +150,11 @@ export async function POST(request: NextRequest) {
         password: passwordHash,
         role: UserRole.STUDENT,
         status: AccountStatus.ACTIVE,
+        emailVerified: false,
+        emailVerificationCode: hashedOTP,
+        emailVerificationExpiresAt: expiresAt,
+        emailVerificationAttempts: 0,
+        emailVerificationLastSentAt: now,
       },
       select: {
         id: true,
@@ -80,34 +166,41 @@ export async function POST(request: NextRequest) {
         discordName: true,
         role: true,
         status: true,
+        emailVerified: true,
       },
     });
 
-    // Create session token with STUDENT type and log in immediately
-    const token = await createSession(newUser.id, newUser.role, "STUDENT");
+    // Send plain OTP via Nodemailer
+    const mailResult = await sendRegistrationVerificationCode(email, plainOTP);
 
-    const response = NextResponse.json(
+    if (!mailResult.success) {
+      console.error("REGISTER_SMTP_FAILED", mailResult.error);
+
+      // Clean up the created unverified user record if initial email send failed
+      await prisma.user.delete({ where: { id: newUser.id } }).catch(() => null);
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: "We couldn't send the verification email. Please check your SMTP configuration and try again.",
+        },
+        { status: 500 },
+      );
+    }
+
+    // DO NOT create a login session after registration
+    return NextResponse.json(
       {
         success: true,
-        message: "Account created successfully.",
+        requiresVerification: true,
+        email: newUser.email,
+        message: "Account created successfully! Please check your email for the verification code.",
         user: newUser,
       },
       { status: 201 },
     );
-
-    response.cookies.set({
-      name: STUDENT_SESSION_COOKIE,
-      value: token,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    return response;
-  } catch (error) {
-    console.error("REGISTER_ERROR", error);
+  } catch (error: any) {
+    console.error("REGISTER_ERROR", error?.message || error);
 
     return NextResponse.json(
       {

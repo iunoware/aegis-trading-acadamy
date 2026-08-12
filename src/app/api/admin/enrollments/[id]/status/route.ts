@@ -6,12 +6,24 @@ import {
   subscriptionIncludeSelector,
 } from "@/lib/enrollment-transform";
 
+import { getCurrentAdminUser } from "@/lib/current-user";
+
+export const runtime = "nodejs";
+
 interface RouteProps {
   params: Promise<{ id: string }>;
 }
 
 export async function PATCH(request: Request, { params }: RouteProps) {
   try {
+    const adminUser = await getCurrentAdminUser();
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized admin access" },
+        { status: 401 }
+      );
+    }
     const { id } = await params;
     const body = await request.json().catch(() => ({}));
 
