@@ -15,8 +15,8 @@ function hashPassword(password: string) {
 
 export async function GET() {
   try {
-    const email = "info@aegistradingacademy.com";
-    const password = "aegis@123";
+    const email = "admin@aegis.com";
+    const password = "aegis@143";
 
     const hashedPassword = hashPassword(password);
 
@@ -38,8 +38,8 @@ export async function GET() {
         },
         data: {
           firstName: "Super",
-          lastName: "Admin",
-          name: "Super Admin",
+          lastName: "Admin 2",
+          // name: "Super Admin",
           password: hashedPassword,
           role: UserRole.SUPER_ADMIN,
           status: AccountStatus.ACTIVE,

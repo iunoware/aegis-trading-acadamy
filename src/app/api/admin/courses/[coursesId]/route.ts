@@ -11,11 +11,12 @@ import { deleteThumbnailFile } from "@/lib/thumbnail-storage";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ courseId: string }> },
+  { params }: { params: Promise<{ coursesId: string }> },
 ) {
   try {
     const adminUser = await getRequiredSuperAdmin();
-    const { courseId } = await params;
+    const { coursesId } = await params;
+    const courseId = coursesId;
     const formData = await request.formData();
 
     const existing = await prisma.course.findUnique({
@@ -142,9 +143,7 @@ export async function DELETE(
       },
     });
     // ...
-    await deleteThumbnailFile(existing?.thumbnailUrl);
-
-    const localFiles = existing?.lessons.filter((l) => !l.videoUrl.startsWith("http"));
+    const localFiles = (existing?.lessons || []).filter((l) => !l.videoUrl.startsWith("http"));
     await Promise.all(
       localFiles.map((l) =>
         deleteVideoFile(l.videoUrl).catch((err) => console.error(err)),

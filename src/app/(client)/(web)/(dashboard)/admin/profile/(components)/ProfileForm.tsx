@@ -30,7 +30,11 @@ const EMPTY_PASSWORD_FORM: PasswordFormValues = {
   confirmPassword: "",
 };
 
-export function ProfileForm({ profile, isSaving = false, onSubmit }: ProfileFormProps) {
+export function ProfileForm({
+  profile,
+  isSaving = false,
+  onSubmit,
+}: ProfileFormProps) {
   const [profileForm, setProfileForm] = useState<ProfileFormValues>({
     name: profile.name,
     email: profile.email,
@@ -46,14 +50,20 @@ export function ProfileForm({ profile, isSaving = false, onSubmit }: ProfileForm
     confirm: false,
   });
 
-  const updateProfileField = (field: keyof ProfileFormValues, value: string) => {
+  const updateProfileField = (
+    field: keyof ProfileFormValues,
+    value: string,
+  ) => {
     setProfileForm((current) => ({
       ...current,
       [field]: value,
     }));
   };
 
-  const updatePasswordField = (field: keyof PasswordFormValues, value: string) => {
+  const updatePasswordField = (
+    field: keyof PasswordFormValues,
+    value: string,
+  ) => {
     setPasswordForm((current) => ({
       ...current,
       [field]: value,
@@ -90,33 +100,33 @@ export function ProfileForm({ profile, isSaving = false, onSubmit }: ProfileForm
         />
 
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <FormField
+          <ReadOnlyField
             label="Name"
             icon={UserRound}
             value={profileForm.name}
-            placeholder="Enter your name"
-            onChange={(value) => updateProfileField("name", value)}
-            required
+            // placeholder="Enter your name"
+            // onChange={(value) => updateProfileField("name", value)}
+            // required
           />
 
-          <FormField
+          <ReadOnlyField
             label="Email"
             icon={Mail}
-            type="email"
+            // type="email"
             value={profileForm.email}
-            placeholder="Enter your email"
-            onChange={(value) => updateProfileField("email", value)}
-            required
+            // placeholder="Enter your email"
+            // onChange={(value) => updateProfileField("email", value)}
+            // required
           />
 
-          <FormField
+          {/* <ReadOnlyField
             label="Phone"
             icon={Phone}
             type="tel"
             value={profileForm.phone}
             placeholder="Enter phone number"
             onChange={(value) => updateProfileField("phone", value)}
-          />
+          /> */}
 
           <ReadOnlyField
             label="Role"
@@ -126,7 +136,7 @@ export function ProfileForm({ profile, isSaving = false, onSubmit }: ProfileForm
         </div>
       </section>
 
-      <section className="rounded-2xl border border-white/10 bg-[#111113]/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.45)] sm:p-6">
+      {/* <section className="rounded-2xl border border-white/10 bg-[#111113]/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.45)] sm:p-6">
         <SectionHeading
           icon={KeyRound}
           title="Change Password"
@@ -181,7 +191,7 @@ export function ProfileForm({ profile, isSaving = false, onSubmit }: ProfileForm
           Password must be at least 8 characters and contain one number and one special
           character.
         </p>
-      </section>
+      </section> */}
 
       <div className="flex justify-end">
         <button

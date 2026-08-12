@@ -34,8 +34,8 @@ export default function StudentDashboardPage() {
   return (
     <main className="min-h-screen pt-20 bg-[#050505] text-white selection:bg-primary/30 py-10 px-4 sm:px-6 lg:px-8">
       {/* Background Decorative Glows */}
-      <div className="fixed top-0 left-1/4 w-96 h-96 bg-primary/10 blur-[130px] pointer-events-none rounded-full" />
-      <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 blur-[130px] pointer-events-none rounded-full" />
+      {/* <div className="fixed top-0 left-1/4 w-96 h-96 bg-primary/10 blur-[130px] pointer-events-none rounded-full" />
+      <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-amber-500/5 blur-[130px] pointer-events-none rounded-full" /> */}
 
       <div className="relative z-10 max-w-5xl mx-auto space-y-8">
         {/* Top Bar Navigation */}
