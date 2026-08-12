@@ -10,12 +10,10 @@ import crypto from "crypto";
 
 export const runtime = "nodejs";
 
-// Point VIDEO_STORAGE_DIR at a persistent path outside your Hostinger deploy dir
 const STORAGE_DIR =
   process.env.VIDEO_STORAGE_DIR || path.join(process.cwd(), "storage", "videos");
-
 const ALLOWED_MIME = ["video/mp4", "video/webm", "video/quicktime", "video/x-matroska"];
-const MAX_BYTES = 2 * 1024 * 1024 * 1024; // 2GB, adjust as needed
+const MAX_BYTES = 2 * 1024 * 1024 * 1024;
 
 function slugify(title: string) {
   return title
@@ -36,10 +34,9 @@ export async function POST(
 
     const course = await prisma.course.findUnique({
       where: { id: courseId },
-      select: { id: true, deletedAt: true },
+      select: { id: true },
     });
-
-    if (!course || course.deletedAt) {
+    if (!course) {
       return NextResponse.json(
         { success: false, message: "Course not found." },
         { status: 404 },
@@ -58,21 +55,18 @@ export async function POST(
         { status: 400 },
       );
     }
-
     if (!(file instanceof File)) {
       return NextResponse.json(
         { success: false, message: "No video file was provided." },
         { status: 400 },
       );
     }
-
     if (!ALLOWED_MIME.includes(file.type)) {
       return NextResponse.json(
         { success: false, message: `Unsupported file type: ${file.type}` },
         { status: 400 },
       );
     }
-
     if (file.size > MAX_BYTES) {
       return NextResponse.json(
         { success: false, message: "File exceeds the maximum upload size." },
@@ -83,11 +77,8 @@ export async function POST(
     const baseSlug = slugify(title);
     let slug = baseSlug;
     let suffix = 1;
-
     while (
-      await prisma.lesson.findUnique({
-        where: { courseId_slug: { courseId, slug } },
-      })
+      await prisma.lesson.findUnique({ where: { courseId_slug: { courseId, slug } } })
     ) {
       slug = `${baseSlug}-${suffix++}`;
     }
@@ -101,13 +92,10 @@ export async function POST(
     const buffer = Buffer.from(await file.arrayBuffer());
     await writeFile(destPath, buffer);
 
-    // videoUrl stores an internal reference resolved by /api/stream/[lessonId],
-    // never a directly web-accessible path.
     const internalRef = `${courseId}/${fileName}`;
-
     const maxOrder = await prisma.lesson.aggregate({
       _max: { displayOrder: true },
-      where: { courseId, deletedAt: null },
+      where: { courseId },
     });
 
     const result = await prisma.$transaction(async (tx) => {
@@ -144,16 +132,11 @@ export async function POST(
     });
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "Video uploaded successfully.",
-        lesson: result,
-      },
+      { success: true, message: "Video uploaded successfully.", lesson: result },
       { status: 201 },
     );
   } catch (error: unknown) {
     console.error("Lesson upload error:", error);
-
     if (
       typeof error === "object" &&
       error !== null &&
@@ -168,7 +151,6 @@ export async function POST(
         { status: 409 },
       );
     }
-
     return NextResponse.json(
       { success: false, message: "Failed to upload video." },
       { status: 500 },

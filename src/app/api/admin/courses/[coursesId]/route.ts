@@ -35,7 +35,9 @@ export async function PATCH(
     const description = formData.get("description")?.toString().trim();
     const statusRaw = formData.get("status")?.toString();
     const status =
-      statusRaw === "PUBLISHED" || statusRaw === "DRAFT" || statusRaw === "HIDDEN"
+      statusRaw === "PUBLISHED" ||
+      statusRaw === "DRAFT" ||
+      statusRaw === "HIDDEN"
         ? (statusRaw as ContentStatus)
         : undefined;
     const thumbnailFile = formData.get("thumbnail");
@@ -50,7 +52,7 @@ export async function PATCH(
     let thumbnailUrl: string | undefined;
     if (thumbnailFile instanceof File) {
       thumbnailUrl = await saveThumbnail(thumbnailFile);
-      await deleteThumbnailFile(existing.thumbnailUrl); // clean up the replaced file
+      await deleteThumbnailFile(existing.thumbnailUrl);
     }
 
     const now = new Date();
@@ -60,7 +62,9 @@ export async function PATCH(
         where: { id: courseId },
         data: {
           ...(title !== undefined ? { title } : {}),
-          ...(description !== undefined ? { description: description || null } : {}),
+          ...(description !== undefined
+            ? { description: description || null }
+            : {}),
           ...(thumbnailUrl !== undefined ? { thumbnailUrl } : {}),
           ...(status !== undefined ? { status } : {}),
           updatedById: adminUser.id,
@@ -123,16 +127,6 @@ export async function DELETE(
     const { coursesId } = await params;
     const courseId = coursesId;
 
-    // const existing = await prisma.course.findUnique({
-    //   where: { id: courseId },
-    //   select: {
-    //     id: true,
-    //     title: true,
-    //     lessons: {
-    //       select: { id: true, title: true, videoUrl: true },
-    //     },
-    //   },
-    // });
     const existing = await prisma.course.findUnique({
       where: { id: courseId },
       select: {
@@ -142,13 +136,6 @@ export async function DELETE(
         lessons: { select: { id: true, title: true, videoUrl: true } },
       },
     });
-    // ...
-    const localFiles = (existing?.lessons || []).filter((l) => !l.videoUrl.startsWith("http"));
-    await Promise.all(
-      localFiles.map((l) =>
-        deleteVideoFile(l.videoUrl).catch((err) => console.error(err)),
-      ),
-    );
 
     if (!existing) {
       return NextResponse.json(
@@ -157,10 +144,11 @@ export async function DELETE(
       );
     }
 
-    // Delete any locally-uploaded video files before removing DB rows.
-    // External URLs (videoUrl starting with "http") have nothing to unlink.
-    // const localFiles = existing.lessons.filter((l) => !l.videoUrl.startsWith("http"));
+    await deleteThumbnailFile(existing.thumbnailUrl);
 
+    const localFiles = existing.lessons.filter(
+      (l) => !l.videoUrl.startsWith("http"),
+    );
     await Promise.all(
       localFiles.map((l) =>
         deleteVideoFile(l.videoUrl).catch((err) => {
@@ -180,11 +168,13 @@ export async function DELETE(
           description: `Course "${existing.title}" and its ${existing.lessons.length} video(s) were permanently deleted.`,
           targetId: existing.id,
           targetType: "COURSE",
-          beforeData: { title: existing.title, lessonCount: existing.lessons.length },
+          beforeData: {
+            title: existing.title,
+            lessonCount: existing.lessons.length,
+          },
         },
       });
 
-      // Cascades: Lesson, LessonProgress, CourseProgress all delete automatically
       await tx.course.delete({ where: { id: courseId } });
     });
 
@@ -194,7 +184,6 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("DELETE course error:", error);
-
     return NextResponse.json(
       { success: false, message: "Failed to delete course." },
       { status: 500 },

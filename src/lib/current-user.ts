@@ -38,7 +38,12 @@ export async function getCurrentStudentUser() {
     },
   });
 
-  if (!user || user.deletedAt || user.status !== AccountStatus.ACTIVE || user.role !== UserRole.STUDENT) {
+  if (
+    !user ||
+    user.deletedAt ||
+    user.status !== AccountStatus.ACTIVE ||
+    user.role !== UserRole.STUDENT
+  ) {
     return null;
   }
 
@@ -113,7 +118,8 @@ export async function getRequiredSuperAdmin() {
     throw new Error("UNAUTHORIZED");
   }
 
-  if (user.role !== UserRole.SUPER_ADMIN && user.role !== UserRole.ADMIN) {
+  // if (user.role !== UserRole.SUPER_ADMIN && user.role !== UserRole.ADMIN) {
+  if (user.role !== UserRole.SUPER_ADMIN) {
     throw new Error("FORBIDDEN");
   }
 
