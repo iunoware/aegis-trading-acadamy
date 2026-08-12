@@ -75,7 +75,6 @@ export async function getCurrentAdminUser() {
       name: true,
       email: true,
       phone: true,
-      password: true,
       role: true,
       status: true,
       deletedAt: true,
@@ -95,6 +94,8 @@ export async function getCurrentAdminUser() {
 
   return user;
 }
+
+export type AdminUser = NonNullable<Awaited<ReturnType<typeof getCurrentAdminUser>>>;
 
 export async function getCurrentUser() {
   return getCurrentStudentUser();

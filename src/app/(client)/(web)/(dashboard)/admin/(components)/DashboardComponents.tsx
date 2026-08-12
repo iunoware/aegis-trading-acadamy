@@ -14,26 +14,24 @@ import {
   Plus,
   Calendar,
   Clock,
-  // ArrowUpRight,
-  // CheckCircle2,
   AlertCircle,
-  // RefreshCw,
-  // CreditCard,
   UserPlus,
-  // FileCheck,
-  // Filter,
-  // Download,
   ChevronRight,
-  // MoreVertical,
-  // Star,
   MessageSquareQuote,
   FolderTree,
   UserRound,
 } from "lucide-react";
 
-// DUMMY PLACEHOLDER DATA STRUCTURES (Ready for API integration)
+export type AdminUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  deletedAt: string | null;
+};
 
-export interface KpiItem {
+export type KpiItem = {
   id: string;
   title: string;
   value: number;
@@ -43,304 +41,144 @@ export interface KpiItem {
   trend: string;
   isUp: boolean;
   icon: React.ElementType;
-}
+};
 
-export const KPI_DATA: KpiItem[] = [
-  {
-    id: "revenue",
-    title: "Total Revenue",
-    value: 485200,
-    prefix: "₹",
-    description: "vs last month",
-    trend: "+14.2%",
-    isUp: true,
-    icon: IndianRupee,
-  },
-  {
-    id: "students",
-    title: "Total Students",
-    value: 1280,
-    prefix: "",
-    description: "New this week",
-    trend: "+42%",
-    isUp: true,
-    icon: Users,
-  },
-  {
-    id: "subscriptions",
-    title: "Active Subscriptions",
-    value: 340,
-    prefix: "",
-    description: "Currently Active",
-    trend: "+8.5%",
-    isUp: true,
-    icon: ShieldCheck,
-  },
-  {
-    id: "courses",
-    title: "Monthly Plan Subscribers",
-    value: 18,
-    prefix: "",
-    description: "Active in catalog",
-    trend: "+3%",
-    isUp: true,
-    icon: BookOpen,
-  },
-  {
-    id: "courses",
-    title: "Yearly Plan Subscribers",
-    value: 154,
-    prefix: "",
-    description: "vs last month",
-    trend: "+12.4%",
-    isUp: true,
-    icon: ShoppingBag,
-  },
-];
+export type RecentOrder = {
+  id: string;
+  student: string;
+  email: string;
+  plan: string;
+  amount: string;
+  status: string;
+  date: string;
+};
 
-export const RECENT_ORDERS = [
-  {
-    id: "ORD-9842",
-    student: "Aarav Sharma",
-    email: "aarav@gmail.com",
-    plan: "Pro Trader Annual",
-    amount: "₹24,999",
-    status: "Paid",
-    date: "31 Jul 2026",
-  },
-  {
-    id: "ORD-9841",
-    student: "Rohan Verma",
-    email: "rohan.v@yahoo.com",
-    plan: "Price Action Masterclass",
-    amount: "₹14,499",
-    status: "Paid",
-    date: "31 Jul 2026",
-  },
-  {
-    id: "ORD-9840",
-    student: "Priya Patel",
-    email: "priya.p@gmail.com",
-    plan: "Options Scalping Blueprint",
-    amount: "₹9,999",
-    status: "Pending",
-    date: "30 Jul 2026",
-  },
-  {
-    id: "ORD-9839",
-    student: "Vikram Malhotra",
-    email: "vikram@outlook.com",
-    plan: "Elite Mentorship Lifetime",
-    amount: "₹49,999",
-    status: "Paid",
-    date: "30 Jul 2026",
-  },
-  {
-    id: "ORD-9838",
-    student: "Sneha Reddy",
-    email: "sneha.r@gmail.com",
-    plan: "Pro Trader Monthly",
-    amount: "₹2,999",
-    status: "Failed",
-    date: "29 Jul 2026",
-  },
-  {
-    id: "ORD-9837",
-    student: "Karan Mehta",
-    email: "karan.m@gmail.com",
-    plan: "Equity Derivatives Series",
-    amount: "₹7,999",
-    status: "Refunded",
-    date: "28 Jul 2026",
-  },
-];
+export type LatestUser = {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  plan: string;
+  joined: string;
+};
 
-export const RECENT_ENROLLMENTS = [
-  {
-    id: "enr-1",
-    student: "Ananya Iyer",
-    avatar: "A",
-    course: "Institutional Order Flow Masterclass",
-    plan: "Annual Pass",
-    time: "12 mins ago",
-  },
-  {
-    id: "enr-2",
-    student: "Devansh Nambiar",
-    avatar: "D",
-    course: "NISM Equity Derivatives Prep",
-    plan: "One-Time",
-    time: "45 mins ago",
-  },
-  {
-    id: "enr-3",
-    student: "Simran Kaur",
-    avatar: "S",
-    course: "Advanced Liquidity & Smart Money",
-    plan: "Monthly Pass",
-    time: "2 hours ago",
-  },
-  {
-    id: "enr-4",
-    student: "Aditya Nair",
-    avatar: "A",
-    course: "Options Delta & Gamma Strategies",
-    plan: "Annual Pass",
-    time: "4 hours ago",
-  },
-  {
-    id: "enr-5",
-    student: "Tanvi Deshmukh",
-    avatar: "T",
-    course: "Algorithmic Risk Management",
-    plan: "Lifetime Pass",
-    time: "6 hours ago",
-  },
-];
+export type RecentEnrollment = {
+  id: string;
+  student: string;
+  avatar: string;
+  course: string;
+  plan: string;
+  time: string;
+};
 
-export const LATEST_USERS = [
-  {
-    id: "usr-1",
-    name: "Rajesh Kulkarni",
-    email: "rajesh.k@gmail.com",
-    avatar: "R",
-    plan: "Pro Annual",
-    joined: "31 Jul 2026",
-  },
-  {
-    id: "usr-2",
-    name: "Meera Sen",
-    email: "meera.sen@gmail.com",
-    avatar: "M",
-    plan: "Basic Monthly",
-    joined: "30 Jul 2026",
-  },
-  {
-    id: "usr-3",
-    name: "Arjun Banerjee",
-    email: "arjun.b@yahoo.com",
-    avatar: "A",
-    plan: "Pro Annual",
-    joined: "30 Jul 2026",
-  },
-  {
-    id: "usr-4",
-    name: "Kavya Singhania",
-    email: "kavya.s@hotmail.com",
-    avatar: "K",
-    plan: "Elite Lifetime",
-    joined: "29 Jul 2026",
-  },
-];
+export type ActivityItem = {
+  id: string;
+  title: string;
+  detail: string;
+  time: string;
+  iconCategory?: string;
+};
 
-export const RECENT_ACTIVITIES = [
-  {
-    id: "act-1",
-    title: "New Course Published",
-    detail: "'Advanced Liquidity & Smart Money Concepts' went live.",
-    time: "25 mins ago",
-    icon: BookOpen,
-    color: "text-[#C9A227]",
-  },
-  {
-    id: "act-2",
-    title: "Pro Plan Purchased",
-    detail: "Aarav Sharma subscribed to Annual Pro Pass (₹24,999).",
-    time: "1 hour ago",
-    icon: ShoppingBag,
-    color: "text-emerald-400",
-  },
-  {
-    id: "act-3",
-    title: "Certificate Issued",
-    detail: "CMT Level II certification verified for Rohan Verma.",
-    time: "3 hours ago",
-    icon: Award,
-    color: "text-amber-400",
-  },
-  {
-    id: "act-4",
-    title: "Mentor Onboarded",
-    detail: "Dr. Vikram Seth assigned as Lead Derivatives Mentor.",
-    time: "5 hours ago",
-    icon: UserRound,
-    color: "text-sky-400",
-  },
-  {
-    id: "act-5",
-    title: "New User Registered",
-    detail: "Ananya Iyer completed account onboarding.",
-    time: "7 hours ago",
-    icon: UserPlus,
-    color: "text-[#C9A227]",
-  },
-];
+export type TopPlan = {
+  id: string;
+  name: string;
+  billing: string;
+  revenue: string;
+  growth: string;
+};
 
-export const TOP_PLANS = [
-  {
-    id: "plan-1",
-    name: "Pro Trader Annual Pass",
-    billing: "Yearly (₹24,999/yr)",
-    revenue: "₹2,49,990",
-    growth: "+18.4%",
-  },
-  {
-    id: "plan-2",
-    name: "Elite Mentorship Lifetime",
-    billing: "One-Time (₹49,999)",
-    revenue: "₹1,49,997",
-    growth: "+12.1%",
-  },
-  {
-    id: "plan-3",
-    name: "Pro Trader Monthly Pass",
-    billing: "Monthly (₹2,999/mo)",
-    revenue: "₹85,221",
-    growth: "+6.8%",
-  },
-];
+export type TopCourse = {
+  id: string;
+  title: string;
+  students: string;
+  revenue: string;
+  completion: string;
+};
 
-export const TOP_COURSES = [
-  {
-    id: "crs-1",
-    title: "Institutional Order Flow Masterclass",
-    students: "420 Students",
-    revenue: "₹1,85,000",
-    completion: "92%",
-  },
-  {
-    id: "crs-2",
-    title: "NISM Series VIII Derivatives Blueprint",
-    students: "380 Students",
-    revenue: "₹1,42,000",
-    completion: "88%",
-  },
-  {
-    id: "crs-3",
-    title: "Advanced Price Action & Scalping",
-    students: "290 Students",
-    revenue: "₹1,15,000",
-    completion: "84%",
-  },
-];
-
-export const FOOTER_STATS = [
-  { label: "Testimonials", value: "48 Approved", icon: MessageSquareQuote },
-  { label: "Certificates", value: "214 Issued", icon: Award },
-  { label: "Mentors", value: "12 Active", icon: UserRound },
-  { label: "Categories", value: "8 Active", icon: FolderTree },
-  { label: "Pending Reviews", value: "3 Required", icon: AlertCircle },
-];
+export type DashboardData = {
+  range: string;
+  kpis: {
+    revenue: {
+      title: string;
+      value: number;
+      prefix: string;
+      description: string;
+      trend: string;
+      isUp: boolean;
+    };
+    students: {
+      title: string;
+      value: number;
+      prefix: string;
+      description: string;
+      trend: string;
+      isUp: boolean;
+    };
+    subscriptions: {
+      title: string;
+      value: number;
+      prefix: string;
+      description: string;
+      trend: string;
+      isUp: boolean;
+    };
+    monthlySubscribers: {
+      title: string;
+      value: number;
+      prefix: string;
+      description: string;
+      trend: string;
+      isUp: boolean;
+    };
+    yearlySubscribers: {
+      title: string;
+      value: number;
+      prefix: string;
+      description: string;
+      trend: string;
+      isUp: boolean;
+    };
+  };
+  revenueChart: {
+    buckets: { label: string; amount: number }[];
+    peakDayLabel: string;
+  };
+  subscriptionsDistribution: {
+    total: number;
+    monthly: { count: number; percent: number };
+    yearly: { count: number; percent: number };
+    inactive: { count: number; percent: number };
+  };
+  recentOrders: RecentOrder[];
+  latestUsers: LatestUser[];
+  recentEnrollments: RecentEnrollment[];
+  recentActivities: ActivityItem[];
+  topPlans: TopPlan[];
+  topCourses: TopCourse[];
+  footerStats: {
+    testimonials: string;
+    certificates: string;
+    mentors: string;
+    categories: string;
+    pendingReviews: string;
+  };
+};
 
 // 1. DASHBOARD HEADER COMPONENT
 
-export function DashboardHeader() {
+export function DashboardHeader({ admin }: { admin: AdminUser | null }) {
   const [currentDate, setCurrentDate] = useState("");
   const [currentTime, setCurrentTime] = useState("");
+  const [greeting, setGreeting] = useState("Good Morning");
 
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
+      const hour = now.getHours();
+      if (hour < 12) setGreeting("Good Morning");
+      else if (hour < 17) setGreeting("Good Afternoon");
+      else setGreeting("Good Evening");
+
       setCurrentDate(
         now.toLocaleDateString("en-US", {
           weekday: "long",
@@ -373,8 +211,7 @@ export function DashboardHeader() {
           ADMIN DASHBOARD
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-sans">
-          Good Morning, Admin{" "}
-          {/* <span className="inline-block animate-bounce">👋</span> */}
+          {greeting}, {admin?.name || "Super Admin"}
         </h1>
         <p className="text-sm text-zinc-400 mt-1 font-normal">
           Here&apos;s what&apos;s happening in your academy today.
@@ -398,7 +235,7 @@ export function DashboardHeader() {
         <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <a
             href="/admin/courses"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black  transition-all duration-200 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black transition-all duration-200 cursor-pointer hover:brightness-110"
           >
             <Plus size={14} className="stroke-3" />
             <span>Add Course</span>
@@ -427,13 +264,73 @@ export function DashboardHeader() {
 
 // 2. KPI SECTION COMPONENT WITH GSAP COUNT-UP ANIMATION
 
-export function KPISection() {
+export function KPISection({
+  kpis,
+  loading,
+}: {
+  kpis?: DashboardData["kpis"] | null;
+  loading?: boolean;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
+  const kpiItems: KpiItem[] = [
+    {
+      id: "revenue",
+      title: kpis?.revenue?.title || "Total Revenue",
+      value: kpis?.revenue?.value ?? 0,
+      prefix: "₹",
+      description: kpis?.revenue?.description || "vs previous period",
+      trend: kpis?.revenue?.trend || "0%",
+      isUp: kpis?.revenue?.isUp ?? true,
+      icon: IndianRupee,
+    },
+    {
+      id: "students",
+      title: kpis?.students?.title || "Total Students",
+      value: kpis?.students?.value ?? 0,
+      prefix: "",
+      description: kpis?.students?.description || "Total Enrolled",
+      trend: kpis?.students?.trend || "0%",
+      isUp: kpis?.students?.isUp ?? true,
+      icon: Users,
+    },
+    {
+      id: "subscriptions",
+      title: kpis?.subscriptions?.title || "Active Subscriptions",
+      value: kpis?.subscriptions?.value ?? 0,
+      prefix: "",
+      description: kpis?.subscriptions?.description || "Currently Active",
+      trend: kpis?.subscriptions?.trend || "0%",
+      isUp: kpis?.subscriptions?.isUp ?? true,
+      icon: ShieldCheck,
+    },
+    {
+      id: "monthly",
+      title: kpis?.monthlySubscribers?.title || "Monthly Plan Subscribers",
+      value: kpis?.monthlySubscribers?.value ?? 0,
+      prefix: "",
+      description: kpis?.monthlySubscribers?.description || "Active Monthly",
+      trend: kpis?.monthlySubscribers?.trend || "0%",
+      isUp: kpis?.monthlySubscribers?.isUp ?? true,
+      icon: BookOpen,
+    },
+    {
+      id: "yearly",
+      title: kpis?.yearlySubscribers?.title || "Yearly Plan Subscribers",
+      value: kpis?.yearlySubscribers?.value ?? 0,
+      prefix: "",
+      description: kpis?.yearlySubscribers?.description || "Active Yearly",
+      trend: kpis?.yearlySubscribers?.trend || "0%",
+      isUp: kpis?.yearlySubscribers?.isUp ?? true,
+      icon: ShoppingBag,
+    },
+  ];
+
   useEffect(() => {
+    if (loading || !kpis) return;
+
     const ctx = gsap.context(() => {
-      // Fade in & stagger KPI Cards
       if (containerRef.current) {
         gsap.fromTo(
           containerRef.current.children,
@@ -448,8 +345,7 @@ export function KPISection() {
         );
       }
 
-      // Count-up animations for each KPI value
-      KPI_DATA.forEach((kpi, idx) => {
+      kpiItems.forEach((kpi, idx) => {
         const numEl = numberRefs.current[idx];
         if (!numEl) return;
 
@@ -462,9 +358,7 @@ export function KPISection() {
           ease: "power2.out",
           onUpdate: () => {
             if (numEl) {
-              if (kpi.suffix === "%") {
-                numEl.innerText = obj.val.toFixed(1);
-              } else if (kpi.prefix === "₹") {
+              if (kpi.prefix === "₹") {
                 numEl.innerText = Math.round(obj.val).toLocaleString("en-IN");
               } else {
                 numEl.innerText = Math.round(obj.val).toLocaleString("en-US");
@@ -476,14 +370,34 @@ export function KPISection() {
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [kpis, loading]);
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={i}
+            className="rounded-2xl bg-[#111113]/80 border border-white/10 p-4 h-36 animate-pulse flex flex-col justify-between"
+          >
+            <div className="w-9 h-9 rounded-xl bg-white/10" />
+            <div className="space-y-2">
+              <div className="h-3 bg-white/10 rounded w-1/2" />
+              <div className="h-6 bg-white/10 rounded w-3/4" />
+            </div>
+            <div className="h-2 bg-white/5 rounded w-1/3" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div
       ref={containerRef}
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4"
     >
-      {KPI_DATA.map((kpi, idx) => {
+      {kpiItems.map((kpi, idx) => {
         const IconComponent = kpi.icon;
         return (
           <div
@@ -503,7 +417,11 @@ export function KPISection() {
                     : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                 }`}
               >
-                {kpi.isUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                {kpi.isUp ? (
+                  <TrendingUp size={12} />
+                ) : (
+                  <TrendingDown size={12} />
+                )}
                 <span>{kpi.trend}</span>
               </div>
             </div>
@@ -514,13 +432,15 @@ export function KPISection() {
                 {kpi.title}
               </span>
               <div className="text-2xl font-extrabold text-white font-sans tracking-tight flex items-baseline gap-0.5">
-                {kpi.prefix && <span className="text-[#C9A227]">{kpi.prefix}</span>}
+                {kpi.prefix && (
+                  <span className="text-[#C9A227]">{kpi.prefix}</span>
+                )}
                 <span
                   ref={(el) => {
                     numberRefs.current[idx] = el;
                   }}
                 >
-                  0
+                  {kpi.value.toLocaleString()}
                 </span>
                 {kpi.suffix && (
                   <span className="text-[#C9A227] text-lg">{kpi.suffix}</span>
@@ -541,12 +461,75 @@ export function KPISection() {
 
 // 3. ANALYTICS ROW: REVENUE CHART & SUBSCRIPTION DONUT
 
-export function AnalyticsRow() {
-  const [timeRange, setTimeRange] = useState("30D");
+export function AnalyticsRow({
+  revenueChart,
+  subscriptionsDistribution,
+  timeRange,
+  onTimeRangeChange,
+  loading,
+  analyticsLoading,
+}: {
+  revenueChart?: DashboardData["revenueChart"];
+  subscriptionsDistribution?: DashboardData["subscriptionsDistribution"];
+  timeRange: string;
+  onTimeRangeChange: (range: string) => void;
+  loading?: boolean;
+  analyticsLoading?: boolean;
+}) {
+  const buckets = revenueChart?.buckets || [];
+  const maxAmount = Math.max(...buckets.map((b) => b.amount), 1);
+
+  // SVG Line Chart Coordinate Generator (width: 700, height: 200)
+  const svgWidth = 700;
+  const svgHeight = 200;
+  const padding = 20;
+
+  const points = buckets.map((b, idx) => {
+    const x =
+      buckets.length > 1
+        ? (idx / (buckets.length - 1)) * (svgWidth - 2 * padding) + padding
+        : svgWidth / 2;
+    const y =
+      svgHeight - padding - (b.amount / maxAmount) * (svgHeight - 2 * padding);
+    return { x, y, amount: b.amount, label: b.label };
+  });
+
+  let lineD = "";
+  let areaD = "";
+
+  if (points.length > 0) {
+    if (points.length === 1) {
+      lineD = `M 0,${points[0].y} L 700,${points[0].y}`;
+      areaD = `M 0,${points[0].y} L 700,${points[0].y} L 700,200 L 0,200 Z`;
+    } else {
+      lineD = `M ${points[0].x},${points[0].y}`;
+      for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i];
+        const p1 = points[i + 1];
+        const cx = (p0.x + p1.x) / 2;
+        lineD += ` C ${cx},${p0.y} ${cx},${p1.y} ${p1.x},${p1.y}`;
+      }
+
+      const firstX = points[0].x;
+      const lastX = points[points.length - 1].x;
+      areaD = `${lineD} L ${lastX},200 L ${firstX},200 Z`;
+    }
+  }
+
+  // Donut chart calculations
+  const totalSub = subscriptionsDistribution?.total || 0;
+  const mPct = subscriptionsDistribution?.monthly?.percent || 0;
+  const yPct = subscriptionsDistribution?.yearly?.percent || 0;
+  const iPct = subscriptionsDistribution?.inactive?.percent || 0;
+
+  const circumference = 238.76;
+  const monthlyDash = (mPct / 100) * circumference;
+  const yearlyDash = (yPct / 100) * circumference;
+  const inactiveDash = (iPct / 100) * circumference;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* LEFT: Revenue Analytics Line Chart Placeholder (8 Cols) */}
+      {/* LEFT: Revenue Analytics Line Chart (8 Cols) */}
       <div className="lg:col-span-8 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         {/* Header & Range Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -567,7 +550,7 @@ export function AnalyticsRow() {
             {["7D", "30D", "3M", "1Y"].map((range) => (
               <button
                 key={range}
-                onClick={() => setTimeRange(range)}
+                onClick={() => onTimeRangeChange(range)}
                 className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold transition-all duration-200 cursor-pointer ${
                   timeRange === range
                     ? "bg-[#C9A227] text-black shadow-[0_0_10px_rgba(201,162,39,0.5)]"
@@ -580,108 +563,120 @@ export function AnalyticsRow() {
           </div>
         </div>
 
-        {/* SVG Line Chart Placeholder */}
+        {/* Dynamic SVG Line Chart */}
         <div className="relative w-full h-60 flex items-end">
-          <svg
-            className="w-full h-full overflow-visible"
-            viewBox="0 0 700 220"
-            fill="none"
-          >
-            <defs>
-              <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#C9A227" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#C9A227" stopOpacity="0.0" />
-              </linearGradient>
-            </defs>
+          {loading && !analyticsLoading ? (
+            <div className="w-full h-full animate-pulse bg-white/5 rounded-xl flex items-center justify-center text-xs font-mono text-zinc-500">
+              Loading revenue chart...
+            </div>
+          ) : (
+            <div className="relative w-full h-full">
+              {analyticsLoading && (
+                <div className="absolute top-2 left-2 z-10 bg-[#18181c]/90 border border-[#C9A227]/40 rounded-xl px-2.5 py-1 text-[11px] font-mono text-[#C9A227] shadow-lg animate-pulse flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227] animate-ping" />
+                  <span>Updating analytics...</span>
+                </div>
+              )}
+              <svg
+                className={`w-full h-full overflow-visible transition-opacity duration-200 ${
+                  analyticsLoading ? "opacity-50" : "opacity-100"
+                }`}
+                viewBox="0 0 700 220"
+                fill="none"
+              >
+                <defs>
+                  <linearGradient
+                    id="revenueGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="0%" stopColor="#C9A227" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#C9A227" stopOpacity="0.0" />
+                  </linearGradient>
+                </defs>
 
-            {/* Subtle Horizontal Grid lines */}
-            <line
-              x1="0"
-              y1="40"
-              x2="700"
-              y2="40"
-              stroke="rgba(255,255,255,0.06)"
-              strokeDasharray="4 4"
-            />
-            <line
-              x1="0"
-              y1="90"
-              x2="700"
-              y2="90"
-              stroke="rgba(255,255,255,0.06)"
-              strokeDasharray="4 4"
-            />
-            <line
-              x1="0"
-              y1="140"
-              x2="700"
-              y2="140"
-              stroke="rgba(255,255,255,0.06)"
-              strokeDasharray="4 4"
-            />
-            <line
-              x1="0"
-              y1="190"
-              x2="700"
-              y2="190"
-              stroke="rgba(255,255,255,0.06)"
-              strokeDasharray="4 4"
-            />
+                {/* Horizontal Grid lines */}
+                <line
+                  x1="0"
+                  y1="40"
+                  x2="700"
+                  y2="40"
+                  stroke="rgba(255,255,255,0.06)"
+                  strokeDasharray="4 4"
+                />
+                <line
+                  x1="0"
+                  y1="90"
+                  x2="700"
+                  y2="90"
+                  stroke="rgba(255,255,255,0.06)"
+                  strokeDasharray="4 4"
+                />
+                <line
+                  x1="0"
+                  y1="140"
+                  x2="700"
+                  y2="140"
+                  stroke="rgba(255,255,255,0.06)"
+                  strokeDasharray="4 4"
+                />
+                <line
+                  x1="0"
+                  y1="190"
+                  x2="700"
+                  y2="190"
+                  stroke="rgba(255,255,255,0.06)"
+                  strokeDasharray="4 4"
+                />
 
-            {/* Gradient Fill Area */}
-            <path
-              d="M0,180 C80,160 140,120 220,130 C300,140 380,60 460,80 C540,100 620,30 700,40 L700,200 L0,200 Z"
-              fill="url(#revenueGradient)"
-            />
+                {/* Gradient Fill Area */}
+                {areaD && <path d={areaD} fill="url(#revenueGradient)" />}
 
-            {/* Main Smooth Curve Line */}
-            <path
-              d="M0,180 C80,160 140,120 220,130 C300,140 380,60 460,80 C540,100 620,30 700,40"
-              stroke="#C9A227"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
+                {/* Main Smooth Curve Line */}
+                {lineD && (
+                  <path
+                    d={lineD}
+                    stroke="#C9A227"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                )}
 
-            {/* Highlight Data Points */}
-            <circle
-              cx="220"
-              cy="130"
-              r="4"
-              fill="#C9A227"
-              stroke="#050505"
-              strokeWidth="2"
-            />
-            <circle
-              cx="460"
-              cy="80"
-              r="4"
-              fill="#C9A227"
-              stroke="#050505"
-              strokeWidth="2"
-            />
-            <circle
-              cx="700"
-              cy="40"
-              r="5"
-              fill="#e6c55a"
-              stroke="#050505"
-              strokeWidth="2"
-            />
-          </svg>
+                {/* Highlight Data Points */}
+                {points.map((pt, i) => (
+                  <circle
+                    key={i}
+                    cx={pt.x}
+                    cy={pt.y}
+                    r="4"
+                    fill="#C9A227"
+                    stroke="#050505"
+                    strokeWidth="2"
+                  />
+                ))}
+              </svg>
+            </div>
+          )}
 
           {/* Peak Tooltip Overlay */}
           <div className="absolute top-2 right-4 bg-[#18181c] border border-[#C9A227]/40 rounded-xl px-3 py-1.5 text-xs font-mono text-white shadow-xl flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#C9A227] animate-ping" />
-            <span>Peak Day: ₹48,500</span>
+            <span>{revenueChart?.peakDayLabel || "Peak: ₹0"}</span>
           </div>
         </div>
 
         {/* X-Axis Month Labels */}
         <div className="flex justify-between items-center text-xs font-mono text-zinc-500 pt-3 border-t border-white/5">
-          <span>Week 1</span>
-          <span>Week 2</span>
-          <span>Week 3</span>
-          <span>Week 4</span>
+          {buckets.length > 0 ? (
+            buckets.slice(0, 8).map((b, i) => <span key={i}>{b.label}</span>)
+          ) : (
+            <>
+              <span>Start</span>
+              <span>End</span>
+            </>
+          )}
         </div>
       </div>
 
@@ -696,9 +691,12 @@ export function AnalyticsRow() {
           </p>
         </div>
 
-        {/* SVG Donut Chart Placeholder */}
+        {/* SVG Donut Chart */}
         <div className="relative w-full h-45 my-4 flex items-center justify-center">
-          <svg className="w-42.5 h-42.5 transform -rotate-90" viewBox="0 0 100 100">
+          <svg
+            className="w-42.5 h-42.5 transform -rotate-90"
+            viewBox="0 0 100 100"
+          >
             {/* Background Track */}
             <circle
               cx="50"
@@ -708,43 +706,45 @@ export function AnalyticsRow() {
               strokeWidth="12"
               fill="none"
             />
-            {/* Monthly (62%) - Gold */}
+            {/* Monthly Pass - Gold */}
             <circle
               cx="50"
               cy="50"
               r="38"
               stroke="#C9A227"
               strokeWidth="12"
-              strokeDasharray="148 238"
+              strokeDasharray={`${monthlyDash} ${circumference}`}
               fill="none"
             />
-            {/* Yearly (28%) - Amber */}
+            {/* Yearly Annual - Amber */}
             <circle
               cx="50"
               cy="50"
               r="38"
               stroke="#e6c55a"
               strokeWidth="12"
-              strokeDasharray="67 238"
-              strokeDashoffset="-148"
+              strokeDasharray={`${yearlyDash} ${circumference}`}
+              strokeDashoffset={-monthlyDash}
               fill="none"
             />
-            {/* Expired (10%) - Zinc */}
+            {/* Expired / Inactive - Zinc */}
             <circle
               cx="50"
               cy="50"
               r="38"
               stroke="#52525b"
               strokeWidth="12"
-              strokeDasharray="23 238"
-              strokeDashoffset="-215"
+              strokeDasharray={`${inactiveDash} ${circumference}`}
+              strokeDashoffset={-(monthlyDash + yearlyDash)}
               fill="none"
             />
           </svg>
 
           {/* Center Total Count */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-2xl font-extrabold text-white font-sans">340</span>
+            <span className="text-2xl font-extrabold text-white font-sans">
+              {totalSub}
+            </span>
             <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">
               Total Plans
             </span>
@@ -758,7 +758,9 @@ export function AnalyticsRow() {
               <span className="w-3 h-3 rounded-full bg-[#C9A227]" />
               <span className="text-zinc-300 font-medium">Monthly Pass</span>
             </div>
-            <span className="font-mono text-white font-bold">210 (62%)</span>
+            <span className="font-mono text-white font-bold">
+              {subscriptionsDistribution?.monthly?.count ?? 0} ({mPct}%)
+            </span>
           </div>
 
           <div className="flex items-center justify-between text-xs">
@@ -766,15 +768,21 @@ export function AnalyticsRow() {
               <span className="w-3 h-3 rounded-full bg-[#e6c55a]" />
               <span className="text-zinc-300 font-medium">Yearly Annual</span>
             </div>
-            <span className="font-mono text-white font-bold">95 (28%)</span>
+            <span className="font-mono text-white font-bold">
+              {subscriptionsDistribution?.yearly?.count ?? 0} ({yPct}%)
+            </span>
           </div>
 
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-zinc-600" />
-              <span className="text-zinc-300 font-medium">Expired / Inactive</span>
+              <span className="text-zinc-300 font-medium">
+                Expired / Inactive
+              </span>
             </div>
-            <span className="font-mono text-zinc-400">35 (10%)</span>
+            <span className="font-mono text-zinc-400">
+              {subscriptionsDistribution?.inactive?.count ?? 0} ({iPct}%)
+            </span>
           </div>
         </div>
       </div>
@@ -782,12 +790,20 @@ export function AnalyticsRow() {
   );
 }
 
-// 4. SECOND ROW: USER GROWTH & TOP PERFORMING COURSES
+// 4. SECOND ROW: RECENT ORDERS & LATEST REGISTERED USERS
 
-export function SecondRowCharts() {
+export function SecondRowCharts({
+  recentOrders = [],
+  latestUsers = [],
+  loading,
+}: {
+  recentOrders?: RecentOrder[];
+  latestUsers?: LatestUser[];
+  loading?: boolean;
+}) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* LEFT: User Growth Line Chart (6 Cols) */}
+      {/* LEFT: Recent Orders Table (6 Cols) */}
       <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -809,116 +825,82 @@ export function SecondRowCharts() {
 
         {/* Orders Table Container */}
         <div className="w-full overflow-x-auto">
-          <table className="w-full text-left text-xs font-sans">
-            <thead className="bg-black/40 text-zinc-400 font-mono uppercase text-[10px] tracking-wider border-b border-white/10">
-              <tr>
-                <th className="py-3 px-3">Order ID</th>
-                <th className="py-3 px-3">Student</th>
-                <th className="py-3 px-3">Plan</th>
-                <th className="py-3 px-3">Amount</th>
-                <th className="py-3 px-3">Status</th>
-                <th className="py-3 px-3 text-right">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/5">
-              {RECENT_ORDERS.map((order) => {
-                let statusStyle = "bg-zinc-800 text-zinc-300 border-zinc-700";
-                if (order.status === "Paid")
-                  statusStyle =
-                    "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
-                else if (order.status === "Pending")
-                  statusStyle = "bg-amber-500/10 text-amber-400 border-amber-500/30";
-                else if (order.status === "Failed")
-                  statusStyle = "bg-rose-500/10 text-rose-400 border-rose-500/30";
-                else if (order.status === "Refunded")
-                  statusStyle = "bg-purple-500/10 text-purple-400 border-purple-500/30";
-
-                return (
-                  <tr
-                    key={order.id}
-                    className="hover:bg-white/4 transition-colors duration-150 cursor-pointer"
-                  >
-                    <td className="py-3 px-3 font-mono font-bold text-white">
-                      {order.id}
-                    </td>
-                    <td className="py-3 px-3">
-                      <div className="font-semibold text-white">{order.student}</div>
-                      <div className="text-[10px] text-zinc-400 font-mono">
-                        {order.email}
-                      </div>
-                    </td>
-                    <td className="py-3 px-3 text-zinc-300">{order.plan}</td>
-                    <td className="py-3 px-3 font-mono font-bold text-[#C9A227]">
-                      {order.amount}
-                    </td>
-                    <td className="py-3 px-3">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono border ${statusStyle}`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-3 text-right font-mono text-zinc-400 text-[11px]">
-                      {order.date}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      {/* RIGHT: Top Performing Courses Bar Metrics (6 Cols) */}
-      <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-        <div className="mb-4">
-          <h3 className="text-lg font-bold text-white font-sans">
-            Top Performing Courses
-          </h3>
-          <p className="text-xs text-zinc-400 mt-0.5">
-            Ranked by revenue generation & completion rate.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-4">
-          {TOP_COURSES.map((course) => (
-            <div
-              key={course.id}
-              className="flex flex-col gap-1.5 p-3 rounded-xl bg-white/3 border border-white/5"
-            >
-              <div className="flex items-center justify-between text-xs sm:text-sm">
-                <span className="font-semibold text-white truncate max-w-65">
-                  {course.title}
-                </span>
-                <span className="font-mono text-[#C9A227] font-bold">
-                  {course.revenue}
-                </span>
-              </div>
-
-              <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-linear-to-r from-[#e6c55a] to-[#C9A227] h-full rounded-full"
-                  style={{ width: course.completion }}
-                />
-              </div>
-
-              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
-                <span>{course.students}</span>
-                <span>Completion: {course.completion}</span>
-              </div>
+          {loading ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500 animate-pulse">
+              Loading recent orders...
             </div>
-          ))}
+          ) : recentOrders.length === 0 ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500">
+              No recent orders recorded yet.
+            </div>
+          ) : (
+            <table className="w-full text-left text-xs font-sans">
+              <thead className="bg-black/40 text-zinc-400 font-mono uppercase text-[10px] tracking-wider border-b border-white/10">
+                <tr>
+                  <th className="py-3 px-3">Order ID</th>
+                  <th className="py-3 px-3">Student</th>
+                  <th className="py-3 px-3">Plan</th>
+                  <th className="py-3 px-3">Amount</th>
+                  <th className="py-3 px-3">Status</th>
+                  <th className="py-3 px-3 text-right">Date</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {recentOrders.map((order) => {
+                  let statusStyle = "bg-zinc-800 text-zinc-300 border-zinc-700";
+                  if (order.status === "Paid")
+                    statusStyle =
+                      "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
+                  else if (order.status === "Pending")
+                    statusStyle =
+                      "bg-amber-500/10 text-amber-400 border-amber-500/30";
+                  else if (order.status === "Failed")
+                    statusStyle =
+                      "bg-rose-500/10 text-rose-400 border-rose-500/30";
+                  else if (order.status === "Refunded")
+                    statusStyle =
+                      "bg-purple-500/10 text-purple-400 border-purple-500/30";
+
+                  return (
+                    <tr
+                      key={order.id}
+                      className="hover:bg-white/4 transition-colors duration-150 cursor-pointer"
+                    >
+                      <td className="py-3 px-3 font-mono font-bold text-white">
+                        {order.id}
+                      </td>
+                      <td className="py-3 px-3">
+                        <div className="font-semibold text-white">
+                          {order.student}
+                        </div>
+                        <div className="text-[10px] text-zinc-400 font-mono">
+                          {order.email}
+                        </div>
+                      </td>
+                      <td className="py-3 px-3 text-zinc-300">{order.plan}</td>
+                      <td className="py-3 px-3 font-mono font-bold text-[#C9A227]">
+                        {order.amount}
+                      </td>
+                      <td className="py-3 px-3">
+                        <span
+                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono border ${statusStyle}`}
+                        >
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3 text-right font-mono text-zinc-400 text-[11px]">
+                        {order.date}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
-    </div>
-  );
-}
 
-// 5. THIRD ROW: RECENT ORDERS TABLE & RECENT ENROLLMENTS
-
-export function ThirdRow() {
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* LEFT: Recent Orders Table (7 Cols) */}
+      {/* RIGHT: Latest Registered Users (6 Cols) */}
       <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -939,32 +921,67 @@ export function ThirdRow() {
         </div>
 
         <div className="flex flex-col gap-3">
-          {LATEST_USERS.map((usr) => (
-            <div
-              key={usr.id}
-              className="flex items-center justify-between p-3 rounded-xl bg-white/3 border border-white/5 hover:bg-white/6 transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white font-bold text-xs shrink-0">
-                  {usr.avatar}
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white">{usr.name}</div>
-                  <div className="text-[11px] text-zinc-400 font-mono">{usr.email}</div>
-                </div>
-              </div>
-
-              <div className="text-right">
-                <div className="text-xs font-semibold text-[#C9A227] font-mono">
-                  {usr.plan}
-                </div>
-                <div className="text-[10px] font-mono text-zinc-500">{usr.joined}</div>
-              </div>
+          {loading ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500 animate-pulse">
+              Loading registered users...
             </div>
-          ))}
+          ) : latestUsers.length === 0 ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500">
+              No registered students found.
+            </div>
+          ) : (
+            latestUsers.map((usr) => (
+              <div
+                key={usr.id}
+                className="flex items-center justify-between p-3 rounded-xl bg-white/3 border border-white/5 hover:bg-white/6 transition-colors"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white font-bold text-xs shrink-0">
+                    {usr.avatar}
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white">
+                      {usr.name}
+                    </div>
+                    <div className="text-[11px] text-zinc-400 font-mono">
+                      {usr.email}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-xs font-semibold text-[#C9A227] font-mono">
+                    {usr.plan}
+                  </div>
+                  <div className="text-[10px] font-mono text-zinc-500">
+                    {usr.joined}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
-      {/* RIGHT: Recent Enrollments Vertical Cards (5 Cols) */}
+    </div>
+  );
+}
+
+// 5. THIRD ROW: RECENT ENROLLMENTS & RECENT SYSTEM ACTIVITY TIMELINE
+
+export function ThirdRow({
+  recentEnrollments = [],
+  topPlans = [],
+  recentActivities = [],
+  loading,
+}: {
+  recentEnrollments?: RecentEnrollment[];
+  topPlans?: TopPlan[];
+  recentActivities?: ActivityItem[];
+  loading?: boolean;
+}) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* LEFT: Recent Enrollments (6 Cols) */}
       <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -985,49 +1002,114 @@ export function ThirdRow() {
         </div>
 
         <div className="flex flex-col gap-3">
-          {RECENT_ENROLLMENTS.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between p-3 rounded-xl bg-white/3 border border-white/5 hover:border-[#C9A227]/30 transition-all duration-200"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/40 flex items-center justify-center text-[#C9A227] font-bold text-xs shrink-0">
-                  {item.avatar}
+          {loading ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500 animate-pulse">
+              Loading recent enrollments...
+            </div>
+          ) : recentEnrollments.length === 0 ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500">
+              No recent enrollments recorded.
+            </div>
+          ) : (
+            recentEnrollments.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between p-3 rounded-xl bg-white/3 border border-white/5 hover:border-[#C9A227]/30 transition-all duration-200"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/40 flex items-center justify-center text-[#C9A227] font-bold text-xs shrink-0">
+                    {item.avatar}
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white">
+                      {item.student}
+                    </div>
+                    <div className="text-[11px] text-zinc-400 truncate max-w-50">
+                      {item.course}
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-white">{item.student}</div>
-                  <div className="text-[11px] text-zinc-400 truncate max-w-50">
-                    {item.course}
+
+                <div className="text-right">
+                  <span className="inline-block px-2 py-0.5 rounded-md bg-[#C9A227]/10 text-[#C9A227] text-[10px] font-mono border border-[#C9A227]/20 mb-1">
+                    {item.plan}
+                  </span>
+                  <div className="text-[10px] font-mono text-zinc-500">
+                    {item.time}
                   </div>
                 </div>
               </div>
+            ))
+          )}
+        </div>
+      </div>
 
-              <div className="text-right">
-                <span className="inline-block px-2 py-0.5 rounded-md bg-[#C9A227]/10 text-[#C9A227] text-[10px] font-mono border border-[#C9A227]/20 mb-1">
-                  {item.plan}
-                </span>
-                <div className="text-[10px] font-mono text-zinc-500">{item.time}</div>
-              </div>
+      {/* RIGHT: Recent Activity Timeline (6 Cols) */}
+      <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+        <div className="mb-4">
+          <h3 className="text-lg font-bold text-white font-sans">
+            Top Selling Pricing Plans
+          </h3>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Best performing subscription tiers.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          {loading ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500 animate-pulse">
+              Loading top plans...
             </div>
-          ))}
+          ) : topPlans.length === 0 ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500">
+              No plan purchase data available.
+            </div>
+          ) : (
+            topPlans.map((plan) => (
+              <div
+                key={plan.id}
+                className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
+              >
+                <div>
+                  <div className="text-xs font-bold text-white">
+                    {plan.name}
+                  </div>
+                  <div className="text-[11px] font-mono text-zinc-400">
+                    {plan.billing}
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-sm font-bold text-[#C9A227] font-mono">
+                    {plan.revenue}
+                  </div>
+                  <div className="text-[10px] font-mono text-emerald-400">
+                    {plan.growth}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-// 6. FOURTH ROW: LATEST USERS & RECENT ACTIVITY TIMELINE
-
-export function FourthRow() {
+// 6. FOURTH ROW (ALIAS FOR SYSTEM ACTIVITY IF NEEDED)
+export function FourthRow({
+  recentActivities = [],
+  loading,
+}: {
+  recentActivities?: ActivityItem[];
+  loading?: boolean;
+}) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* LEFT: Latest Users List (6 Cols) */}
-
-      {/* RIGHT: Recent Activity Timeline (6 Cols) */}
-      <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+    <div className="grid grid-cols-1 gap-6">
+      <div className="rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <div className="mb-4">
           <h3 className="text-lg font-bold text-white font-sans">
-            Recent System Activity
+            Recent System Activity Log
           </h3>
           <p className="text-xs text-zinc-400 mt-0.5">
             Real-time audit log of admin and user actions.
@@ -1035,25 +1117,30 @@ export function FourthRow() {
         </div>
 
         <div className="relative pl-6 flex flex-col gap-4 border-l border-white/10 ml-2">
-          {RECENT_ACTIVITIES.map((act) => {
-            const IconComp = act.icon;
-            return (
+          {loading ? (
+            <div className="py-4 text-center text-xs font-mono text-zinc-500 animate-pulse">
+              Loading system activity...
+            </div>
+          ) : (
+            recentActivities.map((act) => (
               <div key={act.id} className="relative flex flex-col gap-0.5">
-                {/* Timeline Connector Dot */}
                 <div className="absolute -left-7.75 top-0.5 w-6 h-6 rounded-full bg-[#111113] border border-white/20 flex items-center justify-center text-xs">
-                  <IconComp size={12} className={act.color} />
+                  <ShieldCheck size={12} className="text-[#C9A227]" />
                 </div>
-
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white font-sans">{act.title}</span>
-                  <span className="text-[10px] font-mono text-zinc-500">{act.time}</span>
+                  <span className="font-bold text-white font-sans">
+                    {act.title}
+                  </span>
+                  <span className="text-[10px] font-mono text-zinc-500">
+                    {act.time}
+                  </span>
                 </div>
                 <p className="text-xs text-zinc-400 font-normal leading-relaxed">
                   {act.detail}
                 </p>
               </div>
-            );
-          })}
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -1062,7 +1149,15 @@ export function FourthRow() {
 
 // 7. BOTTOM SECTION: TOP SELLING PLANS & TOP COURSES
 
-export function BottomSection() {
+export function BottomSection({
+  topPlans = [],
+  topCourses = [],
+  loading,
+}: {
+  topPlans?: TopPlan[];
+  topCourses?: TopCourse[];
+  loading?: boolean;
+}) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
       {/* Top Selling Plans (6 Cols) */}
@@ -1077,68 +1172,94 @@ export function BottomSection() {
         </div>
 
         <div className="flex flex-col gap-3">
-          {TOP_PLANS.map((plan) => (
-            <div
-              key={plan.id}
-              className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
-            >
-              <div>
-                <div className="text-xs font-bold text-white">{plan.name}</div>
-                <div className="text-[11px] font-mono text-zinc-400">{plan.billing}</div>
-              </div>
-
-              <div className="text-right">
-                <div className="text-sm font-bold text-[#C9A227] font-mono">
-                  {plan.revenue}
-                </div>
-                <div className="text-[10px] font-mono text-emerald-400">
-                  {plan.growth}
-                </div>
-              </div>
+          {loading ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500 animate-pulse">
+              Loading top plans...
             </div>
-          ))}
+          ) : topPlans.length === 0 ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500">
+              No plan purchase data available.
+            </div>
+          ) : (
+            topPlans.map((plan) => (
+              <div
+                key={plan.id}
+                className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
+              >
+                <div>
+                  <div className="text-xs font-bold text-white">
+                    {plan.name}
+                  </div>
+                  <div className="text-[11px] font-mono text-zinc-400">
+                    {plan.billing}
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-sm font-bold text-[#C9A227] font-mono">
+                    {plan.revenue}
+                  </div>
+                  <div className="text-[10px] font-mono text-emerald-400">
+                    {plan.growth}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
 
       {/* Top Courses Summary (6 Cols) */}
       <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <div className="mb-4">
-          <h3 className="text-lg font-bold text-white font-sans">Top Enrolled Courses</h3>
+          <h3 className="text-lg font-bold text-white font-sans">
+            Top Enrolled Courses
+          </h3>
           <p className="text-xs text-zinc-400 mt-0.5">
             Highest engagement trading modules.
           </p>
         </div>
 
         <div className="flex flex-col gap-3">
-          {TOP_COURSES.map((crs) => (
-            <div
-              key={crs.id}
-              className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-black/60 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] shrink-0 font-mono text-xs font-bold">
-                  CRS
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-white truncate max-w-55">
-                    {crs.title}
-                  </div>
-                  <div className="text-[11px] font-mono text-zinc-400">
-                    {crs.students}
-                  </div>
-                </div>
-              </div>
-
-              <div className="text-right">
-                <div className="text-xs font-bold text-[#C9A227] font-mono">
-                  {crs.revenue}
-                </div>
-                <div className="text-[10px] font-mono text-zinc-400">
-                  Comp: {crs.completion}
-                </div>
-              </div>
+          {loading ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500 animate-pulse">
+              Loading top courses...
             </div>
-          ))}
+          ) : topCourses.length === 0 ? (
+            <div className="py-8 text-center text-xs font-mono text-zinc-500">
+              No course enrollment data available.
+            </div>
+          ) : (
+            topCourses.map((crs) => (
+              <div
+                key={crs.id}
+                className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-black/60 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] shrink-0 font-mono text-xs font-bold">
+                    CRS
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-white truncate max-w-55">
+                      {crs.title}
+                    </div>
+                    <div className="text-[11px] font-mono text-zinc-400">
+                      {crs.students}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-xs font-bold text-[#C9A227] font-mono">
+                    {crs.revenue}
+                  </div>
+                  <div className="text-[10px] font-mono text-zinc-400">
+                    Comp: {crs.completion}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
@@ -1147,10 +1268,44 @@ export function BottomSection() {
 
 // 8. FOOTER STATS COMPONENT
 
-export function FooterStats() {
+export function FooterStats({
+  footerStats,
+  loading,
+}: {
+  footerStats?: DashboardData["footerStats"];
+  loading?: boolean;
+}) {
+  const statsList = [
+    {
+      label: "Testimonials",
+      value: footerStats?.testimonials || "0 Approved",
+      icon: MessageSquareQuote,
+    },
+    {
+      label: "Certificates",
+      value: footerStats?.certificates || "0 Issued",
+      icon: Award,
+    },
+    {
+      label: "Mentors",
+      value: footerStats?.mentors || "0 Active",
+      icon: UserRound,
+    },
+    {
+      label: "Categories",
+      value: footerStats?.categories || "0 Active",
+      icon: FolderTree,
+    },
+    {
+      label: "Pending Reviews",
+      value: footerStats?.pendingReviews || "0 Required",
+      icon: AlertCircle,
+    },
+  ];
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 pt-4 border-t border-white/10">
-      {FOOTER_STATS.map((stat, idx) => {
+      {statsList.map((stat, idx) => {
         const IconComp = stat.icon;
         return (
           <div
@@ -1161,9 +1316,14 @@ export function FooterStats() {
               <span className="text-[10px] font-mono text-zinc-400 uppercase block mb-0.5">
                 {stat.label}
               </span>
-              <span className="text-xs font-bold text-white font-sans">{stat.value}</span>
+              <span className="text-xs font-bold text-white font-sans">
+                {loading ? "..." : stat.value}
+              </span>
             </div>
-            <IconComp size={16} className="text-[#C9A227] shrink-0 opacity-80" />
+            <IconComp
+              size={16}
+              className="text-[#C9A227] shrink-0 opacity-80"
+            />
           </div>
         );
       })}

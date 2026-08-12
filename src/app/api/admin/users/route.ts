@@ -1,10 +1,23 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { transformUserToUI } from "@/lib/user-transform";
-import { AccountStatus, UserRole } from "@/generated/prisma/client";
+import { AccountStatus, ActivityAction, UserRole } from "@/generated/prisma/client";
+import { getCurrentAdminUser } from "@/lib/current-user";
+import { hashPassword } from "@/lib/password";
 
-export async function GET(request: Request) {
+export const runtime = "nodejs";
+
+export async function GET(request: NextRequest) {
   try {
+    const adminUser = await getCurrentAdminUser();
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized admin access" },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search") || "";
     const statusParam = searchParams.get("status") || "";
@@ -12,7 +25,7 @@ export async function GET(request: Request) {
 
     const whereClause: Record<string, unknown> = {
       deletedAt: null,
-      role: { not: UserRole.SUPER_ADMIN }, // Exclude admin users
+      role: { not: UserRole.SUPER_ADMIN },
     };
 
     if (search) {
@@ -72,10 +85,105 @@ export async function GET(request: Request) {
       total: transformedUsers.length,
     });
   } catch (error) {
-    console.error("GET /api/users error:", error);
+    console.error("GET /api/admin/users error:", error);
     return NextResponse.json(
       { success: false, message: "Failed to fetch users" },
       { status: 500 },
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const adminUser = await getCurrentAdminUser();
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized admin access" },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    const { firstName, lastName, email, phone, discordName } = body;
+
+    const trimmedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+    const trimmedFirstName = typeof firstName === "string" ? firstName.trim() : "";
+    const trimmedLastName = typeof lastName === "string" ? lastName.trim() : "";
+
+    if (!trimmedEmail || !trimmedFirstName) {
+      return NextResponse.json(
+        { success: false, message: "First name and email are required." },
+        { status: 400 }
+      );
+    }
+
+    const existing = await prisma.user.findFirst({
+      where: { email: trimmedEmail, deletedAt: null },
+    });
+
+    if (existing) {
+      return NextResponse.json(
+        { success: false, message: "A user with this email already exists." },
+        { status: 409 }
+      );
+    }
+
+    const defaultPassword = "AegisUser@2026!";
+    const hashedPassword = await hashPassword(defaultPassword);
+    const fullName = `${trimmedFirstName} ${trimmedLastName}`.trim();
+
+    const newUser = await prisma.user.create({
+      data: {
+        firstName: trimmedFirstName,
+        lastName: trimmedLastName || null,
+        name: fullName,
+        email: trimmedEmail,
+        phone: typeof phone === "string" && phone.trim() ? phone.trim() : null,
+        discordName: typeof discordName === "string" && discordName.trim() ? discordName.trim() : null,
+        password: hashedPassword,
+        role: UserRole.STUDENT,
+        status: AccountStatus.ACTIVE,
+      },
+      include: {
+        subscriptions: {
+          select: {
+            id: true,
+            status: true,
+            currentExpiryDate: true,
+          },
+        },
+        accountActivities: {
+          take: 10,
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+      },
+    });
+
+    await prisma.userActivity.create({
+      data: {
+        userId: newUser.id,
+        actorId: adminUser.id,
+        action: ActivityAction.ACCOUNT_CREATED,
+        title: "Account Registered",
+        details: `Account registered by administrator (${adminUser.name}).`,
+      },
+    }).catch(() => null);
+
+    const transformed = transformUserToUI(newUser);
+
+    return NextResponse.json({
+      success: true,
+      message: "User registered successfully.",
+      user: transformed,
+    });
+  } catch (error) {
+    console.error("POST /api/admin/users error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to register user." },
+      { status: 500 }
     );
   }
 }
