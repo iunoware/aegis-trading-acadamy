@@ -9,7 +9,9 @@ interface ExtendExpiryFormProps {
   onExtend: (request: ExtensionRequest) => void;
 }
 
-const toInputDate = (value: string) => new Date(value).toISOString().slice(0, 10);
+// const toInputDate = (value: string) => new Date(value).toISOString().slice(0, 10);
+const toInputDate = (value: string | null) =>
+  value ? new Date(value).toISOString().slice(0, 10) : "";
 
 const addDays = (value: string, days: number) => {
   const date = new Date(value);
@@ -24,16 +26,23 @@ export function ExtendExpiryForm({ record, onExtend }: ExtendExpiryFormProps) {
   const [reason, setReason] = useState("Complimentary access extension");
 
   const minimumDate = useMemo(() => {
-    const currentExpiry = new Date(record.currentExpiryDate);
+    // const currentExpiry = new Date(record.currentExpiryDate);
     const today = new Date();
+    const currentExpiry = record.currentExpiryDate
+      ? new Date(record.currentExpiryDate)
+      : today;
     const base = currentExpiry > today ? currentExpiry : today;
     base.setDate(base.getDate() + 1);
     return base.toISOString().slice(0, 10);
   }, [record.currentExpiryDate]);
 
   const applyPreset = (days: number) => {
-    const currentExpiry = new Date(record.currentExpiryDate);
+    // const currentExpiry = new Date(record.currentExpiryDate);
     const today = new Date();
+    const currentExpiry = record.currentExpiryDate
+      ? new Date(record.currentExpiryDate)
+      : today;
+
     const base = currentExpiry > today ? currentExpiry : today;
     setNewExpiryDate(toInputDate(addDays(base.toISOString(), days)));
   };

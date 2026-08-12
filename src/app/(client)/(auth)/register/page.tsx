@@ -78,9 +78,8 @@ export default function RegisterPage() {
         return;
       }
 
-      toast.success("Account created successfully!");
-      router.replace("/student");
-      router.refresh();
+      toast.success(data.message || "Account created! Please verify your email.");
+      router.replace(`/verify-email?email=${encodeURIComponent(email.trim())}`);
     } catch {
       toast.error("Something went wrong with registration");
     } finally {

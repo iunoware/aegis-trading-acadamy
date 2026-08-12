@@ -3,12 +3,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { toast } from "sonner";
-import axios from "@/lib/axios";
 import { EnrollmentsHeader } from "./(components)/EnrollmentsHeader";
 import { EnrollmentOverviewCards } from "./(components)/EnrollmentOverviewCards";
 import { EnrollmentsTable, Enrollment } from "./(components)/EnrollmentsTable";
 import { EnrollmentSidebar } from "@/components/sidebar/EnrollmentSidebar";
 import { ManualEnrollmentModal } from "./(components)/ManualEnrollmentModal";
+import {
+  getEnrollments,
+  createManualEnrollment,
+  extendSubscription,
+  changeSubscriptionPlan,
+  toggleSubscriptionStatus,
+  saveSubscriptionNotes,
+} from "@/lib/services/enrollments.service";
 
 export default function EnrollmentsPage() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
@@ -17,11 +24,11 @@ export default function EnrollmentsPage() {
   const [isManualModalOpen, setIsManualModalOpen] = useState(false);
   const pageRef = useRef<HTMLDivElement>(null);
 
-  // Fetch enrollments from API using axios
+  // Fetch enrollments from API using enrollments.service
   const fetchEnrollments = async () => {
     setLoading(true);
     try {
-      const res: any = await axios.get("/enrollments");
+      const res = await getEnrollments();
       if (res.success && Array.isArray(res.enrollments)) {
         setEnrollments(res.enrollments);
       } else {
@@ -69,10 +76,10 @@ export default function EnrollmentsPage() {
   ).length;
   const expiredCount = enrollments.filter((e) => e.status === "Expired").length;
 
-  // Handlers connected to backend via axios
+  // Handlers connected to backend via enrollments.service
   const handleManualEnroll = async (newEnrollmentData: any) => {
     try {
-      const res: any = await axios.post("/enrollments/manual", newEnrollmentData);
+      const res = await createManualEnrollment(newEnrollmentData);
       if (res.success && res.enrollment) {
         setEnrollments((prev) => [res.enrollment, ...prev]);
         toast.success(`User "${res.enrollment.userName}" enrolled!`, {
@@ -90,7 +97,7 @@ export default function EnrollmentsPage() {
 
   const handleExtendSubscription = async (enrollmentId: string, days: number) => {
     try {
-      const res: any = await axios.patch(`/enrollments/${enrollmentId}/extend`, { days });
+      const res = await extendSubscription(enrollmentId, days);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
           prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
@@ -113,9 +120,7 @@ export default function EnrollmentsPage() {
     newPlan: "Monthly Plan" | "Yearly Plan",
   ) => {
     try {
-      const res: any = await axios.patch(`/enrollments/${enrollmentId}/plan`, {
-        newPlan,
-      });
+      const res = await changeSubscriptionPlan(enrollmentId, newPlan);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
           prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
@@ -135,7 +140,7 @@ export default function EnrollmentsPage() {
 
   const handleToggleStatus = async (enrollmentId: string) => {
     try {
-      const res: any = await axios.patch(`/enrollments/${enrollmentId}/status`);
+      const res = await toggleSubscriptionStatus(enrollmentId);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
           prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
@@ -155,7 +160,7 @@ export default function EnrollmentsPage() {
 
   const handleSaveNotes = async (enrollmentId: string, notes: string) => {
     try {
-      const res: any = await axios.patch(`/enrollments/${enrollmentId}/notes`, { notes });
+      const res = await saveSubscriptionNotes(enrollmentId, notes);
       if (res.success && res.enrollment) {
         setEnrollments((prev) =>
           prev.map((e) => (e.id === enrollmentId ? res.enrollment : e)),
