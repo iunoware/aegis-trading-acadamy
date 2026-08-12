@@ -37,7 +37,6 @@ export async function POST(
         { status: 400 },
       );
     }
-
     if (!videoUrl) {
       return NextResponse.json(
         { success: false, message: "Video URL is required." },
@@ -47,10 +46,9 @@ export async function POST(
 
     const course = await prisma.course.findUnique({
       where: { id: courseId },
-      select: { id: true, deletedAt: true },
+      select: { id: true },
     });
-
-    if (!course || course.deletedAt) {
+    if (!course) {
       return NextResponse.json(
         { success: false, message: "Course not found." },
         { status: 404 },
@@ -60,18 +58,15 @@ export async function POST(
     const baseSlug = slugify(title);
     let slug = baseSlug;
     let suffix = 1;
-
     while (
-      await prisma.lesson.findUnique({
-        where: { courseId_slug: { courseId, slug } },
-      })
+      await prisma.lesson.findUnique({ where: { courseId_slug: { courseId, slug } } })
     ) {
       slug = `${baseSlug}-${suffix++}`;
     }
 
     const maxOrder = await prisma.lesson.aggregate({
       _max: { displayOrder: true },
-      where: { courseId, deletedAt: null },
+      where: { courseId },
     });
 
     const result = await prisma.$transaction(async (tx) => {
@@ -105,16 +100,11 @@ export async function POST(
     });
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "Video added successfully.",
-        lesson: result,
-      },
+      { success: true, message: "Video added successfully.", lesson: result },
       { status: 201 },
     );
   } catch (error: unknown) {
     console.error("POST lesson error:", error);
-
     if (
       typeof error === "object" &&
       error !== null &&
@@ -129,7 +119,6 @@ export async function POST(
         { status: 409 },
       );
     }
-
     return NextResponse.json(
       { success: false, message: "Failed to add video." },
       { status: 500 },
