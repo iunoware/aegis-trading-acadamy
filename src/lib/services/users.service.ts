@@ -20,6 +20,15 @@ export interface DeleteUserApiResponse {
   id?: string;
 }
 
+export interface CreateUserData {
+  firstName: string;
+  lastName?: string;
+  email: string;
+  phone?: string;
+  discordName?: string;
+  isSubscribed?: boolean;
+}
+
 export interface UpdateUserData {
   firstName?: string;
   lastName?: string;
@@ -31,29 +40,39 @@ export interface UpdateUserData {
 
 /**
  * Fetch all users directory
- * GET /api/users
+ * GET /api/admin/users
  */
 export const getUsers = async (): Promise<UsersApiResponse> => {
-  return apiClient.get<unknown, UsersApiResponse>("/users");
+  return apiClient.get<unknown, UsersApiResponse>("/admin/users");
+};
+
+/**
+ * Create a new student user
+ * POST /api/admin/users
+ */
+export const createUser = async (
+  data: CreateUserData
+): Promise<UserApiResponse> => {
+  return apiClient.post<unknown, UserApiResponse>("/admin/users", data);
 };
 
 /**
  * Update an existing user profile or status
- * PATCH /api/users/:id
+ * PATCH /api/admin/users/:id
  */
 export const updateUser = async (
   id: string,
   data: UpdateUserData
 ): Promise<UserApiResponse> => {
-  return apiClient.patch<unknown, UserApiResponse>(`/users/${id}`, data);
+  return apiClient.patch<unknown, UserApiResponse>(`/admin/users/${id}`, data);
 };
 
 /**
  * Soft delete a user by ID
- * DELETE /api/users/:id
+ * DELETE /api/admin/users/:id
  */
 export const deleteUser = async (
   id: string
 ): Promise<DeleteUserApiResponse> => {
-  return apiClient.delete<unknown, DeleteUserApiResponse>(`/users/${id}`);
+  return apiClient.delete<unknown, DeleteUserApiResponse>(`/admin/users/${id}`);
 };

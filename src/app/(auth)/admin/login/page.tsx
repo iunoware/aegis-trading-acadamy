@@ -80,8 +80,8 @@ export default function AdminLoginPage() {
 
       toast.success("Admin login successful.");
 
-      router.replace("/admin");
       router.refresh();
+      router.replace("/admin");
     } catch (error) {
       console.error("ADMIN_LOGIN_ERROR", error);
 

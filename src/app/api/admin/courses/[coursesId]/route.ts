@@ -35,7 +35,9 @@ export async function PATCH(
     const description = formData.get("description")?.toString().trim();
     const statusRaw = formData.get("status")?.toString();
     const status =
-      statusRaw === "PUBLISHED" || statusRaw === "DRAFT" || statusRaw === "HIDDEN"
+      statusRaw === "PUBLISHED" ||
+      statusRaw === "DRAFT" ||
+      statusRaw === "HIDDEN"
         ? (statusRaw as ContentStatus)
         : undefined;
     const thumbnailFile = formData.get("thumbnail");
@@ -60,7 +62,9 @@ export async function PATCH(
         where: { id: courseId },
         data: {
           ...(title !== undefined ? { title } : {}),
-          ...(description !== undefined ? { description: description || null } : {}),
+          ...(description !== undefined
+            ? { description: description || null }
+            : {}),
           ...(thumbnailUrl !== undefined ? { thumbnailUrl } : {}),
           ...(status !== undefined ? { status } : {}),
           updatedById: adminUser.id,
@@ -142,7 +146,9 @@ export async function DELETE(
 
     await deleteThumbnailFile(existing.thumbnailUrl);
 
-    const localFiles = existing.lessons.filter((l) => !l.videoUrl.startsWith("http"));
+    const localFiles = existing.lessons.filter(
+      (l) => !l.videoUrl.startsWith("http"),
+    );
     await Promise.all(
       localFiles.map((l) =>
         deleteVideoFile(l.videoUrl).catch((err) => {
@@ -162,14 +168,20 @@ export async function DELETE(
           description: `Course "${existing.title}" and its ${existing.lessons.length} video(s) were permanently deleted.`,
           targetId: existing.id,
           targetType: "COURSE",
-          beforeData: { title: existing.title, lessonCount: existing.lessons.length },
+          beforeData: {
+            title: existing.title,
+            lessonCount: existing.lessons.length,
+          },
         },
       });
 
       await tx.course.delete({ where: { id: courseId } });
     });
 
-    return NextResponse.json({ success: true, message: "Course deleted permanently." });
+    return NextResponse.json({
+      success: true,
+      message: "Course deleted permanently.",
+    });
   } catch (error) {
     console.error("DELETE course error:", error);
     return NextResponse.json(

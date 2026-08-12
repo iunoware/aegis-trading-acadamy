@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { mapUIToAccountStatus, transformUserToUI } from "@/lib/user-transform";
 import { ActivityAction } from "@/generated/prisma/client";
+import { getCurrentAdminUser } from "@/lib/current-user";
+
+export const runtime = "nodejs";
 
 interface RouteProps {
   params: Promise<{
@@ -10,11 +13,20 @@ interface RouteProps {
 }
 
 /**
- * PATCH /api/users/:id
+ * PATCH /api/admin/users/:id
  * Allows updating: firstName, lastName, phone, discordName, status / accountStatus
  */
 export async function PATCH(request: Request, { params }: RouteProps) {
   try {
+    const adminUser = await getCurrentAdminUser();
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized admin access" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -77,21 +89,23 @@ export async function PATCH(request: Request, { params }: RouteProps) {
       await prisma.userActivity.create({
         data: {
           userId: id,
+          actorId: adminUser.id,
           action:
             newAccountStatus === "SUSPENDED"
               ? ActivityAction.ACCOUNT_SUSPENDED
               : ActivityAction.ACCOUNT_REACTIVATED,
           title: `Account ${newAccountStatus === "SUSPENDED" ? "Suspended" : "Activated"}`,
-          details: `Account status changed to ${newAccountStatus}.`,
+          details: `Account status changed to ${newAccountStatus} by ${adminUser.name}.`,
         },
-      }).catch(() => null); // Silently proceed if activity logging is not crucial
+      }).catch(() => null);
     } else if (firstName !== undefined || lastName !== undefined || phone !== undefined || discordName !== undefined) {
       await prisma.userActivity.create({
         data: {
           userId: id,
+          actorId: adminUser.id,
           action: ActivityAction.ACCOUNT_UPDATED,
           title: "Updated Profile",
-          details: "Account information updated by administrator.",
+          details: `Account information updated by administrator (${adminUser.name}).`,
         },
       }).catch(() => null);
     }
@@ -104,7 +118,7 @@ export async function PATCH(request: Request, { params }: RouteProps) {
       message: "User profile updated successfully",
     });
   } catch (error) {
-    console.error("PATCH /api/users/[id] error:", error);
+    console.error("PATCH /api/admin/users/[id] error:", error);
     return NextResponse.json(
       { success: false, message: "Failed to update user profile" },
       { status: 500 }
@@ -113,11 +127,20 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 }
 
 /**
- * DELETE /api/users/:id
+ * DELETE /api/admin/users/:id
  * Soft delete by setting deletedAt timestamp
  */
 export async function DELETE(_request: Request, { params }: RouteProps) {
   try {
+    const adminUser = await getCurrentAdminUser();
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized admin access" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
 
     const existingUser = await prisma.user.findFirst({
@@ -143,9 +166,10 @@ export async function DELETE(_request: Request, { params }: RouteProps) {
     await prisma.userActivity.create({
       data: {
         userId: id,
+        actorId: adminUser.id,
         action: ActivityAction.ACCOUNT_DELETED,
         title: "Account Deleted",
-        details: "User account soft deleted by administrator.",
+        details: `User account soft deleted by administrator (${adminUser.name}).`,
       },
     }).catch(() => null);
 
@@ -155,7 +179,7 @@ export async function DELETE(_request: Request, { params }: RouteProps) {
       id,
     });
   } catch (error) {
-    console.error("DELETE /api/users/[id] error:", error);
+    console.error("DELETE /api/admin/users/[id] error:", error);
     return NextResponse.json(
       { success: false, message: "Failed to delete user" },
       { status: 500 }
