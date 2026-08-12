@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -36,8 +37,8 @@ const PricingFeature: React.FC<PricingFeatureProps> = ({
       <div
         className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
           isPopularPlan
-            ? "bg-[var(--primary)] text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]"
-            : "bg-[var(--primary)]/15 border border-[var(--primary)]/30 text-[var(--primary)]"
+            ? "bg-primary text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]"
+            : "bg-primary/15 border border-(--primary)/30 text-primary"
         }`}
       >
         <Check size={12} strokeWidth={3} />
@@ -57,7 +58,7 @@ interface TrustItemProps {
 const TrustItem: React.FC<TrustItemProps> = ({ icon: Icon, text }) => {
   return (
     <div className="flex items-center gap-2.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-zinc-300">
-      <div className="w-7 h-7 rounded-full bg-(--primary)/10 border border-(--primary)/20 flex items-center justify-center text-[var(--primary)] shrink-0">
+      <div className="w-7 h-7 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
         <Icon size={14} />
       </div>
       <span className="whitespace-nowrap tracking-wide">{text}</span>
@@ -73,8 +74,8 @@ const TrustItem: React.FC<TrustItemProps> = ({ icon: Icon, text }) => {
 
 // const PaymentMethod: React.FC<PaymentMethodProps> = ({ name }) => {
 //   return (
-//     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg glass-panel border border-white/10 text-xs font-mono font-semibold tracking-wider text-zinc-400 uppercase hover:text-primary hover:border-(--primary)/30 transition-colors duration-300">
-//       <span className="w-1.5 h-1.5 rounded-full bg-(--primary)/60" />
+//     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg glass-panel border border-white/10 text-xs font-mono font-semibold tracking-wider text-zinc-400 uppercase hover:text-primary hover:border-primary/30 transition-colors duration-300">
+//       <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
 //       <span>{name}</span>
 //     </div>
 //   );
@@ -143,8 +144,8 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
     <article
       className={`relative rounded-3xl glass-panel p-8 sm:p-10 flex flex-col justify-between h-full transition-all duration-350 ease-out border ${
         isPopular
-          ? "border-(--primary)/50 shadow-[0_20px_50px_rgba(212,175,55,0.15),inset_0_1px_0_rgba(255,255,255,0.2)] bg-linear-to-b from-[#181818]/90 to-[#0d0d0d]/90"
-          : "border-white/10 hover:border-(--primary)/30 bg-[#121212]/60"
+          ? "border-primary/50 shadow-[0_20px_50px_rgba(212,175,55,0.15),inset_0_1px_0_rgba(255,255,255,0.2)] bg-linear-to-b from-[#181818]/90 to-[#0d0d0d]/90"
+          : "border-white/10 hover:border-primary/30 bg-[#121212]/60"
       } hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_25px_60px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.2)] cursor-pointer ${className}`}
     >
       {isPopular && (
@@ -163,7 +164,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
           </h3>
 
           {savingsLabel && (
-            <span className="px-3 py-1 rounded-full bg-(--primary)/15 border border-(--primary)/30 text-primary text-xs font-bold font-mono tracking-wide uppercase">
+            <span className="px-3 py-1 rounded-full bg-primary/15 border border-primary/30 text-primary text-xs font-bold font-mono tracking-wide uppercase">
               {savingsLabel}
             </span>
           )}
@@ -198,7 +199,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
           className={`w-full group inline-flex items-center justify-center gap-3 py-4 px-6 rounded-xl font-bold text-sm sm:text-base tracking-wider uppercase transition-all duration-300 transform active:translate-y-0 text-center ${
             isPopular
               ? "bg-linear-to-r from-primary-light via-primary to-primary-dark text-black "
-              : "glass-panel text-white hover:text-primary border border-white/15 hover:border-(--primary)/40"
+              : "glass-panel text-white hover:text-primary border border-white/15 hover:border-primary/40"
           }`}
         >
           <span>{buttonText}</span>
@@ -473,7 +474,7 @@ export default function Pricing() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         <div ref={labelRef} className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-(--primary)/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-(--primary)/5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-primary/5">
             <ShieldCheck size={14} className="text-primary" />
             PRICING
           </div>

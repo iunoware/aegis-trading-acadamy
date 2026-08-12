@@ -22,63 +22,6 @@ interface TestimonialData {
   createdAt: string;
 }
 
-// const TESTIMONIALS: TestimonialData[] = [
-//   {
-//     id: "t1",
-//     quote:
-//       "I joined Aegis with almost no understanding of market structure. The structured roadmap and live sessions completely changed the way I approach trading.",
-//     name: "Rohan Sharma",
-//     role: "SWING TRADER",
-//     memberSince: "Member Since 2024",
-//     rating: 5,
-//   },
-//   {
-//     id: "t2",
-//     quote:
-//       "Risk management was my biggest weakness. Aegis gave me the discipline and systematic process required to protect capital and trade with confidence.",
-//     name: "Ananya Verma",
-//     role: "INTRADAY TRADER",
-//     memberSince: "Member Since 2025",
-//     rating: 5,
-//   },
-//   {
-//     id: "t3",
-//     quote:
-//       "The mentorship and community support are unmatched. Being able to review real market setups with experienced traders cut years off my learning curve.",
-//     name: "Vikram Sengupta",
-//     role: "QUANTITATIVE TRADER",
-//     memberSince: "Member Since 2024",
-//     rating: 5,
-//   },
-//   {
-//     id: "t4",
-//     quote:
-//       "Aegis isn't selling dream promises or magical indicators. It's real institutional education focused on price action and discipline.",
-//     name: "Karan Malhotra",
-//     role: "PRICE ACTION TRADER",
-//     memberSince: "Member Since 2025",
-//     rating: 5,
-//   },
-//   {
-//     id: "t5",
-//     quote:
-//       "From liquidity concepts to trading psychology, every single module is engineered with depth and precision. Worth every investment.",
-//     name: "Priya Nair",
-//     role: "INDEX TRADER",
-//     memberSince: "Member Since 2024",
-//     rating: 5,
-//   },
-//   {
-//     id: "t6",
-//     quote:
-//       "The live market sessions gave me the confidence to execute my strategy under real market conditions without emotional bias.",
-//     name: "Aditya Patel",
-//     role: "OPTIONS TRADER",
-//     memberSince: "Member Since 2025",
-//     rating: 5,
-//   },
-// ];
-
 export default function Testimonials() {
   const sectionRef = useRef<HTMLElement>(null);
   const labelRef = useRef<HTMLDivElement>(null);
@@ -248,7 +191,7 @@ export default function Testimonials() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
         {/* Small Label */}
         <div ref={labelRef} className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-(--primary)/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-(--primary)/5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-(--primary)/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-primary/5">
             <ShieldCheck size={14} className="text-primary" />
             TESTIMONIALS
           </div>
@@ -370,7 +313,7 @@ export default function Testimonials() {
                     <article
                       className={`relative rounded-3xl glass-panel p-8 sm:p-9 flex flex-col justify-between h-full min-h-75 border transition-all duration-300 ${
                         isCenter
-                          ? "border-(--primary)/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
+                          ? "border-primary/50 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.18)] bg-[#141414]/90"
                           : "border-white/10 bg-[#101010]/60"
                       } hover:-translate-y-1.5`}
                     >
@@ -429,7 +372,7 @@ export default function Testimonials() {
           <button
             onClick={handlePrev}
             aria-label="Previous Testimonial"
-            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-primary hover:border-(--primary)/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
+            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-primary hover:border-primary/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
           >
             <ChevronLeft size={20} />
           </button>
@@ -460,7 +403,7 @@ export default function Testimonials() {
           <button
             onClick={handleNext}
             aria-label="Next Testimonial"
-            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-primary hover:border-(--primary)/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
+            className="w-11 h-11 rounded-full glass-panel border border-white/15 flex items-center justify-center text-white hover:text-primary hover:border-primary/50 hover:scale-110 active:scale-95 transition-all duration-300 shadow-md cursor-pointer"
           >
             <ChevronRight size={20} />
           </button>
