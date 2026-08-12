@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
         password: true,
         role: true,
         status: true,
+        emailVerified: true,
         deletedAt: true,
       },
     });
@@ -91,6 +92,19 @@ export async function POST(request: NextRequest) {
           error: "Invalid email or password.",
         },
         { status: 401 },
+      );
+    }
+
+    // Email OTP Verification Check
+    if (!user.emailVerified) {
+      return NextResponse.json(
+        {
+          success: false,
+          requiresVerification: true,
+          email: user.email,
+          error: "Email verification is required. Please verify your email before logging in.",
+        },
+        { status: 403 },
       );
     }
 

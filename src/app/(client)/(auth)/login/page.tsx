@@ -79,6 +79,11 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
+        if (data.requiresVerification && data.email) {
+          toast.info(data.error || "Email verification required.");
+          router.replace(`/verify-email?email=${encodeURIComponent(data.email)}`);
+          return;
+        }
         toast.error(data.error || "Login failed");
         return;
       }

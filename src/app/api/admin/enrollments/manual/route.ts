@@ -16,8 +16,21 @@ import {
   subscriptionIncludeSelector,
 } from "@/lib/enrollment-transform";
 
+import { getCurrentAdminUser } from "@/lib/current-user";
+
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   try {
+    const adminUser = await getCurrentAdminUser();
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized admin access" },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const {
       userName,
