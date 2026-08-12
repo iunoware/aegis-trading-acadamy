@@ -1,13 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/set-state-in-effect */
-// "use client";
-
-// import CourseCMS from "./CourseCMS";
-
-// export default function AdminCoursesPage() {
-//   return <CourseCMS />;
-// }
-
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -32,11 +23,8 @@ import {
   Link as LinkIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-// import apiClient from "@/lib/axios";
 import axios from "axios";
 
-// Kept as local literal types (not imported from @/generated/prisma/client)
-// so the Prisma client's runtime code never gets pulled into the browser bundle.
 type ContentStatus = "DRAFT" | "PUBLISHED" | "HIDDEN";
 
 export interface Lesson {
@@ -81,23 +69,21 @@ function formatDate(dateStr: string) {
 export default function CourseCMS() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Data state
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeCourseId, setActiveCourseId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"All" | "PUBLISHED" | "DRAFT">("All");
 
-  // Course modal
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [isSavingCourse, setIsSavingCourse] = useState(false);
   const [courseTitle, setCourseTitle] = useState("");
   const [courseDesc, setCourseDesc] = useState("");
-  const [courseThumbnail, setCourseThumbnail] = useState("");
   const [courseStatus, setCourseStatus] = useState<"DRAFT" | "PUBLISHED">("PUBLISHED");
+  const [courseThumbnailFile, setCourseThumbnailFile] = useState<File | null>(null);
+  const [courseThumbnailPreview, setCourseThumbnailPreview] = useState<string>("");
 
-  // Video modal
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [editingVideo, setEditingVideo] = useState<Lesson | null>(null);
   const [isSavingVideo, setIsSavingVideo] = useState(false);
@@ -108,14 +94,75 @@ export default function CourseCMS() {
   const [videoDurationSeconds, setVideoDurationSeconds] = useState(0);
   const [videoIsPreview, setVideoIsPreview] = useState(false);
 
-  const [courseThumbnailFile, setCourseThumbnailFile] = useState<File | null>(null);
-  const [courseThumbnailPreview, setCourseThumbnailPreview] = useState<string>("");
-
   const [confirmModal, setConfirmModal] = useState<{
     title: string;
     message: string;
     onConfirm: () => void;
   } | null>(null);
+
+  //  Fetch courses
+  const fetchCourses = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const res = await axios.get("/api/admin/courses");
+      setCourses(res.data.courses ?? []);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to load courses");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (containerRef.current) {
+        gsap.fromTo(
+          containerRef.current.children,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: "power2.out" },
+        );
+      }
+    }, [activeCourseId, isCourseModalOpen, isVideoModalOpen, isLoading]);
+
+    return () => ctx.revert();
+  }, [activeCourseId, isCourseModalOpen, isVideoModalOpen, isLoading]);
+
+  const activeCourse = courses.find((c) => c.id === activeCourseId) || null;
+
+  const filteredCourses = courses.filter((c) => {
+    const matchesSearch =
+      c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (c.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
+    const matchesStatus = statusFilter === "All" || c.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  //  Course handlers
+
+  const handleOpenCreateCourse = () => {
+    setEditingCourse(null);
+    setCourseTitle("");
+    setCourseDesc("");
+    setCourseStatus("PUBLISHED");
+    setCourseThumbnailFile(null);
+    setCourseThumbnailPreview("");
+    setIsCourseModalOpen(true);
+  };
+
+  const handleOpenEditCourse = (e: React.MouseEvent, c: Course) => {
+    e.stopPropagation();
+    setEditingCourse(c);
+    setCourseTitle(c.title);
+    setCourseDesc(c.description ?? "");
+    setCourseStatus(c.status === "HIDDEN" ? "DRAFT" : c.status);
+    setCourseThumbnailFile(null);
+    setCourseThumbnailPreview(c.thumbnailUrl ?? "");
+    setIsCourseModalOpen(true);
+  };
 
   const handleSaveCourse = async () => {
     if (!courseTitle.trim()) {
@@ -144,131 +191,14 @@ export default function CourseCMS() {
       }
       setIsCourseModalOpen(false);
     } catch (err) {
-      const msg = axios.isAxiosError(err) ? err.response?.data?.message : undefined;
-      toast.error(msg || "Failed to save course");
+      toast.error(
+        axios.isAxiosError(err) ? err.response?.data?.message : "Failed to save course",
+      );
     } finally {
       setIsSavingCourse(false);
     }
   };
 
-  // Fetch courses from the DB
-  const fetchCourses = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const res = await axios.get("/api/admin/courses");
-      setCourses(res.data.courses ?? []);
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to load courses");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCourses();
-  }, [fetchCourses]);
-
-  // GSAP Animations
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      if (containerRef.current) {
-        gsap.fromTo(
-          containerRef.current.children,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: "power2.out" },
-        );
-      }
-    }, [activeCourseId, isCourseModalOpen, isVideoModalOpen, isLoading]);
-
-    return () => ctx.revert();
-  }, [activeCourseId, isCourseModalOpen, isVideoModalOpen, isLoading]);
-
-  const activeCourse = courses.find((c) => c.id === activeCourseId) || null;
-
-  const filteredCourses = courses.filter((c) => {
-    const matchesSearch =
-      c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (c.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
-    const matchesStatus = statusFilter === "All" || c.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-  //  Course Handlers
-
-  const handleOpenCreateCourse = () => {
-    setEditingCourse(null);
-    setCourseTitle("");
-    setCourseDesc("");
-    setCourseThumbnail("");
-    setCourseStatus("PUBLISHED");
-    setIsCourseModalOpen(true);
-  };
-
-  const handleOpenEditCourse = (e: React.MouseEvent, c: Course) => {
-    e.stopPropagation();
-    setEditingCourse(c);
-    setCourseTitle(c.title);
-    setCourseDesc(c.description ?? "");
-    setCourseThumbnail(c.thumbnailUrl ?? "");
-    setCourseStatus(c.status === "HIDDEN" ? "DRAFT" : c.status);
-    setIsCourseModalOpen(true);
-  };
-
-  // const handleSaveCourse = async () => {
-  //   if (!courseTitle.trim()) {
-  //     toast.error("Course title is required");
-  //     return;
-  //   }
-
-  //   setIsSavingCourse(true);
-  //   try {
-  //     if (editingCourse) {
-  //       const data = await apiClient.patch(`/admin/courses/${editingCourse.id}`, {
-  //         title: courseTitle,
-  //         description: courseDesc,
-  //         thumbnailUrl: courseThumbnail,
-  //         status: courseStatus,
-  //       });
-  //       setCourses((prev) =>
-  //         prev.map((c) => (c.id === editingCourse.id ? { ...c, ...data.course } : c)),
-  //       );
-  //       toast.success(data.message);
-  //     } else {
-  //       const data = await apiClient.post("/admin/courses", {
-  //         title: courseTitle,
-  //         description: courseDesc,
-  //         thumbnailUrl: courseThumbnail,
-  //         status: courseStatus,
-  //       });
-  //       setCourses((prev) => [{ ...data.course, lessons: [] }, ...prev]);
-  //       toast.success(data.message);
-  //     }
-  //     setIsCourseModalOpen(false);
-  //   } catch (err) {
-  //     toast.error(err instanceof Error ? err.message : "Failed to save course");
-  //   } finally {
-  //     setIsSavingCourse(false);
-  //   }
-  // };
-
-  // const handleDeleteCourse = async (e: React.MouseEvent, courseId: string) => {
-  //   e.stopPropagation();
-  //   if (
-  //     !window.confirm(
-  //       "Delete this course and all its videos permanently? This cannot be undone.",
-  //     )
-  //   ) {
-  //     return;
-  //   }
-  //   try {
-  //     const res = await axios.delete(`/api/admin/courses/${courseId}`);
-  //     setCourses((prev) => prev.filter((c) => c.id !== courseId));
-  //     if (activeCourseId === courseId) setActiveCourseId(null);
-  //     toast.success(res.data.message);
-  //   } catch (err) {
-  //     toast.error(err instanceof Error ? err.message : "Failed to delete course");
-  //   }
-  // };
   const handleDeleteCourse = (
     e: React.MouseEvent,
     courseId: string,
@@ -297,38 +227,7 @@ export default function CourseCMS() {
     });
   };
 
-  // const handleDeleteVideo = (videoId: string, videoTitle: string) => {
-  //   if (!activeCourseId) return;
-  //   setConfirmModal({
-  //     title: "Delete Video",
-  //     message: `Delete "${videoTitle}" permanently? The uploaded file will also be removed.`,
-  //     onConfirm: async () => {
-  //       try {
-  //         const res = await axios.delete(
-  //           `/api/admin/courses/${activeCourseId}/lessons/${videoId}`,
-  //         );
-  //         setCourses((prev) =>
-  //           prev.map((c) =>
-  //             c.id === activeCourseId
-  //               ? { ...c, lessons: c.lessons.filter((v) => v.id !== videoId) }
-  //               : c,
-  //           ),
-  //         );
-  //         toast.success(res.data.message);
-  //       } catch (err) {
-  //         toast.error(
-  //           axios.isAxiosError(err)
-  //             ? err.response?.data?.message
-  //             : "Failed to delete video",
-  //         );
-  //       } finally {
-  //         setConfirmModal(null);
-  //       }
-  //     },
-  //   });
-  // };
-
-  //  Video Handlers
+  //  Video handlers
 
   const handleOpenCreateVideo = () => {
     if (!activeCourse) return;
@@ -345,7 +244,7 @@ export default function CourseCMS() {
   const handleOpenEditVideo = (v: Lesson) => {
     setEditingVideo(v);
     setVideoTitle(v.title);
-    setVideoMode("url");
+    setVideoMode(v.videoUrl.startsWith("http") ? "url" : "upload");
     setVideoUrl(v.videoUrl.startsWith("http") ? v.videoUrl : "");
     setVideoFile(null);
     setVideoDurationSeconds(v.durationSeconds);
@@ -358,7 +257,6 @@ export default function CourseCMS() {
     if (!file) return;
     setVideoFile(file);
 
-    // Client-side duration detection
     const tempVideo = document.createElement("video");
     tempVideo.preload = "metadata";
     tempVideo.onloadedmetadata = () => {
@@ -376,20 +274,21 @@ export default function CourseCMS() {
       return;
     }
 
-    // ---- Edit existing video (metadata/URL only, no re-upload) ----
+    // ---- Editing an existing video (title/URL/preview/duration, or replace the file) ----
     if (editingVideo) {
       setIsSavingVideo(true);
       try {
+        const formData = new FormData();
+        formData.append("title", videoTitle);
+        formData.append("durationSeconds", String(videoDurationSeconds));
+        formData.append("isPreview", String(videoIsPreview));
+        if (videoMode === "url" && videoUrl.trim())
+          formData.append("videoUrl", videoUrl.trim());
+        if (videoFile) formData.append("file", videoFile);
+
         const res = await axios.patch(
           `/api/admin/courses/${activeCourseId}/lessons/${editingVideo.id}`,
-          {
-            title: videoTitle,
-            ...(videoMode === "url" && videoUrl.trim()
-              ? { videoUrl: videoUrl.trim() }
-              : {}),
-            durationSeconds: videoDurationSeconds,
-            isPreview: videoIsPreview,
-          },
+          formData,
         );
         setCourses((prev) =>
           prev.map((c) =>
@@ -406,14 +305,18 @@ export default function CourseCMS() {
         toast.success(res.data.message);
         setIsVideoModalOpen(false);
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to update video");
+        toast.error(
+          axios.isAxiosError(err)
+            ? err.response?.data?.message
+            : "Failed to update video",
+        );
       } finally {
         setIsSavingVideo(false);
       }
       return;
     }
 
-    // ---- Create new video: upload ----
+    // ---- Creating a new video: upload ----
     if (videoMode === "upload") {
       if (!videoFile) {
         toast.error("Please choose a video file to upload");
@@ -430,8 +333,6 @@ export default function CourseCMS() {
         const res = await axios.post(
           `/api/admin/courses/${activeCourseId}/lessons/upload`,
           formData,
-          // Let the browser set the multipart boundary itself
-          // { headers: { "Content-Type": undefined } },
         );
 
         setCourses((prev) =>
@@ -444,14 +345,18 @@ export default function CourseCMS() {
         toast.success(res.data.message);
         setIsVideoModalOpen(false);
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Failed to upload video");
+        toast.error(
+          axios.isAxiosError(err)
+            ? err.response?.data?.message
+            : "Failed to upload video",
+        );
       } finally {
         setIsSavingVideo(false);
       }
       return;
     }
 
-    // ---- Create new video: URL ----
+    // ---- Creating a new video: URL ----
     if (!videoUrl.trim()) {
       toast.error("Video URL is required");
       return;
@@ -474,7 +379,9 @@ export default function CourseCMS() {
       toast.success(res.data.message);
       setIsVideoModalOpen(false);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to add video");
+      toast.error(
+        axios.isAxiosError(err) ? err.response?.data?.message : "Failed to add video",
+      );
     } finally {
       setIsSavingVideo(false);
     }
@@ -524,8 +431,6 @@ export default function CourseCMS() {
 
   return (
     <div ref={containerRef} className="w-full max-w-350 mx-auto space-y-6 pb-16 ">
-      {/* VIEW 1: COURSES LIST VIEW */}
-
       {!activeCourseId && (
         <>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
@@ -564,7 +469,7 @@ export default function CourseCMS() {
               />
             </div>
 
-            <div className="flex items-center gap-2 self-start sm:self-auto">
+            {/* <div className="flex items-center gap-2 self-start sm:self-auto">
               <span className="text-xs font-mono text-zinc-400 flex items-center gap-1">
                 <Filter size={13} />
                 Status:
@@ -582,7 +487,7 @@ export default function CourseCMS() {
                   {st === "All" ? "All" : st.charAt(0) + st.slice(1).toLowerCase()}
                 </button>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -602,7 +507,7 @@ export default function CourseCMS() {
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-60 pointer-events-none" />
 
-                    <div className="absolute top-3 right-3">
+                    {/* <div className="absolute top-3 right-3">
                       <span
                         className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border shadow-md ${
                           course.status === "PUBLISHED"
@@ -612,7 +517,7 @@ export default function CourseCMS() {
                       >
                         {course.status.charAt(0) + course.status.slice(1).toLowerCase()}
                       </span>
-                    </div>
+                    </div> */}
 
                     <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg bg-black/80 backdrop-blur-md border border-white/15 text-[11px] font-mono text-white flex items-center gap-1.5">
                       <Video size={13} className="text-[#C9A227]" />
@@ -645,7 +550,6 @@ export default function CourseCMS() {
                     </button>
 
                     <button
-                      // onClick={(e) => handleDeleteCourse(e, course.id)}
                       onClick={(e) => handleDeleteCourse(e, course.id, course.title)}
                       className="p-1.5 rounded-lg bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 transition-colors"
                       title="Delete Course"
@@ -681,8 +585,6 @@ export default function CourseCMS() {
           )}
         </>
       )}
-
-      {/* VIEW 2: COURSE DETAIL VIEW */}
 
       {activeCourse && (
         <div className="space-y-6">
@@ -785,7 +687,7 @@ export default function CourseCMS() {
                         <span>{formatDuration(vid.durationSeconds)}</span>
                       </div>
 
-                      <span
+                      {/* <span
                         className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold border ${
                           vid.isPreview
                             ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
@@ -793,7 +695,7 @@ export default function CourseCMS() {
                         }`}
                       >
                         {vid.isPreview ? "Preview ON" : "Preview OFF"}
-                      </span>
+                      </span> */}
 
                       <button
                         onClick={() => handleOpenEditVideo(vid)}
@@ -804,7 +706,6 @@ export default function CourseCMS() {
                       </button>
 
                       <button
-                        // onClick={() => handleDeleteVideo(vid.id)}
                         onClick={() => handleDeleteVideo(vid.id, vid.title)}
                         className="p-1.5 rounded-xl bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 transition-colors cursor-pointer"
                         title="Delete Video"
@@ -826,7 +727,6 @@ export default function CourseCMS() {
         </div>
       )}
 
-      {/* MODAL 1: CREATE / EDIT COURSE */}
       {isCourseModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="w-full max-w-lg max-h-[90vh] overflow-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-500 rounded-2xl bg-[#111113] border border-[#C9A227]/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
@@ -869,18 +769,6 @@ export default function CourseCMS() {
                 />
               </div>
 
-              {/* <div>
-                <label className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1">
-                  Thumbnail URL
-                </label>
-                <input
-                  type="text"
-                  value={courseThumbnail}
-                  onChange={(e) => setCourseThumbnail(e.target.value)}
-                  placeholder="/images/course-cover.png or https://..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#09090b] border border-white/15 text-xs font-mono text-zinc-300 focus:outline-none focus:border-[#C9A227]"
-                />
-              </div> */}
               <div>
                 <label className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1">
                   Course Thumbnail
@@ -908,7 +796,7 @@ export default function CourseCMS() {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1">
                   Status
                 </label>
@@ -928,7 +816,7 @@ export default function CourseCMS() {
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
@@ -952,7 +840,6 @@ export default function CourseCMS() {
         </div>
       )}
 
-      {/* MODAL 2: ADD / EDIT VIDEO */}
       {isVideoModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="w-full max-w-lg rounded-2xl bg-[#111113] border border-[#C9A227]/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
@@ -982,36 +869,34 @@ export default function CourseCMS() {
                 />
               </div>
 
-              {!editingVideo && (
-                <div className="flex items-center gap-2 p-1 rounded-xl bg-black/40 border border-white/10">
-                  <button
-                    type="button"
-                    onClick={() => setVideoMode("upload")}
-                    className={`flex-1 py-2 rounded-lg text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
-                      videoMode === "upload"
-                        ? "bg-[#C9A227] text-black"
-                        : "text-zinc-400 hover:text-white"
-                    }`}
-                  >
-                    <UploadCloud size={13} />
-                    Upload File
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setVideoMode("url")}
-                    className={`flex-1 py-2 rounded-lg text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
-                      videoMode === "url"
-                        ? "bg-[#C9A227] text-black"
-                        : "text-zinc-400 hover:text-white"
-                    }`}
-                  >
-                    <LinkIcon size={13} />
-                    Paste URL
-                  </button>
-                </div>
-              )}
+              <div className="flex items-center gap-2 p-1 rounded-xl bg-black/40 border border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setVideoMode("upload")}
+                  className={`flex-1 py-2 rounded-lg text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
+                    videoMode === "upload"
+                      ? "bg-[#C9A227] text-black"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <UploadCloud size={13} />
+                  Upload File
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setVideoMode("url")}
+                  className={`flex-1 py-2 rounded-lg text-xs font-mono font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
+                    videoMode === "url"
+                      ? "bg-[#C9A227] text-black"
+                      : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <LinkIcon size={13} />
+                  Paste URL
+                </button>
+              </div>
 
-              {(editingVideo ? videoMode === "url" : videoMode === "url") && (
+              {videoMode === "url" && (
                 <div>
                   <label className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1">
                     Video URL
@@ -1026,10 +911,10 @@ export default function CourseCMS() {
                 </div>
               )}
 
-              {!editingVideo && videoMode === "upload" && (
+              {videoMode === "upload" && (
                 <div>
                   <label className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1">
-                    Video File
+                    {editingVideo ? "Replace Video File (optional)" : "Video File"}
                   </label>
                   <input
                     type="file"
@@ -1042,18 +927,13 @@ export default function CourseCMS() {
                       {videoFile.name} · {(videoFile.size / (1024 * 1024)).toFixed(1)} MB
                     </p>
                   )}
+                  {editingVideo && !videoFile && (
+                    <p className="text-[11px] text-zinc-500 mt-1.5">
+                      Leave empty to keep the current file.
+                    </p>
+                  )}
                 </div>
               )}
-
-              {editingVideo &&
-                editingVideo.videoUrl &&
-                !editingVideo.videoUrl.startsWith("http") && (
-                  <p className="text-[11px] text-zinc-500 font-mono">
-                    This video was uploaded as a file. Replacing the file itself
-                    isn&apos;t supported here yet — you can still update its title,
-                    preview flag, and duration.
-                  </p>
-                )}
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -1074,7 +954,7 @@ export default function CourseCMS() {
                   </p>
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="text-xs font-mono font-bold text-zinc-300 uppercase tracking-wider block mb-1">
                     Preview
                   </label>
@@ -1089,7 +969,7 @@ export default function CourseCMS() {
                   >
                     {videoIsPreview ? "Free Preview: ON" : "Free Preview: OFF"}
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -1114,7 +994,6 @@ export default function CourseCMS() {
         </div>
       )}
 
-      {/* MODAL 3: DELETE CONFIRMATION */}
       {confirmModal && (
         <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="w-full max-w-sm rounded-2xl bg-[#111113] border border-rose-500/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
