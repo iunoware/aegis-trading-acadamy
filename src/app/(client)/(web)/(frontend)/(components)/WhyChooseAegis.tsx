@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -6,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   Target,
   Users,
-  Award,
+  // Award,
   BookOpen,
   ArrowRight,
   ShieldCheck,
@@ -18,9 +19,8 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// -------------------------------------------------------------
 // Sub-component: FeatureCard
-// -------------------------------------------------------------
+
 interface FeatureCardProps {
   icon: LucideIcon;
   heading: string;
@@ -36,15 +36,15 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 }) => {
   return (
     <article
-      className={`glass-panel rounded-[20px] p-7 sm:p-8 flex flex-col justify-between group transition-all duration-350 ease-out border border-[var(--primary)]/20 hover:border-[var(--primary)]/50 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.6),0_0_35px_rgba(212,175,55,0.18)] cursor-pointer ${className}`}
+      className={`glass-panel rounded-[20px] p-7 sm:p-8 flex flex-col justify-between group transition-all duration-350 ease-out border border-primary/20 hover:border-primary/50 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.6),0_0_35px_rgba(212,175,55,0.18)] cursor-pointer ${className}`}
     >
       <div>
         <div className="flex items-center justify-between mb-6">
-          <div className="w-12 h-12 rounded-xl bg-[var(--primary)]/10 border border-[var(--primary)]/25 flex items-center justify-center text-[var(--primary)] group-hover:scale-110 group-hover:rotate-6 group-hover:bg-[var(--primary)]/20 transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.15)]">
+          <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary group-hover:scale-110 group-hover:rotate-6 group-hover:bg-(--primary)/20 transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.15)]">
             <Icon size={24} />
           </div>
 
-          <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted group-hover:text-primary group-hover:border-[var(--primary)]/40 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300">
+          <div className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted group-hover:text-primary group-hover:border-primary/40 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300">
             <ArrowUpRight size={18} />
           </div>
         </div>
@@ -57,7 +57,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         </p>
       </div>
 
-      <div className="w-full h-[1px] bg-gradient-to-r from-[var(--primary)]/0 via-[var(--primary)]/20 to-[var(--primary)]/0 mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="w-full h-px bg-linear-to-r from-(--primary)/0 via-primary/20 to-(--primary)/0 mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     </article>
   );
 };
@@ -212,7 +212,7 @@ export default function WhyChooseAegis() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           <div className="lg:col-span-5 flex flex-col items-start text-left space-y-6 sm:space-y-8">
             <div ref={labelRef}>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-[var(--primary)]/30 text-xs font-semibold tracking-widest text-[var(--primary)] uppercase font-mono shadow-md">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-primary/30 text-xs font-semibold tracking-widest text-primary uppercase font-mono shadow-md">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                 WHY CHOOSE AEGIS
               </div>
@@ -228,14 +228,14 @@ export default function WhyChooseAegis() {
 
             <p
               ref={paragraphRef}
-              className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed text-zinc-300 max-w-[520px]"
+              className="text-base sm:text-lg text-text font-normal leading-relaxed max-w-130"
             >
               At Aegis Trading Academy, we don&apos;t sell shortcuts or false promises. We
               build disciplined traders through structured education, practical market
               experience and continuous mentorship.
             </p>
 
-            <div
+            {/* <div
               ref={statsRef}
               className="grid grid-cols-3 gap-4 sm:gap-6 pt-4 pb-2 border-y border-white/10 w-full"
             >
@@ -265,12 +265,12 @@ export default function WhyChooseAegis() {
                   Hours of Learning
                 </span>
               </div>
-            </div>
+            </div> */}
 
             <div ref={ctaRef} className="w-full sm:w-auto pt-2">
               <a
                 href="#register"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold text-sm sm:text-base tracking-wide bg-gradient-to-r from-[var(--primary-light)] via-[var(--primary)] to-[var(--primary-dark)] text-black shadow-[0_0_25px_rgba(212,175,55,0.3)] hover:shadow-[0_0_40px_rgba(212,175,55,0.5)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto text-center"
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold text-sm sm:text-base tracking-wide bg-linear-to-r from-primary-light via-primary to-primary-dark text-black shadow-[0_0_25px_rgba(212,175,55,0.3)] hover:shadow-[0_0_40px_rgba(212,175,55,0.5)] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto text-center"
               >
                 <span>Start Your Journey</span>
                 <ArrowRight
@@ -291,14 +291,14 @@ export default function WhyChooseAegis() {
                   icon={FEATURES[0].icon}
                   heading={FEATURES[0].heading}
                   description={FEATURES[0].description}
-                  className="min-h-[220px]"
+                  className="min-h-55"
                 />
 
                 <FeatureCard
                   icon={FEATURES[2].icon}
                   heading={FEATURES[2].heading}
                   description={FEATURES[2].description}
-                  className="min-h-[240px] sm:translate-y-4"
+                  className="min-h-60 sm:translate-y-4"
                 />
               </div>
 
@@ -307,14 +307,14 @@ export default function WhyChooseAegis() {
                   icon={FEATURES[1].icon}
                   heading={FEATURES[1].heading}
                   description={FEATURES[1].description}
-                  className="min-h-[240px]"
+                  className="min-h-60"
                 />
 
                 <FeatureCard
                   icon={FEATURES[3].icon}
                   heading={FEATURES[3].heading}
                   description={FEATURES[3].description}
-                  className="min-h-[220px] sm:translate-y-4"
+                  className="min-h-55 sm:translate-y-4"
                 />
               </div>
             </div>

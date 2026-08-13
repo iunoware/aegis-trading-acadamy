@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
@@ -17,10 +18,11 @@ export async function POST(request: NextRequest) {
       typeof body.fullName === "string"
         ? body.fullName.trim()
         : typeof body.name === "string"
-        ? body.name.trim()
-        : "";
+          ? body.name.trim()
+          : "";
     const phone = typeof body.phone === "string" ? body.phone.trim() : null;
-    const discordName = typeof body.discordName === "string" ? body.discordName.trim() : null;
+    const discordName =
+      typeof body.discordName === "string" ? body.discordName.trim() : null;
 
     if (!email || !password || !fullName) {
       return NextResponse.json(
@@ -72,7 +74,7 @@ export async function POST(request: NextRequest) {
       }
 
       // If user exists and is already verified, reject duplicate registration
-      if (existingUser.emailVerified) {
+      if (existingUser.emailVerifiedAt) {
         return NextResponse.json(
           {
             success: false,
@@ -107,7 +109,7 @@ export async function POST(request: NextRequest) {
           discordName: true,
           role: true,
           status: true,
-          emailVerified: true,
+          emailVerifiedAt: true,
         },
       });
 
@@ -120,7 +122,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
           {
             success: false,
-            error: "We couldn't send the verification email. Please check your SMTP settings and try again.",
+            error:
+              "We couldn't send the verification email. Please check your SMTP settings and try again.",
           },
           { status: 500 },
         );
@@ -131,7 +134,8 @@ export async function POST(request: NextRequest) {
           success: true,
           requiresVerification: true,
           email: updatedUser.email,
-          message: "Account updated! Please check your email for the new verification code.",
+          message:
+            "Account updated! Please check your email for the new verification code.",
           user: updatedUser,
         },
         { status: 201 },
@@ -150,7 +154,7 @@ export async function POST(request: NextRequest) {
         password: passwordHash,
         role: UserRole.STUDENT,
         status: AccountStatus.ACTIVE,
-        emailVerified: false,
+        // emailVerified: false,
         emailVerificationCode: hashedOTP,
         emailVerificationExpiresAt: expiresAt,
         emailVerificationAttempts: 0,
@@ -166,7 +170,7 @@ export async function POST(request: NextRequest) {
         discordName: true,
         role: true,
         status: true,
-        emailVerified: true,
+        emailVerifiedAt: true,
       },
     });
 
@@ -182,7 +186,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          error: "We couldn't send the verification email. Please check your SMTP configuration and try again.",
+          error:
+            "We couldn't send the verification email. Please check your SMTP configuration and try again.",
         },
         { status: 500 },
       );
@@ -194,7 +199,8 @@ export async function POST(request: NextRequest) {
         success: true,
         requiresVerification: true,
         email: newUser.email,
-        message: "Account created successfully! Please check your email for the verification code.",
+        message:
+          "Account created successfully! Please check your email for the verification code.",
         user: newUser,
       },
       { status: 201 },

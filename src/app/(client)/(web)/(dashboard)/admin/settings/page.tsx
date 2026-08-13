@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface SettingsForm {
   academyName: string;
@@ -38,6 +39,7 @@ interface ComplimentaryUser {
   name: string;
   email: string;
   phone: string;
+  discordName: string;
   status: "ACTIVE" | "INACTIVE";
   createdAt: string;
 }
@@ -46,6 +48,7 @@ interface NewComplimentaryUserForm {
   name: string;
   email: string;
   phone: string;
+  discordName: string;
   password: string;
   status: "ACTIVE" | "INACTIVE";
 }
@@ -55,7 +58,8 @@ const INITIAL_COMPLIMENTARY_USERS: ComplimentaryUser[] = [
     id: "student-001",
     name: "Demo Student",
     email: "student@aegistrading.com",
-    phone: "+1 555 010 2026",
+    phone: "+91 987 654 3210",
+    discordName: "demo-student-discord",
     status: "ACTIVE",
     createdAt: "2026-08-06",
   },
@@ -65,6 +69,7 @@ const INITIAL_USER_FORM: NewComplimentaryUserForm = {
   name: "",
   email: "",
   phone: "",
+  discordName: "",
   password: "",
   status: "ACTIVE",
 };
@@ -165,6 +170,7 @@ export default function AdminSettingsPage() {
     name: "",
     email: "",
     phone: "",
+    discordName: "",
     status: "ACTIVE" as "ACTIVE" | "INACTIVE",
   });
   const [isSavingEdit, setIsSavingEdit] = useState(false);
@@ -179,6 +185,7 @@ export default function AdminSettingsPage() {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      discordName: user.discordName,
       status: user.status,
     });
   }
@@ -194,6 +201,7 @@ export default function AdminSettingsPage() {
 
     const name = editForm.name.trim();
     const email = editForm.email.trim().toLowerCase();
+    const discordName = editForm.discordName.trim();
 
     if (!name || !email) return;
 
@@ -205,6 +213,7 @@ export default function AdminSettingsPage() {
         name,
         email,
         phone: editForm.phone.trim(),
+        discordName,
         status: editForm.status,
       });
 
@@ -213,6 +222,8 @@ export default function AdminSettingsPage() {
       setComplimentaryUsers((current) =>
         current.map((u) => (u.id === updated.id ? { ...u, ...updated } : u)),
       );
+
+      toast.success("User updated successfully");
 
       setEditingUser(null);
     } catch (error) {
@@ -333,6 +344,7 @@ export default function AdminSettingsPage() {
     const name = newUserForm.name.trim();
     const email = newUserForm.email.trim().toLowerCase();
     const phone = newUserForm.phone.trim();
+    const discordName = newUserForm.discordName.trim();
     const password = newUserForm.password;
 
     if (!name || !email || !password) {
@@ -346,6 +358,7 @@ export default function AdminSettingsPage() {
         name,
         email,
         phone,
+        discordName,
         password,
         status: newUserForm.status,
       });
@@ -357,6 +370,7 @@ export default function AdminSettingsPage() {
         name: createdUser.name,
         email: createdUser.email,
         phone: createdUser.phone || "",
+        discordName: createdUser.discordName || "",
         status: createdUser.status,
         createdAt: createdUser.createdAt,
       };
@@ -488,10 +502,10 @@ export default function AdminSettingsPage() {
 
               {/* Users table */}
               <div className="overflow-hidden rounded-xl border border-white/10">
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400">
                   <table className="w-full min-w-212.5 border-collapse text-left">
                     <thead className="bg-white/3">
-                      <tr className="border-b border-white/10">
+                      <tr className="border-b border-white/10 text-nowrap">
                         <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">
                           Student
                         </th>
@@ -502,6 +516,10 @@ export default function AdminSettingsPage() {
 
                         <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">
                           Phone
+                        </th>
+
+                        <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                          Discord
                         </th>
 
                         <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">
@@ -526,7 +544,7 @@ export default function AdminSettingsPage() {
                       {filteredComplimentaryUsers.map((user) => (
                         <tr
                           key={user.id}
-                          className="border-b border-white/8 last:border-b-0"
+                          className="border-b border-white/8 last:border-b-0 text-nowrap"
                         >
                           <td className="px-5 py-4">
                             <div className="flex items-center gap-3">
@@ -549,7 +567,11 @@ export default function AdminSettingsPage() {
                           </td>
 
                           <td className="px-5 py-4 text-sm text-zinc-400">
-                            {user.phone || "—"}
+                            {user.phone || "-"}
+                          </td>
+
+                          <td className="px-5 py-4 text-sm text-zinc-400">
+                            {user.discordName || "-"}
                           </td>
 
                           <td className="px-5 py-4">
@@ -674,18 +696,25 @@ export default function AdminSettingsPage() {
       {/* CREATE STUDENT MODAL */}
       {isAddUserModalOpen && (
         <div
-          className="fixed inset-0 z-100 flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
+          // className="fixed inset-0 z-100 flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-100 overflow-y-auto bg-black/75 px-4 py-4 backdrop-blur-sm sm:py-6"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               closeAddUserModal();
             }
           }}
         >
-          <div
+          {/* <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="add-student-title"
             className="w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-[#121212] shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
+          > */}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="add-student-title"
+            className="mx-auto flex max-h-[calc(100vh-2rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#121212] shadow-[0_30px_100px_rgba(0,0,0,0.8)] sm:max-h-[calc(100vh-3rem)]"
           >
             {/* Modal header */}
             <div className="flex items-start justify-between border-b border-white/10 px-5 py-5 sm:px-6">
@@ -717,117 +746,143 @@ export default function AdminSettingsPage() {
             </div>
 
             {/* Modal form */}
-            <form onSubmit={handleCreateComplimentaryUser}>
-              <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2 sm:p-6">
-                {/* Full name */}
+            {/* <form onSubmit={handleCreateComplimentaryUser}> */}
+            <form
+              className="flex min-h-0 flex-1 flex-col"
+              onSubmit={handleCreateComplimentaryUser}
+            >
+              <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400">
+                <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2 sm:p-6">
+                  {/* Full name */}
 
-                <FormField label="Full Name">
-                  <input
-                    type="text"
-                    value={newUserForm.name}
-                    onChange={(event) => updateNewUserField("name", event.target.value)}
-                    placeholder="Enter student name"
-                    required
-                    className={inputClassName}
-                  />
-                </FormField>
-
-                {/* Email */}
-                <FormField
-                  label="New Login Email"
-                  description="This email must not already belong to another account."
-                >
-                  <input
-                    type="email"
-                    value={newUserForm.email}
-                    onChange={(event) => updateNewUserField("email", event.target.value)}
-                    placeholder="student@example.com"
-                    autoComplete="off"
-                    required
-                    className={inputClassName}
-                  />
-                </FormField>
-
-                {/* Phone */}
-                <FormField label="Phone Number" description="Optional contact number.">
-                  <input
-                    type="tel"
-                    value={newUserForm.phone}
-                    onChange={(event) => updateNewUserField("phone", event.target.value)}
-                    placeholder="Enter phone number"
-                    className={inputClassName}
-                  />
-                </FormField>
-
-                {/* Status */}
-                <FormField label="Account Status">
-                  <select
-                    value={newUserForm.status}
-                    onChange={(event) =>
-                      updateNewUserField(
-                        "status",
-                        event.target.value as "ACTIVE" | "INACTIVE",
-                      )
-                    }
-                    className={inputClassName}
-                  >
-                    <option value="ACTIVE" className="bg-[#121212]">
-                      Active
-                    </option>
-
-                    <option value="INACTIVE" className="bg-[#121212]">
-                      Inactive
-                    </option>
-                  </select>
-                </FormField>
-
-                {/* Password */}
-                <div className="sm:col-span-2">
-                  <FormField
-                    label="New Login Password"
-                    description="Create the password the student will use for their first login."
-                  >
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        value={newUserForm.password}
-                        onChange={(event) =>
-                          updateNewUserField("password", event.target.value)
-                        }
-                        placeholder="Create a secure password"
-                        autoComplete="new-password"
-                        minLength={8}
-                        required
-                        className={`${inputClassName} pr-12`}
-                      />
-
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword((current) => !current)}
-                        aria-label={showPassword ? "Hide password" : "Show password"}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors hover:text-white"
-                      >
-                        {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
-                      </button>
-                    </div>
+                  <FormField label="Full Name">
+                    <input
+                      type="text"
+                      value={newUserForm.name}
+                      onChange={(event) => updateNewUserField("name", event.target.value)}
+                      placeholder="Enter student name"
+                      required
+                      className={inputClassName}
+                    />
                   </FormField>
-                </div>
 
-                {/* Student role information */}
-                <div className="sm:col-span-2">
-                  <div className="rounded-xl border border-white/10 bg-[#0d0d0d] p-4">
-                    <div className="flex items-start gap-3">
-                      <ShieldCheck size={17} className="mt-0.5 shrink-0 text-primary" />
+                  {/* Email */}
+                  <FormField
+                    label="New Login Email"
+                    description="This email must not already belong to another account."
+                  >
+                    <input
+                      type="email"
+                      value={newUserForm.email}
+                      onChange={(event) =>
+                        updateNewUserField("email", event.target.value)
+                      }
+                      placeholder="student@example.com"
+                      autoComplete="off"
+                      required
+                      className={inputClassName}
+                    />
+                  </FormField>
 
-                      <div>
-                        <p className="text-sm font-semibold text-white">
-                          Student role is fixed
-                        </p>
+                  {/* Phone */}
+                  <FormField label="Phone Number" description="Optional contact number.">
+                    <input
+                      type="tel"
+                      value={newUserForm.phone}
+                      onChange={(event) =>
+                        updateNewUserField("phone", event.target.value)
+                      }
+                      placeholder="Enter phone number"
+                      className={inputClassName}
+                    />
+                  </FormField>
 
-                        <p className="mt-1 text-xs leading-relaxed text-zinc-500">
-                          This account will be created as a student. It can access
-                          published courses but cannot open or use the admin panel.
-                        </p>
+                  {/* discord name */}
+                  <FormField
+                    label="Discord Name"
+                    description="Optional Discord username for contacting the student."
+                  >
+                    <input
+                      type="text"
+                      value={newUserForm.discordName}
+                      onChange={(event) =>
+                        updateNewUserField("discordName", event.target.value)
+                      }
+                      placeholder="e.g. discord#1234"
+                      className={inputClassName}
+                    />
+                  </FormField>
+
+                  {/* Status */}
+                  <FormField label="Account Status">
+                    <select
+                      value={newUserForm.status}
+                      onChange={(event) =>
+                        updateNewUserField(
+                          "status",
+                          event.target.value as "ACTIVE" | "INACTIVE",
+                        )
+                      }
+                      className={inputClassName}
+                    >
+                      <option value="ACTIVE" className="bg-[#121212]">
+                        Active
+                      </option>
+
+                      <option value="INACTIVE" className="bg-[#121212]">
+                        Inactive
+                      </option>
+                    </select>
+                  </FormField>
+
+                  {/* Password */}
+                  <div className="sm:col-span-2">
+                    <FormField
+                      label="New Login Password"
+                      description="Create the password the student will use for their first login."
+                    >
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          value={newUserForm.password}
+                          onChange={(event) =>
+                            updateNewUserField("password", event.target.value)
+                          }
+                          placeholder="Create a secure password"
+                          autoComplete="new-password"
+                          minLength={8}
+                          required
+                          className={`${inputClassName} pr-12`}
+                        />
+
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((current) => !current)}
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors hover:text-white"
+                        >
+                          {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                        </button>
+                      </div>
+                    </FormField>
+                  </div>
+
+                  {/* Student role information */}
+                  <div className="sm:col-span-2">
+                    <div className="rounded-xl border border-white/10 bg-[#0d0d0d] p-4">
+                      <div className="flex items-start gap-3">
+                        <ShieldCheck size={17} className="mt-0.5 shrink-0 text-primary" />
+
+                        <div>
+                          <p className="text-sm font-semibold text-white">
+                            Student role is fixed
+                          </p>
+
+                          <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                            This account will be created as a student. It can access
+                            published courses but cannot open or use the admin panel.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -862,15 +917,21 @@ export default function AdminSettingsPage() {
 
       {editingUser && (
         <div
-          className="fixed inset-0 z-100 flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
+          // className="fixed inset-0 z-100 flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-100 overflow-y-auto bg-black/75 px-4 py-4 backdrop-blur-sm sm:py-6"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) closeEditModal();
           }}
         >
-          <div
+          {/* <div
             role="dialog"
             aria-modal="true"
             className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-[#121212] shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
+          > */}
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="mx-auto flex max-h-[calc(100vh-2rem)] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#121212] shadow-[0_30px_100px_rgba(0,0,0,0.8)] sm:max-h-[calc(100vh-3rem)]"
           >
             <div className="flex items-start justify-between border-b border-white/10 px-5 py-5 sm:px-6">
               <div>
@@ -890,64 +951,87 @@ export default function AdminSettingsPage() {
               </button>
             </div>
 
-            <form onSubmit={handleUpdateUser}>
-              <div className="space-y-5 p-5 sm:p-6">
-                <FormField label="Full Name">
-                  <input
-                    type="text"
-                    value={editForm.name}
-                    onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
-                    required
-                    className={inputClassName}
-                  />
-                </FormField>
+            {/* <form onSubmit={handleUpdateUser }> */}
+            <form onSubmit={handleUpdateUser} className="flex min-h-0 flex-1 flex-col">
+              <div className="min-h-0 flex-1 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400">
+                <div className="space-y-5 p-5 sm:p-6">
+                  <FormField label="Full Name">
+                    <input
+                      type="text"
+                      value={editForm.name}
+                      onChange={(e) =>
+                        setEditForm((f) => ({ ...f, name: e.target.value }))
+                      }
+                      required
+                      className={inputClassName}
+                    />
+                  </FormField>
 
-                <FormField
-                  label="Login Email"
-                  description="Changing this updates the email the student logs in with."
-                >
-                  <input
-                    type="email"
-                    value={editForm.email}
-                    onChange={(e) =>
-                      setEditForm((f) => ({ ...f, email: e.target.value }))
-                    }
-                    autoComplete="off"
-                    required
-                    className={inputClassName}
-                  />
-                </FormField>
-
-                <FormField label="Phone Number">
-                  <input
-                    type="tel"
-                    value={editForm.phone}
-                    onChange={(e) =>
-                      setEditForm((f) => ({ ...f, phone: e.target.value }))
-                    }
-                    className={inputClassName}
-                  />
-                </FormField>
-
-                <FormField label="Account Status">
-                  <select
-                    value={editForm.status}
-                    onChange={(e) =>
-                      setEditForm((f) => ({
-                        ...f,
-                        status: e.target.value as "ACTIVE" | "INACTIVE",
-                      }))
-                    }
-                    className={inputClassName}
+                  <FormField
+                    label="Login Email"
+                    description="Changing this updates the email the student logs in with."
                   >
-                    <option value="ACTIVE" className="bg-[#121212]">
-                      Active
-                    </option>
-                    <option value="INACTIVE" className="bg-[#121212]">
-                      Inactive
-                    </option>
-                  </select>
-                </FormField>
+                    <input
+                      type="email"
+                      value={editForm.email}
+                      onChange={(e) =>
+                        setEditForm((f) => ({ ...f, email: e.target.value }))
+                      }
+                      autoComplete="off"
+                      required
+                      className={inputClassName}
+                    />
+                  </FormField>
+
+                  <FormField label="Phone Number">
+                    <input
+                      type="tel"
+                      value={editForm.phone}
+                      onChange={(e) =>
+                        setEditForm((f) => ({ ...f, phone: e.target.value }))
+                      }
+                      className={inputClassName}
+                    />
+                  </FormField>
+
+                  <FormField
+                    label="Discord Name"
+                    description="Optional Discord username for contacting the student."
+                  >
+                    <input
+                      type="text"
+                      value={editForm.discordName}
+                      onChange={(e) =>
+                        setEditForm((f) => ({
+                          ...f,
+                          discordName: e.target.value,
+                        }))
+                      }
+                      placeholder="e.g. praveen#1234"
+                      className={inputClassName}
+                    />
+                  </FormField>
+
+                  <FormField label="Account Status">
+                    <select
+                      value={editForm.status}
+                      onChange={(e) =>
+                        setEditForm((f) => ({
+                          ...f,
+                          status: e.target.value as "ACTIVE" | "INACTIVE",
+                        }))
+                      }
+                      className={inputClassName}
+                    >
+                      <option value="ACTIVE" className="bg-[#121212]">
+                        Active
+                      </option>
+                      <option value="INACTIVE" className="bg-[#121212]">
+                        Inactive
+                      </option>
+                    </select>
+                  </FormField>
+                </div>
               </div>
 
               <div className="flex flex-col-reverse gap-3 border-t border-white/10 px-5 py-4 sm:flex-row sm:justify-end sm:px-6">

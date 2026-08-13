@@ -59,6 +59,7 @@ export async function GET() {
         name: true,
         email: true,
         phone: true,
+        discordName: true,
         status: true,
         createdAt: true,
         subscriptions: {
@@ -114,6 +115,8 @@ export async function POST(request: NextRequest) {
 
     const password = typeof body.password === "string" ? body.password : "";
 
+    const discordName = typeof body.discordName === "string" ? body.discordName : "";
+
     const status =
       body.status === "INACTIVE" ? AccountStatus.INACTIVE : AccountStatus.ACTIVE;
 
@@ -134,6 +137,18 @@ export async function POST(request: NextRequest) {
           message: "Email address is required.",
         },
         { status: 400 },
+      );
+    }
+
+    if (!discordName) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Discord name is required",
+        },
+        {
+          status: 400,
+        },
       );
     }
 
@@ -158,7 +173,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Check existing email
-
     const existingEmail = await prisma.user.findUnique({
       where: {
         email,
@@ -181,7 +195,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Check existing phone
-
     if (phone) {
       const existingPhone = await prisma.user.findUnique({
         where: {
@@ -206,7 +219,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Find an active subscription plan
-
     const plan = await prisma.subscriptionPlan.findUnique({
       where: {
         type: "YEARLY",
@@ -231,19 +243,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // if (!plan) {
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       message:
-    //         "No active subscription plan exists. Create an active plan before creating a complimentary student.",
-    //     },
-    //     { status: 400 },
-    //   );
-    // }
-
     // Prepare user data
-
     const { firstName, lastName } = getNameParts(name);
 
     const hashedPassword = hashPassword(password);
@@ -264,6 +264,7 @@ export async function POST(request: NextRequest) {
           name,
           email,
           phone: phone || null,
+          discordName: discordName || null,
           password: hashedPassword,
           role: UserRole.STUDENT,
           status,
@@ -381,6 +382,7 @@ export async function POST(request: NextRequest) {
           name: result.user.name,
           email: result.user.email,
           phone: result.user.phone,
+          discordName: result.user.discordName,
           role: result.user.role,
           status: result.user.status,
           createdAt: result.user.createdAt,
@@ -463,6 +465,8 @@ export async function PATCH(request: NextRequest) {
     const email =
       typeof body.email === "string" ? body.email.trim().toLowerCase() : undefined;
     const phone = typeof body.phone === "string" ? body.phone.trim() : undefined;
+    const discordName =
+      typeof body.discordName === "string" ? body.discordName.trim() : undefined;
     const status =
       body.status === "ACTIVE" || body.status === "INACTIVE"
         ? (body.status as AccountStatus)
@@ -534,6 +538,7 @@ export async function PATCH(request: NextRequest) {
           ...(name !== undefined ? { name, firstName, lastName } : {}),
           ...(email !== undefined ? { email } : {}),
           ...(phone !== undefined ? { phone: phone || null } : {}),
+          ...(discordName !== undefined ? { discordName: discordName || null } : {}),
           ...(status !== undefined ? { status } : {}),
         },
       });
@@ -575,6 +580,7 @@ export async function PATCH(request: NextRequest) {
         name: updatedUser.name,
         email: updatedUser.email,
         phone: updatedUser.phone,
+        discordName: updatedUser.discordName,
         status: updatedUser.status,
         createdAt: updatedUser.createdAt,
       },

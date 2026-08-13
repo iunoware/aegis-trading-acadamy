@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { BadgeIndianRupee, Save, ShieldCheck } from "lucide-react";
 import { gsap } from "gsap";
 
@@ -39,7 +40,7 @@ export function PricingHeader({ hasChanges, onSave }: PricingHeaderProps) {
         </p>
       </div>
 
-      <div className="flex items-center gap-3">
+      {/* <div className="flex items-center gap-3">
         <button
           ref={saveBtnRef}
           onClick={onSave}
@@ -53,7 +54,7 @@ export function PricingHeader({ hasChanges, onSave }: PricingHeaderProps) {
           <Save size={15} />
           <span>Save Changes</span>
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

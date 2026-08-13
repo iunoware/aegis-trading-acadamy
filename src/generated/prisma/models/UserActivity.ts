@@ -218,8 +218,8 @@ export type UserActivityWhereInput = {
   userAgent?: Prisma.StringNullableFilter<"UserActivity"> | string | null
   metadata?: Prisma.JsonNullableFilter<"UserActivity">
   createdAt?: Prisma.DateTimeFilter<"UserActivity"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   actor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type UserActivityOrderByWithRelationInput = {
@@ -233,8 +233,8 @@ export type UserActivityOrderByWithRelationInput = {
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
   actor?: Prisma.UserOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type UserActivityWhereUniqueInput = Prisma.AtLeast<{
@@ -251,8 +251,8 @@ export type UserActivityWhereUniqueInput = Prisma.AtLeast<{
   userAgent?: Prisma.StringNullableFilter<"UserActivity"> | string | null
   metadata?: Prisma.JsonNullableFilter<"UserActivity">
   createdAt?: Prisma.DateTimeFilter<"UserActivity"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   actor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type UserActivityOrderByWithAggregationInput = {
@@ -296,8 +296,8 @@ export type UserActivityCreateInput = {
   userAgent?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutAccountActivitiesInput
   actor?: Prisma.UserCreateNestedOneWithoutPerformedActivitiesInput
+  user: Prisma.UserCreateNestedOneWithoutAccountActivitiesInput
 }
 
 export type UserActivityUncheckedCreateInput = {
@@ -322,8 +322,8 @@ export type UserActivityUpdateInput = {
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutAccountActivitiesNestedInput
   actor?: Prisma.UserUpdateOneWithoutPerformedActivitiesNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutAccountActivitiesNestedInput
 }
 
 export type UserActivityUncheckedUpdateInput = {
@@ -423,13 +423,6 @@ export type UserActivityMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
-export type UserActivityCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.UserActivityCreateWithoutUserInput, Prisma.UserActivityUncheckedCreateWithoutUserInput> | Prisma.UserActivityCreateWithoutUserInput[] | Prisma.UserActivityUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.UserActivityCreateOrConnectWithoutUserInput | Prisma.UserActivityCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.UserActivityCreateManyUserInputEnvelope
-  connect?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
-}
-
 export type UserActivityCreateNestedManyWithoutActorInput = {
   create?: Prisma.XOR<Prisma.UserActivityCreateWithoutActorInput, Prisma.UserActivityUncheckedCreateWithoutActorInput> | Prisma.UserActivityCreateWithoutActorInput[] | Prisma.UserActivityUncheckedCreateWithoutActorInput[]
   connectOrCreate?: Prisma.UserActivityCreateOrConnectWithoutActorInput | Prisma.UserActivityCreateOrConnectWithoutActorInput[]
@@ -437,7 +430,7 @@ export type UserActivityCreateNestedManyWithoutActorInput = {
   connect?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
 }
 
-export type UserActivityUncheckedCreateNestedManyWithoutUserInput = {
+export type UserActivityCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.UserActivityCreateWithoutUserInput, Prisma.UserActivityUncheckedCreateWithoutUserInput> | Prisma.UserActivityCreateWithoutUserInput[] | Prisma.UserActivityUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.UserActivityCreateOrConnectWithoutUserInput | Prisma.UserActivityCreateOrConnectWithoutUserInput[]
   createMany?: Prisma.UserActivityCreateManyUserInputEnvelope
@@ -451,18 +444,11 @@ export type UserActivityUncheckedCreateNestedManyWithoutActorInput = {
   connect?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
 }
 
-export type UserActivityUpdateManyWithoutUserNestedInput = {
+export type UserActivityUncheckedCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.UserActivityCreateWithoutUserInput, Prisma.UserActivityUncheckedCreateWithoutUserInput> | Prisma.UserActivityCreateWithoutUserInput[] | Prisma.UserActivityUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.UserActivityCreateOrConnectWithoutUserInput | Prisma.UserActivityCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.UserActivityUpsertWithWhereUniqueWithoutUserInput | Prisma.UserActivityUpsertWithWhereUniqueWithoutUserInput[]
   createMany?: Prisma.UserActivityCreateManyUserInputEnvelope
-  set?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
-  disconnect?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
-  delete?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
   connect?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
-  update?: Prisma.UserActivityUpdateWithWhereUniqueWithoutUserInput | Prisma.UserActivityUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.UserActivityUpdateManyWithWhereWithoutUserInput | Prisma.UserActivityUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.UserActivityScalarWhereInput | Prisma.UserActivityScalarWhereInput[]
 }
 
 export type UserActivityUpdateManyWithoutActorNestedInput = {
@@ -479,7 +465,7 @@ export type UserActivityUpdateManyWithoutActorNestedInput = {
   deleteMany?: Prisma.UserActivityScalarWhereInput | Prisma.UserActivityScalarWhereInput[]
 }
 
-export type UserActivityUncheckedUpdateManyWithoutUserNestedInput = {
+export type UserActivityUpdateManyWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.UserActivityCreateWithoutUserInput, Prisma.UserActivityUncheckedCreateWithoutUserInput> | Prisma.UserActivityCreateWithoutUserInput[] | Prisma.UserActivityUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.UserActivityCreateOrConnectWithoutUserInput | Prisma.UserActivityCreateOrConnectWithoutUserInput[]
   upsert?: Prisma.UserActivityUpsertWithWhereUniqueWithoutUserInput | Prisma.UserActivityUpsertWithWhereUniqueWithoutUserInput[]
@@ -507,42 +493,22 @@ export type UserActivityUncheckedUpdateManyWithoutActorNestedInput = {
   deleteMany?: Prisma.UserActivityScalarWhereInput | Prisma.UserActivityScalarWhereInput[]
 }
 
+export type UserActivityUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserActivityCreateWithoutUserInput, Prisma.UserActivityUncheckedCreateWithoutUserInput> | Prisma.UserActivityCreateWithoutUserInput[] | Prisma.UserActivityUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.UserActivityCreateOrConnectWithoutUserInput | Prisma.UserActivityCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.UserActivityUpsertWithWhereUniqueWithoutUserInput | Prisma.UserActivityUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.UserActivityCreateManyUserInputEnvelope
+  set?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
+  disconnect?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
+  delete?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
+  connect?: Prisma.UserActivityWhereUniqueInput | Prisma.UserActivityWhereUniqueInput[]
+  update?: Prisma.UserActivityUpdateWithWhereUniqueWithoutUserInput | Prisma.UserActivityUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.UserActivityUpdateManyWithWhereWithoutUserInput | Prisma.UserActivityUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.UserActivityScalarWhereInput | Prisma.UserActivityScalarWhereInput[]
+}
+
 export type EnumActivityActionFieldUpdateOperationsInput = {
   set?: $Enums.ActivityAction
-}
-
-export type UserActivityCreateWithoutUserInput = {
-  id?: string
-  action: $Enums.ActivityAction
-  title: string
-  details?: string | null
-  ipAddress?: string | null
-  userAgent?: string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Date | string
-  actor?: Prisma.UserCreateNestedOneWithoutPerformedActivitiesInput
-}
-
-export type UserActivityUncheckedCreateWithoutUserInput = {
-  id?: string
-  actorId?: string | null
-  action: $Enums.ActivityAction
-  title: string
-  details?: string | null
-  ipAddress?: string | null
-  userAgent?: string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Date | string
-}
-
-export type UserActivityCreateOrConnectWithoutUserInput = {
-  where: Prisma.UserActivityWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserActivityCreateWithoutUserInput, Prisma.UserActivityUncheckedCreateWithoutUserInput>
-}
-
-export type UserActivityCreateManyUserInputEnvelope = {
-  data: Prisma.UserActivityCreateManyUserInput | Prisma.UserActivityCreateManyUserInput[]
-  skipDuplicates?: boolean
 }
 
 export type UserActivityCreateWithoutActorInput = {
@@ -579,36 +545,38 @@ export type UserActivityCreateManyActorInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type UserActivityUpsertWithWhereUniqueWithoutUserInput = {
+export type UserActivityCreateWithoutUserInput = {
+  id?: string
+  action: $Enums.ActivityAction
+  title: string
+  details?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  actor?: Prisma.UserCreateNestedOneWithoutPerformedActivitiesInput
+}
+
+export type UserActivityUncheckedCreateWithoutUserInput = {
+  id?: string
+  actorId?: string | null
+  action: $Enums.ActivityAction
+  title: string
+  details?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+}
+
+export type UserActivityCreateOrConnectWithoutUserInput = {
   where: Prisma.UserActivityWhereUniqueInput
-  update: Prisma.XOR<Prisma.UserActivityUpdateWithoutUserInput, Prisma.UserActivityUncheckedUpdateWithoutUserInput>
   create: Prisma.XOR<Prisma.UserActivityCreateWithoutUserInput, Prisma.UserActivityUncheckedCreateWithoutUserInput>
 }
 
-export type UserActivityUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.UserActivityWhereUniqueInput
-  data: Prisma.XOR<Prisma.UserActivityUpdateWithoutUserInput, Prisma.UserActivityUncheckedUpdateWithoutUserInput>
-}
-
-export type UserActivityUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.UserActivityScalarWhereInput
-  data: Prisma.XOR<Prisma.UserActivityUpdateManyMutationInput, Prisma.UserActivityUncheckedUpdateManyWithoutUserInput>
-}
-
-export type UserActivityScalarWhereInput = {
-  AND?: Prisma.UserActivityScalarWhereInput | Prisma.UserActivityScalarWhereInput[]
-  OR?: Prisma.UserActivityScalarWhereInput[]
-  NOT?: Prisma.UserActivityScalarWhereInput | Prisma.UserActivityScalarWhereInput[]
-  id?: Prisma.StringFilter<"UserActivity"> | string
-  userId?: Prisma.StringFilter<"UserActivity"> | string
-  actorId?: Prisma.StringNullableFilter<"UserActivity"> | string | null
-  action?: Prisma.EnumActivityActionFilter<"UserActivity"> | $Enums.ActivityAction
-  title?: Prisma.StringFilter<"UserActivity"> | string
-  details?: Prisma.StringNullableFilter<"UserActivity"> | string | null
-  ipAddress?: Prisma.StringNullableFilter<"UserActivity"> | string | null
-  userAgent?: Prisma.StringNullableFilter<"UserActivity"> | string | null
-  metadata?: Prisma.JsonNullableFilter<"UserActivity">
-  createdAt?: Prisma.DateTimeFilter<"UserActivity"> | Date | string
+export type UserActivityCreateManyUserInputEnvelope = {
+  data: Prisma.UserActivityCreateManyUserInput | Prisma.UserActivityCreateManyUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type UserActivityUpsertWithWhereUniqueWithoutActorInput = {
@@ -627,16 +595,36 @@ export type UserActivityUpdateManyWithWhereWithoutActorInput = {
   data: Prisma.XOR<Prisma.UserActivityUpdateManyMutationInput, Prisma.UserActivityUncheckedUpdateManyWithoutActorInput>
 }
 
-export type UserActivityCreateManyUserInput = {
-  id?: string
-  actorId?: string | null
-  action: $Enums.ActivityAction
-  title: string
-  details?: string | null
-  ipAddress?: string | null
-  userAgent?: string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Date | string
+export type UserActivityScalarWhereInput = {
+  AND?: Prisma.UserActivityScalarWhereInput | Prisma.UserActivityScalarWhereInput[]
+  OR?: Prisma.UserActivityScalarWhereInput[]
+  NOT?: Prisma.UserActivityScalarWhereInput | Prisma.UserActivityScalarWhereInput[]
+  id?: Prisma.StringFilter<"UserActivity"> | string
+  userId?: Prisma.StringFilter<"UserActivity"> | string
+  actorId?: Prisma.StringNullableFilter<"UserActivity"> | string | null
+  action?: Prisma.EnumActivityActionFilter<"UserActivity"> | $Enums.ActivityAction
+  title?: Prisma.StringFilter<"UserActivity"> | string
+  details?: Prisma.StringNullableFilter<"UserActivity"> | string | null
+  ipAddress?: Prisma.StringNullableFilter<"UserActivity"> | string | null
+  userAgent?: Prisma.StringNullableFilter<"UserActivity"> | string | null
+  metadata?: Prisma.JsonNullableFilter<"UserActivity">
+  createdAt?: Prisma.DateTimeFilter<"UserActivity"> | Date | string
+}
+
+export type UserActivityUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.UserActivityWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserActivityUpdateWithoutUserInput, Prisma.UserActivityUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.UserActivityCreateWithoutUserInput, Prisma.UserActivityUncheckedCreateWithoutUserInput>
+}
+
+export type UserActivityUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.UserActivityWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserActivityUpdateWithoutUserInput, Prisma.UserActivityUncheckedUpdateWithoutUserInput>
+}
+
+export type UserActivityUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.UserActivityScalarWhereInput
+  data: Prisma.XOR<Prisma.UserActivityUpdateManyMutationInput, Prisma.UserActivityUncheckedUpdateManyWithoutUserInput>
 }
 
 export type UserActivityCreateManyActorInput = {
@@ -651,40 +639,16 @@ export type UserActivityCreateManyActorInput = {
   createdAt?: Date | string
 }
 
-export type UserActivityUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.EnumActivityActionFieldUpdateOperationsInput | $Enums.ActivityAction
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  details?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type UserActivityCreateManyUserInput = {
+  id?: string
+  actorId?: string | null
+  action: $Enums.ActivityAction
+  title: string
+  details?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  actor?: Prisma.UserUpdateOneWithoutPerformedActivitiesNestedInput
-}
-
-export type UserActivityUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  action?: Prisma.EnumActivityActionFieldUpdateOperationsInput | $Enums.ActivityAction
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  details?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type UserActivityUncheckedUpdateManyWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  action?: Prisma.EnumActivityActionFieldUpdateOperationsInput | $Enums.ActivityAction
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  details?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Date | string
 }
 
 export type UserActivityUpdateWithoutActorInput = {
@@ -723,6 +687,42 @@ export type UserActivityUncheckedUpdateManyWithoutActorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type UserActivityUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.EnumActivityActionFieldUpdateOperationsInput | $Enums.ActivityAction
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  details?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actor?: Prisma.UserUpdateOneWithoutPerformedActivitiesNestedInput
+}
+
+export type UserActivityUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  action?: Prisma.EnumActivityActionFieldUpdateOperationsInput | $Enums.ActivityAction
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  details?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserActivityUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  action?: Prisma.EnumActivityActionFieldUpdateOperationsInput | $Enums.ActivityAction
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  details?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type UserActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -736,8 +736,8 @@ export type UserActivitySelect<ExtArgs extends runtime.Types.Extensions.Internal
   userAgent?: boolean
   metadata?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.UserActivity$actorArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userActivity"]>
 
 export type UserActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -751,8 +751,8 @@ export type UserActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   userAgent?: boolean
   metadata?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.UserActivity$actorArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userActivity"]>
 
 export type UserActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -766,8 +766,8 @@ export type UserActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   userAgent?: boolean
   metadata?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.UserActivity$actorArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userActivity"]>
 
 export type UserActivitySelectScalar = {
@@ -785,23 +785,23 @@ export type UserActivitySelectScalar = {
 
 export type UserActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "actorId" | "action" | "title" | "details" | "ipAddress" | "userAgent" | "metadata" | "createdAt", ExtArgs["result"]["userActivity"]>
 export type UserActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.UserActivity$actorArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type UserActivityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.UserActivity$actorArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type UserActivityIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.UserActivity$actorArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $UserActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UserActivity"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
     actor: Prisma.$UserPayload<ExtArgs> | null
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1208,8 +1208,8 @@ readonly fields: UserActivityFieldRefs;
  */
 export interface Prisma__UserActivityClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   actor<T extends Prisma.UserActivity$actorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserActivity$actorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

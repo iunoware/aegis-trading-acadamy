@@ -202,8 +202,8 @@ export type SubscriptionEventWhereInput = {
   description?: Prisma.StringNullableFilter<"SubscriptionEvent"> | string | null
   metadata?: Prisma.JsonNullableFilter<"SubscriptionEvent">
   createdAt?: Prisma.DateTimeFilter<"SubscriptionEvent"> | Date | string
-  subscription?: Prisma.XOR<Prisma.SubscriptionScalarRelationFilter, Prisma.SubscriptionWhereInput>
   actor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  subscription?: Prisma.XOR<Prisma.SubscriptionScalarRelationFilter, Prisma.SubscriptionWhereInput>
 }
 
 export type SubscriptionEventOrderByWithRelationInput = {
@@ -215,8 +215,8 @@ export type SubscriptionEventOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  subscription?: Prisma.SubscriptionOrderByWithRelationInput
   actor?: Prisma.UserOrderByWithRelationInput
+  subscription?: Prisma.SubscriptionOrderByWithRelationInput
 }
 
 export type SubscriptionEventWhereUniqueInput = Prisma.AtLeast<{
@@ -231,8 +231,8 @@ export type SubscriptionEventWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"SubscriptionEvent"> | string | null
   metadata?: Prisma.JsonNullableFilter<"SubscriptionEvent">
   createdAt?: Prisma.DateTimeFilter<"SubscriptionEvent"> | Date | string
-  subscription?: Prisma.XOR<Prisma.SubscriptionScalarRelationFilter, Prisma.SubscriptionWhereInput>
   actor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  subscription?: Prisma.XOR<Prisma.SubscriptionScalarRelationFilter, Prisma.SubscriptionWhereInput>
 }, "id">
 
 export type SubscriptionEventOrderByWithAggregationInput = {
@@ -270,8 +270,8 @@ export type SubscriptionEventCreateInput = {
   description?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
-  subscription: Prisma.SubscriptionCreateNestedOneWithoutEventsInput
   actor?: Prisma.UserCreateNestedOneWithoutSubscriptionEventsInput
+  subscription: Prisma.SubscriptionCreateNestedOneWithoutEventsInput
 }
 
 export type SubscriptionEventUncheckedCreateInput = {
@@ -292,8 +292,8 @@ export type SubscriptionEventUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  subscription?: Prisma.SubscriptionUpdateOneRequiredWithoutEventsNestedInput
   actor?: Prisma.UserUpdateOneWithoutSubscriptionEventsNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneRequiredWithoutEventsNestedInput
 }
 
 export type SubscriptionEventUncheckedUpdateInput = {
@@ -664,8 +664,8 @@ export type SubscriptionEventSelect<ExtArgs extends runtime.Types.Extensions.Int
   description?: boolean
   metadata?: boolean
   createdAt?: boolean
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.SubscriptionEvent$actorArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionEvent"]>
 
 export type SubscriptionEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -677,8 +677,8 @@ export type SubscriptionEventSelectCreateManyAndReturn<ExtArgs extends runtime.T
   description?: boolean
   metadata?: boolean
   createdAt?: boolean
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.SubscriptionEvent$actorArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionEvent"]>
 
 export type SubscriptionEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -690,8 +690,8 @@ export type SubscriptionEventSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   description?: boolean
   metadata?: boolean
   createdAt?: boolean
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.SubscriptionEvent$actorArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionEvent"]>
 
 export type SubscriptionEventSelectScalar = {
@@ -707,23 +707,23 @@ export type SubscriptionEventSelectScalar = {
 
 export type SubscriptionEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "subscriptionId" | "actorId" | "type" | "title" | "description" | "metadata" | "createdAt", ExtArgs["result"]["subscriptionEvent"]>
 export type SubscriptionEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.SubscriptionEvent$actorArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }
 export type SubscriptionEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.SubscriptionEvent$actorArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }
 export type SubscriptionEventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   actor?: boolean | Prisma.SubscriptionEvent$actorArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }
 
 export type $SubscriptionEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SubscriptionEvent"
   objects: {
-    subscription: Prisma.$SubscriptionPayload<ExtArgs>
     actor: Prisma.$UserPayload<ExtArgs> | null
+    subscription: Prisma.$SubscriptionPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1128,8 +1128,8 @@ readonly fields: SubscriptionEventFieldRefs;
  */
 export interface Prisma__SubscriptionEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  subscription<T extends Prisma.SubscriptionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionDefaultArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   actor<T extends Prisma.SubscriptionEvent$actorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionEvent$actorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  subscription<T extends Prisma.SubscriptionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionDefaultArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

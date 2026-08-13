@@ -88,6 +88,7 @@ interface PricingPlan {
   title: string;
   price: string;
   subtitle: string;
+  description: string;
   savingsLabel?: string;
   isPopular?: boolean;
   popularBadgeText?: string;
@@ -132,6 +133,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
     title,
     price,
     subtitle,
+    description,
     savingsLabel,
     isPopular,
     popularBadgeText,
@@ -179,6 +181,12 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
               / {subtitle}
             </span>
           </div>
+        </div>
+
+        <div className="mb-8 pb-6 border-b border-white/10">
+          <p className="text-sm sm:text-base leading-relaxed text-zinc-400">
+            {description}
+          </p>
         </div>
 
         <ul className="space-y-3 mb-8" aria-label={`${title} Features`}>
@@ -283,6 +291,7 @@ function convertApiPlanToPricingPlan(
     title: plan.name,
     price: `$${plan.price.toLocaleString("en-US")}`,
     subtitle: plan.id === "monthly" ? "Per Month" : "Per Year",
+    description: plan.description,
     savingsLabel,
     isPopular:
       plan.badge === "Popular" ||
@@ -337,6 +346,10 @@ export default function Pricing() {
 
       const monthlyPlan = response.data.data.monthly;
       const yearlyPlan = response.data.data.yearly;
+
+      console.log("Pricing API:", response.data);
+      console.log("Monthly description:", monthlyPlan?.description);
+      console.log("Yearly description:", yearlyPlan?.description);
 
       const formattedPlans: PricingPlan[] = [];
 

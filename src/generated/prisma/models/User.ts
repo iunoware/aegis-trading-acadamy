@@ -20,18 +20,8 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
-  _avg: UserAvgAggregateOutputType | null
-  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
-}
-
-export type UserAvgAggregateOutputType = {
-  emailVerificationAttempts: number | null
-}
-
-export type UserSumAggregateOutputType = {
-  emailVerificationAttempts: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -47,11 +37,6 @@ export type UserMinAggregateOutputType = {
   role: $Enums.UserRole | null
   status: $Enums.AccountStatus | null
   emailVerifiedAt: Date | null
-  emailVerified: boolean | null
-  emailVerificationCode: string | null
-  emailVerificationExpiresAt: Date | null
-  emailVerificationAttempts: number | null
-  emailVerificationLastSentAt: Date | null
   phoneVerifiedAt: Date | null
   lastLoginAt: Date | null
   passwordChangedAt: Date | null
@@ -60,9 +45,9 @@ export type UserMinAggregateOutputType = {
   paytmCustomerId: string | null
   deletedById: string | null
   deletedAt: Date | null
-  anonymizedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  anonymizedAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -78,11 +63,6 @@ export type UserMaxAggregateOutputType = {
   role: $Enums.UserRole | null
   status: $Enums.AccountStatus | null
   emailVerifiedAt: Date | null
-  emailVerified: boolean | null
-  emailVerificationCode: string | null
-  emailVerificationExpiresAt: Date | null
-  emailVerificationAttempts: number | null
-  emailVerificationLastSentAt: Date | null
   phoneVerifiedAt: Date | null
   lastLoginAt: Date | null
   passwordChangedAt: Date | null
@@ -91,9 +71,9 @@ export type UserMaxAggregateOutputType = {
   paytmCustomerId: string | null
   deletedById: string | null
   deletedAt: Date | null
-  anonymizedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  anonymizedAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -109,11 +89,6 @@ export type UserCountAggregateOutputType = {
   role: number
   status: number
   emailVerifiedAt: number
-  emailVerified: number
-  emailVerificationCode: number
-  emailVerificationExpiresAt: number
-  emailVerificationAttempts: number
-  emailVerificationLastSentAt: number
   phoneVerifiedAt: number
   lastLoginAt: number
   passwordChangedAt: number
@@ -122,20 +97,12 @@ export type UserCountAggregateOutputType = {
   paytmCustomerId: number
   deletedById: number
   deletedAt: number
-  anonymizedAt: number
   createdAt: number
   updatedAt: number
+  anonymizedAt: number
   _all: number
 }
 
-
-export type UserAvgAggregateInputType = {
-  emailVerificationAttempts?: true
-}
-
-export type UserSumAggregateInputType = {
-  emailVerificationAttempts?: true
-}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -150,11 +117,6 @@ export type UserMinAggregateInputType = {
   role?: true
   status?: true
   emailVerifiedAt?: true
-  emailVerified?: true
-  emailVerificationCode?: true
-  emailVerificationExpiresAt?: true
-  emailVerificationAttempts?: true
-  emailVerificationLastSentAt?: true
   phoneVerifiedAt?: true
   lastLoginAt?: true
   passwordChangedAt?: true
@@ -163,9 +125,9 @@ export type UserMinAggregateInputType = {
   paytmCustomerId?: true
   deletedById?: true
   deletedAt?: true
-  anonymizedAt?: true
   createdAt?: true
   updatedAt?: true
+  anonymizedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -181,11 +143,6 @@ export type UserMaxAggregateInputType = {
   role?: true
   status?: true
   emailVerifiedAt?: true
-  emailVerified?: true
-  emailVerificationCode?: true
-  emailVerificationExpiresAt?: true
-  emailVerificationAttempts?: true
-  emailVerificationLastSentAt?: true
   phoneVerifiedAt?: true
   lastLoginAt?: true
   passwordChangedAt?: true
@@ -194,9 +151,9 @@ export type UserMaxAggregateInputType = {
   paytmCustomerId?: true
   deletedById?: true
   deletedAt?: true
-  anonymizedAt?: true
   createdAt?: true
   updatedAt?: true
+  anonymizedAt?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -212,11 +169,6 @@ export type UserCountAggregateInputType = {
   role?: true
   status?: true
   emailVerifiedAt?: true
-  emailVerified?: true
-  emailVerificationCode?: true
-  emailVerificationExpiresAt?: true
-  emailVerificationAttempts?: true
-  emailVerificationLastSentAt?: true
   phoneVerifiedAt?: true
   lastLoginAt?: true
   passwordChangedAt?: true
@@ -225,9 +177,9 @@ export type UserCountAggregateInputType = {
   paytmCustomerId?: true
   deletedById?: true
   deletedAt?: true
-  anonymizedAt?: true
   createdAt?: true
   updatedAt?: true
+  anonymizedAt?: true
   _all?: true
 }
 
@@ -269,18 +221,6 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: UserAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: UserSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -311,8 +251,6 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
-  _avg?: UserAvgAggregateInputType
-  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -330,11 +268,6 @@ export type UserGroupByOutputType = {
   role: $Enums.UserRole
   status: $Enums.AccountStatus
   emailVerifiedAt: Date | null
-  emailVerified: boolean
-  emailVerificationCode: string | null
-  emailVerificationExpiresAt: Date | null
-  emailVerificationAttempts: number
-  emailVerificationLastSentAt: Date | null
   phoneVerifiedAt: Date | null
   lastLoginAt: Date | null
   passwordChangedAt: Date | null
@@ -343,12 +276,10 @@ export type UserGroupByOutputType = {
   paytmCustomerId: string | null
   deletedById: string | null
   deletedAt: Date | null
-  anonymizedAt: Date | null
   createdAt: Date
   updatedAt: Date
+  anonymizedAt: Date | null
   _count: UserCountAggregateOutputType | null
-  _avg: UserAvgAggregateOutputType | null
-  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -384,11 +315,6 @@ export type UserWhereInput = {
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
-  emailVerificationCode?: Prisma.StringNullableFilter<"User"> | string | null
-  emailVerificationExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFilter<"User"> | number
-  emailVerificationLastSentAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -397,25 +323,25 @@ export type UserWhereInput = {
   paytmCustomerId?: Prisma.StringNullableFilter<"User"> | string | null
   deletedById?: Prisma.StringNullableFilter<"User"> | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  activityLogs?: Prisma.ActivityLogListRelationFilter
   sessions?: Prisma.AuthSessionListRelationFilter
-  passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
-  subscriptions?: Prisma.SubscriptionListRelationFilter
   courseProgress?: Prisma.CourseProgressListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
   orders?: Prisma.OrderListRelationFilter
+  passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   refunds?: Prisma.RefundListRelationFilter
-  accountActivities?: Prisma.UserActivityListRelationFilter
-  performedActivities?: Prisma.UserActivityListRelationFilter
-  activityLogs?: Prisma.ActivityLogListRelationFilter
+  subscriptions?: Prisma.SubscriptionListRelationFilter
+  subscriptionEvents?: Prisma.SubscriptionEventListRelationFilter
   subscriptionExtensions?: Prisma.SubscriptionExtensionListRelationFilter
   subscriptionNotes?: Prisma.SubscriptionNoteListRelationFilter
-  subscriptionEvents?: Prisma.SubscriptionEventListRelationFilter
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   deletedUsers?: Prisma.UserListRelationFilter
+  performedActivities?: Prisma.UserActivityListRelationFilter
+  accountActivities?: Prisma.UserActivityListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -431,11 +357,6 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
-  emailVerificationCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  emailVerificationExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  emailVerificationAttempts?: Prisma.SortOrder
-  emailVerificationLastSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -444,25 +365,25 @@ export type UserOrderByWithRelationInput = {
   paytmCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  anonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  activityLogs?: Prisma.ActivityLogOrderByRelationAggregateInput
   sessions?: Prisma.AuthSessionOrderByRelationAggregateInput
-  passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
-  subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
   courseProgress?: Prisma.CourseProgressOrderByRelationAggregateInput
   lessonProgress?: Prisma.LessonProgressOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
+  passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   refunds?: Prisma.RefundOrderByRelationAggregateInput
-  accountActivities?: Prisma.UserActivityOrderByRelationAggregateInput
-  performedActivities?: Prisma.UserActivityOrderByRelationAggregateInput
-  activityLogs?: Prisma.ActivityLogOrderByRelationAggregateInput
+  subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
+  subscriptionEvents?: Prisma.SubscriptionEventOrderByRelationAggregateInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionOrderByRelationAggregateInput
   subscriptionNotes?: Prisma.SubscriptionNoteOrderByRelationAggregateInput
-  subscriptionEvents?: Prisma.SubscriptionEventOrderByRelationAggregateInput
   deletedBy?: Prisma.UserOrderByWithRelationInput
   deletedUsers?: Prisma.UserOrderByRelationAggregateInput
+  performedActivities?: Prisma.UserActivityOrderByRelationAggregateInput
+  accountActivities?: Prisma.UserActivityOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -484,35 +405,30 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
-  emailVerificationCode?: Prisma.StringNullableFilter<"User"> | string | null
-  emailVerificationExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFilter<"User"> | number
-  emailVerificationLastSentAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   deletedById?: Prisma.StringNullableFilter<"User"> | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  activityLogs?: Prisma.ActivityLogListRelationFilter
   sessions?: Prisma.AuthSessionListRelationFilter
-  passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
-  subscriptions?: Prisma.SubscriptionListRelationFilter
   courseProgress?: Prisma.CourseProgressListRelationFilter
   lessonProgress?: Prisma.LessonProgressListRelationFilter
   orders?: Prisma.OrderListRelationFilter
+  passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   refunds?: Prisma.RefundListRelationFilter
-  accountActivities?: Prisma.UserActivityListRelationFilter
-  performedActivities?: Prisma.UserActivityListRelationFilter
-  activityLogs?: Prisma.ActivityLogListRelationFilter
+  subscriptions?: Prisma.SubscriptionListRelationFilter
+  subscriptionEvents?: Prisma.SubscriptionEventListRelationFilter
   subscriptionExtensions?: Prisma.SubscriptionExtensionListRelationFilter
   subscriptionNotes?: Prisma.SubscriptionNoteListRelationFilter
-  subscriptionEvents?: Prisma.SubscriptionEventListRelationFilter
   deletedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   deletedUsers?: Prisma.UserListRelationFilter
+  performedActivities?: Prisma.UserActivityListRelationFilter
+  accountActivities?: Prisma.UserActivityListRelationFilter
 }, "id" | "email" | "phone" | "razorpayCustomerId" | "stripeCustomerId" | "paytmCustomerId">
 
 export type UserOrderByWithAggregationInput = {
@@ -528,11 +444,6 @@ export type UserOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
-  emailVerificationCode?: Prisma.SortOrderInput | Prisma.SortOrder
-  emailVerificationExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  emailVerificationAttempts?: Prisma.SortOrder
-  emailVerificationLastSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -541,14 +452,12 @@ export type UserOrderByWithAggregationInput = {
   paytmCustomerId?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  anonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
-  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
-  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -567,11 +476,6 @@ export type UserScalarWhereWithAggregatesInput = {
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumAccountStatusWithAggregatesFilter<"User"> | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-  emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
-  emailVerificationCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  emailVerificationExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-  emailVerificationAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number
-  emailVerificationLastSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   phoneVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   passwordChangedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -580,9 +484,9 @@ export type UserScalarWhereWithAggregatesInput = {
   paytmCustomerId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   deletedById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-  anonymizedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  anonymizedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
 }
 
 export type UserCreateInput = {
@@ -598,11 +502,6 @@ export type UserCreateInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -610,25 +509,25 @@ export type UserCreateInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -644,11 +543,6 @@ export type UserUncheckedCreateInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -657,24 +551,24 @@ export type UserUncheckedCreateInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -690,11 +584,6 @@ export type UserUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -702,25 +591,25 @@ export type UserUpdateInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -736,11 +625,6 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -749,24 +633,24 @@ export type UserUncheckedUpdateInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -782,11 +666,6 @@ export type UserCreateManyInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -795,9 +674,9 @@ export type UserCreateManyInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -813,11 +692,6 @@ export type UserUpdateManyMutationInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -825,9 +699,9 @@ export type UserUpdateManyMutationInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -843,11 +717,6 @@ export type UserUncheckedUpdateManyInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -856,9 +725,9 @@ export type UserUncheckedUpdateManyInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserNullableScalarRelationFilter = {
@@ -889,11 +758,6 @@ export type UserCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
-  emailVerificationCode?: Prisma.SortOrder
-  emailVerificationExpiresAt?: Prisma.SortOrder
-  emailVerificationAttempts?: Prisma.SortOrder
-  emailVerificationLastSentAt?: Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
@@ -902,13 +766,9 @@ export type UserCountOrderByAggregateInput = {
   paytmCustomerId?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
-  anonymizedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type UserAvgOrderByAggregateInput = {
-  emailVerificationAttempts?: Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -924,11 +784,6 @@ export type UserMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
-  emailVerificationCode?: Prisma.SortOrder
-  emailVerificationExpiresAt?: Prisma.SortOrder
-  emailVerificationAttempts?: Prisma.SortOrder
-  emailVerificationLastSentAt?: Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
@@ -937,9 +792,9 @@ export type UserMaxOrderByAggregateInput = {
   paytmCustomerId?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
-  anonymizedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -955,11 +810,6 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
-  emailVerificationCode?: Prisma.SortOrder
-  emailVerificationExpiresAt?: Prisma.SortOrder
-  emailVerificationAttempts?: Prisma.SortOrder
-  emailVerificationLastSentAt?: Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
@@ -968,13 +818,9 @@ export type UserMinOrderByAggregateInput = {
   paytmCustomerId?: Prisma.SortOrder
   deletedById?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
-  anonymizedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type UserSumOrderByAggregateInput = {
-  emailVerificationAttempts?: Prisma.SortOrder
+  anonymizedAt?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -1020,18 +866,6 @@ export type EnumAccountStatusFieldUpdateOperationsInput = {
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -1232,24 +1066,16 @@ export type UserUpdateOneRequiredWithoutRefundsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRefundsInput, Prisma.UserUpdateWithoutRefundsInput>, Prisma.UserUncheckedUpdateWithoutRefundsInput>
 }
 
-export type UserCreateNestedOneWithoutAccountActivitiesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountActivitiesInput, Prisma.UserUncheckedCreateWithoutAccountActivitiesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountActivitiesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
 export type UserCreateNestedOneWithoutPerformedActivitiesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutPerformedActivitiesInput, Prisma.UserUncheckedCreateWithoutPerformedActivitiesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutPerformedActivitiesInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutAccountActivitiesNestedInput = {
+export type UserCreateNestedOneWithoutAccountActivitiesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAccountActivitiesInput, Prisma.UserUncheckedCreateWithoutAccountActivitiesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountActivitiesInput
-  upsert?: Prisma.UserUpsertWithoutAccountActivitiesInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountActivitiesInput, Prisma.UserUpdateWithoutAccountActivitiesInput>, Prisma.UserUncheckedUpdateWithoutAccountActivitiesInput>
 }
 
 export type UserUpdateOneWithoutPerformedActivitiesNestedInput = {
@@ -1260,6 +1086,14 @@ export type UserUpdateOneWithoutPerformedActivitiesNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPerformedActivitiesInput, Prisma.UserUpdateWithoutPerformedActivitiesInput>, Prisma.UserUncheckedUpdateWithoutPerformedActivitiesInput>
+}
+
+export type UserUpdateOneRequiredWithoutAccountActivitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAccountActivitiesInput, Prisma.UserUncheckedCreateWithoutAccountActivitiesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountActivitiesInput
+  upsert?: Prisma.UserUpsertWithoutAccountActivitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAccountActivitiesInput, Prisma.UserUpdateWithoutAccountActivitiesInput>, Prisma.UserUncheckedUpdateWithoutAccountActivitiesInput>
 }
 
 export type UserCreateNestedOneWithoutActivityLogsInput = {
@@ -1291,11 +1125,6 @@ export type UserCreateWithoutDeletedUsersInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1303,24 +1132,24 @@ export type UserCreateWithoutDeletedUsersInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDeletedUsersInput = {
@@ -1336,11 +1165,6 @@ export type UserUncheckedCreateWithoutDeletedUsersInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1349,23 +1173,23 @@ export type UserUncheckedCreateWithoutDeletedUsersInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDeletedUsersInput = {
@@ -1386,11 +1210,6 @@ export type UserCreateWithoutDeletedByInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1398,24 +1217,24 @@ export type UserCreateWithoutDeletedByInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDeletedByInput = {
@@ -1431,11 +1250,6 @@ export type UserUncheckedCreateWithoutDeletedByInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1443,24 +1257,24 @@ export type UserUncheckedCreateWithoutDeletedByInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDeletedByInput = {
@@ -1497,11 +1311,6 @@ export type UserUpdateWithoutDeletedUsersInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1509,24 +1318,24 @@ export type UserUpdateWithoutDeletedUsersInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedUsersInput = {
@@ -1542,11 +1351,6 @@ export type UserUncheckedUpdateWithoutDeletedUsersInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1555,23 +1359,23 @@ export type UserUncheckedUpdateWithoutDeletedUsersInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutDeletedByInput = {
@@ -1606,11 +1410,6 @@ export type UserScalarWhereInput = {
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
-  emailVerificationCode?: Prisma.StringNullableFilter<"User"> | string | null
-  emailVerificationExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFilter<"User"> | number
-  emailVerificationLastSentAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -1619,9 +1418,9 @@ export type UserScalarWhereInput = {
   paytmCustomerId?: Prisma.StringNullableFilter<"User"> | string | null
   deletedById?: Prisma.StringNullableFilter<"User"> | string | null
   deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  anonymizedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1637,11 +1436,6 @@ export type UserCreateWithoutSessionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1649,24 +1443,24 @@ export type UserCreateWithoutSessionsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1682,11 +1476,6 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1695,23 +1484,23 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1743,11 +1532,6 @@ export type UserUpdateWithoutSessionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1755,24 +1539,24 @@ export type UserUpdateWithoutSessionsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1788,11 +1572,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1801,23 +1580,23 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPasswordResetTokensInput = {
@@ -1833,11 +1612,6 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1845,24 +1619,24 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -1878,11 +1652,6 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1891,23 +1660,23 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -1939,11 +1708,6 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1951,24 +1715,24 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -1984,11 +1748,6 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1997,23 +1756,23 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCourseProgressInput = {
@@ -2029,11 +1788,6 @@ export type UserCreateWithoutCourseProgressInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2041,24 +1795,24 @@ export type UserCreateWithoutCourseProgressInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCourseProgressInput = {
@@ -2074,11 +1828,6 @@ export type UserUncheckedCreateWithoutCourseProgressInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2087,23 +1836,23 @@ export type UserUncheckedCreateWithoutCourseProgressInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCourseProgressInput = {
@@ -2135,11 +1884,6 @@ export type UserUpdateWithoutCourseProgressInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2147,24 +1891,24 @@ export type UserUpdateWithoutCourseProgressInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCourseProgressInput = {
@@ -2180,11 +1924,6 @@ export type UserUncheckedUpdateWithoutCourseProgressInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2193,23 +1932,23 @@ export type UserUncheckedUpdateWithoutCourseProgressInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLessonProgressInput = {
@@ -2225,11 +1964,6 @@ export type UserCreateWithoutLessonProgressInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2237,24 +1971,24 @@ export type UserCreateWithoutLessonProgressInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLessonProgressInput = {
@@ -2270,11 +2004,6 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2283,23 +2012,23 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLessonProgressInput = {
@@ -2331,11 +2060,6 @@ export type UserUpdateWithoutLessonProgressInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2343,24 +2067,24 @@ export type UserUpdateWithoutLessonProgressInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLessonProgressInput = {
@@ -2376,11 +2100,6 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2389,23 +2108,23 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionsInput = {
@@ -2421,11 +2140,6 @@ export type UserCreateWithoutSubscriptionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2433,24 +2147,24 @@ export type UserCreateWithoutSubscriptionsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionsInput = {
@@ -2466,11 +2180,6 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2479,23 +2188,23 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionsInput = {
@@ -2527,11 +2236,6 @@ export type UserUpdateWithoutSubscriptionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2539,24 +2243,24 @@ export type UserUpdateWithoutSubscriptionsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionsInput = {
@@ -2572,11 +2276,6 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2585,23 +2284,23 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionExtensionsInput = {
@@ -2617,11 +2316,6 @@ export type UserCreateWithoutSubscriptionExtensionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2629,24 +2323,24 @@ export type UserCreateWithoutSubscriptionExtensionsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
-  subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
+  subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionExtensionsInput = {
@@ -2662,11 +2356,6 @@ export type UserUncheckedCreateWithoutSubscriptionExtensionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2675,23 +2364,23 @@ export type UserUncheckedCreateWithoutSubscriptionExtensionsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
-  subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
+  subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionExtensionsInput = {
@@ -2723,11 +2412,6 @@ export type UserUpdateWithoutSubscriptionExtensionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2735,24 +2419,24 @@ export type UserUpdateWithoutSubscriptionExtensionsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
-  subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
+  subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionExtensionsInput = {
@@ -2768,11 +2452,6 @@ export type UserUncheckedUpdateWithoutSubscriptionExtensionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2781,23 +2460,23 @@ export type UserUncheckedUpdateWithoutSubscriptionExtensionsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
-  subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
+  subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionNotesInput = {
@@ -2813,11 +2492,6 @@ export type UserCreateWithoutSubscriptionNotesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2825,24 +2499,24 @@ export type UserCreateWithoutSubscriptionNotesInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
-  subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
+  subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionNotesInput = {
@@ -2858,11 +2532,6 @@ export type UserUncheckedCreateWithoutSubscriptionNotesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2871,23 +2540,23 @@ export type UserUncheckedCreateWithoutSubscriptionNotesInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
-  subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
+  subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionNotesInput = {
@@ -2919,11 +2588,6 @@ export type UserUpdateWithoutSubscriptionNotesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2931,24 +2595,24 @@ export type UserUpdateWithoutSubscriptionNotesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
-  subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
+  subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionNotesInput = {
@@ -2964,11 +2628,6 @@ export type UserUncheckedUpdateWithoutSubscriptionNotesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2977,23 +2636,23 @@ export type UserUncheckedUpdateWithoutSubscriptionNotesInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
-  subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
+  subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubscriptionEventsInput = {
@@ -3009,11 +2668,6 @@ export type UserCreateWithoutSubscriptionEventsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3021,24 +2675,24 @@ export type UserCreateWithoutSubscriptionEventsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubscriptionEventsInput = {
@@ -3054,11 +2708,6 @@ export type UserUncheckedCreateWithoutSubscriptionEventsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3067,23 +2716,23 @@ export type UserUncheckedCreateWithoutSubscriptionEventsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubscriptionEventsInput = {
@@ -3115,11 +2764,6 @@ export type UserUpdateWithoutSubscriptionEventsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3127,24 +2771,24 @@ export type UserUpdateWithoutSubscriptionEventsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionEventsInput = {
@@ -3160,11 +2804,6 @@ export type UserUncheckedUpdateWithoutSubscriptionEventsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3173,23 +2812,23 @@ export type UserUncheckedUpdateWithoutSubscriptionEventsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -3205,11 +2844,6 @@ export type UserCreateWithoutOrdersInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3217,24 +2851,24 @@ export type UserCreateWithoutOrdersInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -3250,11 +2884,6 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3263,23 +2892,23 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -3311,11 +2940,6 @@ export type UserUpdateWithoutOrdersInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3323,24 +2947,24 @@ export type UserUpdateWithoutOrdersInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -3356,11 +2980,6 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3369,23 +2988,23 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
@@ -3401,11 +3020,6 @@ export type UserCreateWithoutPaymentsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3413,24 +3027,24 @@ export type UserCreateWithoutPaymentsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
@@ -3446,11 +3060,6 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3459,23 +3068,23 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -3507,11 +3116,6 @@ export type UserUpdateWithoutPaymentsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3519,24 +3123,24 @@ export type UserUpdateWithoutPaymentsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
@@ -3552,11 +3156,6 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3565,23 +3164,23 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRefundsInput = {
@@ -3597,11 +3196,6 @@ export type UserCreateWithoutRefundsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3609,24 +3203,24 @@ export type UserCreateWithoutRefundsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRefundsInput = {
@@ -3642,11 +3236,6 @@ export type UserUncheckedCreateWithoutRefundsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3655,23 +3244,23 @@ export type UserUncheckedCreateWithoutRefundsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRefundsInput = {
@@ -3703,11 +3292,6 @@ export type UserUpdateWithoutRefundsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3715,24 +3299,24 @@ export type UserUpdateWithoutRefundsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefundsInput = {
@@ -3748,11 +3332,6 @@ export type UserUncheckedUpdateWithoutRefundsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3761,118 +3340,23 @@ export type UserUncheckedUpdateWithoutRefundsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
-}
-
-export type UserCreateWithoutAccountActivitiesInput = {
-  id?: string
-  firstName: string
-  lastName?: string | null
-  name: string
-  email: string
-  phone?: string | null
-  discordName?: string | null
-  password: string
-  avatarUrl?: string | null
-  role?: $Enums.UserRole
-  status?: $Enums.AccountStatus
-  emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
-  phoneVerifiedAt?: Date | string | null
-  lastLoginAt?: Date | string | null
-  passwordChangedAt?: Date | string | null
-  razorpayCustomerId?: string | null
-  stripeCustomerId?: string | null
-  paytmCustomerId?: string | null
-  deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
-  courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
-  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
-  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
-  refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
-  subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
-  subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
-  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
-  deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
-}
-
-export type UserUncheckedCreateWithoutAccountActivitiesInput = {
-  id?: string
-  firstName: string
-  lastName?: string | null
-  name: string
-  email: string
-  phone?: string | null
-  discordName?: string | null
-  password: string
-  avatarUrl?: string | null
-  role?: $Enums.UserRole
-  status?: $Enums.AccountStatus
-  emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
-  phoneVerifiedAt?: Date | string | null
-  lastLoginAt?: Date | string | null
-  passwordChangedAt?: Date | string | null
-  razorpayCustomerId?: string | null
-  stripeCustomerId?: string | null
-  paytmCustomerId?: string | null
-  deletedById?: string | null
-  deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
-  courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
-  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
-  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
-  refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
-  subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
-  subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
-  deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
-}
-
-export type UserCreateOrConnectWithoutAccountActivitiesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAccountActivitiesInput, Prisma.UserUncheckedCreateWithoutAccountActivitiesInput>
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPerformedActivitiesInput = {
@@ -3888,11 +3372,6 @@ export type UserCreateWithoutPerformedActivitiesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3900,24 +3379,24 @@ export type UserCreateWithoutPerformedActivitiesInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPerformedActivitiesInput = {
@@ -3933,11 +3412,6 @@ export type UserUncheckedCreateWithoutPerformedActivitiesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3946,23 +3420,23 @@ export type UserUncheckedCreateWithoutPerformedActivitiesInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPerformedActivitiesInput = {
@@ -3970,105 +3444,89 @@ export type UserCreateOrConnectWithoutPerformedActivitiesInput = {
   create: Prisma.XOR<Prisma.UserCreateWithoutPerformedActivitiesInput, Prisma.UserUncheckedCreateWithoutPerformedActivitiesInput>
 }
 
-export type UserUpsertWithoutAccountActivitiesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAccountActivitiesInput, Prisma.UserUncheckedUpdateWithoutAccountActivitiesInput>
+export type UserCreateWithoutAccountActivitiesInput = {
+  id?: string
+  firstName: string
+  lastName?: string | null
+  name: string
+  email: string
+  phone?: string | null
+  discordName?: string | null
+  password: string
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.AccountStatus
+  emailVerifiedAt?: Date | string | null
+  phoneVerifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  passwordChangedAt?: Date | string | null
+  razorpayCustomerId?: string | null
+  stripeCustomerId?: string | null
+  paytmCustomerId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogCreateNestedManyWithoutActorInput
+  sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
+  courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
+  lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
+  refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
+  subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
+  subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
+  deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
+  deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutAccountActivitiesInput = {
+  id?: string
+  firstName: string
+  lastName?: string | null
+  name: string
+  email: string
+  phone?: string | null
+  discordName?: string | null
+  password: string
+  avatarUrl?: string | null
+  role?: $Enums.UserRole
+  status?: $Enums.AccountStatus
+  emailVerifiedAt?: Date | string | null
+  phoneVerifiedAt?: Date | string | null
+  lastLoginAt?: Date | string | null
+  passwordChangedAt?: Date | string | null
+  razorpayCustomerId?: string | null
+  stripeCustomerId?: string | null
+  paytmCustomerId?: string | null
+  deletedById?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedCreateNestedManyWithoutActorInput
+  sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
+  courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
+  lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
+  refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
+  subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
+  subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
+  deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutAccountActivitiesInput = {
+  where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutAccountActivitiesInput, Prisma.UserUncheckedCreateWithoutAccountActivitiesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutAccountActivitiesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAccountActivitiesInput, Prisma.UserUncheckedUpdateWithoutAccountActivitiesInput>
-}
-
-export type UserUpdateWithoutAccountActivitiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  discordName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
-  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  razorpayCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
-  courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
-  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
-  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
-  refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
-  subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
-  subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
-  deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
-  deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
-}
-
-export type UserUncheckedUpdateWithoutAccountActivitiesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  discordName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
-  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  razorpayCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
-  courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
-  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
-  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
-  refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
-  subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
-  subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
-  deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
 }
 
 export type UserUpsertWithoutPerformedActivitiesInput = {
@@ -4095,11 +3553,6 @@ export type UserUpdateWithoutPerformedActivitiesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4107,24 +3560,24 @@ export type UserUpdateWithoutPerformedActivitiesInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPerformedActivitiesInput = {
@@ -4140,11 +3593,6 @@ export type UserUncheckedUpdateWithoutPerformedActivitiesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4153,23 +3601,114 @@ export type UserUncheckedUpdateWithoutPerformedActivitiesInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutAccountActivitiesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAccountActivitiesInput, Prisma.UserUncheckedUpdateWithoutAccountActivitiesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAccountActivitiesInput, Prisma.UserUncheckedCreateWithoutAccountActivitiesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAccountActivitiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAccountActivitiesInput, Prisma.UserUncheckedUpdateWithoutAccountActivitiesInput>
+}
+
+export type UserUpdateWithoutAccountActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  razorpayCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
+  courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
+  refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
+  subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
+  subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
+  deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
+  deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAccountActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  discordName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  razorpayCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
+  courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
+  lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
+  refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
+  subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
+  subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
+  deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
 }
 
 export type UserCreateWithoutActivityLogsInput = {
@@ -4185,11 +3724,6 @@ export type UserCreateWithoutActivityLogsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -4197,24 +3731,24 @@ export type UserCreateWithoutActivityLogsInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
   sessions?: Prisma.AuthSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventCreateNestedManyWithoutActorInput
   deletedBy?: Prisma.UserCreateNestedOneWithoutDeletedUsersInput
   deletedUsers?: Prisma.UserCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutActivityLogsInput = {
@@ -4230,11 +3764,6 @@ export type UserUncheckedCreateWithoutActivityLogsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -4243,23 +3772,23 @@ export type UserUncheckedCreateWithoutActivityLogsInput = {
   paytmCustomerId?: string | null
   deletedById?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
   sessions?: Prisma.AuthSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
   courseProgress?: Prisma.CourseProgressUncheckedCreateNestedManyWithoutUserInput
   lessonProgress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   refunds?: Prisma.RefundUncheckedCreateNestedManyWithoutUserInput
-  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
-  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutExtendedByInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutAuthorInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutActorInput
   deletedUsers?: Prisma.UserUncheckedCreateNestedManyWithoutDeletedByInput
+  performedActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutActorInput
+  accountActivities?: Prisma.UserActivityUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutActivityLogsInput = {
@@ -4291,11 +3820,6 @@ export type UserUpdateWithoutActivityLogsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4303,24 +3827,24 @@ export type UserUpdateWithoutActivityLogsInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedBy?: Prisma.UserUpdateOneWithoutDeletedUsersNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutActivityLogsInput = {
@@ -4336,11 +3860,6 @@ export type UserUncheckedUpdateWithoutActivityLogsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4349,23 +3868,23 @@ export type UserUncheckedUpdateWithoutActivityLogsInput = {
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyDeletedByInput = {
@@ -4381,11 +3900,6 @@ export type UserCreateManyDeletedByInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
-  emailVerified?: boolean
-  emailVerificationCode?: string | null
-  emailVerificationExpiresAt?: Date | string | null
-  emailVerificationAttempts?: number
-  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -4393,9 +3907,9 @@ export type UserCreateManyDeletedByInput = {
   stripeCustomerId?: string | null
   paytmCustomerId?: string | null
   deletedAt?: Date | string | null
-  anonymizedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  anonymizedAt?: Date | string | null
 }
 
 export type UserUpdateWithoutDeletedByInput = {
@@ -4411,11 +3925,6 @@ export type UserUpdateWithoutDeletedByInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4423,24 +3932,24 @@ export type UserUpdateWithoutDeletedByInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDeletedByInput = {
@@ -4456,11 +3965,6 @@ export type UserUncheckedUpdateWithoutDeletedByInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4468,24 +3972,24 @@ export type UserUncheckedUpdateWithoutDeletedByInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
   sessions?: Prisma.AuthSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
   courseProgress?: Prisma.CourseProgressUncheckedUpdateManyWithoutUserNestedInput
   lessonProgress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   refunds?: Prisma.RefundUncheckedUpdateManyWithoutUserNestedInput
-  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
-  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
-  activityLogs?: Prisma.ActivityLogUncheckedUpdateManyWithoutActorNestedInput
+  subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   subscriptionExtensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutExtendedByNestedInput
   subscriptionNotes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutAuthorNestedInput
-  subscriptionEvents?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutActorNestedInput
   deletedUsers?: Prisma.UserUncheckedUpdateManyWithoutDeletedByNestedInput
+  performedActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutActorNestedInput
+  accountActivities?: Prisma.UserActivityUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutDeletedByInput = {
@@ -4501,11 +4005,6 @@ export type UserUncheckedUpdateManyWithoutDeletedByInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4513,9 +4012,9 @@ export type UserUncheckedUpdateManyWithoutDeletedByInput = {
   stripeCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paytmCustomerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anonymizedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -4524,39 +4023,39 @@ export type UserUncheckedUpdateManyWithoutDeletedByInput = {
  */
 
 export type UserCountOutputType = {
+  activityLogs: number
   sessions: number
-  passwordResetTokens: number
-  subscriptions: number
   courseProgress: number
   lessonProgress: number
   orders: number
+  passwordResetTokens: number
   payments: number
   refunds: number
-  accountActivities: number
-  performedActivities: number
-  activityLogs: number
+  subscriptions: number
+  subscriptionEvents: number
   subscriptionExtensions: number
   subscriptionNotes: number
-  subscriptionEvents: number
   deletedUsers: number
+  performedActivities: number
+  accountActivities: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  activityLogs?: boolean | UserCountOutputTypeCountActivityLogsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
-  passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
-  subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
   courseProgress?: boolean | UserCountOutputTypeCountCourseProgressArgs
   lessonProgress?: boolean | UserCountOutputTypeCountLessonProgressArgs
   orders?: boolean | UserCountOutputTypeCountOrdersArgs
+  passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
   payments?: boolean | UserCountOutputTypeCountPaymentsArgs
   refunds?: boolean | UserCountOutputTypeCountRefundsArgs
-  accountActivities?: boolean | UserCountOutputTypeCountAccountActivitiesArgs
-  performedActivities?: boolean | UserCountOutputTypeCountPerformedActivitiesArgs
-  activityLogs?: boolean | UserCountOutputTypeCountActivityLogsArgs
+  subscriptions?: boolean | UserCountOutputTypeCountSubscriptionsArgs
+  subscriptionEvents?: boolean | UserCountOutputTypeCountSubscriptionEventsArgs
   subscriptionExtensions?: boolean | UserCountOutputTypeCountSubscriptionExtensionsArgs
   subscriptionNotes?: boolean | UserCountOutputTypeCountSubscriptionNotesArgs
-  subscriptionEvents?: boolean | UserCountOutputTypeCountSubscriptionEventsArgs
   deletedUsers?: boolean | UserCountOutputTypeCountDeletedUsersArgs
+  performedActivities?: boolean | UserCountOutputTypeCountPerformedActivitiesArgs
+  accountActivities?: boolean | UserCountOutputTypeCountAccountActivitiesArgs
 }
 
 /**
@@ -4572,22 +4071,15 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountActivityLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ActivityLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuthSessionWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PasswordResetTokenWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SubscriptionWhereInput
 }
 
 /**
@@ -4614,6 +4106,13 @@ export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Ext
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PasswordResetTokenWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PaymentWhereInput
 }
@@ -4628,22 +4127,15 @@ export type UserCountOutputTypeCountRefundsArgs<ExtArgs extends runtime.Types.Ex
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAccountActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserActivityWhereInput
+export type UserCountOutputTypeCountSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountPerformedActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserActivityWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountActivityLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ActivityLogWhereInput
+export type UserCountOutputTypeCountSubscriptionEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionEventWhereInput
 }
 
 /**
@@ -4663,15 +4155,22 @@ export type UserCountOutputTypeCountSubscriptionNotesArgs<ExtArgs extends runtim
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountSubscriptionEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SubscriptionEventWhereInput
+export type UserCountOutputTypeCountDeletedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountDeletedUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserWhereInput
+export type UserCountOutputTypeCountPerformedActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserActivityWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAccountActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserActivityWhereInput
 }
 
 
@@ -4688,11 +4187,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   status?: boolean
   emailVerifiedAt?: boolean
-  emailVerified?: boolean
-  emailVerificationCode?: boolean
-  emailVerificationExpiresAt?: boolean
-  emailVerificationAttempts?: boolean
-  emailVerificationLastSentAt?: boolean
   phoneVerifiedAt?: boolean
   lastLoginAt?: boolean
   passwordChangedAt?: boolean
@@ -4701,25 +4195,25 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   paytmCustomerId?: boolean
   deletedById?: boolean
   deletedAt?: boolean
-  anonymizedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  anonymizedAt?: boolean
+  activityLogs?: boolean | Prisma.User$activityLogsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
-  subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   courseProgress?: boolean | Prisma.User$courseProgressArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
+  passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   refunds?: boolean | Prisma.User$refundsArgs<ExtArgs>
-  accountActivities?: boolean | Prisma.User$accountActivitiesArgs<ExtArgs>
-  performedActivities?: boolean | Prisma.User$performedActivitiesArgs<ExtArgs>
-  activityLogs?: boolean | Prisma.User$activityLogsArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
+  subscriptionEvents?: boolean | Prisma.User$subscriptionEventsArgs<ExtArgs>
   subscriptionExtensions?: boolean | Prisma.User$subscriptionExtensionsArgs<ExtArgs>
   subscriptionNotes?: boolean | Prisma.User$subscriptionNotesArgs<ExtArgs>
-  subscriptionEvents?: boolean | Prisma.User$subscriptionEventsArgs<ExtArgs>
   deletedBy?: boolean | Prisma.User$deletedByArgs<ExtArgs>
   deletedUsers?: boolean | Prisma.User$deletedUsersArgs<ExtArgs>
+  performedActivities?: boolean | Prisma.User$performedActivitiesArgs<ExtArgs>
+  accountActivities?: boolean | Prisma.User$accountActivitiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4736,11 +4230,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   status?: boolean
   emailVerifiedAt?: boolean
-  emailVerified?: boolean
-  emailVerificationCode?: boolean
-  emailVerificationExpiresAt?: boolean
-  emailVerificationAttempts?: boolean
-  emailVerificationLastSentAt?: boolean
   phoneVerifiedAt?: boolean
   lastLoginAt?: boolean
   passwordChangedAt?: boolean
@@ -4749,9 +4238,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   paytmCustomerId?: boolean
   deletedById?: boolean
   deletedAt?: boolean
-  anonymizedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  anonymizedAt?: boolean
   deletedBy?: boolean | Prisma.User$deletedByArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4768,11 +4257,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   status?: boolean
   emailVerifiedAt?: boolean
-  emailVerified?: boolean
-  emailVerificationCode?: boolean
-  emailVerificationExpiresAt?: boolean
-  emailVerificationAttempts?: boolean
-  emailVerificationLastSentAt?: boolean
   phoneVerifiedAt?: boolean
   lastLoginAt?: boolean
   passwordChangedAt?: boolean
@@ -4781,9 +4265,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   paytmCustomerId?: boolean
   deletedById?: boolean
   deletedAt?: boolean
-  anonymizedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  anonymizedAt?: boolean
   deletedBy?: boolean | Prisma.User$deletedByArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4800,11 +4284,6 @@ export type UserSelectScalar = {
   role?: boolean
   status?: boolean
   emailVerifiedAt?: boolean
-  emailVerified?: boolean
-  emailVerificationCode?: boolean
-  emailVerificationExpiresAt?: boolean
-  emailVerificationAttempts?: boolean
-  emailVerificationLastSentAt?: boolean
   phoneVerifiedAt?: boolean
   lastLoginAt?: boolean
   passwordChangedAt?: boolean
@@ -4813,29 +4292,29 @@ export type UserSelectScalar = {
   paytmCustomerId?: boolean
   deletedById?: boolean
   deletedAt?: boolean
-  anonymizedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  anonymizedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "name" | "email" | "phone" | "discordName" | "password" | "avatarUrl" | "role" | "status" | "emailVerifiedAt" | "emailVerified" | "emailVerificationCode" | "emailVerificationExpiresAt" | "emailVerificationAttempts" | "emailVerificationLastSentAt" | "phoneVerifiedAt" | "lastLoginAt" | "passwordChangedAt" | "razorpayCustomerId" | "stripeCustomerId" | "paytmCustomerId" | "deletedById" | "deletedAt" | "anonymizedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "name" | "email" | "phone" | "discordName" | "password" | "avatarUrl" | "role" | "status" | "emailVerifiedAt" | "phoneVerifiedAt" | "lastLoginAt" | "passwordChangedAt" | "razorpayCustomerId" | "stripeCustomerId" | "paytmCustomerId" | "deletedById" | "deletedAt" | "createdAt" | "updatedAt" | "anonymizedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  activityLogs?: boolean | Prisma.User$activityLogsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
-  subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   courseProgress?: boolean | Prisma.User$courseProgressArgs<ExtArgs>
   lessonProgress?: boolean | Prisma.User$lessonProgressArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
+  passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   refunds?: boolean | Prisma.User$refundsArgs<ExtArgs>
-  accountActivities?: boolean | Prisma.User$accountActivitiesArgs<ExtArgs>
-  performedActivities?: boolean | Prisma.User$performedActivitiesArgs<ExtArgs>
-  activityLogs?: boolean | Prisma.User$activityLogsArgs<ExtArgs>
+  subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
+  subscriptionEvents?: boolean | Prisma.User$subscriptionEventsArgs<ExtArgs>
   subscriptionExtensions?: boolean | Prisma.User$subscriptionExtensionsArgs<ExtArgs>
   subscriptionNotes?: boolean | Prisma.User$subscriptionNotesArgs<ExtArgs>
-  subscriptionEvents?: boolean | Prisma.User$subscriptionEventsArgs<ExtArgs>
   deletedBy?: boolean | Prisma.User$deletedByArgs<ExtArgs>
   deletedUsers?: boolean | Prisma.User$deletedUsersArgs<ExtArgs>
+  performedActivities?: boolean | Prisma.User$performedActivitiesArgs<ExtArgs>
+  accountActivities?: boolean | Prisma.User$accountActivitiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4848,22 +4327,22 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    activityLogs: Prisma.$ActivityLogPayload<ExtArgs>[]
     sessions: Prisma.$AuthSessionPayload<ExtArgs>[]
-    passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
-    subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
     courseProgress: Prisma.$CourseProgressPayload<ExtArgs>[]
     lessonProgress: Prisma.$LessonProgressPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
+    passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     refunds: Prisma.$RefundPayload<ExtArgs>[]
-    accountActivities: Prisma.$UserActivityPayload<ExtArgs>[]
-    performedActivities: Prisma.$UserActivityPayload<ExtArgs>[]
-    activityLogs: Prisma.$ActivityLogPayload<ExtArgs>[]
+    subscriptions: Prisma.$SubscriptionPayload<ExtArgs>[]
+    subscriptionEvents: Prisma.$SubscriptionEventPayload<ExtArgs>[]
     subscriptionExtensions: Prisma.$SubscriptionExtensionPayload<ExtArgs>[]
     subscriptionNotes: Prisma.$SubscriptionNotePayload<ExtArgs>[]
-    subscriptionEvents: Prisma.$SubscriptionEventPayload<ExtArgs>[]
     deletedBy: Prisma.$UserPayload<ExtArgs> | null
     deletedUsers: Prisma.$UserPayload<ExtArgs>[]
+    performedActivities: Prisma.$UserActivityPayload<ExtArgs>[]
+    accountActivities: Prisma.$UserActivityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -4878,11 +4357,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     role: $Enums.UserRole
     status: $Enums.AccountStatus
     emailVerifiedAt: Date | null
-    emailVerified: boolean
-    emailVerificationCode: string | null
-    emailVerificationExpiresAt: Date | null
-    emailVerificationAttempts: number
-    emailVerificationLastSentAt: Date | null
     phoneVerifiedAt: Date | null
     lastLoginAt: Date | null
     passwordChangedAt: Date | null
@@ -4891,9 +4365,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     paytmCustomerId: string | null
     deletedById: string | null
     deletedAt: Date | null
-    anonymizedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    anonymizedAt: Date | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -5288,22 +4762,22 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  activityLogs<T extends Prisma.User$activityLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  subscriptions<T extends Prisma.User$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   courseProgress<T extends Prisma.User$courseProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$courseProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CourseProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessonProgress<T extends Prisma.User$lessonProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lessonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   refunds<T extends Prisma.User$refundsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refundsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  accountActivities<T extends Prisma.User$accountActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  performedActivities<T extends Prisma.User$performedActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$performedActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  activityLogs<T extends Prisma.User$activityLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$activityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptions<T extends Prisma.User$subscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  subscriptionEvents<T extends Prisma.User$subscriptionEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptionExtensions<T extends Prisma.User$subscriptionExtensionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionExtensionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionExtensionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscriptionNotes<T extends Prisma.User$subscriptionNotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionNotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  subscriptionEvents<T extends Prisma.User$subscriptionEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$subscriptionEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   deletedBy<T extends Prisma.User$deletedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   deletedUsers<T extends Prisma.User$deletedUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deletedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  performedActivities<T extends Prisma.User$performedActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$performedActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  accountActivities<T extends Prisma.User$accountActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5345,11 +4819,6 @@ export interface UserFieldRefs {
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly status: Prisma.FieldRef<"User", 'AccountStatus'>
   readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
-  readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
-  readonly emailVerificationCode: Prisma.FieldRef<"User", 'String'>
-  readonly emailVerificationExpiresAt: Prisma.FieldRef<"User", 'DateTime'>
-  readonly emailVerificationAttempts: Prisma.FieldRef<"User", 'Int'>
-  readonly emailVerificationLastSentAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly phoneVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly passwordChangedAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -5358,9 +4827,9 @@ export interface UserFieldRefs {
   readonly paytmCustomerId: Prisma.FieldRef<"User", 'String'>
   readonly deletedById: Prisma.FieldRef<"User", 'String'>
   readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
-  readonly anonymizedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly anonymizedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 
@@ -5762,6 +5231,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * User.activityLogs
+ */
+export type User$activityLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ActivityLog
+   */
+  select?: Prisma.ActivityLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ActivityLog
+   */
+  omit?: Prisma.ActivityLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ActivityLogInclude<ExtArgs> | null
+  where?: Prisma.ActivityLogWhereInput
+  orderBy?: Prisma.ActivityLogOrderByWithRelationInput | Prisma.ActivityLogOrderByWithRelationInput[]
+  cursor?: Prisma.ActivityLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ActivityLogScalarFieldEnum | Prisma.ActivityLogScalarFieldEnum[]
+}
+
+/**
  * User.sessions
  */
 export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5783,54 +5276,6 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.AuthSessionScalarFieldEnum | Prisma.AuthSessionScalarFieldEnum[]
-}
-
-/**
- * User.passwordResetTokens
- */
-export type User$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PasswordResetToken
-   */
-  select?: Prisma.PasswordResetTokenSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PasswordResetToken
-   */
-  omit?: Prisma.PasswordResetTokenOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PasswordResetTokenInclude<ExtArgs> | null
-  where?: Prisma.PasswordResetTokenWhereInput
-  orderBy?: Prisma.PasswordResetTokenOrderByWithRelationInput | Prisma.PasswordResetTokenOrderByWithRelationInput[]
-  cursor?: Prisma.PasswordResetTokenWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
-}
-
-/**
- * User.subscriptions
- */
-export type User$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Subscription
-   */
-  select?: Prisma.SubscriptionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Subscription
-   */
-  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SubscriptionInclude<ExtArgs> | null
-  where?: Prisma.SubscriptionWhereInput
-  orderBy?: Prisma.SubscriptionOrderByWithRelationInput | Prisma.SubscriptionOrderByWithRelationInput[]
-  cursor?: Prisma.SubscriptionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.SubscriptionScalarFieldEnum | Prisma.SubscriptionScalarFieldEnum[]
 }
 
 /**
@@ -5906,6 +5351,30 @@ export type User$ordersArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 }
 
 /**
+ * User.passwordResetTokens
+ */
+export type User$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordResetToken
+   */
+  select?: Prisma.PasswordResetTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordResetToken
+   */
+  omit?: Prisma.PasswordResetTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordResetTokenInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetTokenWhereInput
+  orderBy?: Prisma.PasswordResetTokenOrderByWithRelationInput | Prisma.PasswordResetTokenOrderByWithRelationInput[]
+  cursor?: Prisma.PasswordResetTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
+}
+
+/**
  * User.payments
  */
 export type User$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5954,75 +5423,51 @@ export type User$refundsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 /**
- * User.accountActivities
+ * User.subscriptions
  */
-export type User$accountActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$subscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the UserActivity
+   * Select specific fields to fetch from the Subscription
    */
-  select?: Prisma.UserActivitySelect<ExtArgs> | null
+  select?: Prisma.SubscriptionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the UserActivity
+   * Omit specific fields from the Subscription
    */
-  omit?: Prisma.UserActivityOmit<ExtArgs> | null
+  omit?: Prisma.SubscriptionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserActivityInclude<ExtArgs> | null
-  where?: Prisma.UserActivityWhereInput
-  orderBy?: Prisma.UserActivityOrderByWithRelationInput | Prisma.UserActivityOrderByWithRelationInput[]
-  cursor?: Prisma.UserActivityWhereUniqueInput
+  include?: Prisma.SubscriptionInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionWhereInput
+  orderBy?: Prisma.SubscriptionOrderByWithRelationInput | Prisma.SubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.UserActivityScalarFieldEnum | Prisma.UserActivityScalarFieldEnum[]
+  distinct?: Prisma.SubscriptionScalarFieldEnum | Prisma.SubscriptionScalarFieldEnum[]
 }
 
 /**
- * User.performedActivities
+ * User.subscriptionEvents
  */
-export type User$performedActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$subscriptionEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the UserActivity
+   * Select specific fields to fetch from the SubscriptionEvent
    */
-  select?: Prisma.UserActivitySelect<ExtArgs> | null
+  select?: Prisma.SubscriptionEventSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the UserActivity
+   * Omit specific fields from the SubscriptionEvent
    */
-  omit?: Prisma.UserActivityOmit<ExtArgs> | null
+  omit?: Prisma.SubscriptionEventOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserActivityInclude<ExtArgs> | null
-  where?: Prisma.UserActivityWhereInput
-  orderBy?: Prisma.UserActivityOrderByWithRelationInput | Prisma.UserActivityOrderByWithRelationInput[]
-  cursor?: Prisma.UserActivityWhereUniqueInput
+  include?: Prisma.SubscriptionEventInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionEventWhereInput
+  orderBy?: Prisma.SubscriptionEventOrderByWithRelationInput | Prisma.SubscriptionEventOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionEventWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.UserActivityScalarFieldEnum | Prisma.UserActivityScalarFieldEnum[]
-}
-
-/**
- * User.activityLogs
- */
-export type User$activityLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ActivityLog
-   */
-  select?: Prisma.ActivityLogSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ActivityLog
-   */
-  omit?: Prisma.ActivityLogOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ActivityLogInclude<ExtArgs> | null
-  where?: Prisma.ActivityLogWhereInput
-  orderBy?: Prisma.ActivityLogOrderByWithRelationInput | Prisma.ActivityLogOrderByWithRelationInput[]
-  cursor?: Prisma.ActivityLogWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ActivityLogScalarFieldEnum | Prisma.ActivityLogScalarFieldEnum[]
+  distinct?: Prisma.SubscriptionEventScalarFieldEnum | Prisma.SubscriptionEventScalarFieldEnum[]
 }
 
 /**
@@ -6074,30 +5519,6 @@ export type User$subscriptionNotesArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
- * User.subscriptionEvents
- */
-export type User$subscriptionEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the SubscriptionEvent
-   */
-  select?: Prisma.SubscriptionEventSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the SubscriptionEvent
-   */
-  omit?: Prisma.SubscriptionEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SubscriptionEventInclude<ExtArgs> | null
-  where?: Prisma.SubscriptionEventWhereInput
-  orderBy?: Prisma.SubscriptionEventOrderByWithRelationInput | Prisma.SubscriptionEventOrderByWithRelationInput[]
-  cursor?: Prisma.SubscriptionEventWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.SubscriptionEventScalarFieldEnum | Prisma.SubscriptionEventScalarFieldEnum[]
-}
-
-/**
  * User.deletedBy
  */
 export type User$deletedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -6138,6 +5559,54 @@ export type User$deletedUsersArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * User.performedActivities
+ */
+export type User$performedActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserActivity
+   */
+  select?: Prisma.UserActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserActivity
+   */
+  omit?: Prisma.UserActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserActivityInclude<ExtArgs> | null
+  where?: Prisma.UserActivityWhereInput
+  orderBy?: Prisma.UserActivityOrderByWithRelationInput | Prisma.UserActivityOrderByWithRelationInput[]
+  cursor?: Prisma.UserActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserActivityScalarFieldEnum | Prisma.UserActivityScalarFieldEnum[]
+}
+
+/**
+ * User.accountActivities
+ */
+export type User$accountActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserActivity
+   */
+  select?: Prisma.UserActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserActivity
+   */
+  omit?: Prisma.UserActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserActivityInclude<ExtArgs> | null
+  where?: Prisma.UserActivityWhereInput
+  orderBy?: Prisma.UserActivityOrderByWithRelationInput | Prisma.UserActivityOrderByWithRelationInput[]
+  cursor?: Prisma.UserActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserActivityScalarFieldEnum | Prisma.UserActivityScalarFieldEnum[]
 }
 
 /**

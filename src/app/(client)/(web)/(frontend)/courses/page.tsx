@@ -242,7 +242,7 @@ export default function CoursesPage() {
   useEffect(() => {
     async function fetchCourses() {
       try {
-        const response = await axios.get("/api/admin/courses");
+        const response = await axios.get("/api/courses");
 
         const fetchedCourses: Course[] = response.data?.courses ?? [];
 

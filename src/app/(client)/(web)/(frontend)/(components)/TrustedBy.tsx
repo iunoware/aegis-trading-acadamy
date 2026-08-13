@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ShieldCheck } from "lucide-react";
+// import { ShieldCheck } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -123,27 +123,25 @@ export default function TrustedBy() {
       aria-label="Trusted By Section"
       className="relative w-full py-28 lg:py-20 bg-background text-white overflow-hidden "
     >
-      {/* ------------------------------------------------------------- */}
       {/* BACKGROUND GLOW (No grid, no charts, no noise) */}
-      {/* ------------------------------------------------------------- */}
+
       <div className="absolute inset-0 pointer-events-none z-0">
         <div
           ref={glowRef}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-[700px] rounded-full gold-radial-glow opacity-25 blur-3xl transform-gpu"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-175 rounded-full gold-radial-glow opacity-25 blur-3xl transform-gpu"
         />
       </div>
 
-      {/* ------------------------------------------------------------- */}
       {/* SECTION CONTENT */}
-      {/* ------------------------------------------------------------- */}
-      <div className="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
         {/* Small Label */}
-        <div ref={labelRef} className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--primary)]/30 text-xs font-semibold tracking-widest text-[var(--primary)] font-mono uppercase bg-[var(--primary)]/5">
-            <ShieldCheck size={14} className="text-[var(--primary)]" />
+        {/* <div ref={labelRef} className="mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-(--primary)/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-primary/5">
+            <ShieldCheck size={14} className="text-primary" />
             TRUSTED BY
           </div>
-        </div>
+        </div> */}
 
         {/* Main Heading */}
         <h2
@@ -157,16 +155,15 @@ export default function TrustedBy() {
         {/* Supporting Text (Max width 600px) */}
         <p
           ref={textRef}
-          className="text-base sm:text-lg text-[var(--text)] font-normal leading-relaxed max-w-[600px] mb-16 sm:mb-20"
+          className="text-base sm:text-lg text-text font-normal leading-relaxed max-w-150 mb-16 sm:mb-20"
         >
           Every successful trader starts with the right foundation. Aegis Trading Academy
           has helped aspiring traders build confidence through structured learning,
           disciplined execution and continuous mentorship.
         </p>
 
-        {/* ------------------------------------------------------------- */}
         {/* HORIZONTAL METRICS SECTION (No cards, no boxes, thin gold dividers) */}
-        {/* ------------------------------------------------------------- */}
+
         <div
           ref={metricsRef}
           className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 items-center justify-between border-y border-white/10 py-10 md:py-14"
@@ -180,7 +177,7 @@ export default function TrustedBy() {
               Active Members
             </span>
             {/* Right Divider for desktop */}
-            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-16 bg-gradient-to-b from-[var(--primary)]/0 via-[var(--primary)]/30 to-[var(--primary)]/0 group-hover:via-[var(--primary)]/70 transition-colors duration-300" />
+            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-16 bg-linear-to-b from-(--primary)/0 via-(--primary)/30 to-(--primary)/0 group-hover:via-(--primary)/70 transition-colors duration-300" />
           </div>
 
           {/* Metric 2 */}
@@ -188,11 +185,11 @@ export default function TrustedBy() {
             <span className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-mono gold-gradient-text tracking-tight">
               {yearsCount}+
             </span>
-            <span className="text-xs sm:text-sm font-semibold tracking-wider text-[var(--muted)] uppercase font-mono mt-2.5 block group-hover:text-white transition-colors duration-300">
+            <span className="text-xs sm:text-sm font-semibold tracking-wider text-muted uppercase font-mono mt-2.5 block group-hover:text-white transition-colors duration-300">
               Years Experience
             </span>
             {/* Right Divider for desktop */}
-            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-16 bg-gradient-to-b from-[var(--primary)]/0 via-[var(--primary)]/30 to-[var(--primary)]/0 group-hover:via-[var(--primary)]/70 transition-colors duration-300" />
+            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-16 bg-linear-to-b from-(--primary)/0 via-(--primary)/30 to-(--primary)/0 group-hover:via-(--primary)/70 transition-colors duration-300" />
           </div>
 
           {/* Metric 3 */}
@@ -200,11 +197,11 @@ export default function TrustedBy() {
             <span className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-mono gold-gradient-text tracking-tight">
               {hoursCount}+
             </span>
-            <span className="text-xs sm:text-sm font-semibold tracking-wider text-[var(--muted)] uppercase font-mono mt-2.5 block group-hover:text-white transition-colors duration-300">
+            <span className="text-xs sm:text-sm font-semibold tracking-wider text-muted uppercase font-mono mt-2.5 block group-hover:text-white transition-colors duration-300">
               Hours of Structured Learning
             </span>
             {/* Right Divider for desktop */}
-            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-16 bg-gradient-to-b from-[var(--primary)]/0 via-[var(--primary)]/30 to-[var(--primary)]/0 group-hover:via-[var(--primary)]/70 transition-colors duration-300" />
+            <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-16 bg-linear-to-b from-(--primary)/0 via-(--primary)/30 to-(--primary)/0 group-hover:via-(--primary)/70 transition-colors duration-300" />
           </div>
 
           {/* Metric 4 */}
@@ -212,7 +209,7 @@ export default function TrustedBy() {
             <span className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-mono gold-gradient-text tracking-tight">
               Lifetime
             </span>
-            <span className="text-xs sm:text-sm font-semibold tracking-wider text-[var(--muted)] uppercase font-mono mt-2.5 block group-hover:text-white transition-colors duration-300">
+            <span className="text-xs sm:text-sm font-semibold tracking-wider text-muted uppercase font-mono mt-2.5 block group-hover:text-white transition-colors duration-300">
               Community Support
             </span>
           </div>
