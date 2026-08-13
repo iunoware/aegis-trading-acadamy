@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Check whether email is already verified
-    if (user.emailVerified) {
+    if (user.emailVerifiedAt) {
       const token = await createSession(user.id, user.role, "STUDENT");
 
       const response = NextResponse.json({
@@ -171,7 +171,6 @@ export async function POST(request: NextRequest) {
     const verifiedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
-        emailVerified: true,
         emailVerifiedAt: now,
         emailVerificationCode: null,
         emailVerificationExpiresAt: null,

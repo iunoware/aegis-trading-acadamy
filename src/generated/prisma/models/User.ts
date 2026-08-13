@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  emailVerificationAttempts: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  emailVerificationAttempts: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -37,6 +47,10 @@ export type UserMinAggregateOutputType = {
   role: $Enums.UserRole | null
   status: $Enums.AccountStatus | null
   emailVerifiedAt: Date | null
+  emailVerificationCode: string | null
+  emailVerificationExpiresAt: Date | null
+  emailVerificationAttempts: number | null
+  emailVerificationLastSentAt: Date | null
   phoneVerifiedAt: Date | null
   lastLoginAt: Date | null
   passwordChangedAt: Date | null
@@ -63,6 +77,10 @@ export type UserMaxAggregateOutputType = {
   role: $Enums.UserRole | null
   status: $Enums.AccountStatus | null
   emailVerifiedAt: Date | null
+  emailVerificationCode: string | null
+  emailVerificationExpiresAt: Date | null
+  emailVerificationAttempts: number | null
+  emailVerificationLastSentAt: Date | null
   phoneVerifiedAt: Date | null
   lastLoginAt: Date | null
   passwordChangedAt: Date | null
@@ -89,6 +107,10 @@ export type UserCountAggregateOutputType = {
   role: number
   status: number
   emailVerifiedAt: number
+  emailVerificationCode: number
+  emailVerificationExpiresAt: number
+  emailVerificationAttempts: number
+  emailVerificationLastSentAt: number
   phoneVerifiedAt: number
   lastLoginAt: number
   passwordChangedAt: number
@@ -104,6 +126,14 @@ export type UserCountAggregateOutputType = {
 }
 
 
+export type UserAvgAggregateInputType = {
+  emailVerificationAttempts?: true
+}
+
+export type UserSumAggregateInputType = {
+  emailVerificationAttempts?: true
+}
+
 export type UserMinAggregateInputType = {
   id?: true
   firstName?: true
@@ -117,6 +147,10 @@ export type UserMinAggregateInputType = {
   role?: true
   status?: true
   emailVerifiedAt?: true
+  emailVerificationCode?: true
+  emailVerificationExpiresAt?: true
+  emailVerificationAttempts?: true
+  emailVerificationLastSentAt?: true
   phoneVerifiedAt?: true
   lastLoginAt?: true
   passwordChangedAt?: true
@@ -143,6 +177,10 @@ export type UserMaxAggregateInputType = {
   role?: true
   status?: true
   emailVerifiedAt?: true
+  emailVerificationCode?: true
+  emailVerificationExpiresAt?: true
+  emailVerificationAttempts?: true
+  emailVerificationLastSentAt?: true
   phoneVerifiedAt?: true
   lastLoginAt?: true
   passwordChangedAt?: true
@@ -169,6 +207,10 @@ export type UserCountAggregateInputType = {
   role?: true
   status?: true
   emailVerifiedAt?: true
+  emailVerificationCode?: true
+  emailVerificationExpiresAt?: true
+  emailVerificationAttempts?: true
+  emailVerificationLastSentAt?: true
   phoneVerifiedAt?: true
   lastLoginAt?: true
   passwordChangedAt?: true
@@ -221,6 +263,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -251,6 +305,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -268,6 +324,10 @@ export type UserGroupByOutputType = {
   role: $Enums.UserRole
   status: $Enums.AccountStatus
   emailVerifiedAt: Date | null
+  emailVerificationCode: string | null
+  emailVerificationExpiresAt: Date | null
+  emailVerificationAttempts: number
+  emailVerificationLastSentAt: Date | null
   phoneVerifiedAt: Date | null
   lastLoginAt: Date | null
   passwordChangedAt: Date | null
@@ -280,6 +340,8 @@ export type UserGroupByOutputType = {
   updatedAt: Date
   anonymizedAt: Date | null
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -315,6 +377,10 @@ export type UserWhereInput = {
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerificationCode?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerificationExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFilter<"User"> | number
+  emailVerificationLastSentAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -357,6 +423,10 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerificationCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerificationExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerificationAttempts?: Prisma.SortOrder
+  emailVerificationLastSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -405,6 +475,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerificationCode?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerificationExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFilter<"User"> | number
+  emailVerificationLastSentAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -444,6 +518,10 @@ export type UserOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerificationCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerificationExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerificationAttempts?: Prisma.SortOrder
+  emailVerificationLastSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -456,8 +534,10 @@ export type UserOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   anonymizedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -476,6 +556,10 @@ export type UserScalarWhereWithAggregatesInput = {
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumAccountStatusWithAggregatesFilter<"User"> | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  emailVerificationCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  emailVerificationExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  emailVerificationAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number
+  emailVerificationLastSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   phoneVerifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   passwordChangedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -502,6 +586,10 @@ export type UserCreateInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -543,6 +631,10 @@ export type UserUncheckedCreateInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -584,6 +676,10 @@ export type UserUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -625,6 +721,10 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -666,6 +766,10 @@ export type UserCreateManyInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -692,6 +796,10 @@ export type UserUpdateManyMutationInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -717,6 +825,10 @@ export type UserUncheckedUpdateManyInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -758,6 +870,10 @@ export type UserCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
+  emailVerificationCode?: Prisma.SortOrder
+  emailVerificationExpiresAt?: Prisma.SortOrder
+  emailVerificationAttempts?: Prisma.SortOrder
+  emailVerificationLastSentAt?: Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
@@ -769,6 +885,10 @@ export type UserCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   anonymizedAt?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  emailVerificationAttempts?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -784,6 +904,10 @@ export type UserMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
+  emailVerificationCode?: Prisma.SortOrder
+  emailVerificationExpiresAt?: Prisma.SortOrder
+  emailVerificationAttempts?: Prisma.SortOrder
+  emailVerificationLastSentAt?: Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
@@ -810,6 +934,10 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   status?: Prisma.SortOrder
   emailVerifiedAt?: Prisma.SortOrder
+  emailVerificationCode?: Prisma.SortOrder
+  emailVerificationExpiresAt?: Prisma.SortOrder
+  emailVerificationAttempts?: Prisma.SortOrder
+  emailVerificationLastSentAt?: Prisma.SortOrder
   phoneVerifiedAt?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   passwordChangedAt?: Prisma.SortOrder
@@ -821,6 +949,10 @@ export type UserMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   anonymizedAt?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  emailVerificationAttempts?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -866,6 +998,14 @@ export type EnumAccountStatusFieldUpdateOperationsInput = {
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -1125,6 +1265,10 @@ export type UserCreateWithoutDeletedUsersInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1165,6 +1309,10 @@ export type UserUncheckedCreateWithoutDeletedUsersInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1210,6 +1358,10 @@ export type UserCreateWithoutDeletedByInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1250,6 +1402,10 @@ export type UserUncheckedCreateWithoutDeletedByInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1311,6 +1467,10 @@ export type UserUpdateWithoutDeletedUsersInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1351,6 +1511,10 @@ export type UserUncheckedUpdateWithoutDeletedUsersInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1410,6 +1574,10 @@ export type UserScalarWhereInput = {
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFilter<"User"> | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerificationCode?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerificationExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFilter<"User"> | number
+  emailVerificationLastSentAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   phoneVerifiedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordChangedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -1436,6 +1604,10 @@ export type UserCreateWithoutSessionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1476,6 +1648,10 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1532,6 +1708,10 @@ export type UserUpdateWithoutSessionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1572,6 +1752,10 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1612,6 +1796,10 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1652,6 +1840,10 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1708,6 +1900,10 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1748,6 +1944,10 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1788,6 +1988,10 @@ export type UserCreateWithoutCourseProgressInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1828,6 +2032,10 @@ export type UserUncheckedCreateWithoutCourseProgressInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -1884,6 +2092,10 @@ export type UserUpdateWithoutCourseProgressInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1924,6 +2136,10 @@ export type UserUncheckedUpdateWithoutCourseProgressInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1964,6 +2180,10 @@ export type UserCreateWithoutLessonProgressInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2004,6 +2224,10 @@ export type UserUncheckedCreateWithoutLessonProgressInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2060,6 +2284,10 @@ export type UserUpdateWithoutLessonProgressInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2100,6 +2328,10 @@ export type UserUncheckedUpdateWithoutLessonProgressInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2140,6 +2372,10 @@ export type UserCreateWithoutSubscriptionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2180,6 +2416,10 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2236,6 +2476,10 @@ export type UserUpdateWithoutSubscriptionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2276,6 +2520,10 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2316,6 +2564,10 @@ export type UserCreateWithoutSubscriptionExtensionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2356,6 +2608,10 @@ export type UserUncheckedCreateWithoutSubscriptionExtensionsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2412,6 +2668,10 @@ export type UserUpdateWithoutSubscriptionExtensionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2452,6 +2712,10 @@ export type UserUncheckedUpdateWithoutSubscriptionExtensionsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2492,6 +2756,10 @@ export type UserCreateWithoutSubscriptionNotesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2532,6 +2800,10 @@ export type UserUncheckedCreateWithoutSubscriptionNotesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2588,6 +2860,10 @@ export type UserUpdateWithoutSubscriptionNotesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2628,6 +2904,10 @@ export type UserUncheckedUpdateWithoutSubscriptionNotesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2668,6 +2948,10 @@ export type UserCreateWithoutSubscriptionEventsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2708,6 +2992,10 @@ export type UserUncheckedCreateWithoutSubscriptionEventsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2764,6 +3052,10 @@ export type UserUpdateWithoutSubscriptionEventsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2804,6 +3096,10 @@ export type UserUncheckedUpdateWithoutSubscriptionEventsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2844,6 +3140,10 @@ export type UserCreateWithoutOrdersInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2884,6 +3184,10 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -2940,6 +3244,10 @@ export type UserUpdateWithoutOrdersInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2980,6 +3288,10 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3020,6 +3332,10 @@ export type UserCreateWithoutPaymentsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3060,6 +3376,10 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3116,6 +3436,10 @@ export type UserUpdateWithoutPaymentsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3156,6 +3480,10 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3196,6 +3524,10 @@ export type UserCreateWithoutRefundsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3236,6 +3568,10 @@ export type UserUncheckedCreateWithoutRefundsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3292,6 +3628,10 @@ export type UserUpdateWithoutRefundsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3332,6 +3672,10 @@ export type UserUncheckedUpdateWithoutRefundsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3372,6 +3716,10 @@ export type UserCreateWithoutPerformedActivitiesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3412,6 +3760,10 @@ export type UserUncheckedCreateWithoutPerformedActivitiesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3457,6 +3809,10 @@ export type UserCreateWithoutAccountActivitiesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3497,6 +3853,10 @@ export type UserUncheckedCreateWithoutAccountActivitiesInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3553,6 +3913,10 @@ export type UserUpdateWithoutPerformedActivitiesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3593,6 +3957,10 @@ export type UserUncheckedUpdateWithoutPerformedActivitiesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3644,6 +4012,10 @@ export type UserUpdateWithoutAccountActivitiesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3684,6 +4056,10 @@ export type UserUncheckedUpdateWithoutAccountActivitiesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3724,6 +4100,10 @@ export type UserCreateWithoutActivityLogsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3764,6 +4144,10 @@ export type UserUncheckedCreateWithoutActivityLogsInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3820,6 +4204,10 @@ export type UserUpdateWithoutActivityLogsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3860,6 +4248,10 @@ export type UserUncheckedUpdateWithoutActivityLogsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3900,6 +4292,10 @@ export type UserCreateManyDeletedByInput = {
   role?: $Enums.UserRole
   status?: $Enums.AccountStatus
   emailVerifiedAt?: Date | string | null
+  emailVerificationCode?: string | null
+  emailVerificationExpiresAt?: Date | string | null
+  emailVerificationAttempts?: number
+  emailVerificationLastSentAt?: Date | string | null
   phoneVerifiedAt?: Date | string | null
   lastLoginAt?: Date | string | null
   passwordChangedAt?: Date | string | null
@@ -3925,6 +4321,10 @@ export type UserUpdateWithoutDeletedByInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3965,6 +4365,10 @@ export type UserUncheckedUpdateWithoutDeletedByInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4005,6 +4409,10 @@ export type UserUncheckedUpdateManyWithoutDeletedByInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   emailVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerificationExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailVerificationAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerificationLastSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   phoneVerifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordChangedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4187,6 +4595,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   status?: boolean
   emailVerifiedAt?: boolean
+  emailVerificationCode?: boolean
+  emailVerificationExpiresAt?: boolean
+  emailVerificationAttempts?: boolean
+  emailVerificationLastSentAt?: boolean
   phoneVerifiedAt?: boolean
   lastLoginAt?: boolean
   passwordChangedAt?: boolean
@@ -4230,6 +4642,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   status?: boolean
   emailVerifiedAt?: boolean
+  emailVerificationCode?: boolean
+  emailVerificationExpiresAt?: boolean
+  emailVerificationAttempts?: boolean
+  emailVerificationLastSentAt?: boolean
   phoneVerifiedAt?: boolean
   lastLoginAt?: boolean
   passwordChangedAt?: boolean
@@ -4257,6 +4673,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   status?: boolean
   emailVerifiedAt?: boolean
+  emailVerificationCode?: boolean
+  emailVerificationExpiresAt?: boolean
+  emailVerificationAttempts?: boolean
+  emailVerificationLastSentAt?: boolean
   phoneVerifiedAt?: boolean
   lastLoginAt?: boolean
   passwordChangedAt?: boolean
@@ -4284,6 +4704,10 @@ export type UserSelectScalar = {
   role?: boolean
   status?: boolean
   emailVerifiedAt?: boolean
+  emailVerificationCode?: boolean
+  emailVerificationExpiresAt?: boolean
+  emailVerificationAttempts?: boolean
+  emailVerificationLastSentAt?: boolean
   phoneVerifiedAt?: boolean
   lastLoginAt?: boolean
   passwordChangedAt?: boolean
@@ -4297,7 +4721,7 @@ export type UserSelectScalar = {
   anonymizedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "name" | "email" | "phone" | "discordName" | "password" | "avatarUrl" | "role" | "status" | "emailVerifiedAt" | "phoneVerifiedAt" | "lastLoginAt" | "passwordChangedAt" | "razorpayCustomerId" | "stripeCustomerId" | "paytmCustomerId" | "deletedById" | "deletedAt" | "createdAt" | "updatedAt" | "anonymizedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "name" | "email" | "phone" | "discordName" | "password" | "avatarUrl" | "role" | "status" | "emailVerifiedAt" | "emailVerificationCode" | "emailVerificationExpiresAt" | "emailVerificationAttempts" | "emailVerificationLastSentAt" | "phoneVerifiedAt" | "lastLoginAt" | "passwordChangedAt" | "razorpayCustomerId" | "stripeCustomerId" | "paytmCustomerId" | "deletedById" | "deletedAt" | "createdAt" | "updatedAt" | "anonymizedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   activityLogs?: boolean | Prisma.User$activityLogsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
@@ -4357,6 +4781,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     role: $Enums.UserRole
     status: $Enums.AccountStatus
     emailVerifiedAt: Date | null
+    emailVerificationCode: string | null
+    emailVerificationExpiresAt: Date | null
+    emailVerificationAttempts: number
+    emailVerificationLastSentAt: Date | null
     phoneVerifiedAt: Date | null
     lastLoginAt: Date | null
     passwordChangedAt: Date | null
@@ -4819,6 +5247,10 @@ export interface UserFieldRefs {
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly status: Prisma.FieldRef<"User", 'AccountStatus'>
   readonly emailVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly emailVerificationCode: Prisma.FieldRef<"User", 'String'>
+  readonly emailVerificationExpiresAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly emailVerificationAttempts: Prisma.FieldRef<"User", 'Int'>
+  readonly emailVerificationLastSentAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly phoneVerifiedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly passwordChangedAt: Prisma.FieldRef<"User", 'DateTime'>

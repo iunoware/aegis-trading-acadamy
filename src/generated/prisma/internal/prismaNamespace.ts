@@ -2193,6 +2193,10 @@ export const UserScalarFieldEnum = {
   role: 'role',
   status: 'status',
   emailVerifiedAt: 'emailVerifiedAt',
+  emailVerificationCode: 'emailVerificationCode',
+  emailVerificationExpiresAt: 'emailVerificationExpiresAt',
+  emailVerificationAttempts: 'emailVerificationAttempts',
+  emailVerificationLastSentAt: 'emailVerificationLastSentAt',
   phoneVerifiedAt: 'phoneVerifiedAt',
   lastLoginAt: 'lastLoginAt',
   passwordChangedAt: 'passwordChangedAt',
@@ -2757,20 +2761,6 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'ContentStatus'
- */
-export type EnumContentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentStatus'>
-    
-
-
-/**
- * Reference to a field of type 'ContentStatus[]'
- */
-export type ListEnumContentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentStatus[]'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -2781,6 +2771,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ContentStatus'
+ */
+export type EnumContentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'ContentStatus[]'
+ */
+export type ListEnumContentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentStatus[]'>
     
 
 
