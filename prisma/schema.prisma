@@ -19,8 +19,12 @@ model User {
   avatarUrl              String?
   role                   UserRole                @default(STUDENT)
   status                 AccountStatus           @default(ACTIVE)
-  emailVerifiedAt        DateTime?
-  phoneVerifiedAt        DateTime?
+  emailVerifiedAt             DateTime?
+  emailVerificationCode       String?
+  emailVerificationExpiresAt  DateTime?
+  emailVerificationAttempts   Int       @default(0)
+  emailVerificationLastSentAt DateTime?
+  phoneVerifiedAt             DateTime?
   lastLoginAt            DateTime?
   passwordChangedAt      DateTime?
   razorpayCustomerId     String?                 @unique
