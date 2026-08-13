@@ -318,12 +318,12 @@ export type SubscriptionWhereInput = {
   deletedById?: Prisma.StringNullableFilter<"Subscription"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  plan?: Prisma.XOR<Prisma.SubscriptionPlanScalarRelationFilter, Prisma.SubscriptionPlanWhereInput>
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
+  plan?: Prisma.XOR<Prisma.SubscriptionPlanScalarRelationFilter, Prisma.SubscriptionPlanWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  events?: Prisma.SubscriptionEventListRelationFilter
   extensions?: Prisma.SubscriptionExtensionListRelationFilter
   notes?: Prisma.SubscriptionNoteListRelationFilter
-  events?: Prisma.SubscriptionEventListRelationFilter
 }
 
 export type SubscriptionOrderByWithRelationInput = {
@@ -349,12 +349,12 @@ export type SubscriptionOrderByWithRelationInput = {
   deletedById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
-  plan?: Prisma.SubscriptionPlanOrderByWithRelationInput
   order?: Prisma.OrderOrderByWithRelationInput
+  plan?: Prisma.SubscriptionPlanOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
+  events?: Prisma.SubscriptionEventOrderByRelationAggregateInput
   extensions?: Prisma.SubscriptionExtensionOrderByRelationAggregateInput
   notes?: Prisma.SubscriptionNoteOrderByRelationAggregateInput
-  events?: Prisma.SubscriptionEventOrderByRelationAggregateInput
 }
 
 export type SubscriptionWhereUniqueInput = Prisma.AtLeast<{
@@ -383,12 +383,12 @@ export type SubscriptionWhereUniqueInput = Prisma.AtLeast<{
   deletedById?: Prisma.StringNullableFilter<"Subscription"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  plan?: Prisma.XOR<Prisma.SubscriptionPlanScalarRelationFilter, Prisma.SubscriptionPlanWhereInput>
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
+  plan?: Prisma.XOR<Prisma.SubscriptionPlanScalarRelationFilter, Prisma.SubscriptionPlanWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  events?: Prisma.SubscriptionEventListRelationFilter
   extensions?: Prisma.SubscriptionExtensionListRelationFilter
   notes?: Prisma.SubscriptionNoteListRelationFilter
-  events?: Prisma.SubscriptionEventListRelationFilter
 }, "id" | "orderId">
 
 export type SubscriptionOrderByWithAggregationInput = {
@@ -467,12 +467,12 @@ export type SubscriptionCreateInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
-  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
   order?: Prisma.OrderCreateNestedOneWithoutSubscriptionInput
+  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
+  events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
   extensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteCreateNestedManyWithoutSubscriptionInput
-  events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionUncheckedCreateInput = {
@@ -498,9 +498,9 @@ export type SubscriptionUncheckedCreateInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
   extensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutSubscriptionInput
-  events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionUpdateInput = {
@@ -523,12 +523,12 @@ export type SubscriptionUpdateInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
-  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutSubscriptionNestedInput
+  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
+  events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
   extensions?: Prisma.SubscriptionExtensionUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUpdateManyWithoutSubscriptionNestedInput
-  events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionUncheckedUpdateInput = {
@@ -554,9 +554,9 @@ export type SubscriptionUncheckedUpdateInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
   extensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutSubscriptionNestedInput
-  events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionCreateManyInput = {
@@ -916,11 +916,11 @@ export type SubscriptionCreateWithoutUserInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
   order?: Prisma.OrderCreateNestedOneWithoutSubscriptionInput
+  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
+  events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
   extensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteCreateNestedManyWithoutSubscriptionInput
-  events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionUncheckedCreateWithoutUserInput = {
@@ -945,9 +945,9 @@ export type SubscriptionUncheckedCreateWithoutUserInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
   extensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutSubscriptionInput
-  events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionCreateOrConnectWithoutUserInput = {
@@ -1024,11 +1024,11 @@ export type SubscriptionCreateWithoutPlanInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
   order?: Prisma.OrderCreateNestedOneWithoutSubscriptionInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
+  events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
   extensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteCreateNestedManyWithoutSubscriptionInput
-  events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionUncheckedCreateWithoutPlanInput = {
@@ -1053,9 +1053,9 @@ export type SubscriptionUncheckedCreateWithoutPlanInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
   extensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutSubscriptionInput
-  events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionCreateOrConnectWithoutPlanInput = {
@@ -1104,11 +1104,11 @@ export type SubscriptionCreateWithoutExtensionsInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
-  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
   order?: Prisma.OrderCreateNestedOneWithoutSubscriptionInput
-  notes?: Prisma.SubscriptionNoteCreateNestedManyWithoutSubscriptionInput
+  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
   events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
+  notes?: Prisma.SubscriptionNoteCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionUncheckedCreateWithoutExtensionsInput = {
@@ -1134,8 +1134,8 @@ export type SubscriptionUncheckedCreateWithoutExtensionsInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  notes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutSubscriptionInput
   events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
+  notes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionCreateOrConnectWithoutExtensionsInput = {
@@ -1174,11 +1174,11 @@ export type SubscriptionUpdateWithoutExtensionsInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
-  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutSubscriptionNestedInput
-  notes?: Prisma.SubscriptionNoteUpdateManyWithoutSubscriptionNestedInput
+  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
   events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
+  notes?: Prisma.SubscriptionNoteUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionUncheckedUpdateWithoutExtensionsInput = {
@@ -1204,8 +1204,8 @@ export type SubscriptionUncheckedUpdateWithoutExtensionsInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  notes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutSubscriptionNestedInput
   events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
+  notes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionCreateWithoutNotesInput = {
@@ -1228,11 +1228,11 @@ export type SubscriptionCreateWithoutNotesInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
-  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
   order?: Prisma.OrderCreateNestedOneWithoutSubscriptionInput
-  extensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutSubscriptionInput
+  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
   events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
+  extensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionUncheckedCreateWithoutNotesInput = {
@@ -1258,8 +1258,8 @@ export type SubscriptionUncheckedCreateWithoutNotesInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  extensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutSubscriptionInput
   events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
+  extensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionCreateOrConnectWithoutNotesInput = {
@@ -1298,11 +1298,11 @@ export type SubscriptionUpdateWithoutNotesInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
-  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutSubscriptionNestedInput
-  extensions?: Prisma.SubscriptionExtensionUpdateManyWithoutSubscriptionNestedInput
+  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
   events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
+  extensions?: Prisma.SubscriptionExtensionUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionUncheckedUpdateWithoutNotesInput = {
@@ -1328,8 +1328,8 @@ export type SubscriptionUncheckedUpdateWithoutNotesInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  extensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutSubscriptionNestedInput
   events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
+  extensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionCreateWithoutEventsInput = {
@@ -1352,9 +1352,9 @@ export type SubscriptionCreateWithoutEventsInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
-  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
   order?: Prisma.OrderCreateNestedOneWithoutSubscriptionInput
+  plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
   extensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteCreateNestedManyWithoutSubscriptionInput
 }
@@ -1422,9 +1422,9 @@ export type SubscriptionUpdateWithoutEventsInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
-  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutSubscriptionNestedInput
+  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
   extensions?: Prisma.SubscriptionExtensionUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUpdateManyWithoutSubscriptionNestedInput
 }
@@ -1476,11 +1476,11 @@ export type SubscriptionCreateWithoutOrderInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
   plan: Prisma.SubscriptionPlanCreateNestedOneWithoutSubscriptionsInput
+  user: Prisma.UserCreateNestedOneWithoutSubscriptionsInput
+  events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
   extensions?: Prisma.SubscriptionExtensionCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteCreateNestedManyWithoutSubscriptionInput
-  events?: Prisma.SubscriptionEventCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionUncheckedCreateWithoutOrderInput = {
@@ -1505,9 +1505,9 @@ export type SubscriptionUncheckedCreateWithoutOrderInput = {
   deletedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
   extensions?: Prisma.SubscriptionExtensionUncheckedCreateNestedManyWithoutSubscriptionInput
   notes?: Prisma.SubscriptionNoteUncheckedCreateNestedManyWithoutSubscriptionInput
-  events?: Prisma.SubscriptionEventUncheckedCreateNestedManyWithoutSubscriptionInput
 }
 
 export type SubscriptionCreateOrConnectWithoutOrderInput = {
@@ -1546,11 +1546,11 @@ export type SubscriptionUpdateWithoutOrderInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
   plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
+  events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
   extensions?: Prisma.SubscriptionExtensionUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUpdateManyWithoutSubscriptionNestedInput
-  events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionUncheckedUpdateWithoutOrderInput = {
@@ -1575,9 +1575,9 @@ export type SubscriptionUncheckedUpdateWithoutOrderInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
   extensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutSubscriptionNestedInput
-  events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionCreateManyUserInput = {
@@ -1624,11 +1624,11 @@ export type SubscriptionUpdateWithoutUserInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutSubscriptionNestedInput
+  plan?: Prisma.SubscriptionPlanUpdateOneRequiredWithoutSubscriptionsNestedInput
+  events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
   extensions?: Prisma.SubscriptionExtensionUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUpdateManyWithoutSubscriptionNestedInput
-  events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionUncheckedUpdateWithoutUserInput = {
@@ -1653,9 +1653,9 @@ export type SubscriptionUncheckedUpdateWithoutUserInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
   extensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutSubscriptionNestedInput
-  events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionUncheckedUpdateManyWithoutUserInput = {
@@ -1726,11 +1726,11 @@ export type SubscriptionUpdateWithoutPlanInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
   order?: Prisma.OrderUpdateOneWithoutSubscriptionNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutSubscriptionsNestedInput
+  events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
   extensions?: Prisma.SubscriptionExtensionUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUpdateManyWithoutSubscriptionNestedInput
-  events?: Prisma.SubscriptionEventUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionUncheckedUpdateWithoutPlanInput = {
@@ -1755,9 +1755,9 @@ export type SubscriptionUncheckedUpdateWithoutPlanInput = {
   deletedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
   extensions?: Prisma.SubscriptionExtensionUncheckedUpdateManyWithoutSubscriptionNestedInput
   notes?: Prisma.SubscriptionNoteUncheckedUpdateManyWithoutSubscriptionNestedInput
-  events?: Prisma.SubscriptionEventUncheckedUpdateManyWithoutSubscriptionNestedInput
 }
 
 export type SubscriptionUncheckedUpdateManyWithoutPlanInput = {
@@ -1790,15 +1790,15 @@ export type SubscriptionUncheckedUpdateManyWithoutPlanInput = {
  */
 
 export type SubscriptionCountOutputType = {
+  events: number
   extensions: number
   notes: number
-  events: number
 }
 
 export type SubscriptionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  events?: boolean | SubscriptionCountOutputTypeCountEventsArgs
   extensions?: boolean | SubscriptionCountOutputTypeCountExtensionsArgs
   notes?: boolean | SubscriptionCountOutputTypeCountNotesArgs
-  events?: boolean | SubscriptionCountOutputTypeCountEventsArgs
 }
 
 /**
@@ -1814,6 +1814,13 @@ export type SubscriptionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
 /**
  * SubscriptionCountOutputType without action
  */
+export type SubscriptionCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SubscriptionEventWhereInput
+}
+
+/**
+ * SubscriptionCountOutputType without action
+ */
 export type SubscriptionCountOutputTypeCountExtensionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SubscriptionExtensionWhereInput
 }
@@ -1823,13 +1830,6 @@ export type SubscriptionCountOutputTypeCountExtensionsArgs<ExtArgs extends runti
  */
 export type SubscriptionCountOutputTypeCountNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SubscriptionNoteWhereInput
-}
-
-/**
- * SubscriptionCountOutputType without action
- */
-export type SubscriptionCountOutputTypeCountEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.SubscriptionEventWhereInput
 }
 
 
@@ -1856,12 +1856,12 @@ export type SubscriptionSelect<ExtArgs extends runtime.Types.Extensions.Internal
   deletedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
   order?: boolean | Prisma.Subscription$orderArgs<ExtArgs>
+  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  events?: boolean | Prisma.Subscription$eventsArgs<ExtArgs>
   extensions?: boolean | Prisma.Subscription$extensionsArgs<ExtArgs>
   notes?: boolean | Prisma.Subscription$notesArgs<ExtArgs>
-  events?: boolean | Prisma.Subscription$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.SubscriptionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscription"]>
 
@@ -1888,9 +1888,9 @@ export type SubscriptionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   deletedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
   order?: boolean | Prisma.Subscription$orderArgs<ExtArgs>
+  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscription"]>
 
 export type SubscriptionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1916,9 +1916,9 @@ export type SubscriptionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   deletedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
   order?: boolean | Prisma.Subscription$orderArgs<ExtArgs>
+  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscription"]>
 
 export type SubscriptionSelectScalar = {
@@ -1948,34 +1948,34 @@ export type SubscriptionSelectScalar = {
 
 export type SubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "planId" | "status" | "source" | "purchaseDate" | "startDate" | "originalExpiryDate" | "currentExpiryDate" | "cancelledAt" | "expiredAt" | "revokedAt" | "cancellationReason" | "revocationReason" | "autoRenew" | "gateway" | "gatewaySubscriptionId" | "orderId" | "deletedAt" | "deletedById" | "createdAt" | "updatedAt", ExtArgs["result"]["subscription"]>
 export type SubscriptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
   order?: boolean | Prisma.Subscription$orderArgs<ExtArgs>
+  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  events?: boolean | Prisma.Subscription$eventsArgs<ExtArgs>
   extensions?: boolean | Prisma.Subscription$extensionsArgs<ExtArgs>
   notes?: boolean | Prisma.Subscription$notesArgs<ExtArgs>
-  events?: boolean | Prisma.Subscription$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.SubscriptionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SubscriptionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
   order?: boolean | Prisma.Subscription$orderArgs<ExtArgs>
+  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type SubscriptionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
   order?: boolean | Prisma.Subscription$orderArgs<ExtArgs>
+  plan?: boolean | Prisma.SubscriptionPlanDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $SubscriptionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Subscription"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
-    plan: Prisma.$SubscriptionPlanPayload<ExtArgs>
     order: Prisma.$OrderPayload<ExtArgs> | null
+    plan: Prisma.$SubscriptionPlanPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
+    events: Prisma.$SubscriptionEventPayload<ExtArgs>[]
     extensions: Prisma.$SubscriptionExtensionPayload<ExtArgs>[]
     notes: Prisma.$SubscriptionNotePayload<ExtArgs>[]
-    events: Prisma.$SubscriptionEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2394,12 +2394,12 @@ readonly fields: SubscriptionFieldRefs;
  */
 export interface Prisma__SubscriptionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  plan<T extends Prisma.SubscriptionPlanDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionPlanDefaultArgs<ExtArgs>>): Prisma.Prisma__SubscriptionPlanClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   order<T extends Prisma.Subscription$orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subscription$orderArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  plan<T extends Prisma.SubscriptionPlanDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionPlanDefaultArgs<ExtArgs>>): Prisma.Prisma__SubscriptionPlanClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  events<T extends Prisma.Subscription$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subscription$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   extensions<T extends Prisma.Subscription$extensionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subscription$extensionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionExtensionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notes<T extends Prisma.Subscription$notesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subscription$notesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionNotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  events<T extends Prisma.Subscription$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Subscription$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SubscriptionEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2871,6 +2871,30 @@ export type Subscription$orderArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * Subscription.events
+ */
+export type Subscription$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SubscriptionEvent
+   */
+  select?: Prisma.SubscriptionEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SubscriptionEvent
+   */
+  omit?: Prisma.SubscriptionEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SubscriptionEventInclude<ExtArgs> | null
+  where?: Prisma.SubscriptionEventWhereInput
+  orderBy?: Prisma.SubscriptionEventOrderByWithRelationInput | Prisma.SubscriptionEventOrderByWithRelationInput[]
+  cursor?: Prisma.SubscriptionEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SubscriptionEventScalarFieldEnum | Prisma.SubscriptionEventScalarFieldEnum[]
+}
+
+/**
  * Subscription.extensions
  */
 export type Subscription$extensionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2916,30 +2940,6 @@ export type Subscription$notesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.SubscriptionNoteScalarFieldEnum | Prisma.SubscriptionNoteScalarFieldEnum[]
-}
-
-/**
- * Subscription.events
- */
-export type Subscription$eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the SubscriptionEvent
-   */
-  select?: Prisma.SubscriptionEventSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the SubscriptionEvent
-   */
-  omit?: Prisma.SubscriptionEventOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.SubscriptionEventInclude<ExtArgs> | null
-  where?: Prisma.SubscriptionEventWhereInput
-  orderBy?: Prisma.SubscriptionEventOrderByWithRelationInput | Prisma.SubscriptionEventOrderByWithRelationInput[]
-  cursor?: Prisma.SubscriptionEventWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.SubscriptionEventScalarFieldEnum | Prisma.SubscriptionEventScalarFieldEnum[]
 }
 
 /**

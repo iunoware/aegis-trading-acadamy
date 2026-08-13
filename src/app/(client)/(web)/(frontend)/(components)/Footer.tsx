@@ -10,12 +10,20 @@ import {
   Mail,
   Phone,
   MapPin,
-  Globe,
-  Video,
-  Share2,
-  Send,
+  // Globe,
+  // Video,
+  // Share2,
+  // Send,
   ShieldCheck,
 } from "lucide-react";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  TelegramIcon,
+  XIcon,
+  // YoutubeIcon,
+} from "@/components/Icons";
+import Link from "next/link";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -100,9 +108,8 @@ export default function Footer() {
             </h2>
 
             <p className="text-base sm:text-lg text-zinc-300 max-w-xl font-normal leading-relaxed mb-8">
-              Join Aegis Trading Academy today and start learning through
-              structured education, live mentorship and disciplined trading
-              principles.
+              Join Aegis Trading Academy today and start learning through structured
+              education, live mentorship and disciplined trading principles.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
@@ -121,7 +128,7 @@ export default function Footer() {
               {/* Secondary Button */}
               <a
                 href="#contact"
-                className="inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold text-sm sm:text-base tracking-wide glass-panel text-white hover:text-primary border border-white/15 hover:border-(--primary)/40 transition-all duration-300 hover:-translate-y-0.5 w-full sm:w-auto text-center"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold text-sm sm:text-base tracking-wide glass-panel text-white hover:text-primary border border-white/15 hover:border-primary/40 transition-all duration-300 hover:-translate-y-0.5 w-full sm:w-auto text-center"
               >
                 Contact Us
               </a>
@@ -154,8 +161,8 @@ export default function Footer() {
             </div>
 
             <p className="text-xs sm:text-sm text-zinc-400 font-normal leading-relaxed">
-              Building disciplined traders through structured education and real
-              market experience.
+              Building disciplined traders through structured education and real market
+              experience.
             </p>
           </div>
 
@@ -179,18 +186,12 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="#pricing"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#pricing" className="hover:text-primary transition-colors">
                   Pricing
                 </a>
               </li>
               <li>
-                <a
-                  href="#testimonials"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#testimonials" className="hover:text-primary transition-colors">
                   Testimonials
                 </a>
               </li>
@@ -200,10 +201,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="#contact"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#contact" className="hover:text-primary transition-colors">
                   Contact
                 </a>
               </li>
@@ -217,10 +215,7 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-zinc-300">
               <li>
-                <a
-                  href="#login"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#login" className="hover:text-primary transition-colors">
                   Member Login
                 </a>
               </li>
@@ -233,26 +228,17 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="#pricing"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#pricing" className="hover:text-primary transition-colors">
                   Pricing Plans
                 </a>
               </li>
               <li>
-                <a
-                  href="#community"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#community" className="hover:text-primary transition-colors">
                   Community
                 </a>
               </li>
               <li>
-                <a
-                  href="#support"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#support" className="hover:text-primary transition-colors">
                   Support
                 </a>
               </li>
@@ -266,34 +252,22 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-zinc-300">
               <li>
-                <a
-                  href="#privacy"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#privacy" className="hover:text-primary transition-colors">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a
-                  href="#terms"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#terms" className="hover:text-primary transition-colors">
                   Terms &amp; Conditions
                 </a>
               </li>
               <li>
-                <a
-                  href="#refund"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#refund" className="hover:text-primary transition-colors">
                   Refund Policy
                 </a>
               </li>
               <li>
-                <a
-                  href="#disclaimer"
-                  className="hover:text-primary transition-colors"
-                >
+                <a href="#disclaimer" className="hover:text-primary transition-colors">
                   Risk Disclaimer
                 </a>
               </li>
@@ -323,33 +297,54 @@ export default function Footer() {
             {/* Social Media Icons */}
             <div className="pt-2 flex items-center gap-3">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/aegistradingacademy_?igsh=MWp3ZTlmbHdicXlsYQ%3D%3D&utm_source=qr"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-(--primary)/40 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
               >
-                <Globe size={16} />
+                <InstagramIcon className="h-5" />
               </a>
 
-              <a
+              {/* <a
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-(--primary)/40 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
               >
-                <Video size={16} />
-              </a>
+                <YoutubeIcon className="h-5" />
+              </a> */}
 
-              <a
+              {/* <a
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-(--primary)/40 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
               >
-                <Share2 size={16} />
+                <LinkedInIcon className="h-5" />
+              </a> */}
+
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
+              >
+                {/* <Share2 size={16} /> */}
+                <FacebookIcon className="h-5" />
+              </a>
+
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
+              >
+                <XIcon className="h-5" />
               </a>
 
               <a
@@ -357,9 +352,10 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Telegram"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-(--primary)/40 transition-colors"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
               >
-                <Send size={16} />
+                {/* <Send size={16} /> */}
+                <TelegramIcon className="h-5" />
               </a>
             </div>
           </div>
@@ -369,8 +365,8 @@ export default function Footer() {
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-zinc-400 gap-4">
           <div>
-            &copy; {new Date().getFullYear()} Aegis Trading Academy. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} Aegis Trading Academy. All rights reserved.{" "}
+            <Link href="/disclaimer">Disclaimer</Link>
           </div>
 
           <div className="text-primary/80">Designed with precision.</div>

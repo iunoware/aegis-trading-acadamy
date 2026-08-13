@@ -7,7 +7,600 @@ datasource db {
   provider = "postgresql"
 }
 
-// ENUMS
+model User {
+  id                     String                  @id @default(cuid())
+  firstName              String
+  lastName               String?
+  name                   String
+  email                  String                  @unique
+  phone                  String?                 @unique
+  discordName            String?
+  password               String
+  avatarUrl              String?
+  role                   UserRole                @default(STUDENT)
+  status                 AccountStatus           @default(ACTIVE)
+  emailVerifiedAt        DateTime?
+  phoneVerifiedAt        DateTime?
+  lastLoginAt            DateTime?
+  passwordChangedAt      DateTime?
+  razorpayCustomerId     String?                 @unique
+  stripeCustomerId       String?                 @unique
+  paytmCustomerId        String?                 @unique
+  deletedById            String?
+  deletedAt              DateTime?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  anonymizedAt           DateTime?
+  activityLogs           ActivityLog[]
+  sessions               AuthSession[]
+  courseProgress         CourseProgress[]
+  lessonProgress         LessonProgress[]
+  orders                 Order[]
+  passwordResetTokens    PasswordResetToken[]
+  payments               Payment[]
+  refunds                Refund[]
+  subscriptions          Subscription[]
+  subscriptionEvents     SubscriptionEvent[]
+  subscriptionExtensions SubscriptionExtension[]
+  subscriptionNotes      SubscriptionNote[]
+  deletedBy              User?                   @relation("UserDeletedBy", fields: [deletedById], references: [id])
+  deletedUsers           User[]                  @relation("UserDeletedBy")
+  performedActivities    UserActivity[]          @relation("UserActivityActor")
+  accountActivities      UserActivity[]          @relation("UserActivityOwner")
+
+  @@index([email])
+  @@index([phone])
+  @@index([discordName])
+  @@index([role])
+  @@index([status])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([anonymizedAt])
+  @@index([role, status])
+}
+
+model AuthSession {
+  id         String    @id @default(cuid())
+  userId     String
+  tokenHash  String    @unique
+  ipAddress  String?
+  userAgent  String?
+  deviceName String?
+  expiresAt  DateTime
+  lastUsedAt DateTime?
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([revokedAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Course {
+  id           String           @id @default(cuid())
+  title        String
+  slug         String           @unique
+  description  String?
+  thumbnailUrl String?
+  status       ContentStatus    @default(DRAFT)
+  displayOrder Int              @default(0)
+  createdById  String?
+  updatedById  String?
+  publishedAt  DateTime?
+  deletedAt    DateTime?
+  deletedById  String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  userProgress CourseProgress[]
+  lessons      Lesson[]
+
+  @@index([slug])
+  @@index([status])
+  @@index([displayOrder])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([status, displayOrder])
+}
+
+model Lesson {
+  id              String           @id @default(cuid())
+  courseId        String
+  title           String
+  slug            String
+  description     String?
+  videoUrl        String
+  thumbnailUrl    String?
+  durationSeconds Int              @default(0)
+  isPreview       Boolean          @default(false)
+  status          ContentStatus    @default(PUBLISHED)
+  displayOrder    Int              @default(0)
+  deletedAt       DateTime?
+  deletedById     String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  course          Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress        LessonProgress[]
+
+  @@unique([courseId, slug])
+  @@unique([courseId, displayOrder])
+  @@index([courseId])
+  @@index([status])
+  @@index([isPreview])
+  @@index([displayOrder])
+  @@index([deletedAt])
+  @@index([courseId, status, displayOrder])
+}
+
+model CourseProgress {
+  id                       String    @id @default(cuid())
+  userId                   String
+  courseId                 String
+  startedAt                DateTime?
+  lastAccessedAt           DateTime?
+  completedAt              DateTime?
+  totalLessonsSnapshot     Int       @default(0)
+  completedLessonsSnapshot Int       @default(0)
+  progressPercentage       Decimal   @default(0) @db.Decimal(5, 2)
+  lastLessonId             String?
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+  course                   Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user                     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@index([completedAt])
+  @@index([lastAccessedAt])
+}
+
+model LessonProgress {
+  id                      String               @id @default(cuid())
+  userId                  String
+  lessonId                String
+  status                  LessonProgressStatus @default(NOT_STARTED)
+  lastPositionSeconds     Int                  @default(0)
+  furthestPositionSeconds Int                  @default(0)
+  totalWatchedSeconds     Int                  @default(0)
+  watchPercentage         Decimal              @default(0) @db.Decimal(5, 2)
+  firstWatchedAt          DateTime?
+  lastWatchedAt           DateTime?
+  completedAt             DateTime?
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+  lesson                  Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user                    User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@index([status])
+  @@index([completedAt])
+  @@index([lastWatchedAt])
+}
+
+model SubscriptionPlan {
+  id             String         @id @default(cuid())
+  type           PlanType       @unique
+  name           String
+  description    String?
+  price          Decimal        @db.Decimal(10, 2)
+  currency       String         @default("USD") @db.Char(3)
+  durationMonths Int
+  badge          PlanBadge      @default(NONE)
+  active         Boolean        @default(true)
+  displayOrder   Int            @default(0)
+  razorpayPlanId String?        @unique
+  stripePriceId  String?        @unique
+  paytmPlanId    String?        @unique
+  deletedAt      DateTime?
+  deletedById    String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  orders         Order[]
+  features       PlanFeature[]
+  subscriptions  Subscription[]
+
+  @@index([type])
+  @@index([active])
+  @@index([displayOrder])
+  @@index([deletedAt])
+}
+
+model PlanFeature {
+  id           String           @id @default(cuid())
+  planId       String
+  text         String
+  displayOrder Int              @default(0)
+  active       Boolean          @default(true)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  plan         SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, displayOrder])
+  @@index([planId])
+  @@index([active])
+}
+
+model Subscription {
+  id                    String                  @id @default(cuid())
+  userId                String
+  planId                String
+  status                SubscriptionStatus      @default(PENDING)
+  source                SubscriptionSource      @default(PAYMENT)
+  purchaseDate          DateTime
+  startDate             DateTime
+  originalExpiryDate    DateTime
+  currentExpiryDate     DateTime
+  cancelledAt           DateTime?
+  expiredAt             DateTime?
+  revokedAt             DateTime?
+  cancellationReason    String?
+  revocationReason      String?
+  autoRenew             Boolean                 @default(false)
+  gateway               PaymentGateway?
+  gatewaySubscriptionId String?
+  orderId               String?                 @unique
+  deletedAt             DateTime?
+  deletedById           String?
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  order                 Order?                  @relation(fields: [orderId], references: [id])
+  plan                  SubscriptionPlan        @relation(fields: [planId], references: [id])
+  user                  User                    @relation(fields: [userId], references: [id])
+  events                SubscriptionEvent[]
+  extensions            SubscriptionExtension[]
+  notes                 SubscriptionNote[]
+
+  @@index([userId])
+  @@index([planId])
+  @@index([status])
+  @@index([source])
+  @@index([currentExpiryDate])
+  @@index([purchaseDate])
+  @@index([deletedAt])
+  @@index([userId, status])
+  @@index([status, currentExpiryDate])
+}
+
+model SubscriptionExtension {
+  id                        String       @id @default(cuid())
+  subscriptionId            String
+  extendedById              String
+  previousExpiryDate        DateTime
+  newExpiryDate             DateTime
+  extensionDays             Int
+  reason                    String
+  additionalPaymentRequired Boolean      @default(false)
+  createdAt                 DateTime     @default(now())
+  extendedBy                User         @relation(fields: [extendedById], references: [id])
+  subscription              Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId])
+  @@index([extendedById])
+  @@index([createdAt])
+}
+
+model SubscriptionNote {
+  id             String       @id @default(cuid())
+  subscriptionId String
+  authorId       String
+  note           String
+  editedAt       DateTime?
+  deletedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  author         User         @relation(fields: [authorId], references: [id])
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId])
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+model SubscriptionEvent {
+  id             String                @id @default(cuid())
+  subscriptionId String
+  actorId        String?
+  type           SubscriptionEventType
+  title          String
+  description    String?
+  metadata       Json?
+  createdAt      DateTime              @default(now())
+  actor          User?                 @relation(fields: [actorId], references: [id])
+  subscription   Subscription          @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([subscriptionId])
+  @@index([actorId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model Order {
+  id                String           @id @default(cuid())
+  orderNumber       String           @unique
+  userId            String
+  planId            String
+  status            OrderStatus      @default(CREATED)
+  planTypeSnapshot  PlanType
+  planNameSnapshot  String
+  planPriceSnapshot Decimal          @db.Decimal(10, 2)
+  subtotalAmount    Decimal          @db.Decimal(10, 2)
+  discountAmount    Decimal          @default(0) @db.Decimal(10, 2)
+  taxAmount         Decimal          @default(0) @db.Decimal(10, 2)
+  totalAmount       Decimal          @db.Decimal(10, 2)
+  currency          String           @default("USD") @db.Char(3)
+  couponCode        String?
+  paidAt            DateTime?
+  failedAt          DateTime?
+  cancelledAt       DateTime?
+  refundedAt        DateTime?
+  adminNotes        String?
+  deletedAt         DateTime?
+  deletedById       String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  invoice           Invoice?
+  plan              SubscriptionPlan @relation(fields: [planId], references: [id])
+  user              User             @relation(fields: [userId], references: [id])
+  payments          Payment[]
+  subscription      Subscription?
+
+  @@index([userId])
+  @@index([planId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([paidAt])
+  @@index([deletedAt])
+  @@index([userId, status])
+}
+
+model Payment {
+  id                    String          @id @default(cuid())
+  orderId               String
+  userId                String
+  status                PaymentStatus   @default(PENDING)
+  method                PaymentMethod?
+  gateway               PaymentGateway?
+  amount                Decimal         @db.Decimal(10, 2)
+  currency              String          @default("USD") @db.Char(3)
+  transactionId         String?         @unique
+  gatewayOrderId        String?
+  gatewayPaymentId      String?
+  gatewayCustomerId     String?
+  gatewaySubscriptionId String?
+  gatewaySignature      String?
+  gatewayResponse       Json?
+  failureCode           String?
+  failureMessage        String?
+  authorizedAt          DateTime?
+  capturedAt            DateTime?
+  paidAt                DateTime?
+  failedAt              DateTime?
+  cancelledAt           DateTime?
+  refundedAt            DateTime?
+  deletedAt             DateTime?
+  deletedById           String?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  order                 Order           @relation(fields: [orderId], references: [id])
+  user                  User            @relation(fields: [userId], references: [id])
+  refunds               Refund[]
+
+  @@index([orderId])
+  @@index([userId])
+  @@index([status])
+  @@index([gateway])
+  @@index([gatewayPaymentId])
+  @@index([gatewayOrderId])
+  @@index([createdAt])
+  @@index([paidAt])
+  @@index([deletedAt])
+}
+
+model Refund {
+  id              String       @id @default(cuid())
+  paymentId       String
+  userId          String
+  status          RefundStatus @default(PENDING)
+  amount          Decimal      @db.Decimal(10, 2)
+  currency        String       @default("USD") @db.Char(3)
+  reason          String?
+  gatewayRefundId String?      @unique
+  gatewayResponse Json?
+  requestedAt     DateTime     @default(now())
+  processedAt     DateTime?
+  completedAt     DateTime?
+  failedAt        DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  payment         Payment      @relation(fields: [paymentId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
+
+  @@index([paymentId])
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Invoice {
+  id             String   @id @default(cuid())
+  orderId        String   @unique
+  invoiceNumber  String   @unique
+  invoiceUrl     String?
+  receiptUrl     String?
+  billingName    String
+  billingEmail   String
+  billingPhone   String?
+  billingAddress String?
+  subtotalAmount Decimal  @db.Decimal(10, 2)
+  discountAmount Decimal  @default(0) @db.Decimal(10, 2)
+  taxAmount      Decimal  @default(0) @db.Decimal(10, 2)
+  totalAmount    Decimal  @db.Decimal(10, 2)
+  currency       String   @default("USD") @db.Char(3)
+  issuedAt       DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  order          Order    @relation(fields: [orderId], references: [id])
+
+  @@index([invoiceNumber])
+  @@index([issuedAt])
+}
+
+model UserActivity {
+  id        String         @id @default(cuid())
+  userId    String
+  actorId   String?
+  action    ActivityAction
+  title     String
+  details   String?
+  ipAddress String?
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime       @default(now())
+  actor     User?          @relation("UserActivityActor", fields: [actorId], references: [id])
+  user      User           @relation("UserActivityOwner", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([actorId])
+  @@index([action])
+  @@index([createdAt])
+  @@index([userId, createdAt])
+}
+
+model Testimonial {
+  id           String        @id @default(cuid())
+  customerName String
+  designation  String?
+  company      String?
+  avatarUrl    String?
+  rating       Int
+  reviewText   String
+  status       ContentStatus @default(PUBLISHED)
+  displayOrder Int           @default(0)
+  publishedAt  DateTime?
+  createdById  String?
+  updatedById  String?
+  deletedAt    DateTime?
+  deletedById  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status])
+  @@index([displayOrder])
+  @@index([rating])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([status, displayOrder])
+}
+
+model ShowcaseCertificate {
+  id              String        @id @default(cuid())
+  title           String
+  imageUrl        String
+  issuerName      String?
+  credentialName  String?
+  verificationUrl String?
+  issuedAt        DateTime?
+  expiresAt       DateTime?
+  status          ContentStatus @default(PUBLISHED)
+  displayOrder    Int           @default(0)
+  publishedAt     DateTime?
+  createdById     String?
+  updatedById     String?
+  deletedAt       DateTime?
+  deletedById     String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([status])
+  @@index([displayOrder])
+  @@index([issuedAt])
+  @@index([deletedAt])
+  @@index([status, displayOrder])
+}
+
+model ActivityLog {
+  id          String            @id @default(cuid())
+  actorId     String?
+  actorType   ActivityActorType
+  action      ActivityAction
+  module      String
+  title       String
+  description String?
+  targetId    String?
+  targetType  String?
+  ipAddress   String?
+  userAgent   String?
+  beforeData  Json?
+  afterData   Json?
+  metadata    Json?
+  createdAt   DateTime          @default(now())
+  actor       User?             @relation(fields: [actorId], references: [id])
+
+  @@index([actorId])
+  @@index([actorType])
+  @@index([action])
+  @@index([module])
+  @@index([targetId])
+  @@index([targetType])
+  @@index([createdAt])
+  @@index([module, createdAt])
+}
+
+model AppSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       Json
+  description String?
+  category    String   @default("GENERAL")
+  public      Boolean  @default(false)
+  updatedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([public])
+}
+
+model DeletionQueue {
+  id               String         @id @default(cuid())
+  entityType       String
+  entityId         String
+  deletedById      String?
+  deletedAt        DateTime       @default(now())
+  scheduledPurgeAt DateTime
+  restoredAt       DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  action           DeletionAction
+  failedAt         DateTime?
+  failureReason    String?
+  processedAt      DateTime?
+  status           DeletionStatus @default(PENDING)
+
+  @@unique([entityType, entityId])
+  @@index([status])
+  @@index([action])
+  @@index([scheduledPurgeAt])
+  @@index([status, scheduledPurgeAt])
+}
 
 enum UserRole {
   SUPER_ADMIN
@@ -150,853 +743,33 @@ enum ActivityAction {
   LOGIN
   LOGOUT
   PASSWORD_CHANGED
-
   COURSE_CREATED
   COURSE_UPDATED
   COURSE_PUBLISHED
   COURSE_HIDDEN
   COURSE_DELETED
   COURSE_RESTORED
-
   LESSON_CREATED
   LESSON_UPDATED
   LESSON_DELETED
   LESSON_COMPLETED
-
   SUBSCRIPTION_CREATED
   SUBSCRIPTION_EXTENDED
   SUBSCRIPTION_CHANGED
   SUBSCRIPTION_CANCELLED
   SUBSCRIPTION_REACTIVATED
   SUBSCRIPTION_EXPIRED
-
   ORDER_CREATED
   PAYMENT_COMPLETED
   PAYMENT_FAILED
   PAYMENT_REFUNDED
-
   TESTIMONIAL_CREATED
   TESTIMONIAL_UPDATED
   TESTIMONIAL_DELETED
-
   CERTIFICATE_CREATED
   CERTIFICATE_UPDATED
   CERTIFICATE_DELETED
-
   PRICING_UPDATED
   SETTINGS_UPDATED
   OTHER
-}
-
-// USERS AND AUTHENTICATION
-
-model User {
-  id          String        @id @default(cuid())
-  firstName   String
-  lastName    String?
-  name        String
-  email       String        @unique
-  phone       String?       @unique
-  discordName String?
-  password    String
-  avatarUrl   String?
-  role        UserRole      @default(STUDENT)
-  status      AccountStatus @default(ACTIVE)
-
-  emailVerifiedAt   DateTime?
-  emailVerified              Boolean   @default(false)
-  emailVerificationCode      String?
-  emailVerificationExpiresAt DateTime?
-  emailVerificationAttempts  Int      @default(0)
-  emailVerificationLastSentAt DateTime?
-  phoneVerifiedAt   DateTime?
-  lastLoginAt       DateTime?
-  passwordChangedAt DateTime?
-
-  // Optional gateway customer references
-  razorpayCustomerId String? @unique
-  stripeCustomerId   String? @unique
-  paytmCustomerId    String? @unique
-
-  // Authentication
-  sessions            AuthSession[]
-  passwordResetTokens PasswordResetToken[]
-
-  // Academy access
-  subscriptions  Subscription[]
-  courseProgress CourseProgress[]
-  lessonProgress LessonProgress[]
-
-  // Payments
-  orders   Order[]
-  payments Payment[]
-  refunds  Refund[]
-
-  // Activity
-  accountActivities   UserActivity[] @relation("UserActivityOwner")
-  performedActivities UserActivity[] @relation("UserActivityActor")
-  activityLogs        ActivityLog[]
-
-  // Admin-created records
-  subscriptionExtensions SubscriptionExtension[]
-  subscriptionNotes      SubscriptionNote[]
-  subscriptionEvents     SubscriptionEvent[]
-
-  // Soft-delete self relation
-  deletedById  String?
-  deletedBy    User?   @relation("UserDeletedBy", fields: [deletedById], references: [id], onDelete: SetNull)
-  deletedUsers User[]  @relation("UserDeletedBy")
-
-  deletedAt    DateTime?
-  anonymizedAt DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([email])
-  @@index([phone])
-  @@index([discordName])
-  @@index([role])
-  @@index([status])
-  @@index([createdAt])
-  @@index([deletedAt])
-  @@index([anonymizedAt])
-  @@index([role, status])
-}
-
-model AuthSession {
-  id        String @id @default(cuid())
-  userId    String
-  tokenHash String @unique
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  ipAddress  String?
-  userAgent  String?
-  deviceName String?
-
-  expiresAt  DateTime
-  lastUsedAt DateTime?
-  revokedAt  DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([expiresAt])
-  @@index([revokedAt])
-}
-
-model PasswordResetToken {
-  id        String @id @default(cuid())
-  userId    String
-  tokenHash String @unique
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  expiresAt DateTime
-  usedAt    DateTime?
-
-  createdAt DateTime @default(now())
-
-  @@index([userId])
-  @@index([expiresAt])
-}
-
-// COURSES AND LESSONS
-
-model Course {
-  id           String  @id @default(cuid())
-  title        String
-  slug         String  @unique
-  description  String?
-  thumbnailUrl String?
-
-  status       ContentStatus @default(DRAFT)
-  displayOrder Int           @default(0)
-
-  lessons Lesson[]
-
-  userProgress CourseProgress[]
-
-  createdById String?
-  updatedById String?
-
-  publishedAt DateTime?
-
-  deletedAt   DateTime?
-  deletedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([slug])
-  @@index([status])
-  @@index([displayOrder])
-  @@index([createdAt])
-  @@index([deletedAt])
-  @@index([status, displayOrder])
-}
-
-model Lesson {
-  id       String @id @default(cuid())
-  courseId String
-
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  title       String
-  slug        String
-  description String?
-
-  videoUrl     String
-  thumbnailUrl String?
-
-  // Store duration as seconds, not "12:40"
-  durationSeconds Int @default(0)
-
-  isPreview    Boolean       @default(false)
-  status       ContentStatus @default(PUBLISHED)
-  displayOrder Int           @default(0)
-
-  progress LessonProgress[]
-
-  deletedAt   DateTime?
-  deletedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([courseId, slug])
-  @@unique([courseId, displayOrder])
-  @@index([courseId])
-  @@index([status])
-  @@index([isPreview])
-  @@index([displayOrder])
-  @@index([deletedAt])
-  @@index([courseId, status, displayOrder])
-}
-
-// COURSE AND LESSON PROGRESS
-
-model CourseProgress {
-  id       String @id @default(cuid())
-  userId   String
-  courseId String
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  startedAt      DateTime?
-  lastAccessedAt DateTime?
-  completedAt    DateTime?
-
-  totalLessonsSnapshot     Int @default(0)
-  completedLessonsSnapshot Int @default(0)
-
-  progressPercentage Decimal @default(0) @db.Decimal(5, 2)
-
-  // Used to resume the course
-  lastLessonId String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, courseId])
-  @@index([userId])
-  @@index([courseId])
-  @@index([completedAt])
-  @@index([lastAccessedAt])
-}
-
-model LessonProgress {
-  id       String @id @default(cuid())
-  userId   String
-  lessonId String
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-
-  status LessonProgressStatus @default(NOT_STARTED)
-
-  // Current resume position
-  lastPositionSeconds Int @default(0)
-
-  // Highest point reached in the lesson
-  furthestPositionSeconds Int @default(0)
-
-  totalWatchedSeconds Int @default(0)
-
-  watchPercentage Decimal @default(0) @db.Decimal(5, 2)
-
-  firstWatchedAt DateTime?
-  lastWatchedAt  DateTime?
-  completedAt    DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, lessonId])
-  @@index([userId])
-  @@index([lessonId])
-  @@index([status])
-  @@index([completedAt])
-  @@index([lastWatchedAt])
-}
-
-// SUBSCRIPTION PLANS
-
-model SubscriptionPlan {
-  id   String   @id @default(cuid())
-  type PlanType @unique
-
-  name        String
-  description String?
-
-  price    Decimal @db.Decimal(10, 2)
-  currency String  @default("USD") @db.Char(3)
-
-  // Monthly = 1, Yearly = 12
-  durationMonths Int
-
-  badge  PlanBadge @default(NONE)
-  active Boolean   @default(true)
-
-  displayOrder Int @default(0)
-
-  features      PlanFeature[]
-  subscriptions Subscription[]
-  orders        Order[]
-
-  // Gateway product/price references
-  razorpayPlanId String? @unique
-  stripePriceId  String? @unique
-  paytmPlanId    String? @unique
-
-  deletedAt   DateTime?
-  deletedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([type])
-  @@index([active])
-  @@index([displayOrder])
-  @@index([deletedAt])
-}
-
-model PlanFeature {
-  id     String @id @default(cuid())
-  planId String
-
-  plan SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
-
-  text         String
-  displayOrder Int     @default(0)
-  active       Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([planId, displayOrder])
-  @@index([planId])
-  @@index([active])
-}
-
-// SUBSCRIPTIONS / ENROLLMENTS
-
-model Subscription {
-  id     String @id @default(cuid())
-  userId String
-  planId String
-
-  user User             @relation(fields: [userId], references: [id], onDelete: Restrict)
-  plan SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
-
-  status SubscriptionStatus @default(PENDING)
-  source SubscriptionSource @default(PAYMENT)
-
-  purchaseDate       DateTime
-  startDate          DateTime
-  originalExpiryDate DateTime
-  currentExpiryDate  DateTime
-
-  cancelledAt DateTime?
-  expiredAt   DateTime?
-  revokedAt   DateTime?
-
-  cancellationReason String?
-  revocationReason   String?
-
-  autoRenew Boolean @default(false)
-
-  // Optional recurring gateway subscription reference
-  gateway               PaymentGateway?
-  gatewaySubscriptionId String?
-
-  // One payment order may activate one subscription
-  orderId String? @unique
-  order   Order?  @relation(fields: [orderId], references: [id], onDelete: SetNull)
-
-  extensions SubscriptionExtension[]
-  notes      SubscriptionNote[]
-  events     SubscriptionEvent[]
-
-  deletedAt   DateTime?
-  deletedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([planId])
-  @@index([status])
-  @@index([source])
-  @@index([currentExpiryDate])
-  @@index([purchaseDate])
-  @@index([deletedAt])
-  @@index([userId, status])
-  @@index([status, currentExpiryDate])
-}
-
-model SubscriptionExtension {
-  id             String @id @default(cuid())
-  subscriptionId String
-  extendedById   String
-
-  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
-
-  extendedBy User @relation(fields: [extendedById], references: [id], onDelete: Restrict)
-
-  previousExpiryDate DateTime
-  newExpiryDate      DateTime
-  extensionDays      Int
-
-  reason String
-
-  // Must remain false for complimentary extensions
-  additionalPaymentRequired Boolean @default(false)
-
-  createdAt DateTime @default(now())
-
-  @@index([subscriptionId])
-  @@index([extendedById])
-  @@index([createdAt])
-}
-
-model SubscriptionNote {
-  id             String @id @default(cuid())
-  subscriptionId String
-  authorId       String
-
-  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
-
-  author User @relation(fields: [authorId], references: [id], onDelete: Restrict)
-
-  note String
-
-  editedAt  DateTime?
-  deletedAt DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([subscriptionId])
-  @@index([authorId])
-  @@index([createdAt])
-  @@index([deletedAt])
-}
-
-model SubscriptionEvent {
-  id             String  @id @default(cuid())
-  subscriptionId String
-  actorId        String?
-
-  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
-
-  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
-
-  type SubscriptionEventType
-
-  title       String
-  description String?
-
-  metadata Json?
-
-  createdAt DateTime @default(now())
-
-  @@index([subscriptionId])
-  @@index([actorId])
-  @@index([type])
-  @@index([createdAt])
-}
-
-// ORDERS
-
-model Order {
-  id          String @id @default(cuid())
-  orderNumber String @unique
-
-  userId String
-  planId String
-
-  user User             @relation(fields: [userId], references: [id], onDelete: Restrict)
-  plan SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Restrict)
-
-  status OrderStatus @default(CREATED)
-
-  // Snapshots preserve historical pricing
-  planTypeSnapshot  PlanType
-  planNameSnapshot  String
-  planPriceSnapshot Decimal  @db.Decimal(10, 2)
-
-  subtotalAmount Decimal @db.Decimal(10, 2)
-  discountAmount Decimal @default(0) @db.Decimal(10, 2)
-  taxAmount      Decimal @default(0) @db.Decimal(10, 2)
-  totalAmount    Decimal @db.Decimal(10, 2)
-
-  currency String @default("USD") @db.Char(3)
-
-  couponCode String?
-
-  payments     Payment[]
-  subscription Subscription?
-  invoice      Invoice?
-
-  paidAt      DateTime?
-  failedAt    DateTime?
-  cancelledAt DateTime?
-  refundedAt  DateTime?
-
-  adminNotes String?
-
-  deletedAt   DateTime?
-  deletedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([userId])
-  @@index([planId])
-  @@index([status])
-  @@index([createdAt])
-  @@index([paidAt])
-  @@index([deletedAt])
-  @@index([userId, status])
-}
-
-// PAYMENTS AND REFUNDS
-
-model Payment {
-  id      String @id @default(cuid())
-  orderId String
-  userId  String
-
-  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
-  user  User  @relation(fields: [userId], references: [id], onDelete: Restrict)
-
-  status  PaymentStatus   @default(PENDING)
-  method  PaymentMethod?
-  gateway PaymentGateway?
-
-  amount   Decimal @db.Decimal(10, 2)
-  currency String  @default("USD") @db.Char(3)
-
-  transactionId String? @unique
-
-  // Gateway-independent references
-  gatewayOrderId        String?
-  gatewayPaymentId      String?
-  gatewayCustomerId     String?
-  gatewaySubscriptionId String?
-  gatewaySignature      String?
-
-  gatewayResponse Json?
-  failureCode     String?
-  failureMessage  String?
-
-  authorizedAt DateTime?
-  capturedAt   DateTime?
-  paidAt       DateTime?
-  failedAt     DateTime?
-  cancelledAt  DateTime?
-  refundedAt   DateTime?
-
-  refunds Refund[]
-
-  deletedAt   DateTime?
-  deletedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([orderId])
-  @@index([userId])
-  @@index([status])
-  @@index([gateway])
-  @@index([gatewayPaymentId])
-  @@index([gatewayOrderId])
-  @@index([createdAt])
-  @@index([paidAt])
-  @@index([deletedAt])
-}
-
-model Refund {
-  id        String @id @default(cuid())
-  paymentId String
-  userId    String
-
-  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
-
-  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
-
-  status RefundStatus @default(PENDING)
-
-  amount   Decimal @db.Decimal(10, 2)
-  currency String  @default("USD") @db.Char(3)
-
-  reason String?
-
-  gatewayRefundId String? @unique
-  gatewayResponse Json?
-
-  requestedAt DateTime  @default(now())
-  processedAt DateTime?
-  completedAt DateTime?
-  failedAt    DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([paymentId])
-  @@index([userId])
-  @@index([status])
-  @@index([createdAt])
-}
-
-// INVOICES AND RECEIPTS
-
-model Invoice {
-  id      String @id @default(cuid())
-  orderId String @unique
-
-  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
-
-  invoiceNumber String @unique
-
-  invoiceUrl String?
-  receiptUrl String?
-
-  billingName    String
-  billingEmail   String
-  billingPhone   String?
-  billingAddress String?
-
-  subtotalAmount Decimal @db.Decimal(10, 2)
-  discountAmount Decimal @default(0) @db.Decimal(10, 2)
-  taxAmount      Decimal @default(0) @db.Decimal(10, 2)
-  totalAmount    Decimal @db.Decimal(10, 2)
-
-  currency String @default("USD") @db.Char(3)
-
-  issuedAt DateTime @default(now())
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([invoiceNumber])
-  @@index([issuedAt])
-}
-
-// USER ACTIVITY TIMELINE
-
-model UserActivity {
-  id     String @id @default(cuid())
-  userId String
-
-  // Optional user who performed the action.
-  // Example: Super Admin suspending a student.
-  actorId String?
-
-  user User @relation("UserActivityOwner", fields: [userId], references: [id], onDelete: Cascade)
-
-  actor User? @relation("UserActivityActor", fields: [actorId], references: [id], onDelete: SetNull)
-
-  action  ActivityAction
-  title   String
-  details String?
-
-  ipAddress String?
-  userAgent String?
-  metadata  Json?
-
-  createdAt DateTime @default(now())
-
-  @@index([userId])
-  @@index([actorId])
-  @@index([action])
-  @@index([createdAt])
-  @@index([userId, createdAt])
-}
-
-// TESTIMONIAL CMS
-
-model Testimonial {
-  id String @id @default(cuid())
-
-  customerName String
-  designation  String?
-  company      String?
-  avatarUrl    String?
-
-  rating     Int
-  reviewText String
-
-  status       ContentStatus @default(PUBLISHED)
-  displayOrder Int           @default(0)
-
-  publishedAt DateTime?
-
-  createdById String?
-  updatedById String?
-
-  deletedAt   DateTime?
-  deletedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([status])
-  @@index([displayOrder])
-  @@index([rating])
-  @@index([createdAt])
-  @@index([deletedAt])
-  @@index([status, displayOrder])
-}
-
-// MENTOR / ACADEMY CERTIFICATE SHOWCASE
-
-model ShowcaseCertificate {
-  id String @id @default(cuid())
-
-  title    String
-  imageUrl String
-
-  issuerName      String?
-  credentialName  String?
-  verificationUrl String?
-
-  issuedAt  DateTime?
-  expiresAt DateTime?
-
-  status       ContentStatus @default(PUBLISHED)
-  displayOrder Int           @default(0)
-
-  publishedAt DateTime?
-
-  createdById String?
-  updatedById String?
-
-  deletedAt   DateTime?
-  deletedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([status])
-  @@index([displayOrder])
-  @@index([issuedAt])
-  @@index([deletedAt])
-  @@index([status, displayOrder])
-}
-
-// ADMIN / SYSTEM ACTIVITY LOG
-
-model ActivityLog {
-  id      String  @id @default(cuid())
-  actorId String?
-
-  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
-
-  actorType ActivityActorType
-  action    ActivityAction
-
-  module String
-
-  title       String
-  description String?
-
-  targetId   String?
-  targetType String?
-
-  ipAddress String?
-  userAgent String?
-
-  beforeData Json?
-  afterData  Json?
-  metadata   Json?
-
-  createdAt DateTime @default(now())
-
-  @@index([actorId])
-  @@index([actorType])
-  @@index([action])
-  @@index([module])
-  @@index([targetId])
-  @@index([targetType])
-  @@index([createdAt])
-  @@index([module, createdAt])
-}
-
-// FUTURE APPLICATION SETTINGS
-
-model AppSetting {
-  id String @id @default(cuid())
-
-  key   String @unique
-  value Json
-
-  description String?
-  category    String  @default("GENERAL")
-
-  public Boolean @default(false)
-
-  updatedById String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([category])
-  @@index([public])
-}
-
-// SOFT-DELETE CLEANUP RECORDS
-
-model DeletionQueue {
-  id String @id @default(cuid())
-
-  entityType String
-  entityId   String
-
-  action DeletionAction
-  status DeletionStatus @default(PENDING)
-
-  deletedById String?
-  deletedAt   DateTime @default(now())
-
-  scheduledPurgeAt DateTime
-
-  processedAt DateTime?
-  restoredAt  DateTime?
-  failedAt    DateTime?
-
-  failureReason String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([entityType, entityId])
-  @@index([status])
-  @@index([action])
-  @@index([scheduledPurgeAt])
-  @@index([status, scheduledPurgeAt])
 }

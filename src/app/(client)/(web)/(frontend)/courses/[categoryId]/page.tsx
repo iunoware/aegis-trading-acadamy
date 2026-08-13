@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/purity */
 // /* eslint-disable react-hooks/exhaustive-deps */
 // "use client";
 

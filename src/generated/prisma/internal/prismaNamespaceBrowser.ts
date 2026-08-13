@@ -105,11 +105,6 @@ export const UserScalarFieldEnum = {
   role: 'role',
   status: 'status',
   emailVerifiedAt: 'emailVerifiedAt',
-  emailVerified: 'emailVerified',
-  emailVerificationCode: 'emailVerificationCode',
-  emailVerificationExpiresAt: 'emailVerificationExpiresAt',
-  emailVerificationAttempts: 'emailVerificationAttempts',
-  emailVerificationLastSentAt: 'emailVerificationLastSentAt',
   phoneVerifiedAt: 'phoneVerifiedAt',
   lastLoginAt: 'lastLoginAt',
   passwordChangedAt: 'passwordChangedAt',
@@ -118,9 +113,9 @@ export const UserScalarFieldEnum = {
   paytmCustomerId: 'paytmCustomerId',
   deletedById: 'deletedById',
   deletedAt: 'deletedAt',
-  anonymizedAt: 'anonymizedAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  anonymizedAt: 'anonymizedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -547,17 +542,17 @@ export const DeletionQueueScalarFieldEnum = {
   id: 'id',
   entityType: 'entityType',
   entityId: 'entityId',
-  action: 'action',
-  status: 'status',
   deletedById: 'deletedById',
   deletedAt: 'deletedAt',
   scheduledPurgeAt: 'scheduledPurgeAt',
-  processedAt: 'processedAt',
   restoredAt: 'restoredAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  action: 'action',
   failedAt: 'failedAt',
   failureReason: 'failureReason',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  processedAt: 'processedAt',
+  status: 'status'
 } as const
 
 export type DeletionQueueScalarFieldEnum = (typeof DeletionQueueScalarFieldEnum)[keyof typeof DeletionQueueScalarFieldEnum]

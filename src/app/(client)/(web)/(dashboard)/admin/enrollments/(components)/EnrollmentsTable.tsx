@@ -7,7 +7,7 @@ import {
   Filter,
   ArrowUpDown,
   Eye,
-  Settings,
+  // Settings,
   Mail,
   Phone,
   // ShieldCheck,
@@ -397,7 +397,7 @@ export function EnrollmentsTable({
                             <Eye size={13} />
                           </button>
 
-                          <button
+                          {/* <button
                             type="button"
                             onClick={() => onManageSubscription(item)}
                             title="Manage Subscription Lifecycle"
@@ -405,7 +405,7 @@ export function EnrollmentsTable({
                           >
                             <Settings size={12} />
                             <span>Manage</span>
-                          </button>
+                          </button> */}
                         </div>
                       </td>
                     </tr>

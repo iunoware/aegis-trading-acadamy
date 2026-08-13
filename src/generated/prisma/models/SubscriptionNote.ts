@@ -206,8 +206,8 @@ export type SubscriptionNoteWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"SubscriptionNote"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"SubscriptionNote"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SubscriptionNote"> | Date | string
-  subscription?: Prisma.XOR<Prisma.SubscriptionScalarRelationFilter, Prisma.SubscriptionWhereInput>
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  subscription?: Prisma.XOR<Prisma.SubscriptionScalarRelationFilter, Prisma.SubscriptionWhereInput>
 }
 
 export type SubscriptionNoteOrderByWithRelationInput = {
@@ -219,8 +219,8 @@ export type SubscriptionNoteOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  subscription?: Prisma.SubscriptionOrderByWithRelationInput
   author?: Prisma.UserOrderByWithRelationInput
+  subscription?: Prisma.SubscriptionOrderByWithRelationInput
 }
 
 export type SubscriptionNoteWhereUniqueInput = Prisma.AtLeast<{
@@ -235,8 +235,8 @@ export type SubscriptionNoteWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"SubscriptionNote"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"SubscriptionNote"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SubscriptionNote"> | Date | string
-  subscription?: Prisma.XOR<Prisma.SubscriptionScalarRelationFilter, Prisma.SubscriptionWhereInput>
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  subscription?: Prisma.XOR<Prisma.SubscriptionScalarRelationFilter, Prisma.SubscriptionWhereInput>
 }, "id">
 
 export type SubscriptionNoteOrderByWithAggregationInput = {
@@ -274,8 +274,8 @@ export type SubscriptionNoteCreateInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  subscription: Prisma.SubscriptionCreateNestedOneWithoutNotesInput
   author: Prisma.UserCreateNestedOneWithoutSubscriptionNotesInput
+  subscription: Prisma.SubscriptionCreateNestedOneWithoutNotesInput
 }
 
 export type SubscriptionNoteUncheckedCreateInput = {
@@ -296,8 +296,8 @@ export type SubscriptionNoteUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  subscription?: Prisma.SubscriptionUpdateOneRequiredWithoutNotesNestedInput
   author?: Prisma.UserUpdateOneRequiredWithoutSubscriptionNotesNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneRequiredWithoutNotesNestedInput
 }
 
 export type SubscriptionNoteUncheckedUpdateInput = {
@@ -666,8 +666,8 @@ export type SubscriptionNoteSelect<ExtArgs extends runtime.Types.Extensions.Inte
   deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionNote"]>
 
 export type SubscriptionNoteSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -679,8 +679,8 @@ export type SubscriptionNoteSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionNote"]>
 
 export type SubscriptionNoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -692,8 +692,8 @@ export type SubscriptionNoteSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["subscriptionNote"]>
 
 export type SubscriptionNoteSelectScalar = {
@@ -709,23 +709,23 @@ export type SubscriptionNoteSelectScalar = {
 
 export type SubscriptionNoteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "subscriptionId" | "authorId" | "note" | "editedAt" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["subscriptionNote"]>
 export type SubscriptionNoteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }
 export type SubscriptionNoteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }
 export type SubscriptionNoteIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  subscription?: boolean | Prisma.SubscriptionDefaultArgs<ExtArgs>
 }
 
 export type $SubscriptionNotePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SubscriptionNote"
   objects: {
-    subscription: Prisma.$SubscriptionPayload<ExtArgs>
     author: Prisma.$UserPayload<ExtArgs>
+    subscription: Prisma.$SubscriptionPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1130,8 +1130,8 @@ readonly fields: SubscriptionNoteFieldRefs;
  */
 export interface Prisma__SubscriptionNoteClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  subscription<T extends Prisma.SubscriptionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionDefaultArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   author<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  subscription<T extends Prisma.SubscriptionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SubscriptionDefaultArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
