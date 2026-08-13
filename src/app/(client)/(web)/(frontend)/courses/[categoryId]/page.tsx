@@ -811,7 +811,7 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
       try {
         setLoading(true);
 
-        const response = await axios.get("/api/admin/courses");
+        const response = await axios.get("/api/courses");
 
         const courses: Course[] = response.data?.courses ?? [];
 

@@ -362,14 +362,15 @@ export default function Footer() {
         </div>
 
         {/* BOTTOM BAR */}
-
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-zinc-400 gap-4">
           <div>
             &copy; {new Date().getFullYear()} Aegis Trading Academy. All rights reserved.{" "}
-            <Link href="/disclaimer">Disclaimer</Link>
+            <Link href="/disclaimer" className="hover:text-white transition">
+              Disclaimer
+            </Link>
           </div>
 
-          <div className="text-primary/80">Designed with precision.</div>
+          <div className="text-primary/80 ">Designed with precision.</div>
         </div>
       </div>
     </footer>
