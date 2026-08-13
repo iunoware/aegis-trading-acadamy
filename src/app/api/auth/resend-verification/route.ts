@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if already verified
-    if (user.emailVerified) {
+    if (user.emailVerifiedAt) {
       return NextResponse.json({
         success: true,
         alreadyVerified: true,
