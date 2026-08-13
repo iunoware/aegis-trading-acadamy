@@ -2,10 +2,10 @@
 
 import { FormEvent, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Loader2, Lock, Mail, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail, ArrowRight, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 import { gsap } from "gsap";
 
 // for pulling in the logo and other assets, you can use the Image component from next/image
@@ -182,6 +182,17 @@ export default function LoginPage() {
             Continue your trading journey with Aegis Trading Academy. Access your live
             strategies, risk management tools, and institutional market analytics.
           </p>
+
+          <Link
+            href="/"
+            className="text-sm flex justify-start group items-center text-zinc-300 leading-relaxed font-sans max-w-md"
+          >
+            <ArrowLeft
+              className="inline group-hover:-translate-x-2 transition"
+              size={15}
+            />
+            <span className="group-hover:text-zinc-100 transition">Back to home</span>
+          </Link>
 
           {/* Feature Highlights */}
           {/* <div className="space-y-3 pt-2">

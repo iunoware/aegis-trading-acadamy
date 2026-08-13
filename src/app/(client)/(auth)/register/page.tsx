@@ -12,10 +12,11 @@ import {
   Phone,
   MessageSquare,
   ArrowRight,
+  ArrowLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 import { gsap } from "gsap";
 
 export default function RegisterPage() {
@@ -139,9 +140,20 @@ export default function RegisterPage() {
 
           <p className="text-sm text-zinc-300 leading-relaxed font-sans">
             Start your professional trading journey. Gain immediate access to
-            institutional order flow strategies, risk management tools, and
-            private community insights.
+            institutional order flow strategies, risk management tools, and private
+            community insights.
           </p>
+
+          <Link
+            href="/"
+            className="text-sm flex justify-start group items-center text-zinc-300 leading-relaxed font-sans max-w-md"
+          >
+            <ArrowLeft
+              className="inline group-hover:-translate-x-2 transition"
+              size={15}
+            />
+            <span className="group-hover:text-zinc-100 transition">Back to home</span>
+          </Link>
 
           {/* Membership Benefits List */}
           {/* <div className="space-y-3 pt-1">
@@ -186,9 +198,7 @@ export default function RegisterPage() {
                   className="object-contain"
                 />
               </div> */}
-              <h1 className="text-xl font-extrabold text-white">
-                Create Account
-              </h1>
+              <h1 className="text-xl font-extrabold text-white">Create Account</h1>
               <p className="text-xs text-zinc-400 mt-1">
                 Join Aegis Trading Academy today
               </p>
@@ -264,7 +274,7 @@ export default function RegisterPage() {
 
               {/* Discord Name Input (New Requested Field) */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300 flex items-center justify-between">
+                <label className="text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300 flex items-center justify-between">
                   <span>Discord Name</span>
                   <span className="text-[10px] text-[#C9A227] font-normal font-mono">
                     Community Access
@@ -323,9 +333,7 @@ export default function RegisterPage() {
                       type={showPassword ? "text" : "password"}
                       required
                       value={confirmPassword}
-                      onChange={(event) =>
-                        setConfirmPassword(event.target.value)
-                      }
+                      onChange={(event) => setConfirmPassword(event.target.value)}
                       placeholder="Confirm password"
                       className="w-full rounded-xl bg-[#09090b] border border-white/15 py-2.5 pl-10 pr-4 text-xs text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227]"
                       autoComplete="new-password"
