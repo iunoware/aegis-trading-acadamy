@@ -33,7 +33,9 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /home/aegistradingacademy-api/htdocs/api.aegistradingacademy.com
+            cd /home/aegistradingacademy/htdocs/api.aegistradingacademy.com
+            
+            echo "DATABASE_URL=\"${{ secrets.DATABASE_URL }}\"" > .env
             
             npm install
             npx prisma generate
