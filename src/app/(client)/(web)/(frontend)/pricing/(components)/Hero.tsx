@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useEffect, useRef } from "react";
@@ -287,9 +288,9 @@ export default function Hero() {
           ref={subtitleRef}
           className="text-sm sm:text-base lg:text-lg text-zinc-300/90 font-normal leading-relaxed max-w-175 text-center mb-8 sm:mb-10"
         >
-          Gain access to structured trading education, expert mentorship, and a
-          supportive trading community designed to help you build confidence and
-          consistency in the financial markets.
+          Gain access to structured trading education, expert mentorship, and a supportive
+          trading community designed to help you build confidence and consistency in the
+          financial markets.
         </p>
 
         {/* Call to Actions (Side by Side Desktop, Stacked Mobile) */}
@@ -310,13 +311,13 @@ export default function Hero() {
           </a>
 
           {/* Secondary Button */}
-          <a
+          {/* <a
             href="#contact"
             className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl font-semibold text-sm sm:text-base tracking-wide bg-[#121215]/80 backdrop-blur-md border border-[#C8A84A]/40 text-[#C8A84A] hover:bg-[#C8A84A]/15 hover:text-white hover:border-[#C8A84A] transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 w-full sm:w-auto cursor-pointer"
           >
             <MessageSquare size={17} />
             <span>Contact Us</span>
-          </a>
+          </a> */}
         </div>
 
         {/* Trust Badges (One row Desktop, Wrapped 2 rows Mobile) */}

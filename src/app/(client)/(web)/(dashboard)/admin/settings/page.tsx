@@ -249,6 +249,8 @@ export default function AdminSettingsPage() {
 
       setComplimentaryUsers((current) => current.filter((u) => u.id !== deletingUser.id));
       setDeletingUser(null);
+
+      toast.success("User deleted successfully");
     } catch (error) {
       console.error("Unable to delete complimentary user:", error);
       if (axios.isAxiosError(error)) {
@@ -376,6 +378,8 @@ export default function AdminSettingsPage() {
       };
 
       setComplimentaryUsers((currentUsers) => [user, ...currentUsers]);
+
+      toast.success(`${name}, Created successfully`);
 
       closeAddUserModal();
     } catch (error) {
