@@ -191,6 +191,13 @@ export default function UserManagementPage() {
     toast.success("Exported master user directory to CSV!");
   };
 
+  const handleUserUpdated = (updatedUser: User) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
+    );
+    setSelectedUser(updatedUser);
+  };
+
   return (
     <div
       ref={pageRef}
@@ -231,6 +238,7 @@ export default function UserManagementPage() {
         onEditUser={(user) => setEditingUser(user)}
         onToggleStatus={handleToggleAccountStatus}
         onDeleteUser={handleDeleteUser}
+        onUserUpdated={handleUserUpdated}
       />
 
       {/* 5. Edit User Modal */}

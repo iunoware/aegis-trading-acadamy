@@ -24,6 +24,17 @@ export interface ActivityRecord {
   details: string;
 }
 
+export interface ActiveSubscriptionInfo {
+  id: string;
+  planId: string;
+  planName: string;
+  planType: string;
+  status: string;
+  source: string;
+  startDate: string;
+  currentExpiryDate: string;
+}
+
 export interface User {
   id: string;
   firstName: string;
@@ -33,6 +44,7 @@ export interface User {
   email: string;
   phone: string;
   isSubscribed: boolean;
+  activeSubscription?: ActiveSubscriptionInfo | null;
   accountStatus: "Active" | "Suspended" | "Inactive";
   joinedDate: string;
   lastLogin: string;

@@ -7,11 +7,13 @@ import { toast } from "sonner";
 import Link from "next/link";
 // import Image from "next/image";
 import { gsap } from "gsap";
+import { useAuth } from "@/context/AuthContext";
 
 // for pulling in the logo and other assets, you can use the Image component from next/image
 
 export default function LoginPage() {
   const router = useRouter();
+  const { setAuthUser, refreshSession } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -87,6 +89,11 @@ export default function LoginPage() {
         toast.error(data.error || "Login failed");
         return;
       }
+
+      if (data.user) {
+        setAuthUser(data.user);
+      }
+      await refreshSession();
 
       toast.success("Login successful");
       router.replace("/student");

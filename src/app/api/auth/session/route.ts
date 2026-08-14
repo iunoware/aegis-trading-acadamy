@@ -28,6 +28,7 @@ export async function GET() {
         name: user.name,
         email: user.email,
         phone: user.phone,
+        discordName: user.discordName,
         role: user.role,
         status: user.status,
       },

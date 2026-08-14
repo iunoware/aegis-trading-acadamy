@@ -3,36 +3,37 @@
 import { useState, useEffect, useRef, FormEvent, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  ShieldCheck,
+  Lock,
   Mail,
   Loader2,
   ArrowRight,
   AlertCircle,
-  Clock,
+  Eye,
+  EyeOff,
+  ShieldAlert,
+  ArrowLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { gsap } from "gsap";
-import { useAuth } from "@/context/AuthContext";
 
-function VerifyEmailForm() {
+function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setAuthUser, refreshSession } = useAuth();
 
   const initialEmail = searchParams.get("email") || "";
   const [email, setEmail] = useState(initialEmail);
   const [otpDigits, setOtpDigits] = useState<string[]>(Array(6).fill(""));
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  // Expiry timer (10 minutes = 600 seconds)
-  const [expirySeconds, setExpirySeconds] = useState<number>(600);
 
   const cardRef = useRef<HTMLDivElement>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Update email if query param changes
   useEffect(() => {
     if (initialEmail && !email) {
       setEmail(initialEmail);
@@ -49,15 +50,6 @@ function VerifyEmailForm() {
       );
     }
   }, []);
-
-  // Expiry countdown timer
-  useEffect(() => {
-    if (expirySeconds <= 0) return;
-    const interval = setInterval(() => {
-      setExpirySeconds((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [expirySeconds]);
 
   const handleDigitChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
@@ -93,7 +85,7 @@ function VerifyEmailForm() {
 
   const fullCode = otpDigits.join("");
 
-  async function handleVerify(e: FormEvent) {
+  async function handleReset(e: FormEvent) {
     e.preventDefault();
     setErrorMsg(null);
 
@@ -107,47 +99,51 @@ function VerifyEmailForm() {
       return;
     }
 
+    if (!newPassword) {
+      toast.error("New password is required.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error("New password must be at least 6 characters long.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
 
-      const response = await fetch("/api/auth/verify-email", {
+      const response = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email.trim(),
           code: fullCode,
+          newPassword,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        setErrorMsg(data.error || "Verification failed. Please try again.");
-        toast.error(data.error || "Verification failed");
+        setErrorMsg(data.error || "Password reset failed. Please check your code and try again.");
+        toast.error(data.error || "Password reset failed");
         return;
       }
 
-      if (data.user) {
-        setAuthUser(data.user);
-      }
-      await refreshSession();
-
-      toast.success(data.message || "Email verified successfully!");
-      router.replace("/student");
-      router.refresh();
+      toast.success("Password reset successfully! Please log in with your new password.");
+      router.replace("/login");
     } catch {
-      setErrorMsg("Something went wrong. Please check your network and try again.");
-      toast.error("Verification failed");
+      setErrorMsg("Something went wrong. Please check your connection and try again.");
+      toast.error("Password reset failed");
     } finally {
       setIsSubmitting(false);
     }
   }
-
-  const formatTime = (totalSecs: number) => {
-    const mins = Math.floor(totalSecs / 60);
-    const secs = totalSecs % 60;
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  };
 
   return (
     <div
@@ -160,15 +156,15 @@ function VerifyEmailForm() {
       {/* Header */}
       <div className="text-center mb-6">
         <div className="mx-auto mb-3 w-12 h-12 rounded-2xl bg-[#C9A227]/15 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] shadow-[0_0_20px_rgba(201,162,39,0.2)]">
-          <ShieldCheck size={26} />
+          <ShieldAlert size={24} />
         </div>
 
         <h1 className="text-2xl font-black text-white tracking-tight font-sans">
-          Verify Your Email
+          Reset Your Password
         </h1>
 
         <p className="text-xs text-zinc-400 mt-1 font-sans">
-          Enter the 6-digit OTP code sent to:
+          Enter the 6-digit code sent to your email and your new password.
         </p>
 
         {email ? (
@@ -177,8 +173,8 @@ function VerifyEmailForm() {
             <span className="font-semibold">{email}</span>
           </div>
         ) : (
-          <div className="mt-3 space-y-1">
-            <label className="block text-[11px] font-mono text-zinc-400 uppercase tracking-wider text-left">
+          <div className="mt-3 space-y-1 text-left">
+            <label className="block text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
               Email Address
             </label>
             <input
@@ -200,12 +196,12 @@ function VerifyEmailForm() {
         </div>
       )}
 
-      {/* Verification Form */}
-      <form onSubmit={handleVerify} className="space-y-6">
+      {/* Form */}
+      <form onSubmit={handleReset} className="space-y-5">
         {/* 6-Digit OTP Inputs */}
         <div className="space-y-2">
           <label className="block text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300 text-center">
-            6-Digit Verification Code
+            6-Digit Reset Code
           </label>
 
           <div className="flex items-center justify-center gap-2 sm:gap-2.5">
@@ -229,33 +225,65 @@ function VerifyEmailForm() {
               />
             ))}
           </div>
+        </div>
 
-          {/* Expiry Indicator */}
-          <div className="flex items-center justify-between pt-2 px-1 text-[11px] font-mono text-zinc-400">
-            <span className="flex items-center gap-1">
-              <Clock size={12} className="text-[#C9A227]" />
-              <span>Code expires in:</span>
-            </span>
-            <span className={expirySeconds <= 60 ? "text-rose-400 font-bold animate-pulse" : "text-[#C9A227] font-bold"}>
-              {expirySeconds > 0 ? formatTime(expirySeconds) : "Expired"}
-            </span>
+        {/* New Password */}
+        <div className="space-y-1.5">
+          <label className="block text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300">
+            New Password
+          </label>
+          <div className="relative flex items-center">
+            <Lock className="absolute left-3.5 h-4 w-4 text-zinc-500" />
+            <input
+              type={showPassword ? "text" : "password"}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="At least 6 characters"
+              className="w-full rounded-xl bg-[#09090b] border border-white/15 py-3 pl-10 pr-11 text-xs text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227]"
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3.5 text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer"
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
           </div>
         </div>
 
-        {/* Submit Verification Button */}
+        {/* Confirm Password */}
+        <div className="space-y-1.5">
+          <label className="block text-xs font-mono font-semibold uppercase tracking-wider text-zinc-300">
+            Confirm New Password
+          </label>
+          <div className="relative flex items-center">
+            <Lock className="absolute left-3.5 h-4 w-4 text-zinc-500" />
+            <input
+              type={showPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Re-enter your new password"
+              className="w-full rounded-xl bg-[#09090b] border border-white/15 py-3 pl-10 pr-4 text-xs text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227]"
+              autoComplete="new-password"
+            />
+          </div>
+        </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
-          disabled={isSubmitting || fullCode.length !== 6}
+          disabled={isSubmitting || fullCode.length !== 6 || !newPassword}
           className="w-full py-3 px-4 rounded-xl text-xs font-bold font-sans tracking-wider bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black shadow-[0_0_25px_rgba(201,162,39,0.3)] hover:brightness-110 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin text-black" />
-              <span>Verifying OTP...</span>
+              <span>Resetting Password...</span>
             </>
           ) : (
             <>
-              <span>Verify & Continue</span>
+              <span>Reset Password</span>
               <ArrowRight size={14} className="stroke-3" />
             </>
           )}
@@ -266,26 +294,27 @@ function VerifyEmailForm() {
       <div className="mt-6 pt-4 border-t border-white/10 text-center">
         <Link
           href="/login"
-          className="text-xs font-mono text-zinc-400 hover:text-[#C9A227] transition-colors inline-block"
+          className="text-xs font-mono text-zinc-400 hover:text-[#C9A227] transition-colors inline-flex items-center gap-1.5"
         >
-          &larr; Back to Student Login
+          <ArrowLeft size={13} />
+          <span>Back to Student Login</span>
         </Link>
       </div>
     </div>
   );
 }
 
-export default function VerifyEmailPage() {
+export default function ResetPasswordPage() {
   return (
     <main className="relative min-h-screen bg-[#050505] text-white flex items-center justify-center p-4 overflow-hidden selection:bg-[#C9A227]/30">
       <Suspense
         fallback={
           <div className="w-full max-w-md p-8 rounded-2xl bg-[#111113] border border-white/10 text-center font-mono text-xs text-zinc-400">
-            Loading verification page...
+            Loading reset page...
           </div>
         }
       >
-        <VerifyEmailForm />
+        <ResetPasswordForm />
       </Suspense>
     </main>
   );

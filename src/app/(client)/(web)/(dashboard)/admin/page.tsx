@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { gsap } from "gsap";
 import {
@@ -15,6 +16,7 @@ import {
 } from "./(components)/DashboardComponents";
 
 export default function AdminDashboardPage() {
+  const router = useRouter();
   const pageRef = useRef<HTMLDivElement>(null);
   const analyticsAbortRef = useRef<AbortController | null>(null);
 
@@ -40,15 +42,21 @@ export default function AdminDashboardPage() {
         });
         if (res.data.success && res.data.authenticated) {
           setAdmin(res.data.user);
+        } else {
+          router.replace("/admin/login");
         }
-      } catch (err) {
-        console.error("Failed to fetch authenticated admin:", err);
+      } catch (err: any) {
+        if (err?.response?.status === 401) {
+          router.replace("/admin/login");
+        } else {
+          console.error("Failed to fetch authenticated admin:", err);
+        }
       } finally {
         setLoadingAdmin(false);
       }
     };
     fetchAdmin();
-  }, []);
+  }, [router]);
 
   // 2. Fetch general static dashboard data ONCE on mount
   useEffect(() => {

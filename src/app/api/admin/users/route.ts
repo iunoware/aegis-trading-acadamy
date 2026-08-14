@@ -59,10 +59,27 @@ export async function GET(request: NextRequest) {
       where: whereClause,
       include: {
         subscriptions: {
+          where: {
+            deletedAt: null,
+          },
           select: {
             id: true,
+            planId: true,
             status: true,
+            source: true,
+            startDate: true,
             currentExpiryDate: true,
+            plan: {
+              select: {
+                id: true,
+                name: true,
+                type: true,
+                durationMonths: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: "desc",
           },
         },
         accountActivities: {
@@ -144,6 +161,12 @@ export async function POST(request: NextRequest) {
         password: hashedPassword,
         role: UserRole.STUDENT,
         status: AccountStatus.ACTIVE,
+        // Admin-created accounts are trusted and pre-verified
+        emailVerifiedAt: new Date(),
+        emailVerificationCode: null,
+        emailVerificationExpiresAt: null,
+        emailVerificationAttempts: 0,
+        emailVerificationLastSentAt: null,
       },
       include: {
         subscriptions: {
