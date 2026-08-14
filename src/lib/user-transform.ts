@@ -1,11 +1,19 @@
-import { AccountStatus } from "@/generated/prisma/client";
-import type { User as PrismaUser, SubscriptionStatus, ActivityAction } from "@/generated/prisma/client";
-import type { User, ActivityRecord } from "@/app/(client)/(web)/(dashboard)/admin/users/(components)/UsersTable";
+import type { AccountStatus, User as PrismaUser, SubscriptionStatus, ActivityAction } from "@/generated/prisma/client";
+import type { User, ActivityRecord, ActiveSubscriptionInfo } from "@/app/(client)/(web)/(dashboard)/admin/users/(components)/UsersTable";
 
 export type PartialSubscription = {
   id?: string;
+  planId?: string;
   status: SubscriptionStatus | string;
+  source?: string;
+  startDate?: Date | string | null;
   currentExpiryDate?: Date | string | null;
+  plan?: {
+    id?: string;
+    name?: string;
+    type?: string;
+    durationMonths?: number;
+  } | null;
 };
 
 export type PartialActivity = {
@@ -83,27 +91,28 @@ export function formatLastLogin(date: Date | string | null | undefined): string 
  * SUSPENDED -> "Suspended"
  * INACTIVE -> "Inactive"
  */
-export function mapAccountStatusToUI(status: AccountStatus): "Active" | "Suspended" | "Inactive" {
-  switch (status) {
-    case AccountStatus.ACTIVE:
+export function mapAccountStatusToUI(status: AccountStatus | string): "Active" | "Suspended" | "Inactive" {
+  const normalized = String(status).toUpperCase();
+  switch (normalized) {
+    case "ACTIVE":
       return "Active";
-    case AccountStatus.SUSPENDED:
+    case "SUSPENDED":
       return "Suspended";
-    case AccountStatus.INACTIVE:
+    case "INACTIVE":
     default:
       return "Inactive";
   }
 }
 
 /**
- * Maps UI string status to Prisma AccountStatus Enum
+ * Maps UI string status to Prisma AccountStatus Enum string
  */
 export function mapUIToAccountStatus(statusStr: string): AccountStatus {
   const normalized = statusStr.trim().toUpperCase();
-  if (normalized === "ACTIVE") return AccountStatus.ACTIVE;
-  if (normalized === "SUSPENDED") return AccountStatus.SUSPENDED;
-  if (normalized === "INACTIVE") return AccountStatus.INACTIVE;
-  return AccountStatus.ACTIVE;
+  if (normalized === "ACTIVE") return "ACTIVE" as AccountStatus;
+  if (normalized === "SUSPENDED") return "SUSPENDED" as AccountStatus;
+  if (normalized === "INACTIVE") return "INACTIVE" as AccountStatus;
+  return "ACTIVE" as AccountStatus;
 }
 
 /**
@@ -115,10 +124,24 @@ export function transformUserToUI(user: PrismaUserWithRelations): User {
   const fullName = (user.name || `${firstName} ${lastName}`).trim() || "User";
 
   // Check if active subscription exists
-  const isSubscribed = Boolean(
-    user.subscriptions &&
-      user.subscriptions.some((sub: PartialSubscription) => sub.status === "ACTIVE")
+  const activeSub = user.subscriptions?.find(
+    (sub: PartialSubscription) => sub.status === "ACTIVE"
   );
+
+  const activeSubscription: ActiveSubscriptionInfo | null = activeSub
+    ? {
+        id: activeSub.id || "",
+        planId: activeSub.plan?.id || activeSub.planId || "",
+        planName: activeSub.plan?.name || "Subscription Plan",
+        planType: activeSub.plan?.type || "MONTHLY",
+        status: activeSub.status,
+        source: activeSub.source || "COMPLIMENTARY",
+        startDate: formatJoinedDate(activeSub.startDate),
+        currentExpiryDate: formatJoinedDate(activeSub.currentExpiryDate),
+      }
+    : null;
+
+  const isSubscribed = Boolean(activeSubscription);
 
   const joinedDate = formatJoinedDate(user.createdAt);
   const lastLogin = formatLastLogin(user.lastLoginAt);
@@ -151,6 +174,7 @@ export function transformUserToUI(user: PrismaUserWithRelations): User {
     phone: user.phone || "",
     discordName: user.discordName || "",
     isSubscribed,
+    activeSubscription,
     accountStatus,
     joinedDate,
     lastLogin,

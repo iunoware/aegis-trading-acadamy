@@ -174,6 +174,13 @@ export async function POST(request: NextRequest) {
 
           status,
 
+          // Admin-created accounts are trusted and pre-verified
+          emailVerifiedAt: now,
+          emailVerificationCode: null,
+          emailVerificationExpiresAt: null,
+          emailVerificationAttempts: 0,
+          emailVerificationLastSentAt: null,
+
           passwordChangedAt: now,
         },
       });

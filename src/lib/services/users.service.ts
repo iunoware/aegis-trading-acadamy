@@ -38,6 +38,23 @@ export interface UpdateUserData {
   status?: string;
 }
 
+export interface SubscriptionPlanItem {
+  id: string;
+  name: string;
+  type: string;
+  price: number;
+  currency: string;
+  durationMonths: number;
+  badge?: string;
+  description?: string;
+}
+
+export interface SubscriptionPlansApiResponse {
+  success: boolean;
+  plans: SubscriptionPlanItem[];
+  message?: string;
+}
+
 /**
  * Fetch all users directory
  * GET /api/admin/users
@@ -75,4 +92,33 @@ export const deleteUser = async (
   id: string
 ): Promise<DeleteUserApiResponse> => {
   return apiClient.delete<unknown, DeleteUserApiResponse>(`/admin/users/${id}`);
+};
+
+/**
+ * Fetch active subscription plans for user assignment
+ * GET /api/admin/subscription-plans
+ */
+export const getSubscriptionPlans = async (): Promise<SubscriptionPlansApiResponse> => {
+  return apiClient.get<unknown, SubscriptionPlansApiResponse>("/admin/subscription-plans");
+};
+
+/**
+ * Manually grant or update a subscription for a student
+ * POST /api/admin/users/:id/subscription
+ */
+export const grantUserSubscription = async (
+  userId: string,
+  planId: string
+): Promise<UserApiResponse> => {
+  return apiClient.post<unknown, UserApiResponse>(`/admin/users/${userId}/subscription`, { planId });
+};
+
+/**
+ * Revoke an active subscription for a student
+ * DELETE /api/admin/users/:id/subscription
+ */
+export const revokeUserSubscription = async (
+  userId: string
+): Promise<UserApiResponse> => {
+  return apiClient.delete<unknown, UserApiResponse>(`/admin/users/${userId}/subscription`);
 };

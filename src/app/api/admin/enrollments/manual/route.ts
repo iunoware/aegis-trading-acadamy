@@ -73,6 +73,12 @@ export async function POST(request: Request) {
           discordName: discordName?.trim() || null,
           password: "MANUAL_ENROLLMENT_NO_PASSWORD",
           role: UserRole.STUDENT,
+          // Admin-created accounts are trusted and pre-verified
+          emailVerifiedAt: new Date(),
+          emailVerificationCode: null,
+          emailVerificationExpiresAt: null,
+          emailVerificationAttempts: 0,
+          emailVerificationLastSentAt: null,
         },
       });
     }
