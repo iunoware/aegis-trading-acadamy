@@ -12,7 +12,8 @@
 //   description?: string | null;
 //   durationSeconds?: number | null;
 //   videoUrl?: string | null;
-//   isPreview?: boolean;
+//   isLocked?: boolean;
+//   isCompleted?: boolean;
 // }
 
 // interface Course {
@@ -28,9 +29,21 @@
 //   const [loading, setLoading] = useState(true);
 
 //   useEffect(() => {
+//     const disableContextMenu = (event: MouseEvent) => {
+//       event.preventDefault();
+//     };
+
+//     document.addEventListener("contextmenu", disableContextMenu);
+
+//     return () => {
+//       document.removeEventListener("contextmenu", disableContextMenu);
+//     };
+//   }, []);
+
+//   useEffect(() => {
 //     async function fetchCourses() {
 //       try {
-//         const response = await axios.get("/api/admin/courses");
+//         const response = await axios.get("/api/courses");
 
 //         const fetchedCourses: Course[] = response.data?.courses ?? [];
 
@@ -201,7 +214,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookOpen, PlayCircle, ShieldCheck } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  LogIn,
+  PlayCircle,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -223,9 +243,11 @@ interface Course {
   lessons?: Lesson[];
 }
 
+type AccessState = "loading" | "unauthenticated" | "no-subscription" | "ready";
+
 export default function CoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [accessState, setAccessState] = useState<AccessState>("loading");
 
   useEffect(() => {
     const disableContextMenu = (event: MouseEvent) => {
@@ -247,13 +269,23 @@ export default function CoursesPage() {
         const fetchedCourses: Course[] = response.data?.courses ?? [];
 
         setCourses(fetchedCourses);
-
-        console.log("Courses data:", fetchedCourses);
+        setAccessState("ready");
       } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 401) {
+            setAccessState("unauthenticated");
+            return;
+          }
+
+          if (error.response?.status === 403) {
+            setAccessState("no-subscription");
+            return;
+          }
+        }
+
         console.error("Failed to fetch courses:", error);
         setCourses([]);
-      } finally {
-        setLoading(false);
+        setAccessState("ready");
       }
     }
 
@@ -299,7 +331,7 @@ export default function CoursesPage() {
           </div>
 
           {/* Loading */}
-          {loading && (
+          {accessState === "loading" && (
             <div className="flex min-h-75 items-center justify-center">
               <div className="flex flex-col items-center gap-4">
                 <div className="h-10 w-10 animate-spin rounded-full border-2 border-primary/20 border-t-primary" />
@@ -309,8 +341,61 @@ export default function CoursesPage() {
             </div>
           )}
 
-          {/* Empty State */}
-          {!loading && courses.length === 0 && (
+          {/* Not logged in */}
+          {accessState === "unauthenticated" && (
+            <div className="flex min-h-75 items-center justify-center">
+              <div className="max-w-sm text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5">
+                  <LogIn size={24} className="text-zinc-500" />
+                </div>
+
+                <h2 className="mb-2 text-xl font-bold text-white">Please log in first</h2>
+
+                <p className="mb-6 text-sm text-zinc-500">
+                  You need to be logged in to view and access the course library.
+                </p>
+
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-black transition-transform hover:scale-105"
+                >
+                  <LogIn size={16} />
+                  Log In
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Logged in, no active subscription */}
+          {accessState === "no-subscription" && (
+            <div className="flex min-h-75 items-center justify-center">
+              <div className="max-w-sm text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-primary/30 bg-primary/10">
+                  <Sparkles size={24} className="text-primary" />
+                </div>
+
+                <h2 className="mb-2 text-xl font-bold text-white">
+                  Unlock the Course Library
+                </h2>
+
+                <p className="mb-6 text-sm text-zinc-500">
+                  You don&apos;t have an active subscription yet. Purchase a plan to get
+                  full access to every course and lesson.
+                </p>
+
+                <Link
+                  href="/pricing"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-black transition-transform hover:scale-105"
+                >
+                  View Pricing
+                  <ArrowRight size={16} />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Empty State (authenticated, subscribed, but no courses published) */}
+          {accessState === "ready" && courses.length === 0 && (
             <div className="flex min-h-75 items-center justify-center">
               <div className="text-center">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/5">
@@ -329,7 +414,7 @@ export default function CoursesPage() {
           )}
 
           {/* Course Cards */}
-          {!loading && courses.length > 0 && (
+          {accessState === "ready" && courses.length > 0 && (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map((course) => {
                 const lessonCount = course.lessons?.length ?? 0;
