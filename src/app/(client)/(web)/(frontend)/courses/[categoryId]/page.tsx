@@ -1,10 +1,11 @@
-/* eslint-disable react-hooks/purity */
+/* eslint-disable react-hooks/set-state-in-effect */
+// /* eslint-disable react-hooks/purity */
 // /* eslint-disable react-hooks/exhaustive-deps */
 // "use client";
 
 // import Link from "next/link";
 // import axios from "axios";
-// import { use, useEffect, useMemo, useState, useRef } from "react";
+// import { use, useEffect, useMemo, useRef, useState } from "react";
 // import {
 //   ArrowLeft,
 //   Check,
@@ -13,9 +14,8 @@
 //   Play,
 //   PlayCircle,
 //   Video,
-//   // RotateCcw,
-//   // RotateCw,
 //   ChevronsRight,
+//   Loader2,
 // } from "lucide-react";
 
 // interface Lesson {
@@ -108,7 +108,6 @@
 
 //           <div className="flex shrink-0 items-center gap-1.5 font-mono text-xs text-zinc-500">
 //             <Clock3 size={13} />
-
 //             <span>{formatDuration(lesson.durationSeconds)}</span>
 //           </div>
 //         </div>
@@ -144,86 +143,129 @@
 //   const [loading, setLoading] = useState(true);
 //   const [activeLessonId, setActiveLessonId] = useState("");
 
+//   /*
+//    * Video reference
+//    */
 //   const videoRef = useRef<HTMLVideoElement | null>(null);
-//   const [showVideoControls, setShowVideoControls] = useState(true);
-//   const hideControlsTimeout = useRef<NodeJS.Timeout | null>(null);
+
+//   /*
+//    * Blob URL state for the currently loaded video.
+//    * We fetch the video ourselves (with credentials) instead of
+//    * pointing <video src> directly at the streaming route, so the
+//    * real endpoint never appears in "copy video address" / view-source.
+//    */
+//   const [videoBlobUrl, setVideoBlobUrl] = useState<string | null>(null);
+//   const [isVideoLoading, setIsVideoLoading] = useState(false);
+//   const [videoLoadError, setVideoLoadError] = useState(false);
+//   const [downloadProgress, setDownloadProgress] = useState<number | null>(null);
+
+//   /*
+//    * Tracks the blob URL + abort controller for the in-flight fetch
+//    * so we can cancel/revoke correctly when the lesson changes fast.
+//    */
+//   const currentBlobUrlRef = useRef<string | null>(null);
+//   const abortControllerRef = useRef<AbortController | null>(null);
+
+//   /*
+//    * Controls visibility
+//    *
+//    * true  = visible
+//    * false = hidden
+//    */
 //   const [showSeekControls, setShowSeekControls] = useState(true);
-//   const seekTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-//   function showControlsTemporarily() {
-//     setShowVideoControls(true);
+//   /*
+//    * Timer used to hide rewind/forward buttons
+//    */
+//   const seekControlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-//     if (hideControlsTimeout.current) {
-//       clearTimeout(hideControlsTimeout.current);
-//     }
+//   /*
+//    * Prevent repeatedly restarting the timer
+//    * when mousemove fires continuously.
+//    */
+//   const lastMouseMoveRef = useRef(0);
 
-//     hideControlsTimeout.current = setTimeout(() => {
-//       setShowVideoControls(false);
-//     }, 4000);
-//   }
-
+//   /*
+//    * Show the rewind/forward controls and
+//    * hide them after 4 seconds.
+//    */
 //   const showSeekControlsTemporarily = () => {
 //     setShowSeekControls(true);
 
-//     if (seekTimeoutRef.current) {
-//       clearTimeout(seekTimeoutRef.current);
+//     if (seekControlsTimeoutRef.current) {
+//       clearTimeout(seekControlsTimeoutRef.current);
 //     }
 
-//     seekTimeoutRef.current = setTimeout(() => {
+//     seekControlsTimeoutRef.current = setTimeout(() => {
 //       setShowSeekControls(false);
 //     }, 4000);
 //   };
 
-//   useEffect(() => {
-//     return () => {
-//       if (hideControlsTimeout.current) {
-//         clearTimeout(hideControlsTimeout.current);
-//       }
-//     };
-//   }, []);
+//   /*
+//    * Handle mouse movement over the video.
+//    *
+//    * We only restart the 4-second timer when
+//    * the mouse has actually moved after a
+//    * small interval.
+//    */
+//   const handleVideoMouseMove = () => {
+//     const now = Date.now();
 
-//   useEffect(() => {
-//     return () => {
-//       if (seekTimeoutRef.current) {
-//         clearTimeout(seekTimeoutRef.current);
-//       }
-//     };
-//   }, []);
+//     if (now - lastMouseMoveRef.current < 500) {
+//       return;
+//     }
 
-//   // function rewindVideo() {
-//   //   if (!videoRef.current) return;
+//     lastMouseMoveRef.current = now;
 
-//   //   videoRef.current.currentTime = Math.max(0, videoRef.current.currentTime - 10);
-//   // }
+//     showSeekControlsTemporarily();
+//   };
 
-//   // function forwardVideo() {
-//   //   if (!videoRef.current) return;
-
-//   //   videoRef.current.currentTime = Math.min(
-//   //     videoRef.current.duration,
-//   //     videoRef.current.currentTime + 10,
-//   //   );
-//   // }
-
+//   /*
+//    * Rewind 10 seconds
+//    */
 //   const rewindVideo = () => {
-//     if (!videoRef.current) return;
+//     const video = videoRef.current;
 
-//     videoRef.current.currentTime = Math.max(0, videoRef.current.currentTime - 10);
+//     if (!video) {
+//       return;
+//     }
+
+//     video.currentTime = Math.max(0, video.currentTime - 10);
 
 //     showSeekControlsTemporarily();
 //   };
 
+//   /*
+//    * Forward 10 seconds
+//    */
 //   const forwardVideo = () => {
-//     if (!videoRef.current) return;
+//     const video = videoRef.current;
 
-//     videoRef.current.currentTime = Math.min(
-//       videoRef.current.duration,
-//       videoRef.current.currentTime + 10,
-//     );
+//     if (!video) {
+//       return;
+//     }
+
+//     const newTime = Math.min(video.duration || 0, video.currentTime + 10);
+
+//     video.currentTime = newTime;
 
 //     showSeekControlsTemporarily();
 //   };
 
+//   /*
+//    * Cleanup seek-controls timer
+//    */
+//   useEffect(() => {
+//     return () => {
+//       if (seekControlsTimeoutRef.current) {
+//         clearTimeout(seekControlsTimeoutRef.current);
+//       }
+//     };
+//   }, []);
+
+//   /*
+//    * Disable right click for entire page
+//    */
 //   useEffect(() => {
 //     const disableContextMenu = (event: MouseEvent) => {
 //       event.preventDefault();
@@ -236,12 +278,15 @@
 //     };
 //   }, []);
 
+//   /*
+//    * Fetch course
+//    */
 //   useEffect(() => {
 //     async function fetchCourse() {
 //       try {
 //         setLoading(true);
 
-//         const response = await axios.get("/api/admin/courses");
+//         const response = await axios.get("/api/courses");
 
 //         const courses: Course[] = response.data?.courses ?? [];
 
@@ -270,6 +315,51 @@
 //     fetchCourse();
 //   }, [categoryId]);
 
+//   // useEffect(() => {
+//   //   const videoEl = videoRef.current;
+
+//   //   if (!videoEl || !videoBlobUrl) {
+//   //     return;
+//   //   }
+
+//   //   function handleLoadedData() {
+//   //     if (videoBlobUrl) {
+//   //       URL.revokeObjectURL(videoBlobUrl);
+//   //     }
+//   //   }
+
+//   //   videoEl.addEventListener("loadeddata", handleLoadedData);
+
+//   //   return () => {
+//   //     videoEl.removeEventListener("loadeddata", handleLoadedData);
+//   //   };
+//   // }, [videoBlobUrl]);
+
+//   // useEffect(() => {
+//   //   const videoEl = videoRef.current;
+
+//   //   if (!videoEl || !videoBlobUrl) {
+//   //     return;
+//   //   }
+
+//   //   let revoked = false;
+
+//   //   function revokeNow() {
+//   //     if (!revoked && videoBlobUrl) {
+//   //       revoked = true;
+//   //       URL.revokeObjectURL(videoBlobUrl);
+//   //     }
+//   //   }
+
+//   //   videoEl.addEventListener("canplaythrough", revokeNow);
+//   //   const safetyTimeout = setTimeout(revokeNow, 5000);
+
+//   //   return () => {
+//   //     videoEl.removeEventListener("canplaythrough", revokeNow);
+//   //     clearTimeout(safetyTimeout);
+//   //   };
+//   // }, [videoBlobUrl]);
+
 //   const lessons = course?.lessons ?? [];
 
 //   const firstAvailableLesson = useMemo(() => {
@@ -286,16 +376,133 @@
 //     }
 
 //     setActiveLessonId(lesson.id);
+
+//     /*
+//      * Show seek controls whenever a new lesson
+//      * is selected.
+//      */
+//     showSeekControlsTemporarily();
 //   }
 
-//   // the actual video file exists at:
-//   // storage/videos/cmsppun82000g3k3avp71pjq0/7148e5f7-7e30-4686-8bb1-ee94ea4b1869.mp4
+//   /*
+//    * Fetch the active lesson's video as a blob and point the
+//    * <video> element at an object URL instead of the raw
+//    * streaming endpoint. This keeps the real /api/stream/[id]
+//    * URL out of "copy video address", view-source, and share sheets.
+//    *
+//    * Trade-off: the whole file downloads into memory before playback
+//    * starts, so seeking is instant once loaded, but there's no
+//    * progressive/range-based start like a plain <video src> gets.
+//    */
+//   useEffect(() => {
+//     if (!activeLesson) {
+//       return;
+//     }
 
-//   const videoStreamUrl = activeLesson
-//     ? `/api/admin/courses/${course?.id}/lessons/${activeLesson.id}/video`
-//     : null;
+//     // Cancel any in-flight fetch for a previous lesson
+//     if (abortControllerRef.current) {
+//       abortControllerRef.current.abort();
+//     }
 
-//   /* Loading */
+//     // Revoke the previous blob URL to free memory
+//     if (currentBlobUrlRef.current) {
+//       URL.revokeObjectURL(currentBlobUrlRef.current);
+//       currentBlobUrlRef.current = null;
+//     }
+
+//     setVideoBlobUrl(null);
+//     setVideoLoadError(false);
+//     setDownloadProgress(null);
+//     setIsVideoLoading(true);
+
+//     const controller = new AbortController();
+//     abortControllerRef.current = controller;
+
+//     async function loadVideo() {
+//       try {
+//         const response = await fetch(`/api/stream/${activeLesson!.id}`, {
+//           credentials: "include",
+//           signal: controller.signal,
+//         });
+
+//         if (!response.ok || !response.body) {
+//           throw new Error("Failed to load video");
+//         }
+
+//         const contentLengthHeader = response.headers.get("Content-Length");
+//         const totalBytes = contentLengthHeader ? parseInt(contentLengthHeader, 10) : 0;
+
+//         const reader = response.body.getReader();
+//         const chunks: Uint8Array[] = [];
+//         let receivedBytes = 0;
+
+//         while (true) {
+//           const { done, value } = await reader.read();
+
+//           if (done) {
+//             break;
+//           }
+
+//           if (value) {
+//             chunks.push(value);
+//             receivedBytes += value.length;
+
+//             if (totalBytes > 0) {
+//               setDownloadProgress(Math.round((receivedBytes / totalBytes) * 100));
+//             }
+//           }
+//         }
+
+//         const blob = new Blob(chunks as BlobPart[], { type: "video/mp4" });
+//         const objectUrl = URL.createObjectURL(blob);
+
+//         currentBlobUrlRef.current = objectUrl;
+//         setVideoBlobUrl(objectUrl);
+//       } catch (error) {
+//         if (error instanceof DOMException && error.name === "AbortError") {
+//           // Lesson changed mid-fetch, ignore
+//           return;
+//         }
+
+//         console.error("Failed to load video:", error);
+//         setVideoLoadError(true);
+//       } finally {
+//         setIsVideoLoading(false);
+//       }
+//     }
+
+//     loadVideo();
+
+//     return () => {
+//       controller.abort();
+//     };
+//   }, [activeLesson?.id]);
+
+//   /*
+//    * Revoke the current blob URL on unmount
+//    */
+//   useEffect(() => {
+//     return () => {
+//       if (currentBlobUrlRef.current) {
+//         URL.revokeObjectURL(currentBlobUrlRef.current);
+//       }
+//     };
+//   }, []);
+
+//   /*
+//    * Start the auto-hide timer for the rewind/forward buttons
+//    * as soon as a video is ready — otherwise they stay visible
+//    * indefinitely until the first mouse movement.
+//    */
+//   useEffect(() => {
+//     if (videoBlobUrl) {
+//       showSeekControlsTemporarily();
+//     }
+//   }, [videoBlobUrl]);
+
+//   /*
+//    * Loading
+//    */
 //   if (loading) {
 //     return (
 //       <main className="flex min-h-screen items-center justify-center bg-background px-4 text-white">
@@ -308,7 +515,9 @@
 //     );
 //   }
 
-//   /* Course Not Found */
+//   /*
+//    * Course Not Found
+//    */
 //   if (!course) {
 //     return (
 //       <main className="flex min-h-screen items-center justify-center bg-background px-4 text-white">
@@ -363,92 +572,84 @@
 
 //           {/* Video Player */}
 //           <div className="mb-10 overflow-hidden rounded-3xl border border-white/10 bg-[#101010]/80 shadow-[0_25px_60px_rgba(0,0,0,0.45)]">
-//             {/* <div className="relative aspect-video w-full overflow-hidden bg-black"> */}
 //             <div
 //               className="relative aspect-video w-full overflow-hidden bg-black"
-//               onMouseMove={showSeekControlsTemporarily}
-//               onMouseEnter={showControlsTemporarily}
+//               onMouseMove={handleVideoMouseMove}
+//               onMouseEnter={showSeekControlsTemporarily}
 //             >
-//               {activeLesson && videoStreamUrl ? (
+//               {activeLesson && !videoLoadError ? (
 //                 <>
-//                   <video
-//                     key={activeLesson.id}
-//                     ref={videoRef}
-//                     controls
-//                     controlsList="nodownload"
-//                     disablePictureInPicture
-//                     preload="metadata"
-//                     playsInline
-//                     onContextMenu={(event) => event.preventDefault()}
-//                     className="h-full w-full object-contain"
-//                   >
-//                     <source src={videoStreamUrl} type="video/mp4" />
-//                     Your browser does not support the video element.
-//                   </video>
+//                   {/* Loading overlay */}
+//                   {isVideoLoading && (
+//                     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/90">
+//                       <Loader2 size={32} className="animate-spin text-primary" />
 
-//                   {/* <div className="pointer-events-none absolute inset-0 flex items-center justify-between px-6">
-//                     <div className="flex flex-col justify-center items-center opacity-80">
-//                       <button
-//                         type="button"
-//                         onClick={rewindVideo}
-//                         className="pointer-events-auto group cursor-pointer flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white backdrop-blur-md transition hover:bg-black/80"
-//                         aria-label="Rewind 10 seconds"
-//                       >
-//                         <ChevronsRight className="rotate-180 " size={22} />
-//                       </button>
-//                       <span className="mt-1 text-xs ">10 Sec</span>
+//                       <p className="text-sm text-zinc-400">
+//                         {downloadProgress !== null
+//                           ? `Loading video... ${downloadProgress}%`
+//                           : "Loading video..."}
+//                       </p>
 //                     </div>
+//                   )}
 
-//                     <div className="flex flex-col justify-center items-center opacity-80">
-//                       <button
-//                         type="button"
-//                         onClick={forwardVideo}
-//                         className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-black/60 text-white backdrop-blur-md transition hover:bg-black/80"
-//                         aria-label="Forward 10 seconds"
-//                       >
-//                         <ChevronsRight className="cursor-pointer" size={22} />
-//                       </button>
-//                       <span className="mt-1 text-xs ">10 Sec</span>
+//                   {/* Actual Video */}
+//                   {videoBlobUrl && (
+//                     <video
+//                       key={activeLesson.id}
+//                       ref={videoRef}
+//                       src={videoBlobUrl}
+//                       controls
+//                       controlsList="nodownload noplaybackrate"
+//                       disablePictureInPicture
+//                       preload="metadata"
+//                       playsInline
+//                       onContextMenu={(event) => event.preventDefault()}
+//                       className="h-full w-full object-contain"
+//                     >
+//                       Your browser does not support the video element.
+//                     </video>
+//                   )}
+
+//                   {/* Rewind / Forward Controls */}
+//                   {videoBlobUrl && (
+//                     <div
+//                       className={`pointer-events-none absolute inset-0 flex items-center justify-between px-5 transition-opacity duration-500 sm:px-8 ${
+//                         showSeekControls ? "opacity-100" : "opacity-0"
+//                       }`}
+//                     >
+//                       {/* Rewind */}
+//                       <div className="flex flex-col items-center justify-center">
+//                         <button
+//                           type="button"
+//                           onClick={rewindVideo}
+//                           className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
+//                           aria-label="Rewind 10 seconds"
+//                         >
+//                           <ChevronsRight size={22} className="rotate-180" />
+//                         </button>
+
+//                         <span className="mt-1 text-xs font-medium text-white/70">
+//                           10 Sec
+//                         </span>
+//                       </div>
+
+//                       {/* Forward */}
+//                       <div className="flex flex-col items-center justify-center">
+//                         <button
+//                           type="button"
+//                           onClick={forwardVideo}
+//                           className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
+//                           aria-label="Forward 10 seconds"
+//                         >
+//                           <ChevronsRight size={22} />
+//                         </button>
+
+//                         <span className="mt-1 text-xs font-medium text-white/70">
+//                           10 Sec
+//                         </span>
+//                       </div>
 //                     </div>
-//                   </div> */}
-
-//                   <div
-//                     className={`pointer-events-none absolute inset-0 flex items-center justify-between px-5 transition-opacity duration-300 sm:px-8 ${
-//                       showVideoControls ? "opacity-100" : "opacity-0"
-//                     }`}
-//                   >
-//                     {/* Rewind */}
-//                     <div className="flex flex-col items-center justify-center">
-//                       <button
-//                         type="button"
-//                         onClick={rewindVideo}
-//                         className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80"
-//                         aria-label="Rewind 10 seconds"
-//                       >
-//                         <ChevronsRight size={22} className="rotate-180" />
-//                       </button>
-
-//                       <span className="mt-1 text-xs font-medium text-white/70">
-//                         10 Sec
-//                       </span>
-//                     </div>
-
-//                     {/* Forward */}
-//                     <div className="flex flex-col items-center justify-center">
-//                       <button
-//                         type="button"
-//                         onClick={forwardVideo}
-//                         className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80"
-//                         aria-label="Forward 10 seconds"
-//                       >
-//                         <ChevronsRight size={22} />
-//                       </button>
-
-//                       <span className="mt-1 text-xs font-medium text-white/70">
-//                         10 Sec
-//                       </span>
-//                     </div>
-//                   </div>
+//                   )}
 //                 </>
 //               ) : (
 //                 <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-[#0b0b0b]">
@@ -457,7 +658,11 @@
 //                   </div>
 
 //                   <p className="text-sm text-zinc-400">
-//                     {activeLesson ? "Video unavailable" : "No lessons available"}
+//                     {activeLesson
+//                       ? videoLoadError
+//                         ? "Failed to load video. Please try again."
+//                         : "Video unavailable"
+//                       : "No lessons available"}
 //                   </p>
 //                 </div>
 //               )}
@@ -544,6 +749,7 @@
 //   );
 // }
 
+/* eslint-disable react-hooks/purity */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
@@ -559,6 +765,7 @@ import {
   PlayCircle,
   Video,
   ChevronsRight,
+  Loader2,
 } from "lucide-react";
 
 interface Lesson {
@@ -585,6 +792,8 @@ interface LessonItemProps {
   isActive: boolean;
   onClick: () => void;
 }
+
+type WatermarkPosition = "bottom-left" | "bottom-right" | "top-left" | "top-right";
 
 function formatDuration(seconds?: number | null) {
   if (seconds === null || seconds === undefined) {
@@ -692,6 +901,24 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   /*
+   * Blob URL state for the currently loaded video.
+   * We fetch the video ourselves (with credentials) instead of
+   * pointing <video src> directly at the streaming route, so the
+   * real endpoint never appears in "copy video address" / view-source.
+   */
+  const [videoBlobUrl, setVideoBlobUrl] = useState<string | null>(null);
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
+  const [videoLoadError, setVideoLoadError] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState<number | null>(null);
+
+  /*
+   * Tracks the blob URL + abort controller for the in-flight fetch
+   * so we can cancel/revoke correctly when the lesson changes fast.
+   */
+  const currentBlobUrlRef = useRef<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  /*
    * Controls visibility
    *
    * true  = visible
@@ -709,6 +936,14 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
    * when mousemove fires continuously.
    */
   const lastMouseMoveRef = useRef(0);
+
+  /*
+   * Watermark: identifies which student is watching, so if a
+   * screen recording leaks, we know whose account to suspend.
+   */
+  const [watermarkText, setWatermarkText] = useState("");
+  const [watermarkPosition, setWatermarkPosition] =
+    useState<WatermarkPosition>("bottom-left");
 
   /*
    * Show the rewind/forward controls and
@@ -778,7 +1013,7 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
   };
 
   /*
-   * Cleanup timer
+   * Cleanup seek-controls timer
    */
   useEffect(() => {
     return () => {
@@ -801,6 +1036,51 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
     return () => {
       document.removeEventListener("contextmenu", disableContextMenu);
     };
+  }, []);
+
+  /*
+   * Fetch the logged-in student's identity for the watermark
+   */
+  useEffect(() => {
+    async function fetchCurrentUser() {
+      try {
+        const response = await axios.get("/api/auth/me");
+        const user = response.data?.user;
+
+        if (user) {
+          // Prefer email since it directly identifies the account;
+          // fall back to their user ID if email isn't present.
+          setWatermarkText(user.email || user.id || "Unknown");
+        }
+      } catch (error) {
+        console.error("Failed to fetch current user for watermark:", error);
+      }
+    }
+
+    fetchCurrentUser();
+  }, []);
+
+  /*
+   * Move the watermark to a different corner periodically so it
+   * can't be reliably cropped out of a screen recording.
+   */
+  useEffect(() => {
+    const positions: WatermarkPosition[] = [
+      "bottom-left",
+      "bottom-right",
+      "top-left",
+      "top-right",
+    ];
+
+    const interval = setInterval(() => {
+      setWatermarkPosition((current) => {
+        const currentIndex = positions.indexOf(current);
+        const nextIndex = (currentIndex + 1) % positions.length;
+        return positions[nextIndex];
+      });
+    }, 8000); // moves every 8 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   /*
@@ -865,11 +1145,133 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
   }
 
   /*
-   * Video API
+   * Fetch the active lesson's video as a blob and point the
+   * <video> element at an object URL instead of the raw
+   * streaming endpoint. This keeps the real /api/stream/[id]
+   * URL out of "copy video address", view-source, and share sheets.
+   *
+   * Trade-off: the whole file downloads into memory before playback
+   * starts, so seeking is instant once loaded, but there's no
+   * progressive/range-based start like a plain <video src> gets.
+   *
+   * Note: we deliberately do NOT revoke the blob URL while the video
+   * is playing (e.g. on "canplaythrough") — browsers can still read
+   * from the blob mid-playback, and revoking early causes playback
+   * to stall partway through. We only revoke on lesson-switch and
+   * on unmount below.
    */
-  const videoStreamUrl = activeLesson
-    ? `/api/admin/courses/${course?.id}/lessons/${activeLesson.id}/video`
-    : null;
+  useEffect(() => {
+    if (!activeLesson) {
+      return;
+    }
+
+    // Cancel any in-flight fetch for a previous lesson
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Revoke the previous blob URL to free memory
+    if (currentBlobUrlRef.current) {
+      URL.revokeObjectURL(currentBlobUrlRef.current);
+      currentBlobUrlRef.current = null;
+    }
+
+    setVideoBlobUrl(null);
+    setVideoLoadError(false);
+    setDownloadProgress(null);
+    setIsVideoLoading(true);
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    async function loadVideo() {
+      try {
+        const response = await fetch(`/api/stream/${activeLesson!.id}`, {
+          credentials: "include",
+          signal: controller.signal,
+        });
+
+        if (!response.ok || !response.body) {
+          throw new Error("Failed to load video");
+        }
+
+        const contentLengthHeader = response.headers.get("Content-Length");
+        const totalBytes = contentLengthHeader ? parseInt(contentLengthHeader, 10) : 0;
+
+        const reader = response.body.getReader();
+        const chunks: Uint8Array[] = [];
+        let receivedBytes = 0;
+
+        while (true) {
+          const { done, value } = await reader.read();
+
+          if (done) {
+            break;
+          }
+
+          if (value) {
+            chunks.push(value);
+            receivedBytes += value.length;
+
+            if (totalBytes > 0) {
+              setDownloadProgress(Math.round((receivedBytes / totalBytes) * 100));
+            }
+          }
+        }
+
+        const blob = new Blob(chunks as BlobPart[], { type: "video/mp4" });
+        const objectUrl = URL.createObjectURL(blob);
+
+        currentBlobUrlRef.current = objectUrl;
+        setVideoBlobUrl(objectUrl);
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          // Lesson changed mid-fetch, ignore
+          return;
+        }
+
+        console.error("Failed to load video:", error);
+        setVideoLoadError(true);
+      } finally {
+        setIsVideoLoading(false);
+      }
+    }
+
+    loadVideo();
+
+    return () => {
+      controller.abort();
+    };
+  }, [activeLesson?.id]);
+
+  /*
+   * Revoke the current blob URL on unmount
+   */
+  useEffect(() => {
+    return () => {
+      if (currentBlobUrlRef.current) {
+        URL.revokeObjectURL(currentBlobUrlRef.current);
+      }
+    };
+  }, []);
+
+  /*
+   * Start the auto-hide timer for the rewind/forward buttons
+   * as soon as a video is ready — otherwise they stay visible
+   * indefinitely until the first mouse movement.
+   */
+  useEffect(() => {
+    if (videoBlobUrl) {
+      showSeekControlsTemporarily();
+    }
+  }, [videoBlobUrl]);
+
+  const watermarkPositionClasses: Record<WatermarkPosition, string> = {
+    "bottom-left": "bottom-3 left-3",
+    "bottom-right": "bottom-3 right-3",
+    "top-left": "top-3 left-3",
+    "top-right": "top-3 right-3",
+  };
 
   /*
    * Loading
@@ -948,62 +1350,88 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
               onMouseMove={handleVideoMouseMove}
               onMouseEnter={showSeekControlsTemporarily}
             >
-              {activeLesson && videoStreamUrl ? (
+              {activeLesson && !videoLoadError ? (
                 <>
+                  {/* Loading overlay */}
+                  {isVideoLoading && (
+                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/90">
+                      <Loader2 size={32} className="animate-spin text-primary" />
+
+                      <p className="text-sm text-zinc-400">
+                        {downloadProgress !== null
+                          ? `Loading video... ${downloadProgress}%`
+                          : "Loading video..."}
+                      </p>
+                    </div>
+                  )}
+
                   {/* Actual Video */}
-                  <video
-                    key={activeLesson.id}
-                    ref={videoRef}
-                    controls
-                    controlsList="nodownload noplaybackrate"
-                    disablePictureInPicture
-                    preload="metadata"
-                    playsInline
-                    onContextMenu={(event) => event.preventDefault()}
-                    className="h-full w-full object-contain"
-                  >
-                    <source src={videoStreamUrl} type="video/mp4" />
-                    Your browser does not support the video element.
-                  </video>
+                  {videoBlobUrl && (
+                    <video
+                      key={activeLesson.id}
+                      ref={videoRef}
+                      src={videoBlobUrl}
+                      controls
+                      controlsList="nodownload noplaybackrate"
+                      disablePictureInPicture
+                      preload="metadata"
+                      playsInline
+                      onContextMenu={(event) => event.preventDefault()}
+                      className="h-full w-full object-contain"
+                    >
+                      Your browser does not support the video element.
+                    </video>
+                  )}
 
                   {/* Rewind / Forward Controls */}
-                  <div
-                    className={`pointer-events-none absolute inset-0 flex items-center justify-between px-5 transition-opacity duration-500 sm:px-8 ${
-                      showSeekControls ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    {/* Rewind */}
-                    <div className="flex flex-col items-center justify-center">
-                      <button
-                        type="button"
-                        onClick={rewindVideo}
-                        className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
-                        aria-label="Rewind 10 seconds"
-                      >
-                        <ChevronsRight size={22} className="rotate-180" />
-                      </button>
+                  {videoBlobUrl && (
+                    <div
+                      className={`pointer-events-none absolute inset-0 flex items-center justify-between px-5 transition-opacity duration-500 sm:px-8 ${
+                        showSeekControls ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      {/* Rewind */}
+                      <div className="flex flex-col items-center justify-center">
+                        <button
+                          type="button"
+                          onClick={rewindVideo}
+                          className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
+                          aria-label="Rewind 10 seconds"
+                        >
+                          <ChevronsRight size={22} className="rotate-180" />
+                        </button>
 
-                      <span className="mt-1 text-xs font-medium text-white/70">
-                        10 Sec
-                      </span>
+                        <span className="mt-1 text-xs font-medium text-white/70">
+                          10 Sec
+                        </span>
+                      </div>
+
+                      {/* Forward */}
+                      <div className="flex flex-col items-center justify-center">
+                        <button
+                          type="button"
+                          onClick={forwardVideo}
+                          className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
+                          aria-label="Forward 10 seconds"
+                        >
+                          <ChevronsRight size={22} />
+                        </button>
+
+                        <span className="mt-1 text-xs font-medium text-white/70">
+                          10 Sec
+                        </span>
+                      </div>
                     </div>
+                  )}
 
-                    {/* Forward */}
-                    <div className="flex flex-col items-center justify-center">
-                      <button
-                        type="button"
-                        onClick={forwardVideo}
-                        className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
-                        aria-label="Forward 10 seconds"
-                      >
-                        <ChevronsRight size={22} />
-                      </button>
-
-                      <span className="mt-1 text-xs font-medium text-white/70">
-                        10 Sec
-                      </span>
+                  {/* Watermark */}
+                  {videoBlobUrl && watermarkText && (
+                    <div
+                      className={`pointer-events-none absolute z-20 rounded-md bg-black/40 px-2 py-1 font-mono text-[10px] text-white/50 backdrop-blur-sm transition-all duration-700 ${watermarkPositionClasses[watermarkPosition]}`}
+                    >
+                      {watermarkText}
                     </div>
-                  </div>
+                  )}
                 </>
               ) : (
                 <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-[#0b0b0b]">
@@ -1012,7 +1440,11 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
                   </div>
 
                   <p className="text-sm text-zinc-400">
-                    {activeLesson ? "Video unavailable" : "No lessons available"}
+                    {activeLesson
+                      ? videoLoadError
+                        ? "Failed to load video. Please try again."
+                        : "Video unavailable"
+                      : "No lessons available"}
                   </p>
                 </div>
               )}
