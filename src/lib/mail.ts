@@ -7,7 +7,7 @@ function getSMTPConfig() {
   const pass = process.env.SMTP_PASS || "";
   const from =
     process.env.SMTP_FROM ||
-    `"Aegis Trading Academy" <${user || "noreply@aegistrading.com"}>`;
+    (user ? `"Aegis Trading Academy" <${user}>` : `"Aegis Trading Academy" <noreply@aegistrading.com>`);
 
   return { host, port, user, pass, from };
 }
@@ -15,12 +15,18 @@ function getSMTPConfig() {
 export function logSMTPDiagnostics() {
   const { host, port, user, pass, from } = getSMTPConfig();
 
+  const missing: string[] = [];
+  if (!host) missing.push("SMTP_HOST");
+  if (!user) missing.push("SMTP_USER");
+  if (!pass) missing.push("SMTP_PASS");
+
   console.log("[SMTP_DIAGNOSTICS]", {
     hostConfigured: Boolean(host),
     port,
     userConfigured: Boolean(user),
     passConfigured: Boolean(pass),
     fromConfigured: Boolean(from),
+    missingVariables: missing.length > 0 ? missing : "none",
     environment: process.env.NODE_ENV || "development",
   });
 }
@@ -28,16 +34,15 @@ export function logSMTPDiagnostics() {
 function createTransporter() {
   const { host, port, user, pass } = getSMTPConfig();
 
+  const smtpPort = port || 465;
+
   return nodemailer.createTransport({
     host: host || "smtp.gmail.com",
-    port,
-    secure: port === 465,
+    port: smtpPort,
+    secure: smtpPort === 465,
     auth: {
       user,
       pass,
-    },
-    tls: {
-      rejectUnauthorized: false,
     },
   });
 }
@@ -45,10 +50,10 @@ function createTransporter() {
 export async function sendRegistrationVerificationCode(
   to: string,
   code: string,
-): Promise<{ success: boolean; error?: string }> {
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
   logSMTPDiagnostics();
 
-  const { from, user, pass } = getSMTPConfig();
+  const { from, user } = getSMTPConfig();
 
   const htmlContent = `
   <!DOCTYPE html>
@@ -179,25 +184,8 @@ export async function sendRegistrationVerificationCode(
   try {
     const transporter = createTransporter();
 
-    // Verify SMTP connection
-    await transporter.verify().catch((verifyErr: any) => {
-      console.error("[SMTP_VERIFY_FAILED]", {
-        code: verifyErr?.code,
-        command: verifyErr?.command,
-        message: verifyErr?.message || verifyErr,
-      });
-
-      if (verifyErr?.code === "EAUTH" || verifyErr?.responseCode === 535) {
-        console.error(
-          "[SMTP_AUTH_ERROR] Google SMTP rejected the username or password (535 Bad Credentials).\n" +
-            `Configured User: "${user}"\n` +
-            "Action required:\n" +
-            "1. Verify if 'SMTP_USER' is spelled correctly in .env (e.g. check for typos in email domain/handle).\n" +
-            "2. Ensure 2-Step Verification is enabled on your Google Account.\n" +
-            "3. Generate a 16-character Google App Password at https://myaccount.google.com/apppasswords and update 'SMTP_PASS' in .env.",
-        );
-      }
-    });
+    // Verify SMTP connection before sending
+    await transporter.verify();
 
     const info = await transporter.sendMail({
       from,
@@ -208,28 +196,33 @@ export async function sendRegistrationVerificationCode(
     });
 
     console.log("[SMTP_SUCCESS] Verification email successfully delivered to:", to, "MessageId:", info.messageId);
-    return { success: true };
+
+    return {
+      success: true,
+      messageId: info.messageId,
+    };
   } catch (error: any) {
-    console.error("[SMTP_DELIVERY_ERROR]", {
+    console.error("SMTP_SEND_ERROR", {
+      message: error instanceof Error ? error.message : String(error),
       code: error?.code,
+      command: error?.command,
       response: error?.response,
-      message: error?.message || error,
+      responseCode: error?.responseCode,
     });
 
     if (error?.code === "EAUTH" || error?.responseCode === 535) {
       console.error(
-        "[SMTP_AUTH_ERROR] Google SMTP rejected the username or password (535 Bad Credentials).\n" +
+        "[SMTP_AUTH_ERROR] Google SMTP rejected credentials (535 Bad Credentials).\n" +
           `Configured User: "${user}"\n` +
-          "Action required:\n" +
-          "1. Verify if 'SMTP_USER' is spelled correctly in .env (e.g. check for typos in email domain/handle).\n" +
-          "2. Ensure 2-Step Verification is enabled on your Google Account.\n" +
-          "3. Generate a 16-character Google App Password at https://myaccount.google.com/apppasswords and update 'SMTP_PASS' in .env.",
+          "1. Ensure 2-Step Verification is enabled on your Google Account.\n" +
+          "2. Generate a 16-character Google App Password at https://myaccount.google.com/apppasswords and update 'SMTP_PASS' in .env.",
       );
     }
 
     return {
       success: false,
-      error: error?.message || "Failed to send email via SMTP.",
+      error: error instanceof Error ? error.message : "SMTP email failed",
     };
   }
 }
+

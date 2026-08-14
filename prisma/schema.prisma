@@ -8,49 +8,49 @@ datasource db {
 }
 
 model User {
-  id                     String                  @id @default(cuid())
-  firstName              String
-  lastName               String?
-  name                   String
-  email                  String                  @unique
-  phone                  String?                 @unique
-  discordName            String?
-  password               String
-  avatarUrl              String?
-  role                   UserRole                @default(STUDENT)
-  status                 AccountStatus           @default(ACTIVE)
+  id                          String                  @id @default(cuid())
+  firstName                   String
+  lastName                    String?
+  name                        String
+  email                       String                  @unique
+  phone                       String?                 @unique
+  discordName                 String?
+  password                    String
+  avatarUrl                   String?
+  role                        UserRole                @default(STUDENT)
+  status                      AccountStatus           @default(ACTIVE)
   emailVerifiedAt             DateTime?
   emailVerificationCode       String?
   emailVerificationExpiresAt  DateTime?
-  emailVerificationAttempts   Int       @default(0)
+  emailVerificationAttempts   Int                     @default(0)
   emailVerificationLastSentAt DateTime?
   phoneVerifiedAt             DateTime?
-  lastLoginAt            DateTime?
-  passwordChangedAt      DateTime?
-  razorpayCustomerId     String?                 @unique
-  stripeCustomerId       String?                 @unique
-  paytmCustomerId        String?                 @unique
-  deletedById            String?
-  deletedAt              DateTime?
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-  anonymizedAt           DateTime?
-  activityLogs           ActivityLog[]
-  sessions               AuthSession[]
-  courseProgress         CourseProgress[]
-  lessonProgress         LessonProgress[]
-  orders                 Order[]
-  passwordResetTokens    PasswordResetToken[]
-  payments               Payment[]
-  refunds                Refund[]
-  subscriptions          Subscription[]
-  subscriptionEvents     SubscriptionEvent[]
-  subscriptionExtensions SubscriptionExtension[]
-  subscriptionNotes      SubscriptionNote[]
-  deletedBy              User?                   @relation("UserDeletedBy", fields: [deletedById], references: [id])
-  deletedUsers           User[]                  @relation("UserDeletedBy")
-  performedActivities    UserActivity[]          @relation("UserActivityActor")
-  accountActivities      UserActivity[]          @relation("UserActivityOwner")
+  lastLoginAt                 DateTime?
+  passwordChangedAt           DateTime?
+  razorpayCustomerId          String?                 @unique
+  stripeCustomerId            String?                 @unique
+  paytmCustomerId             String?                 @unique
+  deletedById                 String?
+  deletedAt                   DateTime?
+  createdAt                   DateTime                @default(now())
+  updatedAt                   DateTime                @updatedAt
+  anonymizedAt                DateTime?
+  activityLogs                ActivityLog[]
+  sessions                    AuthSession[]
+  courseProgress              CourseProgress[]
+  lessonProgress              LessonProgress[]
+  orders                      Order[]
+  passwordResetTokens         PasswordResetToken[]
+  payments                    Payment[]
+  refunds                     Refund[]
+  subscriptions               Subscription[]
+  subscriptionEvents          SubscriptionEvent[]
+  subscriptionExtensions      SubscriptionExtension[]
+  subscriptionNotes           SubscriptionNote[]
+  deletedBy                   User?                   @relation("UserDeletedBy", fields: [deletedById], references: [id])
+  deletedUsers                User[]                  @relation("UserDeletedBy")
+  performedActivities         UserActivity[]          @relation("UserActivityActor")
+  accountActivities           UserActivity[]          @relation("UserActivityOwner")
 
   @@index([email])
   @@index([phone])
