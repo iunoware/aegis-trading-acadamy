@@ -15,6 +15,7 @@
 //   PlayCircle,
 //   Video,
 //   ChevronsRight,
+//   Loader2,
 // } from "lucide-react";
 
 // interface Lesson {
@@ -148,6 +149,24 @@
 //   const videoRef = useRef<HTMLVideoElement | null>(null);
 
 //   /*
+//    * Blob URL state for the currently loaded video.
+//    * We fetch the video ourselves (with credentials) instead of
+//    * pointing <video src> directly at the streaming route, so the
+//    * real endpoint never appears in "copy video address" / view-source.
+//    */
+//   const [videoBlobUrl, setVideoBlobUrl] = useState<string | null>(null);
+//   const [isVideoLoading, setIsVideoLoading] = useState(false);
+//   const [videoLoadError, setVideoLoadError] = useState(false);
+//   const [downloadProgress, setDownloadProgress] = useState<number | null>(null);
+
+//   /*
+//    * Tracks the blob URL + abort controller for the in-flight fetch
+//    * so we can cancel/revoke correctly when the lesson changes fast.
+//    */
+//   const currentBlobUrlRef = useRef<string | null>(null);
+//   const abortControllerRef = useRef<AbortController | null>(null);
+
+//   /*
 //    * Controls visibility
 //    *
 //    * true  = visible
@@ -234,7 +253,7 @@
 //   };
 
 //   /*
-//    * Cleanup timer
+//    * Cleanup seek-controls timer
 //    */
 //   useEffect(() => {
 //     return () => {
@@ -296,6 +315,51 @@
 //     fetchCourse();
 //   }, [categoryId]);
 
+//   // useEffect(() => {
+//   //   const videoEl = videoRef.current;
+
+//   //   if (!videoEl || !videoBlobUrl) {
+//   //     return;
+//   //   }
+
+//   //   function handleLoadedData() {
+//   //     if (videoBlobUrl) {
+//   //       URL.revokeObjectURL(videoBlobUrl);
+//   //     }
+//   //   }
+
+//   //   videoEl.addEventListener("loadeddata", handleLoadedData);
+
+//   //   return () => {
+//   //     videoEl.removeEventListener("loadeddata", handleLoadedData);
+//   //   };
+//   // }, [videoBlobUrl]);
+
+//   // useEffect(() => {
+//   //   const videoEl = videoRef.current;
+
+//   //   if (!videoEl || !videoBlobUrl) {
+//   //     return;
+//   //   }
+
+//   //   let revoked = false;
+
+//   //   function revokeNow() {
+//   //     if (!revoked && videoBlobUrl) {
+//   //       revoked = true;
+//   //       URL.revokeObjectURL(videoBlobUrl);
+//   //     }
+//   //   }
+
+//   //   videoEl.addEventListener("canplaythrough", revokeNow);
+//   //   const safetyTimeout = setTimeout(revokeNow, 5000);
+
+//   //   return () => {
+//   //     videoEl.removeEventListener("canplaythrough", revokeNow);
+//   //     clearTimeout(safetyTimeout);
+//   //   };
+//   // }, [videoBlobUrl]);
+
 //   const lessons = course?.lessons ?? [];
 
 //   const firstAvailableLesson = useMemo(() => {
@@ -321,11 +385,120 @@
 //   }
 
 //   /*
-//    * Video API
+//    * Fetch the active lesson's video as a blob and point the
+//    * <video> element at an object URL instead of the raw
+//    * streaming endpoint. This keeps the real /api/stream/[id]
+//    * URL out of "copy video address", view-source, and share sheets.
+//    *
+//    * Trade-off: the whole file downloads into memory before playback
+//    * starts, so seeking is instant once loaded, but there's no
+//    * progressive/range-based start like a plain <video src> gets.
 //    */
-//   const videoStreamUrl = activeLesson
-//     ? `/api/admin/courses/${course?.id}/lessons/${activeLesson.id}/video`
-//     : null;
+//   useEffect(() => {
+//     if (!activeLesson) {
+//       return;
+//     }
+
+//     // Cancel any in-flight fetch for a previous lesson
+//     if (abortControllerRef.current) {
+//       abortControllerRef.current.abort();
+//     }
+
+//     // Revoke the previous blob URL to free memory
+//     if (currentBlobUrlRef.current) {
+//       URL.revokeObjectURL(currentBlobUrlRef.current);
+//       currentBlobUrlRef.current = null;
+//     }
+
+//     setVideoBlobUrl(null);
+//     setVideoLoadError(false);
+//     setDownloadProgress(null);
+//     setIsVideoLoading(true);
+
+//     const controller = new AbortController();
+//     abortControllerRef.current = controller;
+
+//     async function loadVideo() {
+//       try {
+//         const response = await fetch(`/api/stream/${activeLesson!.id}`, {
+//           credentials: "include",
+//           signal: controller.signal,
+//         });
+
+//         if (!response.ok || !response.body) {
+//           throw new Error("Failed to load video");
+//         }
+
+//         const contentLengthHeader = response.headers.get("Content-Length");
+//         const totalBytes = contentLengthHeader ? parseInt(contentLengthHeader, 10) : 0;
+
+//         const reader = response.body.getReader();
+//         const chunks: Uint8Array[] = [];
+//         let receivedBytes = 0;
+
+//         while (true) {
+//           const { done, value } = await reader.read();
+
+//           if (done) {
+//             break;
+//           }
+
+//           if (value) {
+//             chunks.push(value);
+//             receivedBytes += value.length;
+
+//             if (totalBytes > 0) {
+//               setDownloadProgress(Math.round((receivedBytes / totalBytes) * 100));
+//             }
+//           }
+//         }
+
+//         const blob = new Blob(chunks as BlobPart[], { type: "video/mp4" });
+//         const objectUrl = URL.createObjectURL(blob);
+
+//         currentBlobUrlRef.current = objectUrl;
+//         setVideoBlobUrl(objectUrl);
+//       } catch (error) {
+//         if (error instanceof DOMException && error.name === "AbortError") {
+//           // Lesson changed mid-fetch, ignore
+//           return;
+//         }
+
+//         console.error("Failed to load video:", error);
+//         setVideoLoadError(true);
+//       } finally {
+//         setIsVideoLoading(false);
+//       }
+//     }
+
+//     loadVideo();
+
+//     return () => {
+//       controller.abort();
+//     };
+//   }, [activeLesson?.id]);
+
+//   /*
+//    * Revoke the current blob URL on unmount
+//    */
+//   useEffect(() => {
+//     return () => {
+//       if (currentBlobUrlRef.current) {
+//         URL.revokeObjectURL(currentBlobUrlRef.current);
+//       }
+//     };
+//   }, []);
+
+//   /*
+//    * Start the auto-hide timer for the rewind/forward buttons
+//    * as soon as a video is ready — otherwise they stay visible
+//    * indefinitely until the first mouse movement.
+//    */
+//   useEffect(() => {
+//     if (videoBlobUrl) {
+//       showSeekControlsTemporarily();
+//     }
+//   }, [videoBlobUrl]);
 
 //   /*
 //    * Loading
@@ -404,62 +577,79 @@
 //               onMouseMove={handleVideoMouseMove}
 //               onMouseEnter={showSeekControlsTemporarily}
 //             >
-//               {activeLesson && videoStreamUrl ? (
+//               {activeLesson && !videoLoadError ? (
 //                 <>
+//                   {/* Loading overlay */}
+//                   {isVideoLoading && (
+//                     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/90">
+//                       <Loader2 size={32} className="animate-spin text-primary" />
+
+//                       <p className="text-sm text-zinc-400">
+//                         {downloadProgress !== null
+//                           ? `Loading video... ${downloadProgress}%`
+//                           : "Loading video..."}
+//                       </p>
+//                     </div>
+//                   )}
+
 //                   {/* Actual Video */}
-//                   <video
-//                     key={activeLesson.id}
-//                     ref={videoRef}
-//                     controls
-//                     controlsList="nodownload noplaybackrate"
-//                     disablePictureInPicture
-//                     preload="metadata"
-//                     playsInline
-//                     onContextMenu={(event) => event.preventDefault()}
-//                     className="h-full w-full object-contain"
-//                   >
-//                     <source src={videoStreamUrl} type="video/mp4" />
-//                     Your browser does not support the video element.
-//                   </video>
+//                   {videoBlobUrl && (
+//                     <video
+//                       key={activeLesson.id}
+//                       ref={videoRef}
+//                       src={videoBlobUrl}
+//                       controls
+//                       controlsList="nodownload noplaybackrate"
+//                       disablePictureInPicture
+//                       preload="metadata"
+//                       playsInline
+//                       onContextMenu={(event) => event.preventDefault()}
+//                       className="h-full w-full object-contain"
+//                     >
+//                       Your browser does not support the video element.
+//                     </video>
+//                   )}
 
 //                   {/* Rewind / Forward Controls */}
-//                   <div
-//                     className={`pointer-events-none absolute inset-0 flex items-center justify-between px-5 transition-opacity duration-500 sm:px-8 ${
-//                       showSeekControls ? "opacity-100" : "opacity-0"
-//                     }`}
-//                   >
-//                     {/* Rewind */}
-//                     <div className="flex flex-col items-center justify-center">
-//                       <button
-//                         type="button"
-//                         onClick={rewindVideo}
-//                         className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
-//                         aria-label="Rewind 10 seconds"
-//                       >
-//                         <ChevronsRight size={22} className="rotate-180" />
-//                       </button>
+//                   {videoBlobUrl && (
+//                     <div
+//                       className={`pointer-events-none absolute inset-0 flex items-center justify-between px-5 transition-opacity duration-500 sm:px-8 ${
+//                         showSeekControls ? "opacity-100" : "opacity-0"
+//                       }`}
+//                     >
+//                       {/* Rewind */}
+//                       <div className="flex flex-col items-center justify-center">
+//                         <button
+//                           type="button"
+//                           onClick={rewindVideo}
+//                           className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
+//                           aria-label="Rewind 10 seconds"
+//                         >
+//                           <ChevronsRight size={22} className="rotate-180" />
+//                         </button>
 
-//                       <span className="mt-1 text-xs font-medium text-white/70">
-//                         10 Sec
-//                       </span>
+//                         <span className="mt-1 text-xs font-medium text-white/70">
+//                           10 Sec
+//                         </span>
+//                       </div>
+
+//                       {/* Forward */}
+//                       <div className="flex flex-col items-center justify-center">
+//                         <button
+//                           type="button"
+//                           onClick={forwardVideo}
+//                           className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
+//                           aria-label="Forward 10 seconds"
+//                         >
+//                           <ChevronsRight size={22} />
+//                         </button>
+
+//                         <span className="mt-1 text-xs font-medium text-white/70">
+//                           10 Sec
+//                         </span>
+//                       </div>
 //                     </div>
-
-//                     {/* Forward */}
-//                     <div className="flex flex-col items-center justify-center">
-//                       <button
-//                         type="button"
-//                         onClick={forwardVideo}
-//                         className="pointer-events-auto flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-black/60 text-white shadow-lg backdrop-blur-md transition-all duration-200 hover:scale-105 hover:bg-black/80 active:scale-95"
-//                         aria-label="Forward 10 seconds"
-//                       >
-//                         <ChevronsRight size={22} />
-//                       </button>
-
-//                       <span className="mt-1 text-xs font-medium text-white/70">
-//                         10 Sec
-//                       </span>
-//                     </div>
-//                   </div>
+//                   )}
 //                 </>
 //               ) : (
 //                 <div className="flex h-full w-full flex-col items-center justify-center gap-4 bg-[#0b0b0b]">
@@ -468,7 +658,11 @@
 //                   </div>
 
 //                   <p className="text-sm text-zinc-400">
-//                     {activeLesson ? "Video unavailable" : "No lessons available"}
+//                     {activeLesson
+//                       ? videoLoadError
+//                         ? "Failed to load video. Please try again."
+//                         : "Video unavailable"
+//                       : "No lessons available"}
 //                   </p>
 //                 </div>
 //               )}
@@ -598,6 +792,8 @@ interface LessonItemProps {
   isActive: boolean;
   onClick: () => void;
 }
+
+type WatermarkPosition = "bottom-left" | "bottom-right" | "top-left" | "top-right";
 
 function formatDuration(seconds?: number | null) {
   if (seconds === null || seconds === undefined) {
@@ -742,6 +938,14 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
   const lastMouseMoveRef = useRef(0);
 
   /*
+   * Watermark: identifies which student is watching, so if a
+   * screen recording leaks, we know whose account to suspend.
+   */
+  const [watermarkText, setWatermarkText] = useState("");
+  const [watermarkPosition, setWatermarkPosition] =
+    useState<WatermarkPosition>("bottom-left");
+
+  /*
    * Show the rewind/forward controls and
    * hide them after 4 seconds.
    */
@@ -835,6 +1039,51 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
   }, []);
 
   /*
+   * Fetch the logged-in student's identity for the watermark
+   */
+  useEffect(() => {
+    async function fetchCurrentUser() {
+      try {
+        const response = await axios.get("/api/auth/me");
+        const user = response.data?.user;
+
+        if (user) {
+          // Prefer email since it directly identifies the account;
+          // fall back to their user ID if email isn't present.
+          setWatermarkText(user.email || user.id || "Unknown");
+        }
+      } catch (error) {
+        console.error("Failed to fetch current user for watermark:", error);
+      }
+    }
+
+    fetchCurrentUser();
+  }, []);
+
+  /*
+   * Move the watermark to a different corner periodically so it
+   * can't be reliably cropped out of a screen recording.
+   */
+  useEffect(() => {
+    const positions: WatermarkPosition[] = [
+      "bottom-left",
+      "bottom-right",
+      "top-left",
+      "top-right",
+    ];
+
+    const interval = setInterval(() => {
+      setWatermarkPosition((current) => {
+        const currentIndex = positions.indexOf(current);
+        const nextIndex = (currentIndex + 1) % positions.length;
+        return positions[nextIndex];
+      });
+    }, 8000); // moves every 8 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  /*
    * Fetch course
    */
   useEffect(() => {
@@ -904,6 +1153,12 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
    * Trade-off: the whole file downloads into memory before playback
    * starts, so seeking is instant once loaded, but there's no
    * progressive/range-based start like a plain <video src> gets.
+   *
+   * Note: we deliberately do NOT revoke the blob URL while the video
+   * is playing (e.g. on "canplaythrough") — browsers can still read
+   * from the blob mid-playback, and revoking early causes playback
+   * to stall partway through. We only revoke on lesson-switch and
+   * on unmount below.
    */
   useEffect(() => {
     if (!activeLesson) {
@@ -999,6 +1254,24 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
       }
     };
   }, []);
+
+  /*
+   * Start the auto-hide timer for the rewind/forward buttons
+   * as soon as a video is ready — otherwise they stay visible
+   * indefinitely until the first mouse movement.
+   */
+  useEffect(() => {
+    if (videoBlobUrl) {
+      showSeekControlsTemporarily();
+    }
+  }, [videoBlobUrl]);
+
+  const watermarkPositionClasses: Record<WatermarkPosition, string> = {
+    "bottom-left": "bottom-3 left-3",
+    "bottom-right": "bottom-3 right-3",
+    "top-left": "top-3 left-3",
+    "top-right": "top-3 right-3",
+  };
 
   /*
    * Loading
@@ -1148,6 +1421,15 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
                           10 Sec
                         </span>
                       </div>
+                    </div>
+                  )}
+
+                  {/* Watermark */}
+                  {videoBlobUrl && watermarkText && (
+                    <div
+                      className={`pointer-events-none absolute z-20 rounded-md bg-black/40 px-2 py-1 font-mono text-[10px] text-white/50 backdrop-blur-sm transition-all duration-700 ${watermarkPositionClasses[watermarkPosition]}`}
+                    >
+                      {watermarkText}
                     </div>
                   )}
                 </>
