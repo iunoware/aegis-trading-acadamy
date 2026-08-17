@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -244,6 +245,20 @@ export default function Hero() {
                 className="transition-transform duration-300 group-hover:translate-x-1"
               />
             </Link>
+            {/* <a
+              href="https://nowpayments.io/payment/?iid=5652962896&source=button"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <Image
+                src="https://nowpayments.io/images/embeds/payment-button-black.svg"
+                alt="Crypto payment button by NOWPayments"
+                width={36}
+                height={36}
+                className="object-contain"
+              />
+              
+            </a> */}
           </div>
         </div>
       </div>

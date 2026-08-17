@@ -57,10 +57,30 @@ export async function POST(request: NextRequest) {
     const now = new Date();
     const expiresAt = new Date(now.getTime() + 10 * 60 * 1000); // 10 minutes expiry
 
-    // Check if user already exists
+    // Check if user already exists by email
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
+
+    // Check if phone number is already used by another user
+    if (phone) {
+      const existingPhoneUser = await prisma.user.findFirst({
+        where: {
+          phone,
+          ...(existingUser ? { id: { not: existingUser.id } } : {}),
+        },
+      });
+
+      if (existingPhoneUser) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "An account with this phone number already exists.",
+          },
+          { status: 400 },
+        );
+      }
+    }
 
     if (existingUser) {
       if (existingUser.deletedAt) {
@@ -207,6 +227,18 @@ export async function POST(request: NextRequest) {
     );
   } catch (error: any) {
     console.error("REGISTER_ERROR", error?.message || error);
+
+    if (error?.code === "P2002") {
+      const target = error.meta?.target;
+      const field = Array.isArray(target) ? target.join(", ") : "field";
+      return NextResponse.json(
+        {
+          success: false,
+          error: `An account with this ${field} already exists.`,
+        },
+        { status: 400 },
+      );
+    }
 
     return NextResponse.json(
       {
