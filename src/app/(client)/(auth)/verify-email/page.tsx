@@ -45,7 +45,7 @@ function VerifyEmailForm() {
       gsap.fromTo(
         cardRef.current,
         { opacity: 0, y: 25, scale: 0.98 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "power2.out" }
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "power2.out" },
       );
     }
   }, []);
@@ -85,7 +85,10 @@ function VerifyEmailForm() {
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Backspace" && !otpDigits[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -136,7 +139,9 @@ function VerifyEmailForm() {
       router.replace("/student");
       router.refresh();
     } catch {
-      setErrorMsg("Something went wrong. Please check your network and try again.");
+      setErrorMsg(
+        "Something went wrong. Please check your network and try again.",
+      );
       toast.error("Verification failed");
     } finally {
       setIsSubmitting(false);
@@ -236,10 +241,30 @@ function VerifyEmailForm() {
               <Clock size={12} className="text-[#C9A227]" />
               <span>Code expires in:</span>
             </span>
-            <span className={expirySeconds <= 60 ? "text-rose-400 font-bold animate-pulse" : "text-[#C9A227] font-bold"}>
+            <span
+              className={
+                expirySeconds <= 60
+                  ? "text-rose-400 font-bold animate-pulse"
+                  : "text-[#C9A227] font-bold"
+              }
+            >
               {expirySeconds > 0 ? formatTime(expirySeconds) : "Expired"}
             </span>
           </div>
+        </div>
+
+        {/* Spam / Junk Folder Notice */}
+        <div className="text-center px-2 py-1 text-xs text-zinc-400 font-sans space-y-0.5 leading-relaxed">
+          <p className="font-medium text-zinc-300">
+            Didn&apos;t receive the verification email?
+          </p>
+          <p className="text-[11px] text-zinc-400">
+            Please check your{" "}
+            <span className="text-[#C9A227] font-semibold">
+              {`More > Spam folder`}
+            </span>
+            . Sometimes verification emails may be filtered there.
+          </p>
         </div>
 
         {/* Submit Verification Button */}

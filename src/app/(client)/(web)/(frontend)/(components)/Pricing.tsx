@@ -16,6 +16,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import axios from "axios";
+import { toast } from "sonner";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -38,7 +39,7 @@ const PricingFeature: React.FC<PricingFeatureProps> = ({
         className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
           isPopularPlan
             ? "bg-primary text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]"
-            : "bg-primary/15 border border-(--primary)/30 text-primary"
+            : "bg-primary/15 border border-primary/30 text-primary"
         }`}
       >
         <Check size={12} strokeWidth={3} />
@@ -85,6 +86,9 @@ const TrustItem: React.FC<TrustItemProps> = ({ icon: Icon, text }) => {
 
 interface PricingPlan {
   id: string;
+  databaseId: string;
+  numericPrice: number;
+  billingCycle: "Monthly" | "Yearly";
   title: string;
   price: string;
   subtitle: string;
@@ -129,6 +133,55 @@ interface PricingCardProps {
 }
 
 const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubscribe = async (selectedPlan: PricingPlan) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      const response = await axios.post<{
+        success: boolean;
+        checkoutUrl?: string;
+        orderId?: string;
+        message?: string;
+      }>("/api/payment/create", {
+        planId: selectedPlan.databaseId,
+      });
+
+      if (
+        response.data &&
+        response.data.success === true &&
+        typeof response.data.checkoutUrl === "string" &&
+        response.data.checkoutUrl.trim().length > 0
+      ) {
+        window.location.href = response.data.checkoutUrl;
+      } else {
+        throw new Error(response.data?.message || "Invalid checkout URL returned.");
+      }
+    } catch (error: any) {
+      const status = error?.response?.status;
+      let userMessage = "Unable to start payment. Please try again.";
+
+      if (status === 401) {
+        userMessage = "Please log in to continue with your purchase.";
+      } else if (status === 400) {
+        userMessage = "Invalid subscription plan.";
+      } else if (status === 404) {
+        userMessage = "This subscription plan is currently unavailable.";
+      } else if (status === 502) {
+        userMessage = "Unable to initialize the payment. Please try again.";
+      } else if (status === 500) {
+        userMessage = "Something went wrong while starting the payment. Please try again.";
+      } else if (error?.response?.data?.message) {
+        userMessage = error.response.data.message;
+      }
+
+      toast.error(userMessage);
+      setIsSubmitting(false);
+    }
+  };
+
   const {
     title,
     price,
@@ -139,7 +192,6 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
     popularBadgeText,
     features,
     buttonText,
-    buttonHref,
   } = plan;
 
   return (
@@ -201,21 +253,23 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
       </div>
 
       <div className="pt-4">
-        <a
-          href={buttonHref}
+        <button
+          type="button"
+          onClick={() => handleSubscribe(plan)}
+          disabled={isSubmitting}
           aria-label={buttonText}
           className={`w-full group inline-flex items-center justify-center gap-3 py-4 px-6 rounded-xl font-bold text-sm sm:text-base tracking-wider uppercase transition-all duration-300 transform active:translate-y-0 text-center ${
             isPopular
               ? "bg-linear-to-r from-primary-light via-primary to-primary-dark text-black "
               : "glass-panel text-white hover:text-primary border border-white/15 hover:border-primary/40"
-          }`}
+          } ${isSubmitting ? "opacity-70 cursor-not-allowed" : "cursor-pointer"}`}
         >
           <span>{buttonText}</span>
           <ArrowRight
             size={18}
             className="transition-transform duration-300 group-hover:translate-x-1"
           />
-        </a>
+        </button>
       </div>
     </article>
   );
@@ -280,7 +334,9 @@ function convertApiPlanToPricingPlan(
     const savingsAmount = yearlyMonthlyCost - plan.price;
 
     if (savingsAmount > 0) {
-      const savingsPercentage = Math.round((savingsAmount / yearlyMonthlyCost) * 100);
+      const savingsPercentage = Math.round(
+        (savingsAmount / yearlyMonthlyCost) * 100,
+      );
 
       savingsLabel = `Save ${savingsPercentage}%`;
     }
@@ -288,6 +344,9 @@ function convertApiPlanToPricingPlan(
 
   return {
     id: plan.id,
+    databaseId: plan.databaseId,
+    numericPrice: plan.price,
+    billingCycle: plan.billingCycle,
     title: plan.name,
     price: `$${plan.price.toLocaleString("en-US")}`,
     subtitle: plan.id === "monthly" ? "Per Month" : "Per Year",
@@ -297,10 +356,13 @@ function convertApiPlanToPricingPlan(
       plan.badge === "Popular" ||
       plan.badge === "Best Value" ||
       plan.badge === "Recommended",
-    popularBadgeText: plan.badge === "None" ? undefined : plan.badge.toUpperCase(),
+    popularBadgeText:
+      plan.badge === "None" ? undefined : plan.badge.toUpperCase(),
     features: plan.features.map((feature) => feature.text),
-    buttonText: plan.id === "monthly" ? "Start Monthly Plan" : "Start Yearly Plan",
-    buttonHref: plan.id === "monthly" ? "#checkout-monthly" : "#checkout-yearly",
+    buttonText:
+      plan.id === "monthly" ? "Start Monthly Plan" : "Start Yearly Plan",
+    buttonHref:
+      plan.id === "monthly" ? "#checkout-monthly" : "#checkout-yearly",
   };
 }
 
@@ -342,7 +404,8 @@ export default function Pricing() {
     try {
       setIsLoading(true);
 
-      const response = await axios.get<PricingApiResponse>("/api/admin/pricing");
+      const response =
+        await axios.get<PricingApiResponse>("/api/admin/pricing");
 
       const monthlyPlan = response.data.data.monthly;
       const yearlyPlan = response.data.data.yearly;
@@ -358,7 +421,9 @@ export default function Pricing() {
       }
 
       if (yearlyPlan?.status) {
-        formattedPlans.push(convertApiPlanToPricingPlan(yearlyPlan, monthlyPlan?.price));
+        formattedPlans.push(
+          convertApiPlanToPricingPlan(yearlyPlan, monthlyPlan?.price),
+        );
       }
 
       setPricingPlans(formattedPlans);
@@ -439,7 +504,11 @@ export default function Pricing() {
         );
       }
 
-      tl.to(trustStripRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.3");
+      tl.to(
+        trustStripRef.current,
+        { opacity: 1, y: 0, duration: 0.7 },
+        "-=0.3",
+      );
 
       // if (paymentSectionRef.current) {
       //   tl.to(
@@ -505,9 +574,9 @@ export default function Pricing() {
           ref={paragraphRef}
           className="text-base sm:text-lg text-text font-normal leading-relaxed max-w-162.5 text-center mb-16 sm:mb-20"
         >
-          Choose the membership plan that fits your learning journey. Every subscription
-          gives you access to our structured curriculum, live sessions, community, and
-          continuous course updates.
+          Choose the membership plan that fits your learning journey. Every
+          subscription gives you access to our structured curriculum, live
+          sessions, community, and continuous course updates.
         </p>
 
         {/* <div

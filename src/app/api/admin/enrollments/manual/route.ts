@@ -4,8 +4,6 @@ import {
   PlanType,
   OrderStatus,
   PaymentStatus,
-  PaymentGateway,
-  PaymentMethod,
   SubscriptionSource,
   SubscriptionStatus,
   SubscriptionEventType,
@@ -103,7 +101,7 @@ export async function POST(request: Request) {
           name: planType === PlanType.YEARLY ? "Yearly Plan" : "Monthly Plan",
           price: planType === PlanType.YEARLY ? 7999 : 999,
           durationMonths: planType === PlanType.YEARLY ? 12 : 1,
-          currency: "INR",
+          currency: "USD",
         },
       });
     }
@@ -119,7 +117,7 @@ export async function POST(request: Request) {
 
     const planPrice = Number(subPlan.price) || (planType === PlanType.YEARLY ? 7999 : 999);
 
-    // 4. Create Order & Payment for transaction history
+    // 4. Create Order for manual administration record (no fake gateway payment)
     const order = await prisma.order.create({
       data: {
         orderNumber: `ORD-MANUAL-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
@@ -131,20 +129,8 @@ export async function POST(request: Request) {
         planPriceSnapshot: planPrice,
         subtotalAmount: planPrice,
         totalAmount: planPrice,
-        currency: "INR",
+        currency: subPlan.currency || "USD",
         paidAt: now,
-        payments: {
-          create: {
-            userId: user.id,
-            status: PaymentStatus.PAID,
-            method: PaymentMethod.OTHER,
-            gateway: PaymentGateway.MANUAL,
-            amount: planPrice,
-            currency: "INR",
-            transactionId: `MANUAL-${Math.floor(100000 + Math.random() * 900000)}`,
-            paidAt: now,
-          },
-        },
       },
     });
 

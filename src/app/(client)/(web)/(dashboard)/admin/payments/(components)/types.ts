@@ -92,15 +92,7 @@ export type PaymentStatus =
 
 export type AccessStatus = "Active" | "Expiring Soon" | "Expired" | "Cancelled";
 
-export type PaymentMethod =
-  | "UPI"
-  | "CREDIT_CARD"
-  | "DEBIT_CARD"
-  | "NET_BANKING"
-  | "WALLET"
-  | "BANK_TRANSFER"
-  | "CASH"
-  | "OTHER";
+export type PaymentMethod = "CRYPTO";
 
 export type OrderPaymentEventType =
   | "PURCHASED"

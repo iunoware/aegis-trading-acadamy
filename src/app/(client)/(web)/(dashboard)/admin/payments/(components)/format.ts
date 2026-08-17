@@ -23,14 +23,7 @@ export const paymentStatusBadge: Record<PaymentStatus, string> = {
 };
 
 export const paymentMethodLabel: Record<PaymentMethod, string> = {
-  UPI: "UPI",
-  CREDIT_CARD: "Credit Card",
-  DEBIT_CARD: "Debit Card",
-  NET_BANKING: "Net Banking",
-  WALLET: "Wallet",
-  BANK_TRANSFER: "Bank Transfer",
-  CASH: "Cash",
-  OTHER: "Other",
+  CRYPTO: "Crypto",
 };
 
 export const eventTypeDot: Record<OrderPaymentEventType, string> = {

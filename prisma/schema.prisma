@@ -698,22 +698,11 @@ enum PaymentStatus {
 }
 
 enum PaymentMethod {
-  UPI
-  CREDIT_CARD
-  DEBIT_CARD
-  NET_BANKING
-  WALLET
-  BANK_TRANSFER
-  CASH
-  OTHER
+  CRYPTO
 }
 
 enum PaymentGateway {
-  RAZORPAY
-  PAYTM
-  STRIPE
-  MANUAL
-  OTHER
+  NOWPAYMENTS
 }
 
 enum RefundStatus {

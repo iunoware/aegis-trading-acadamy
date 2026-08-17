@@ -137,25 +137,14 @@ export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 
 export const PaymentMethod = {
-  UPI: 'UPI',
-  CREDIT_CARD: 'CREDIT_CARD',
-  DEBIT_CARD: 'DEBIT_CARD',
-  NET_BANKING: 'NET_BANKING',
-  WALLET: 'WALLET',
-  BANK_TRANSFER: 'BANK_TRANSFER',
-  CASH: 'CASH',
-  OTHER: 'OTHER'
+  CRYPTO: 'CRYPTO'
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
 
 export const PaymentGateway = {
-  RAZORPAY: 'RAZORPAY',
-  PAYTM: 'PAYTM',
-  STRIPE: 'STRIPE',
-  MANUAL: 'MANUAL',
-  OTHER: 'OTHER'
+  NOWPAYMENTS: 'NOWPAYMENTS'
 } as const
 
 export type PaymentGateway = (typeof PaymentGateway)[keyof typeof PaymentGateway]
