@@ -435,6 +435,7 @@ export default function Sidebar() {
                   return (
                     <div
                       key={item.link}
+                      title={item.title}
                       className="relative group"
                       onMouseEnter={() => setHoveredItem(item.link)}
                       onMouseLeave={() => setHoveredItem(null)}

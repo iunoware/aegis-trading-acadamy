@@ -25,29 +25,24 @@ export async function POST(request: Request) {
     if (!adminUser) {
       return NextResponse.json(
         { success: false, message: "Unauthorized admin access" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     const body = await request.json();
-    const {
-      userName,
-      userEmail,
-      userPhone,
-      discordName,
-      plan,
-      currentPlan,
-      adminNotes,
-    } = body;
+    const { userName, userEmail, userPhone, discordName, plan, currentPlan, adminNotes } =
+      body;
 
     const targetPlanName = plan || currentPlan || "Monthly Plan";
-    const emailStr = String(userEmail || "").trim().toLowerCase();
+    const emailStr = String(userEmail || "")
+      .trim()
+      .toLowerCase();
     const nameStr = String(userName || "").trim();
 
     if (!emailStr || !nameStr) {
       return NextResponse.json(
         { success: false, message: "Name and Email are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -115,7 +110,8 @@ export async function POST(request: Request) {
       expDate.setMonth(expDate.getMonth() + 1);
     }
 
-    const planPrice = Number(subPlan.price) || (planType === PlanType.YEARLY ? 7999 : 999);
+    const planPrice =
+      Number(subPlan.price) || (planType === PlanType.YEARLY ? 7999 : 999);
 
     // 4. Create Order for manual administration record (no fake gateway payment)
     const order = await prisma.order.create({
@@ -164,7 +160,7 @@ export async function POST(request: Request) {
           create: {
             type: SubscriptionEventType.PURCHASED,
             title: `Manual Enrollment (${subPlan.name})`,
-            description: `Enrolled manually by admin pass (${planType === PlanType.YEARLY ? "₹7,999" : "₹999"}).`,
+            description: `Enrolled manually by admin pass (${planType === PlanType.YEARLY ? "$7,999" : "₹999"}).`,
           },
         },
       },
@@ -182,7 +178,7 @@ export async function POST(request: Request) {
     console.error("POST /api/enrollments/manual error:", error);
     return NextResponse.json(
       { success: false, message: "Failed to create manual enrollment" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

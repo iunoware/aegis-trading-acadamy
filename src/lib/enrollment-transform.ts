@@ -1,4 +1,8 @@
-import { SubscriptionStatus, SubscriptionEventType, PaymentStatus } from "@/generated/prisma/client";
+import {
+  SubscriptionStatus,
+  SubscriptionEventType,
+  PaymentStatus,
+} from "@/generated/prisma/client";
 
 export interface PaymentRecord {
   id: string;
@@ -51,7 +55,9 @@ export function formatDate(dateInput: Date | string | null | undefined): string 
   });
 }
 
-export function mapPaymentStatus(status: string): "Paid" | "Pending" | "Failed" | "Refunded" {
+export function mapPaymentStatus(
+  status: string,
+): "Paid" | "Pending" | "Failed" | "Refunded" {
   switch (status) {
     case PaymentStatus.PAID:
     case PaymentStatus.CAPTURED:
@@ -129,9 +135,7 @@ export function transformSubscriptionToUI(subscription: any): Enrollment {
 
   // Admin notes: latest note if exists
   const adminNotes =
-    subscription.notes && subscription.notes.length > 0
-      ? subscription.notes[0].note
-      : "";
+    subscription.notes && subscription.notes.length > 0 ? subscription.notes[0].note : "";
 
   // Payment history mapping
   const paymentHistory: PaymentRecord[] = [];
@@ -144,11 +148,10 @@ export function transformSubscriptionToUI(subscription: any): Enrollment {
       paymentHistory.push({
         id: p.id,
         plan: currentPlan,
-        amount: `₹${Number(p.amount).toLocaleString("en-IN")}`,
+        amount: `$${Number(p.amount).toLocaleString("en-IN")}`,
         purchaseDate: formatDate(p.paidAt || p.createdAt),
         status: mapPaymentStatus(p.status),
-        transactionId:
-          p.transactionId || p.gatewayPaymentId || `TXN-${p.id.slice(-7)}`,
+        transactionId: p.transactionId || p.gatewayPaymentId || `TXN-${p.id.slice(-7)}`,
       });
     }
   }
@@ -156,19 +159,16 @@ export function transformSubscriptionToUI(subscription: any): Enrollment {
   // Subscription timeline mapping (sorted DESC)
   const events = subscription.events || [];
   const sortedEvents = [...events].sort(
-    (a: any, b: any) =>
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 
-  const subscriptionTimeline: TimelineRecord[] = sortedEvents.map(
-    (e: any) => ({
-      id: e.id,
-      action: e.title,
-      date: formatDate(e.createdAt),
-      details: e.description || "",
-      type: mapEventType(e.type),
-    })
-  );
+  const subscriptionTimeline: TimelineRecord[] = sortedEvents.map((e: any) => ({
+    id: e.id,
+    action: e.title,
+    date: formatDate(e.createdAt),
+    details: e.description || "",
+    type: mapEventType(e.type),
+  }));
 
   return {
     id: subscription.id,
