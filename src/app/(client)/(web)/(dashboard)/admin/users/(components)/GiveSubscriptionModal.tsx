@@ -88,7 +88,7 @@ export function GiveSubscriptionModal({
       if (res.success && res.user) {
         toast.success(
           res.message ||
-            `${selectedPlan?.name || "Subscription"} granted successfully to ${user.name}!`
+            `${selectedPlan?.name || "Subscription"} granted successfully to ${user.name}!`,
         );
         onSuccess(res.user);
         onClose();
@@ -121,7 +121,8 @@ export function GiveSubscriptionModal({
                 {isChangingPlan ? "Change Subscription Plan" : "Give Subscription"}
               </h2>
               <p className="text-xs text-zinc-400">
-                Grant manual access to <span className="text-white font-medium">{user.name}</span>
+                Grant manual access to{" "}
+                <span className="text-white font-medium">{user.name}</span>
               </p>
             </div>
           </div>
@@ -192,7 +193,7 @@ export function GiveSubscriptionModal({
 
                         <div className="text-right">
                           <span className="text-sm font-extrabold text-white">
-                            {plan.currency === "INR" || !plan.currency ? "₹" : "$"}
+                            {plan.currency === "INR" || !plan.currency ? "$" : "$"}
                             {plan.price.toLocaleString()}
                           </span>
                         </div>
@@ -211,12 +212,18 @@ export function GiveSubscriptionModal({
 
                 <div className="grid grid-cols-2 gap-4 text-xs font-mono">
                   <div>
-                    <span className="text-zinc-500 block text-[10px] uppercase">Start Date</span>
+                    <span className="text-zinc-500 block text-[10px] uppercase">
+                      Start Date
+                    </span>
                     <span className="text-white font-semibold">{startDateStr}</span>
                   </div>
                   <div>
-                    <span className="text-zinc-500 block text-[10px] uppercase">End Date</span>
-                    <span className="text-[#C9A227] font-semibold">{calculateEndDate()}</span>
+                    <span className="text-zinc-500 block text-[10px] uppercase">
+                      End Date
+                    </span>
+                    <span className="text-[#C9A227] font-semibold">
+                      {calculateEndDate()}
+                    </span>
                   </div>
                 </div>
               </div>

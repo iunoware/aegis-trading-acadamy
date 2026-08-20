@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -30,11 +31,7 @@ const EMPTY_PASSWORD_FORM: PasswordFormValues = {
   confirmPassword: "",
 };
 
-export function ProfileForm({
-  profile,
-  isSaving = false,
-  onSubmit,
-}: ProfileFormProps) {
+export function ProfileForm({ profile, isSaving = false, onSubmit }: ProfileFormProps) {
   const [profileForm, setProfileForm] = useState<ProfileFormValues>({
     name: profile.name,
     email: profile.email,
@@ -50,20 +47,14 @@ export function ProfileForm({
     confirm: false,
   });
 
-  const updateProfileField = (
-    field: keyof ProfileFormValues,
-    value: string,
-  ) => {
+  const updateProfileField = (field: keyof ProfileFormValues, value: string) => {
     setProfileForm((current) => ({
       ...current,
       [field]: value,
     }));
   };
 
-  const updatePasswordField = (
-    field: keyof PasswordFormValues,
-    value: string,
-  ) => {
+  const updatePasswordField = (field: keyof PasswordFormValues, value: string) => {
     setPasswordForm((current) => ({
       ...current,
       [field]: value,
@@ -136,7 +127,7 @@ export function ProfileForm({
         </div>
       </section>
 
-      {/* <section className="rounded-2xl border border-white/10 bg-[#111113]/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.45)] sm:p-6">
+      <section className="rounded-2xl border border-white/10 bg-[#111113]/90 p-5 shadow-[0_10px_30px_rgba(0,0,0,0.45)] sm:p-6">
         <SectionHeading
           icon={KeyRound}
           title="Change Password"
@@ -191,7 +182,7 @@ export function ProfileForm({
           Password must be at least 8 characters and contain one number and one special
           character.
         </p>
-      </section> */}
+      </section>
 
       <div className="flex justify-end">
         <button

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+// import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -17,10 +17,11 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import {
-  FacebookIcon,
+  // FacebookIcon,
   InstagramIcon,
-  TelegramIcon,
   XIcon,
+  YoutubeIcon,
+  // TelegramIcon,
   // YoutubeIcon,
 } from "@/components/Icons";
 import Link from "next/link";
@@ -142,10 +143,11 @@ export default function Footer() {
 
         <div
           ref={columnsRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-16 border-b border-white/10"
+          // className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-16 border-b border-white/10"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 pb-16 border-b border-white/10"
         >
           {/* Column 1: Brand Info */}
-          <div className="lg:col-span-1 space-y-4">
+          {/* <div className="lg:col-span-1 space-y-4">
             <div className="flex items-center gap-3">
               <div className="relative w-9 h-9">
                 <Image
@@ -164,7 +166,7 @@ export default function Footer() {
               Building disciplined traders through structured education and real market
               experience.
             </p>
-          </div>
+          </div> */}
 
           {/* Column 2: Quick Links */}
           <div className="space-y-3">
@@ -173,38 +175,28 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-zinc-300">
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <Link href="/" className="hover:text-primary transition-colors">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#why-choose-aegis"
+                <Link href="/pricing" className="hover:text-primary transition-colors">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/#testimonials"
                   className="hover:text-primary transition-colors"
                 >
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#pricing" className="hover:text-primary transition-colors">
-                  Pricing
-                </a>
-              </li>
-              <li>
-                <a href="#testimonials" className="hover:text-primary transition-colors">
                   Testimonials
-                </a>
+                </Link>
               </li>
-              <li>
-                <a href="#faq" className="hover:text-primary transition-colors">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="#contact" className="hover:text-primary transition-colors">
+              {/* <li>
+                <Link href="#contact" className="hover:text-primary transition-colors">
                   Contact
-                </a>
-              </li>
+                </Link>
+              </li> */}
             </ul>
           </div>
 
@@ -215,33 +207,34 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-zinc-300">
               <li>
-                <a href="#login" className="hover:text-primary transition-colors">
+                <a href="/login" className="hover:text-primary transition-colors">
                   Member Login
                 </a>
               </li>
+
               <li>
-                <a
-                  href="#learning-journey"
-                  className="hover:text-primary transition-colors"
-                >
-                  Learning Journey
-                </a>
+                <Link href="/courses" className="hover:text-primary transition-colors">
+                  Courses
+                </Link>
               </li>
+
               <li>
-                <a href="#pricing" className="hover:text-primary transition-colors">
+                <a href="/pricing" className="hover:text-primary transition-colors">
                   Pricing Plans
                 </a>
               </li>
-              <li>
+
+              {/* <li>
                 <a href="#community" className="hover:text-primary transition-colors">
                   Community
                 </a>
-              </li>
-              <li>
+              </li> */}
+
+              {/* <li>
                 <a href="#support" className="hover:text-primary transition-colors">
                   Support
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -252,6 +245,11 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-zinc-300">
               <li>
+                <Link href="/disclaimer" className="hover:text-white transition">
+                  Disclaimer
+                </Link>
+              </li>
+              {/* <li>
                 <a href="#privacy" className="hover:text-primary transition-colors">
                   Privacy Policy
                 </a>
@@ -270,7 +268,7 @@ export default function Footer() {
                 <a href="#disclaimer" className="hover:text-primary transition-colors">
                   Risk Disclaimer
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -282,15 +280,23 @@ export default function Footer() {
             <ul className="space-y-2.5 text-xs sm:text-sm text-zinc-300">
               <li className="flex items-center gap-2.5">
                 <Mail size={16} className="text-primary" />
-                <span>support@aegistrading.com</span>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=info@aegistrading.com"
+                >
+                  info@aegistrading.com
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone size={16} className="text-primary" />
-                <span>+91 98765 43210</span>
+                <a target="_blank" rel="noopener noreferrer" href="tel:+919876543210">
+                  +91 98765 43210
+                </a>
               </li>
               <li className="flex items-center gap-2.5">
                 <MapPin size={16} className="text-primary" />
-                <span>Mumbai, India</span>
+                <span>Chennai, Tamil Nadu, India</span>
               </li>
             </ul>
 
@@ -306,7 +312,7 @@ export default function Footer() {
                 <InstagramIcon className="h-5" />
               </a>
 
-              {/* <a
+              <a
                 href="https://youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -314,7 +320,7 @@ export default function Footer() {
                 className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
               >
                 <YoutubeIcon className="h-5" />
-              </a> */}
+              </a>
 
               {/* <a
                 href="https://linkedin.com"
@@ -326,16 +332,15 @@ export default function Footer() {
                 <LinkedInIcon className="h-5" />
               </a> */}
 
-              <a
+              {/* <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
                 className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
               >
-                {/* <Share2 size={16} /> */}
                 <FacebookIcon className="h-5" />
-              </a>
+              </a> */}
 
               <a
                 href="https://x.com"
@@ -347,16 +352,15 @@ export default function Footer() {
                 <XIcon className="h-5" />
               </a>
 
-              <a
+              {/* <a
                 href="https://telegram.org"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Telegram"
                 className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-primary hover:border-primary/40 transition-colors"
               >
-                {/* <Send size={16} /> */}
                 <TelegramIcon className="h-5" />
-              </a>
+              </a> */}
             </div>
           </div>
         </div>
@@ -365,9 +369,9 @@ export default function Footer() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-zinc-400 gap-4">
           <div>
             &copy; {new Date().getFullYear()} Aegis Trading Academy. All rights reserved.{" "}
-            <Link href="/disclaimer" className="hover:text-white transition">
+            {/* <Link href="/disclaimer" className="hover:text-white transition">
               Disclaimer
-            </Link>
+            </Link> */}
           </div>
 
           <div className="text-primary/80 ">Designed with precision.</div>

@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from "next/image";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -214,7 +214,7 @@ export default function Hero() {
         {/* Desktop Layout: Left Text, Center Logo, Right CTA */}
         <div className="w-full h-full flex flex-col md:flex-row items-center justify-between pt-16 pb-12">
           {/* LEFT SIDE: Compact Brand & Tagline */}
-          <div
+          {/* <div
             ref={leftTextRef}
             className="pointer-events-auto text-center md:text-left flex flex-col items-center md:items-start max-w-sm lg:max-w-md z-30 mb-6 md:mb-0"
           >
@@ -228,7 +228,10 @@ export default function Hero() {
             <p className="text-sm sm:text-base text-gray-300 font-normal leading-relaxed">
               Shaping disciplined traders for real market conditions.
             </p>
-          </div>
+          </div> */}
+
+          {/* dummy div */}
+          <div></div>
 
           {/* RIGHT BOTTOM: Single CTA Button */}
           <div

@@ -6,7 +6,7 @@ import { OrderStatus } from "@/generated/prisma/client";
 export const runtime = "nodejs";
 
 function formatCurrencyINR(amount: number): string {
-  return `₹${Math.round(amount).toLocaleString("en-IN")}`;
+  return `$${Math.round(amount).toLocaleString("en-IN")}`;
 }
 
 export async function GET(request: NextRequest) {
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (!admin) {
       return NextResponse.json(
         { success: false, message: "Unauthorized admin access" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
     console.error("GET /api/admin/dashboard/analytics error:", error);
     return NextResponse.json(
       { success: false, message: "Failed to fetch analytics data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

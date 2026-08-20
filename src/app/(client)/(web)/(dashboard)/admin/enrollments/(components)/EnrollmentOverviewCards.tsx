@@ -2,7 +2,15 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ShieldCheck, Calendar, Users, AlertTriangle, Clock, TrendingUp, TrendingDown } from "lucide-react";
+import {
+  ShieldCheck,
+  Calendar,
+  Users,
+  AlertTriangle,
+  Clock,
+  TrendingUp,
+  TrendingDown,
+} from "lucide-react";
 
 export interface EnrollmentKpi {
   id: string;
@@ -46,7 +54,7 @@ export function EnrollmentOverviewCards({
       id: "monthly-plans",
       title: "Monthly Plans",
       value: monthlyCount,
-      description: "₹999/month subscriptions",
+      description: "$999/month subscriptions",
       trend: "+6.2%",
       isUp: true,
       icon: Calendar,
@@ -55,7 +63,7 @@ export function EnrollmentOverviewCards({
       id: "yearly-plans",
       title: "Yearly Plans",
       value: yearlyCount,
-      description: "₹7,999/year subscriptions",
+      description: "$7,999/year subscriptions",
       trend: "+14.1%",
       isUp: true,
       icon: Users,
@@ -92,7 +100,7 @@ export function EnrollmentOverviewCards({
             duration: 0.4,
             stagger: 0.08,
             ease: "power2.out",
-          }
+          },
         );
       }
 
@@ -144,11 +152,7 @@ export function EnrollmentOverviewCards({
                     : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                 }`}
               >
-                {kpi.isUp ? (
-                  <TrendingUp size={11} />
-                ) : (
-                  <TrendingDown size={11} />
-                )}
+                {kpi.isUp ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
                 <span>{kpi.trend}</span>
               </div>
             </div>

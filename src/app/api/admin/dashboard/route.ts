@@ -12,7 +12,7 @@ import {
 export const runtime = "nodejs";
 
 function formatCurrencyINR(amount: number): string {
-  return `₹${Math.round(amount).toLocaleString("en-IN")}`;
+  return `$${Math.round(amount).toLocaleString("en-IN")}`;
 }
 
 function formatDateIST(dateInput: Date | string | null | undefined): string {
@@ -41,7 +41,10 @@ function getRelativeTime(dateInput: Date | string): string {
   return formatDateIST(dateInput);
 }
 
-function computeTrend(current: number, previous: number): { trend: string; isUp: boolean } {
+function computeTrend(
+  current: number,
+  previous: number,
+): { trend: string; isUp: boolean } {
   if (previous === 0) {
     if (current > 0) return { trend: "+100%", isUp: true };
     return { trend: "0%", isUp: true };
@@ -59,7 +62,7 @@ export async function GET(request: NextRequest) {
     if (!admin) {
       return NextResponse.json(
         { success: false, message: "Unauthorized admin access" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -121,11 +124,11 @@ export async function GET(request: NextRequest) {
 
     const currentRevenueSum = paidOrdersCurrent.reduce(
       (sum, o) => sum + Number(o.totalAmount || 0),
-      0
+      0,
     );
     const previousRevenueSum = paidOrdersPrevious.reduce(
       (sum, o) => sum + Number(o.totalAmount || 0),
-      0
+      0,
     );
     const totalRevenueValue = Number(totalRevenueAllTime._sum.totalAmount || 0);
 
@@ -244,7 +247,7 @@ export async function GET(request: NextRequest) {
       revenue: {
         title: "Total Revenue",
         value: totalRevenueValue,
-        prefix: "₹",
+        prefix: "$",
         description: `vs previous ${range.toLowerCase()}`,
         trend: revenueTrend.trend,
         isUp: revenueTrend.isUp,
@@ -353,15 +356,25 @@ export async function GET(request: NextRequest) {
     const activeYearlyCount = yearlySubscribersCount;
     const inactiveCount = await prisma.subscription.count({
       where: {
-        status: { in: [SubscriptionStatus.EXPIRED, SubscriptionStatus.CANCELLED, SubscriptionStatus.REVOKED, SubscriptionStatus.PENDING] },
+        status: {
+          in: [
+            SubscriptionStatus.EXPIRED,
+            SubscriptionStatus.CANCELLED,
+            SubscriptionStatus.REVOKED,
+            SubscriptionStatus.PENDING,
+          ],
+        },
         deletedAt: null,
       },
     });
 
     const totalSubCount = activeMonthlyCount + activeYearlyCount + inactiveCount;
-    const monthlyPercent = totalSubCount > 0 ? Math.round((activeMonthlyCount / totalSubCount) * 100) : 0;
-    const yearlyPercent = totalSubCount > 0 ? Math.round((activeYearlyCount / totalSubCount) * 100) : 0;
-    const inactivePercent = totalSubCount > 0 ? Math.max(0, 100 - monthlyPercent - yearlyPercent) : 0;
+    const monthlyPercent =
+      totalSubCount > 0 ? Math.round((activeMonthlyCount / totalSubCount) * 100) : 0;
+    const yearlyPercent =
+      totalSubCount > 0 ? Math.round((activeYearlyCount / totalSubCount) * 100) : 0;
+    const inactivePercent =
+      totalSubCount > 0 ? Math.max(0, 100 - monthlyPercent - yearlyPercent) : 0;
 
     const subscriptionsDistribution = {
       total: totalSubCount,
@@ -390,9 +403,18 @@ export async function GET(request: NextRequest) {
     const recentOrders = recentOrdersRaw.map((o) => {
       let statusStr = "Paid";
       if (o.status === OrderStatus.PAID) statusStr = "Paid";
-      else if (o.status === OrderStatus.PENDING_PAYMENT || o.status === OrderStatus.CREATED) statusStr = "Pending";
-      else if (o.status === OrderStatus.FAILED || o.status === OrderStatus.CANCELLED) statusStr = "Failed";
-      else if (o.status === OrderStatus.REFUNDED || o.status === OrderStatus.PARTIALLY_REFUNDED) statusStr = "Refunded";
+      else if (
+        o.status === OrderStatus.PENDING_PAYMENT ||
+        o.status === OrderStatus.CREATED
+      )
+        statusStr = "Pending";
+      else if (o.status === OrderStatus.FAILED || o.status === OrderStatus.CANCELLED)
+        statusStr = "Failed";
+      else if (
+        o.status === OrderStatus.REFUNDED ||
+        o.status === OrderStatus.PARTIALLY_REFUNDED
+      )
+        statusStr = "Refunded";
 
       return {
         id: o.orderNumber || `ORD-${o.id.slice(-6).toUpperCase()}`,
@@ -481,10 +503,10 @@ export async function GET(request: NextRequest) {
       iconCategory: act.action.includes("COURSE")
         ? "course"
         : act.action.includes("PAYMENT") || act.action.includes("ORDER")
-        ? "order"
-        : act.action.includes("CERTIFICATE")
-        ? "certificate"
-        : "user",
+          ? "order"
+          : act.action.includes("CERTIFICATE")
+            ? "certificate"
+            : "user",
     }));
 
     if (recentActivities.length === 0) {
@@ -566,8 +588,8 @@ export async function GET(request: NextRequest) {
           ? Math.round(
               c.userProgress.reduce(
                 (sum, p) => sum + Number(p.progressPercentage || 0),
-                0
-              ) / studentCount
+                0,
+              ) / studentCount,
             )
           : 0;
 
@@ -649,7 +671,7 @@ export async function GET(request: NextRequest) {
     console.error("GET /api/admin/dashboard error:", error);
     return NextResponse.json(
       { success: false, message: "Internal server error fetching dashboard data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

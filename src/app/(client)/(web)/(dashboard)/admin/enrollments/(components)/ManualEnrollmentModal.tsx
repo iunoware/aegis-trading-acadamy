@@ -81,7 +81,7 @@ export function ManualEnrollmentModal({
         {
           id: `pay-${Date.now()}`,
           plan,
-          amount: plan === "Yearly Plan" ? "₹7,999" : "₹999",
+          amount: plan === "Yearly Plan" ? "$7,999" : "$999",
           purchaseDate: todayStr,
           status: "Paid",
           transactionId: `MANUAL-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -92,7 +92,7 @@ export function ManualEnrollmentModal({
           id: `tl-1-${Date.now()}`,
           action: `Manual Enrollment (${plan})`,
           date: todayStr,
-          details: `Enrolled manually by admin pass (${plan === "Yearly Plan" ? "₹7,999" : "₹999"}).`,
+          details: `Enrolled manually by admin pass (${plan === "Yearly Plan" ? "$7,999" : "$999"}).`,
           type: "purchase",
         },
       ],
@@ -206,10 +206,10 @@ export function ManualEnrollmentModal({
               className="w-full bg-[#111113] border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-medium focus:outline-none focus:border-[#C9A227] focus:ring-1 focus:ring-[#C9A227] transition-all cursor-pointer"
             >
               <option value="Monthly Plan" className="bg-[#111113]">
-                Monthly Plan (₹999/mo)
+                Monthly Plan ($999/mo)
               </option>
               <option value="Yearly Plan" className="bg-[#111113]">
-                Yearly Plan (₹7,999/yr)
+                Yearly Plan ($7,999/yr)
               </option>
             </select>
           </div>
