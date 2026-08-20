@@ -42,14 +42,14 @@ export function EnrollmentsHeader({
           <span>Export Enrollments</span>
         </button>
 
-        <button
+        {/* <button
           type="button"
           onClick={onManualEnrollment}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black hover:brightness-110 shadow-[0_0_20px_rgba(201,162,39,0.25)] transition-all duration-200 cursor-pointer"
         >
           <Plus size={15} />
           <span>Manual Enrollment</span>
-        </button>
+        </button> */}
       </div>
     </div>
   );

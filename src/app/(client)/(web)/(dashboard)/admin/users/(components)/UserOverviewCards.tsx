@@ -2,15 +2,13 @@
 
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { Users, ShieldCheck, UserX, UserPlus, TrendingUp } from "lucide-react";
+import { Users, ShieldCheck, UserX, UserPlus } from "lucide-react";
 
 export interface UserKpi {
   id: string;
   title: string;
   value: number;
   description: string;
-  trend: string;
-  isUp: boolean;
   icon: React.ElementType;
 }
 
@@ -30,14 +28,17 @@ export function UserOverviewCards({
   const containerRef = useRef<HTMLDivElement>(null);
   const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
+  const currentMonthYear = new Date().toLocaleString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
   const kpis: UserKpi[] = [
     {
       id: "total-registered",
       title: "Total Registered Users",
       value: totalRegistered,
       description: "Master account directory",
-      trend: "+42%",
-      isUp: true,
       icon: Users,
     },
     {
@@ -45,8 +46,6 @@ export function UserOverviewCards({
       title: "Subscribed Users",
       value: subscribedCount,
       description: "Active Academy Pass",
-      trend: "+12.4%",
-      isUp: true,
       icon: ShieldCheck,
     },
     {
@@ -54,17 +53,13 @@ export function UserOverviewCards({
       title: "Non-Subscribed Users",
       value: nonSubscribedCount,
       description: "Free registered accounts",
-      trend: "+8.1%",
-      isUp: true,
       icon: UserX,
     },
     {
       id: "new-this-month",
       title: "New Users This Month",
       value: newThisMonth,
-      description: "Joined in August 2026",
-      trend: "+18.6%",
-      isUp: true,
+      description: `Joined in ${currentMonthYear}`,
       icon: UserPlus,
     },
   ];
@@ -120,15 +115,10 @@ export function UserOverviewCards({
             key={kpi.id}
             className="group rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-4.5 flex flex-col justify-between hover:border-[#C9A227]/40 hover:bg-[#151518] transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
           >
-            {/* Top Row: Icon & Trend */}
+            {/* Top Row: Icon */}
             <div className="flex items-center justify-between mb-3">
               <div className="w-9 h-9 rounded-xl bg-[#C9A227]/10 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] shadow-sm group-hover:scale-105 transition-transform duration-200">
                 <IconComponent size={18} />
-              </div>
-
-              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-mono font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <TrendingUp size={12} />
-                <span>{kpi.trend}</span>
               </div>
             </div>
 
