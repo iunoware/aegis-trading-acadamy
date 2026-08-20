@@ -12,6 +12,10 @@ import {
 
 export const runtime = "nodejs";
 
+// for pull
+// for pull
+// for pull
+
 interface CreatePaymentRequestBody {
   planId?: string;
 }
@@ -33,7 +37,10 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "Unauthorized",
           ...(process.env.NODE_ENV !== "production"
-            ? { errorCode: "UNAUTHORIZED", details: "Student session invalid or user not logged in" }
+            ? {
+                errorCode: "UNAUTHORIZED",
+                details: "Student session invalid or user not logged in",
+              }
             : {}),
         },
         { status: 401 },
@@ -41,7 +48,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate request body
-    const body = (await request.json().catch(() => ({}))) as CreatePaymentRequestBody;
+    const body = (await request
+      .json()
+      .catch(() => ({}))) as CreatePaymentRequestBody;
     const planId = body.planId;
 
     if (!planId || typeof planId !== "string" || !planId.trim()) {
@@ -50,7 +59,10 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "Invalid planId provided.",
           ...(process.env.NODE_ENV !== "production"
-            ? { errorCode: "INVALID_PLAN_ID", details: "Request body missing valid planId string" }
+            ? {
+                errorCode: "INVALID_PLAN_ID",
+                details: "Request body missing valid planId string",
+              }
             : {}),
         },
         { status: 400 },
@@ -81,7 +93,10 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "Subscription plan not found or inactive.",
           ...(process.env.NODE_ENV !== "production"
-            ? { errorCode: "PLAN_NOT_FOUND", details: `No active plan found with id: ${planId}` }
+            ? {
+                errorCode: "PLAN_NOT_FOUND",
+                details: `No active plan found with id: ${planId}`,
+              }
             : {}),
         },
         { status: 404 },
@@ -94,7 +109,10 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "Unsupported subscription plan type.",
           ...(process.env.NODE_ENV !== "production"
-            ? { errorCode: "UNSUPPORTED_PLAN_TYPE", details: `Plan type ${plan.type} is not supported` }
+            ? {
+                errorCode: "UNSUPPORTED_PLAN_TYPE",
+                details: `Plan type ${plan.type} is not supported`,
+              }
             : {}),
         },
         { status: 400 },
@@ -110,7 +128,10 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "Invalid plan price configured.",
           ...(process.env.NODE_ENV !== "production"
-            ? { errorCode: "INVALID_PLAN_PRICE", details: `Configured price is ${plan.price}` }
+            ? {
+                errorCode: "INVALID_PLAN_PRICE",
+                details: `Configured price is ${plan.price}`,
+              }
             : {}),
         },
         { status: 400 },
@@ -169,7 +190,9 @@ export async function POST(request: NextRequest) {
     console.log("NOWPAYMENTS_API_KEY configured:", isApiKeyConfigured);
 
     if (!isApiKeyConfigured) {
-      console.error("[POST /api/payment/create] NOWPAYMENTS_API_KEY environment variable is not configured.");
+      console.error(
+        "[POST /api/payment/create] NOWPAYMENTS_API_KEY environment variable is not configured.",
+      );
 
       await prisma.$transaction([
         prisma.payment.update({
@@ -195,7 +218,11 @@ export async function POST(request: NextRequest) {
           success: false,
           message: "Payment initialization failed. Please contact support.",
           ...(process.env.NODE_ENV !== "production"
-            ? { errorCode: "MISSING_API_KEY", details: "NOWPAYMENTS_API_KEY is not defined in environment variables" }
+            ? {
+                errorCode: "MISSING_API_KEY",
+                details:
+                  "NOWPAYMENTS_API_KEY is not defined in environment variables",
+              }
             : {}),
         },
         { status: 500 },
@@ -203,8 +230,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Build IPN Callback URL
-    const host = request.headers.get("x-forwarded-host") || request.headers.get("host");
-    const proto = request.headers.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
+    const host =
+      request.headers.get("x-forwarded-host") || request.headers.get("host");
+    const proto =
+      request.headers.get("x-forwarded-proto") ||
+      (host?.includes("localhost") ? "http" : "https");
     const origin = host
       ? `${proto}://${host}`
       : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -298,7 +328,9 @@ export async function POST(request: NextRequest) {
           where: { id: payment.id },
           data: {
             status: PaymentStatus.FAILED,
-            failureCode: status ? `NOWPAYMENTS_HTTP_${status}` : "NOWPAYMENTS_ERROR",
+            failureCode: status
+              ? `NOWPAYMENTS_HTTP_${status}`
+              : "NOWPAYMENTS_ERROR",
             failureMessage: String(errorMessage).substring(0, 500),
             failedAt: new Date(),
           },
@@ -327,12 +359,16 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error: any) {
-    console.error(`[PAYMENT CREATE] Internal server error at step [${currentStep}]:`, error?.message || error);
+    console.error(
+      `[PAYMENT CREATE] Internal server error at step [${currentStep}]:`,
+      error?.message || error,
+    );
 
     return NextResponse.json(
       {
         success: false,
-        message: "Something went wrong while starting the payment. Please try again.",
+        message:
+          "Something went wrong while starting the payment. Please try again.",
         ...(process.env.NODE_ENV !== "production"
           ? {
               errorCode: "INTERNAL_SERVER_ERROR",

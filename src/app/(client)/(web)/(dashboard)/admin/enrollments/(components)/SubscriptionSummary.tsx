@@ -28,7 +28,7 @@ export function SubscriptionSummary({ enrollment }: SubscriptionSummaryProps) {
   let remainingDays = 0;
   if (enrollment.status !== "Expired" && enrollment.status !== "Cancelled") {
     const expTime = new Date(enrollment.expiryDate).getTime();
-    const nowTime = new Date("2026-08-01").getTime();
+    const nowTime = new Date().getTime();
     const diff = expTime - nowTime;
     remainingDays = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   }

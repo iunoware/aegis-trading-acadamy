@@ -8,6 +8,7 @@ import { UserOverviewCards } from "./(components)/UserOverviewCards";
 import { UsersTable, User } from "./(components)/UsersTable";
 import { UserSidebar } from "@/components/sidebar/UserSidebar";
 import { EditUserModal } from "./(components)/EditUserModal";
+import { DeleteUserModal } from "./(components)/DeleteUserModal";
 import {
   getUsers,
   updateUser,
@@ -19,6 +20,7 @@ export default function UserManagementPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [deletingUser, setDeletingUser] = useState<User | null>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
   // Fetch users from API using users.service
@@ -80,10 +82,8 @@ export default function UserManagementPage() {
     if (!u.joinedDate) return false;
     const joinedLower = u.joinedDate.toLowerCase();
     return (
-      (joinedLower.includes(currentMonthStr) &&
-        joinedLower.includes(currentYearStr)) ||
-      joinedLower.includes("jul 2026") ||
-      joinedLower.includes("aug 2026")
+      joinedLower.includes(currentMonthStr) &&
+      joinedLower.includes(currentYearStr)
     );
   }).length;
 
@@ -144,8 +144,16 @@ export default function UserManagementPage() {
     }
   };
 
-  const handleDeleteUser = async (userId: string) => {
-    const userToDelete = users.find((u) => u.id === userId);
+  const handleOpenDeleteModal = (userId: string) => {
+    const target = users.find((u) => u.id === userId);
+    if (target) {
+      setDeletingUser(target);
+    }
+  };
+
+  const handleConfirmDeleteUser = async (userId: string) => {
+    const target = users.find((u) => u.id === userId);
+    const userName = target?.name || "User";
     try {
       const data = await deleteUser(userId);
 
@@ -154,13 +162,13 @@ export default function UserManagementPage() {
         if (selectedUser?.id === userId) {
           setSelectedUser(null);
         }
-        toast.error(`User "${userToDelete?.name || "User"}" deleted.`);
+        toast.success(`User "${userName}" deleted permanently from database.`);
       } else {
-        toast.error(data.message || "Failed to delete user");
+        toast.error(data.message || "Failed to delete user from database");
       }
     } catch (error: any) {
       console.error("Error deleting user:", error);
-      toast.error(error?.message || "Failed to delete user");
+      toast.error(error?.message || "Failed to delete user from database");
     }
   };
 
@@ -173,8 +181,7 @@ export default function UserManagementPage() {
         .concat(
           users.map(
             (u) =>
-              `"${u.id}","${u.firstName}","${u.lastName}","${u.email}","${u.phone}","${
-                u.isSubscribed ? "Subscribed" : "Not Subscribed"
+              `"${u.id}","${u.firstName}","${u.lastName}","${u.email}","${u.phone}","${u.isSubscribed ? "Subscribed" : "Not Subscribed"
               }","${u.accountStatus}","${u.joinedDate}","${u.lastLogin}"`,
           ),
         )
@@ -226,7 +233,7 @@ export default function UserManagementPage() {
           users={users}
           onSelectUser={(user) => setSelectedUser(user)}
           onEditUser={(user) => setEditingUser(user)}
-          onDeleteUser={handleDeleteUser}
+          onDeleteUser={handleOpenDeleteModal}
         />
       )}
 
@@ -237,7 +244,7 @@ export default function UserManagementPage() {
         onClose={() => setSelectedUser(null)}
         onEditUser={(user) => setEditingUser(user)}
         onToggleStatus={handleToggleAccountStatus}
-        onDeleteUser={handleDeleteUser}
+        onDeleteUser={handleOpenDeleteModal}
         onUserUpdated={handleUserUpdated}
       />
 
@@ -246,6 +253,14 @@ export default function UserManagementPage() {
         user={editingUser}
         onClose={() => setEditingUser(null)}
         onSave={handleEditSave}
+      />
+
+      {/* 6. Delete User Confirmation Modal */}
+      <DeleteUserModal
+        isOpen={!!deletingUser}
+        user={deletingUser}
+        onClose={() => setDeletingUser(null)}
+        onConfirmDelete={handleConfirmDeleteUser}
       />
     </div>
   );

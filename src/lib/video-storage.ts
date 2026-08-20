@@ -8,7 +8,7 @@ const STORAGE_DIR =
   process.env.VIDEO_STORAGE_DIR || path.join(process.cwd(), "storage", "videos");
 
 const THUMB_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
-const THUMB_MAX_BYTES = 5 * 1024 * 1024;
+const THUMB_MAX_BYTES = 50 * 1024 * 1024;
 const THUMB_DIR = path.join(process.cwd(), "public", "uploads", "course-thumbnails");
 
 /**

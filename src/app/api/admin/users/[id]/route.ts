@@ -128,7 +128,7 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 
 /**
  * DELETE /api/admin/users/:id
- * Soft delete by setting deletedAt timestamp
+ * Permanent hard delete: clears user and linked records from database
  */
 export async function DELETE(_request: Request, { params }: RouteProps) {
   try {
@@ -143,45 +143,54 @@ export async function DELETE(_request: Request, { params }: RouteProps) {
 
     const { id } = await params;
 
-    const existingUser = await prisma.user.findFirst({
-      where: { id, deletedAt: null },
+    const existingUser = await prisma.user.findUnique({
+      where: { id },
     });
 
     if (!existingUser) {
       return NextResponse.json(
-        { success: false, message: "User not found or already deleted" },
+        { success: false, message: "User not found in database" },
         { status: 404 }
       );
     }
 
-    // Soft delete by updating deletedAt
-    await prisma.user.update({
-      where: { id },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
-
-    // Log deletion activity
-    await prisma.userActivity.create({
-      data: {
-        userId: id,
-        actorId: adminUser.id,
-        action: ActivityAction.ACCOUNT_DELETED,
-        title: "Account Deleted",
-        details: `User account soft deleted by administrator (${adminUser.name}).`,
-      },
-    }).catch(() => null);
+    // Perform hard delete inside transaction to clear user and related records from database
+    await prisma.$transaction([
+      prisma.subscriptionExtension.deleteMany({
+        where: { OR: [{ subscription: { userId: id } }, { extendedById: id }] },
+      }),
+      prisma.subscriptionNote.deleteMany({
+        where: { OR: [{ subscription: { userId: id } }, { authorId: id }] },
+      }),
+      prisma.subscriptionEvent.deleteMany({
+        where: { OR: [{ subscription: { userId: id } }, { actorId: id }] },
+      }),
+      prisma.subscription.deleteMany({ where: { userId: id } }),
+      prisma.refund.deleteMany({ where: { userId: id } }),
+      prisma.payment.deleteMany({ where: { userId: id } }),
+      prisma.order.deleteMany({ where: { userId: id } }),
+      prisma.userActivity.deleteMany({
+        where: { OR: [{ userId: id }, { actorId: id }] },
+      }),
+      prisma.activityLog.deleteMany({
+        where: { OR: [{ actorId: id }, { targetId: id }] },
+      }),
+      prisma.user.updateMany({
+        where: { deletedById: id },
+        data: { deletedById: null },
+      }),
+      prisma.user.delete({ where: { id } }),
+    ]);
 
     return NextResponse.json({
       success: true,
-      message: "User deleted successfully",
+      message: `User ${existingUser.name} deleted permanently from database`,
       id,
     });
   } catch (error) {
     console.error("DELETE /api/admin/users/[id] error:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to delete user" },
+      { success: false, message: "Failed to delete user from database" },
       { status: 500 }
     );
   }
