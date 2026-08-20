@@ -1,13 +1,12 @@
 "use client";
 
-import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
   User,
   LogOut,
   Shield,
   Award,
-  Activity,
+  // Activity,
   Mail,
   Phone,
   MessageSquare,
@@ -90,9 +89,7 @@ export default function StudentDashboardPage() {
             <div className="space-y-3 text-xs">
               <div className="flex items-center gap-2 text-zinc-300">
                 <Mail size={14} className="text-zinc-500 shrink-0" />
-                <span className="truncate">
-                  {user?.email || "Not specified"}
-                </span>
+                <span className="truncate">{user?.email || "Not specified"}</span>
               </div>
 
               {user?.phone && (
@@ -137,9 +134,7 @@ export default function StudentDashboardPage() {
                 <span className="text-[10px] font-mono text-zinc-400 uppercase block">
                   Active Plan
                 </span>
-                <p className="text-xs font-bold text-white">
-                  Academy Student Access
-                </p>
+                <p className="text-xs font-bold text-white">Academy Student Access</p>
               </div>
 
               <p className="text-xs text-zinc-400">
@@ -149,7 +144,7 @@ export default function StudentDashboardPage() {
           </div>
 
           {/* Activity Overview Card */}
-          <div className="rounded-2xl border border-white/10 bg-[#111113]/90 p-6 backdrop-blur-xl space-y-4">
+          {/* <div className="rounded-2xl border border-white/10 bg-[#111113]/90 p-6 backdrop-blur-xl space-y-4">
             <div className="flex items-center gap-3 pb-3 border-b border-white/10">
               <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
                 <Activity size={20} />
@@ -172,7 +167,7 @@ export default function StudentDashboardPage() {
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </main>

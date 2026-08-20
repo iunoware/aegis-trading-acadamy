@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -15,7 +17,7 @@ import {
   Calendar,
   Clock,
   AlertCircle,
-  UserPlus,
+  // UserPlus,
   ChevronRight,
   MessageSquareQuote,
   FolderTree,
@@ -235,7 +237,7 @@ export function DashboardHeader({ admin }: { admin: AdminUser | null }) {
         <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <a
             href="/admin/courses"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black transition-all duration-200 cursor-pointer hover:brightness-110"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black transition-all duration-200 cursor-pointer hover:brightness-110"
           >
             <Plus size={14} className="stroke-3" />
             <span>Add Course</span>
@@ -279,7 +281,7 @@ export function KPISection({
       id: "revenue",
       title: kpis?.revenue?.title || "Total Revenue",
       value: kpis?.revenue?.value ?? 0,
-      prefix: "₹",
+      prefix: "$",
       description: kpis?.revenue?.description || "vs previous period",
       trend: kpis?.revenue?.trend || "0%",
       isUp: kpis?.revenue?.isUp ?? true,
@@ -358,7 +360,7 @@ export function KPISection({
           ease: "power2.out",
           onUpdate: () => {
             if (numEl) {
-              if (kpi.prefix === "₹") {
+              if (kpi.prefix === "$") {
                 numEl.innerText = Math.round(obj.val).toLocaleString("en-IN");
               } else {
                 numEl.innerText = Math.round(obj.val).toLocaleString("en-US");
@@ -417,11 +419,7 @@ export function KPISection({
                     : "bg-rose-500/10 text-rose-400 border border-rose-500/20"
                 }`}
               >
-                {kpi.isUp ? (
-                  <TrendingUp size={12} />
-                ) : (
-                  <TrendingDown size={12} />
-                )}
+                {kpi.isUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                 <span>{kpi.trend}</span>
               </div>
             </div>
@@ -432,9 +430,7 @@ export function KPISection({
                 {kpi.title}
               </span>
               <div className="text-2xl font-extrabold text-white font-sans tracking-tight flex items-baseline gap-0.5">
-                {kpi.prefix && (
-                  <span className="text-[#C9A227]">{kpi.prefix}</span>
-                )}
+                {kpi.prefix && <span className="text-[#C9A227]">{kpi.prefix}</span>}
                 <span
                   ref={(el) => {
                     numberRefs.current[idx] = el;
@@ -489,8 +485,7 @@ export function AnalyticsRow({
       buckets.length > 1
         ? (idx / (buckets.length - 1)) * (svgWidth - 2 * padding) + padding
         : svgWidth / 2;
-    const y =
-      svgHeight - padding - (b.amount / maxAmount) * (svgHeight - 2 * padding);
+    const y = svgHeight - padding - (b.amount / maxAmount) * (svgHeight - 2 * padding);
     return { x, y, amount: b.amount, label: b.label };
   });
 
@@ -537,7 +532,7 @@ export function AnalyticsRow({
             <h3 className="text-lg font-bold text-white font-sans flex items-center gap-2">
               <span>Revenue Analytics</span>
               <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-[#C9A227]/10 text-[#C9A227] border border-[#C9A227]/30">
-                INR (₹)
+                USD ($)
               </span>
             </h3>
             <p className="text-xs text-zinc-400 mt-0.5">
@@ -585,13 +580,7 @@ export function AnalyticsRow({
                 fill="none"
               >
                 <defs>
-                  <linearGradient
-                    id="revenueGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
+                  <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#C9A227" stopOpacity="0.35" />
                     <stop offset="100%" stopColor="#C9A227" stopOpacity="0.0" />
                   </linearGradient>
@@ -663,7 +652,7 @@ export function AnalyticsRow({
           {/* Peak Tooltip Overlay */}
           <div className="absolute top-2 right-4 bg-[#18181c] border border-[#C9A227]/40 rounded-xl px-3 py-1.5 text-xs font-mono text-white shadow-xl flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#C9A227] animate-ping" />
-            <span>{revenueChart?.peakDayLabel || "Peak: ₹0"}</span>
+            <span>{revenueChart?.peakDayLabel || "Peak: $0"}</span>
           </div>
         </div>
 
@@ -693,10 +682,7 @@ export function AnalyticsRow({
 
         {/* SVG Donut Chart */}
         <div className="relative w-full h-45 my-4 flex items-center justify-center">
-          <svg
-            className="w-42.5 h-42.5 transform -rotate-90"
-            viewBox="0 0 100 100"
-          >
+          <svg className="w-42.5 h-42.5 transform -rotate-90" viewBox="0 0 100 100">
             {/* Background Track */}
             <circle
               cx="50"
@@ -776,9 +762,7 @@ export function AnalyticsRow({
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full bg-zinc-600" />
-              <span className="text-zinc-300 font-medium">
-                Expired / Inactive
-              </span>
+              <span className="text-zinc-300 font-medium">Expired / Inactive</span>
             </div>
             <span className="font-mono text-zinc-400">
               {subscriptionsDistribution?.inactive?.count ?? 0} ({iPct}%)
@@ -852,14 +836,11 @@ export function SecondRowCharts({
                     statusStyle =
                       "bg-emerald-500/10 text-emerald-400 border-emerald-500/30";
                   else if (order.status === "Pending")
-                    statusStyle =
-                      "bg-amber-500/10 text-amber-400 border-amber-500/30";
+                    statusStyle = "bg-amber-500/10 text-amber-400 border-amber-500/30";
                   else if (order.status === "Failed")
-                    statusStyle =
-                      "bg-rose-500/10 text-rose-400 border-rose-500/30";
+                    statusStyle = "bg-rose-500/10 text-rose-400 border-rose-500/30";
                   else if (order.status === "Refunded")
-                    statusStyle =
-                      "bg-purple-500/10 text-purple-400 border-purple-500/30";
+                    statusStyle = "bg-purple-500/10 text-purple-400 border-purple-500/30";
 
                   return (
                     <tr
@@ -870,9 +851,7 @@ export function SecondRowCharts({
                         {order.id}
                       </td>
                       <td className="py-3 px-3">
-                        <div className="font-semibold text-white">
-                          {order.student}
-                        </div>
+                        <div className="font-semibold text-white">{order.student}</div>
                         <div className="text-[10px] text-zinc-400 font-mono">
                           {order.email}
                         </div>
@@ -940,12 +919,8 @@ export function SecondRowCharts({
                     {usr.avatar}
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-white">
-                      {usr.name}
-                    </div>
-                    <div className="text-[11px] text-zinc-400 font-mono">
-                      {usr.email}
-                    </div>
+                    <div className="text-xs font-bold text-white">{usr.name}</div>
+                    <div className="text-[11px] text-zinc-400 font-mono">{usr.email}</div>
                   </div>
                 </div>
 
@@ -953,9 +928,7 @@ export function SecondRowCharts({
                   <div className="text-xs font-semibold text-[#C9A227] font-mono">
                     {usr.plan}
                   </div>
-                  <div className="text-[10px] font-mono text-zinc-500">
-                    {usr.joined}
-                  </div>
+                  <div className="text-[10px] font-mono text-zinc-500">{usr.joined}</div>
                 </div>
               </div>
             ))
@@ -1021,9 +994,7 @@ export function ThirdRow({
                     {item.avatar}
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-white">
-                      {item.student}
-                    </div>
+                    <div className="text-xs font-bold text-white">{item.student}</div>
                     <div className="text-[11px] text-zinc-400 truncate max-w-50">
                       {item.course}
                     </div>
@@ -1034,9 +1005,7 @@ export function ThirdRow({
                   <span className="inline-block px-2 py-0.5 rounded-md bg-[#C9A227]/10 text-[#C9A227] text-[10px] font-mono border border-[#C9A227]/20 mb-1">
                     {item.plan}
                   </span>
-                  <div className="text-[10px] font-mono text-zinc-500">
-                    {item.time}
-                  </div>
+                  <div className="text-[10px] font-mono text-zinc-500">{item.time}</div>
                 </div>
               </div>
             ))
@@ -1071,9 +1040,7 @@ export function ThirdRow({
                 className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
               >
                 <div>
-                  <div className="text-xs font-bold text-white">
-                    {plan.name}
-                  </div>
+                  <div className="text-xs font-bold text-white">{plan.name}</div>
                   <div className="text-[11px] font-mono text-zinc-400">
                     {plan.billing}
                   </div>
@@ -1128,12 +1095,8 @@ export function FourthRow({
                   <ShieldCheck size={12} className="text-[#C9A227]" />
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white font-sans">
-                    {act.title}
-                  </span>
-                  <span className="text-[10px] font-mono text-zinc-500">
-                    {act.time}
-                  </span>
+                  <span className="font-bold text-white font-sans">{act.title}</span>
+                  <span className="text-[10px] font-mono text-zinc-500">{act.time}</span>
                 </div>
                 <p className="text-xs text-zinc-400 font-normal leading-relaxed">
                   {act.detail}
@@ -1187,9 +1150,7 @@ export function BottomSection({
                 className="flex items-center justify-between p-3.5 rounded-xl bg-white/3 border border-white/5"
               >
                 <div>
-                  <div className="text-xs font-bold text-white">
-                    {plan.name}
-                  </div>
+                  <div className="text-xs font-bold text-white">{plan.name}</div>
                   <div className="text-[11px] font-mono text-zinc-400">
                     {plan.billing}
                   </div>
@@ -1212,9 +1173,7 @@ export function BottomSection({
       {/* Top Courses Summary (6 Cols) */}
       <div className="lg:col-span-6 rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-5 sm:p-6 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         <div className="mb-4">
-          <h3 className="text-lg font-bold text-white font-sans">
-            Top Enrolled Courses
-          </h3>
+          <h3 className="text-lg font-bold text-white font-sans">Top Enrolled Courses</h3>
           <p className="text-xs text-zinc-400 mt-0.5">
             Highest engagement trading modules.
           </p>
@@ -1320,10 +1279,7 @@ export function FooterStats({
                 {loading ? "..." : stat.value}
               </span>
             </div>
-            <IconComp
-              size={16}
-              className="text-[#C9A227] shrink-0 opacity-80"
-            />
+            <IconComp size={16} className="text-[#C9A227] shrink-0 opacity-80" />
           </div>
         );
       })}
