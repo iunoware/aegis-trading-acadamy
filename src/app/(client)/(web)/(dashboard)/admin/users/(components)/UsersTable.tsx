@@ -61,13 +61,20 @@ interface UsersTableProps {
 export function UsersTable({
   users,
   onSelectUser,
-  onEditUser,
+  // onEditUser,
   onDeleteUser,
 }: UsersTableProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOption, setFilterOption] = useState<string>("ALL");
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "name">("newest");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 10;
   const tableRef = useRef<HTMLDivElement>(null);
+
+  // Reset pagination on filter or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filterOption, sortBy]);
 
   // GSAP animation on search/filter/sort updates
   useEffect(() => {
@@ -78,7 +85,7 @@ export function UsersTable({
         { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
       );
     }
-  }, [searchQuery, filterOption, sortBy]);
+  }, [searchQuery, filterOption, sortBy, currentPage]);
 
   // Filtering Logic
   const filteredUsers = users
@@ -92,29 +99,44 @@ export function UsersTable({
 
       let matchesFilter = true;
       if (filterOption === "SUBSCRIBED") matchesFilter = u.isSubscribed;
-      else if (filterOption === "NOT_SUBSCRIBED") matchesFilter = !u.isSubscribed;
-      else if (filterOption === "ACTIVE") matchesFilter = u.accountStatus === "Active";
+      else if (filterOption === "NOT_SUBSCRIBED")
+        matchesFilter = !u.isSubscribed;
+      else if (filterOption === "ACTIVE")
+        matchesFilter = u.accountStatus === "Active";
       else if (filterOption === "SUSPENDED")
         matchesFilter = u.accountStatus === "Suspended";
       else if (filterOption === "RECENT") {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         matchesFilter =
-          new Date(u.joinedDate).getTime() > new Date("2026-07-01").getTime();
+          new Date(u.joinedDate).getTime() >= thirtyDaysAgo.getTime();
       }
 
       return matchesSearch && matchesFilter;
     })
     .sort((a, b) => {
       if (sortBy === "newest") {
-        return new Date(b.joinedDate).getTime() - new Date(a.joinedDate).getTime();
+        return (
+          new Date(b.joinedDate).getTime() - new Date(a.joinedDate).getTime()
+        );
       }
       if (sortBy === "oldest") {
-        return new Date(a.joinedDate).getTime() - new Date(b.joinedDate).getTime();
+        return (
+          new Date(a.joinedDate).getTime() - new Date(b.joinedDate).getTime()
+        );
       }
       if (sortBy === "name") {
         return a.name.localeCompare(b.name);
       }
       return 0;
     });
+
+  const totalFilteredCount = filteredUsers.length;
+  const totalPages = Math.max(1, Math.ceil(totalFilteredCount / pageSize));
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <div className="space-y-4">
@@ -171,7 +193,9 @@ export function UsersTable({
             <ArrowUpDown size={13} className="text-zinc-400" />
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as "newest" | "oldest" | "name")}
+              onChange={(e) =>
+                setSortBy(e.target.value as "newest" | "oldest" | "name")
+              }
               className="bg-transparent text-xs text-white font-medium focus:outline-none cursor-pointer"
             >
               <option value="newest" className="bg-[#111113]">
@@ -202,14 +226,16 @@ export function UsersTable({
                 <th className="py-3.5 px-4 font-semibold">Contact Details</th>
                 <th className="py-3.5 px-4 font-semibold">Subscription</th>
                 <th className="py-3.5 px-4 font-semibold">Joined Date</th>
-                <th className="py-3.5 px-4 font-semibold">Last Login</th>
+                {/* <th className="py-3.5 px-4 font-semibold">Last Login</th> */}
                 <th className="py-3.5 px-4 font-semibold">Account Status</th>
-                <th className="py-3.5 px-4 font-semibold text-right">Actions</th>
+                <th className="py-3.5 px-4 font-semibold text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 text-xs text-zinc-300">
-              {filteredUsers.length > 0 ? (
-                filteredUsers.map((user) => {
+              {paginatedUsers.length > 0 ? (
+                paginatedUsers.map((user) => {
                   const initials =
                     `${user.firstName[0] || ""}${user.lastName[0] || ""}`.toUpperCase();
 
@@ -241,7 +267,7 @@ export function UsersTable({
                         <div className="flex flex-col gap-0.5 font-mono text-[11px]">
                           <span className="flex items-center gap-1 text-zinc-400">
                             <DiscordIcon className="text-zinc-500 h-3.5" />
-                            {user.discordName}
+                            {user.discordName || "—"}
                           </span>
                         </div>
                       </td>
@@ -255,12 +281,12 @@ export function UsersTable({
                           </span>
                           <span className="flex items-center gap-1 text-zinc-400">
                             <Phone size={11} className="text-zinc-500" />
-                            {user.phone}
+                            {user.phone || "—"}
                           </span>
                         </div>
                       </td>
 
-                      {/* Subscription Status (Subscribed / Not Subscribed ONLY) */}
+                      {/* Subscription Status */}
                       <td className="py-3.5 px-4 font-mono">
                         {user.isSubscribed ? (
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
@@ -277,11 +303,6 @@ export function UsersTable({
                       {/* Joined Date */}
                       <td className="py-3.5 px-4 font-mono text-[11px] text-zinc-400">
                         {user.joinedDate}
-                      </td>
-
-                      {/* Last Login */}
-                      <td className="py-3.5 px-4 font-mono text-[11px] text-zinc-300">
-                        {user.lastLogin}
                       </td>
 
                       {/* Account Status */}
@@ -308,14 +329,6 @@ export function UsersTable({
                           <button
                             type="button"
                             onClick={() => onSelectUser(user)}
-                            title="View User Details"
-                            className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 hover:border-[#C9A227]/40 hover:bg-[#C9A227]/10 text-zinc-400 hover:text-[#C9A227] flex items-center justify-center cursor-pointer transition-colors"
-                          >
-                            <Eye size={13} />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => onEditUser(user)}
                             title="Edit User Info"
                             className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 hover:border-sky-500/40 hover:bg-sky-500/10 text-zinc-400 hover:text-sky-400 flex items-center justify-center cursor-pointer transition-colors"
                           >
@@ -336,7 +349,10 @@ export function UsersTable({
                 })
               ) : (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-zinc-500 font-mono">
+                  <td
+                    colSpan={7}
+                    className="py-12 text-center text-zinc-500 font-mono"
+                  >
                     No registered users match your search criteria.
                   </td>
                 </tr>
@@ -347,8 +363,8 @@ export function UsersTable({
 
         {/* Mobile Responsive User Cards */}
         <div className="block md:hidden divide-y divide-white/5">
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map((user) => (
+          {paginatedUsers.length > 0 ? (
+            paginatedUsers.map((user) => (
               <div
                 key={user.id}
                 onClick={() => onSelectUser(user)}
@@ -360,7 +376,9 @@ export function UsersTable({
                       {`${user.firstName[0] || ""}${user.lastName[0] || ""}`}
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">{user.name}</h4>
+                      <h4 className="text-sm font-bold text-white">
+                        {user.name}
+                      </h4>
                       <span className="text-[11px] font-mono text-zinc-400">
                         {user.email}
                       </span>
@@ -380,11 +398,15 @@ export function UsersTable({
 
                 <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5 text-xs font-mono">
                   <div>
-                    <span className="text-zinc-500 block text-[10px]">JOINED:</span>
+                    <span className="text-zinc-500 block text-[10px]">
+                      JOINED:
+                    </span>
                     <span className="text-zinc-300">{user.joinedDate}</span>
                   </div>
                   <div>
-                    <span className="text-zinc-500 block text-[10px]">STATUS:</span>
+                    <span className="text-zinc-500 block text-[10px]">
+                      STATUS:
+                    </span>
                     <span
                       className={`font-bold ${
                         user.accountStatus === "Active"
@@ -405,6 +427,45 @@ export function UsersTable({
           )}
         </div>
       </div>
+
+      {/* Pagination Footer */}
+      {totalFilteredCount > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#111113]/90 backdrop-blur-xl border border-white/10 text-xs font-mono text-zinc-400 shadow-md">
+          <div>
+            Showing{" "}
+            <span className="font-bold text-white">
+              {Math.min((currentPage - 1) * pageSize + 1, totalFilteredCount)}
+            </span>{" "}
+            to{" "}
+            <span className="font-bold text-white">
+              {Math.min(currentPage * pageSize, totalFilteredCount)}
+            </span>{" "}
+            of <span className="font-bold text-white">{totalFilteredCount}</span> registered users
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-300 hover:text-white transition-colors cursor-pointer"
+            >
+              Previous
+            </button>
+            <span className="px-3.5 py-1.5 rounded-xl bg-[#09090b] border border-white/10 text-white font-bold">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              type="button"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-300 hover:text-white transition-colors cursor-pointer"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

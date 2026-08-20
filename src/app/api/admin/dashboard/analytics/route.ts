@@ -5,8 +5,9 @@ import { OrderStatus } from "@/generated/prisma/client";
 
 export const runtime = "nodejs";
 
-function formatCurrencyINR(amount: number): string {
-  return `$${Math.round(amount).toLocaleString("en-IN")}`;
+function formatCurrency(amount: number): string {
+  if (isNaN(amount) || !isFinite(amount)) return "$0";
+  return `$${Math.round(amount).toLocaleString("en-US")}`;
 }
 
 export async function GET(request: NextRequest) {
@@ -89,7 +90,7 @@ export async function GET(request: NextRequest) {
     buckets.forEach((b) => {
       if (b.amount > peakDayAmount) {
         peakDayAmount = b.amount;
-        peakDayLabel = `${b.label}: ${formatCurrencyINR(b.amount)}`;
+        peakDayLabel = `${b.label}: ${formatCurrency(b.amount)}`;
       }
     });
 

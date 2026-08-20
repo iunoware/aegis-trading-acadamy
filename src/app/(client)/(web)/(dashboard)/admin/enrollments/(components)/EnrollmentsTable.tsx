@@ -75,7 +75,14 @@ export function EnrollmentsTable({
   const [sortBy, setSortBy] = useState<"purchaseDate" | "expiryDate" | "name">(
     "purchaseDate",
   );
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const pageSize = 10;
   const tableRef = useRef<HTMLDivElement>(null);
+
+  // Reset pagination on filter or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, planFilter, statusFilter, sortBy]);
 
   // GSAP animation on search/filter/sort updates
   useEffect(() => {
@@ -86,13 +93,13 @@ export function EnrollmentsTable({
         { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" },
       );
     }
-  }, [searchQuery, planFilter, statusFilter, sortBy]);
+  }, [searchQuery, planFilter, statusFilter, sortBy, currentPage]);
 
   // Helper to compute remaining days
   const getRemainingDays = (expiryDateStr: string, status: Enrollment["status"]) => {
     if (status === "Expired" || status === "Cancelled") return 0;
     const expTime = new Date(expiryDateStr).getTime();
-    const nowTime = new Date("2026-08-01").getTime(); // Reference current date
+    const nowTime = new Date().getTime();
     const diff = expTime - nowTime;
     return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
   };
@@ -133,6 +140,13 @@ export function EnrollmentsTable({
       }
       return 0;
     });
+
+  const totalFilteredCount = filteredEnrollments.length;
+  const totalPages = Math.max(1, Math.ceil(totalFilteredCount / pageSize));
+  const paginatedEnrollments = filteredEnrollments.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <div className="space-y-4">
@@ -272,12 +286,7 @@ export function EnrollmentsTable({
                             <span className="font-bold text-white block leading-tight group-hover:text-[#C9A227] transition-colors">
                               {item.userName}
                             </span>
-                            <span className="text-[11px] font-mono text-zinc-400 block">
-                              {item.userEmail}
-                            </span>
-                          </div>
-                        </div>
-                      </td> */}
+                      {/* Enrolled User */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-3">
                           <div className="relative w-9 h-9 rounded-full bg-[#C9A227]/15 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] font-bold text-xs shrink-0 shadow-inner group-hover:scale-105 transition-transform">
@@ -294,11 +303,13 @@ export function EnrollmentsTable({
                         </div>
                       </td>
 
-                      {/* Discord name */}
+                      {/* Discord */}
                       <td className="py-3.5 px-4">
-                        <div className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-[11px] text-zinc-400">
-                          <DiscordIcon className="h-3.5 w-3.5 shrink-0 text-zinc-500" />
-                          <span>{item.discordName}</span>
+                        <div className="flex flex-col gap-0.5 font-mono text-[11px]">
+                          <span className="flex items-center gap-1 text-zinc-400">
+                            <DiscordIcon className="text-zinc-500 h-3.5" />
+                            {item.discordName || "—"}
+                          </span>
                         </div>
                       </td>
 
@@ -311,22 +322,14 @@ export function EnrollmentsTable({
                           </span>
                           <span className="flex items-center gap-1 text-zinc-400">
                             <Phone size={11} className="text-zinc-500" />
-                            {item.userPhone}
+                            {item.userPhone || "—"}
                           </span>
                         </div>
                       </td>
 
                       {/* Current Plan */}
-                      <td className="py-3.5 px-4 font-mono font-medium">
-                        <span
-                          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border ${
-                            item.currentPlan === "Yearly Plan"
-                              ? "bg-[#C9A227]/10 text-[#C9A227] border-[#C9A227]/30"
-                              : "bg-sky-500/10 text-sky-400 border-sky-500/20"
-                          }`}
-                        >
-                          {item.currentPlan}
-                        </span>
+                      <td className="py-3.5 px-4 font-mono font-medium text-white">
+                        {item.currentPlan}
                       </td>
 
                       {/* Purchase Date */}
@@ -335,51 +338,43 @@ export function EnrollmentsTable({
                       </td>
 
                       {/* Expiry Date */}
-                      <td className="py-3.5 px-4 font-mono text-[11px] text-zinc-300">
+                      <td className="py-3.5 px-4 font-mono text-[11px] text-zinc-400">
                         {item.expiryDate}
                       </td>
 
                       {/* Remaining Days */}
-                      <td className="py-3.5 px-4 font-mono text-[11px] font-bold">
-                        <span
-                          className={
-                            item.status === "Active"
-                              ? "text-emerald-400"
-                              : item.status === "Expiring Soon"
-                                ? "text-amber-400"
-                                : "text-zinc-500"
-                          }
-                        >
-                          {remainingDays > 0 ? `${remainingDays} Days` : "0 Days"}
-                        </span>
+                      <td className="py-3.5 px-4 font-mono">
+                        {item.status === "Active" || item.status === "Expiring Soon" ? (
+                          <span
+                            className={`font-semibold text-[11px] ${
+                              remainingDays <= 5 ? "text-amber-400 font-bold" : "text-zinc-300"
+                            }`}
+                          >
+                            {remainingDays} {remainingDays === 1 ? "day" : "days"}
+                          </span>
+                        ) : (
+                          <span className="text-zinc-500 text-[11px]">—</span>
+                        )}
                       </td>
 
-                      {/* Subscription Status Badge */}
-                      <td className="py-3.5 px-4">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-semibold ${
-                            item.status === "Active"
-                              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                              : item.status === "Expiring Soon"
-                                ? "bg-amber-500/15 text-amber-400 border border-amber-500/30 animate-pulse"
-                                : item.status === "Expired"
-                                  ? "bg-zinc-500/15 text-zinc-400 border border-zinc-500/30"
-                                  : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
-                          }`}
-                        >
-                          <span
-                            className={`w-1.5 h-1.5 rounded-full ${
-                              item.status === "Active"
-                                ? "bg-emerald-400 animate-pulse"
-                                : item.status === "Expiring Soon"
-                                  ? "bg-amber-400"
-                                  : item.status === "Expired"
-                                    ? "bg-zinc-400"
-                                    : "bg-rose-400"
-                            }`}
-                          />
-                          {item.status}
-                        </span>
+                      {/* Status */}
+                      <td className="py-3.5 px-4 font-mono">
+                        {item.status === "Active" ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                            Active
+                          </span>
+                        ) : item.status === "Expiring Soon" ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                            Expiring Soon
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                            <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                            {item.status}
+                          </span>
+                        )}
                       </td>
 
                       {/* Actions */}
@@ -390,22 +385,13 @@ export function EnrollmentsTable({
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             type="button"
-                            onClick={() => onSelectEnrollment(item)}
-                            title="View Subscription"
-                            className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 hover:border-[#C9A227]/40 hover:bg-[#C9A227]/10 text-zinc-400 hover:text-[#C9A227] flex items-center justify-center cursor-pointer transition-colors"
-                          >
-                            <Eye size={13} />
-                          </button>
-
-                          {/* <button
-                            type="button"
                             onClick={() => onManageSubscription(item)}
-                            title="Manage Subscription Lifecycle"
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#C9A227]/15 border border-[#C9A227]/30 hover:bg-[#C9A227]/25 text-[#C9A227] font-mono text-[11px] font-bold cursor-pointer transition-colors"
+                            title="Manage Subscription Pass"
+                            className="px-2.5 py-1 rounded-lg bg-[#C9A227]/10 border border-[#C9A227]/30 hover:bg-[#C9A227]/20 text-[#C9A227] text-[11px] font-mono font-bold flex items-center gap-1 transition-all cursor-pointer"
                           >
-                            <Settings size={12} />
-                            <span>Manage</span>
-                          </button> */}
+                            <Eye size={12} />
+                            <span>Details</span>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -413,8 +399,8 @@ export function EnrollmentsTable({
                 })
               ) : (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-zinc-500 font-mono">
-                    No enrollments found matching your filters.
+                  <td colSpan={9} className="py-12 text-center text-zinc-500 font-mono">
+                    No enrollments found matching your search or filter criteria.
                   </td>
                 </tr>
               )}
@@ -424,8 +410,8 @@ export function EnrollmentsTable({
 
         {/* Mobile Responsive Cards */}
         <div className="block md:hidden divide-y divide-white/5">
-          {filteredEnrollments.length > 0 ? (
-            filteredEnrollments.map((item) => (
+          {paginatedEnrollments.length > 0 ? (
+            paginatedEnrollments.map((item) => (
               <div
                 key={item.id}
                 onClick={() => onManageSubscription(item)}
@@ -476,6 +462,45 @@ export function EnrollmentsTable({
           )}
         </div>
       </div>
+
+      {/* Pagination Footer */}
+      {totalFilteredCount > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-[#111113]/90 backdrop-blur-xl border border-white/10 text-xs font-mono text-zinc-400 shadow-md">
+          <div>
+            Showing{" "}
+            <span className="font-bold text-white">
+              {Math.min((currentPage - 1) * pageSize + 1, totalFilteredCount)}
+            </span>{" "}
+            to{" "}
+            <span className="font-bold text-white">
+              {Math.min(currentPage * pageSize, totalFilteredCount)}
+            </span>{" "}
+            of <span className="font-bold text-white">{totalFilteredCount}</span> enrollment records
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-300 hover:text-white transition-colors cursor-pointer"
+            >
+              Previous
+            </button>
+            <span className="px-3.5 py-1.5 rounded-xl bg-[#09090b] border border-white/10 text-white font-bold">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              type="button"
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed text-zinc-300 hover:text-white transition-colors cursor-pointer"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -58,40 +58,9 @@ export default function AdminDashboardPage() {
     fetchAdmin();
   }, [router]);
 
-  // 2. Fetch general static dashboard data ONCE on mount
+  // 2. Fetch dashboard data & analytics when timeRange changes
   useEffect(() => {
-    const fetchGeneralDashboard = async () => {
-      setLoadingDashboard(true);
-      try {
-        const res = await axios.get("/api/admin/dashboard", {
-          withCredentials: true,
-        });
-
-        if (res.data.success && res.data.data) {
-          setDashboardData(res.data.data);
-          // Set initial fallback analytics data if available
-          if (res.data.data.revenueChart) {
-            setAnalyticsData(res.data.data.revenueChart);
-          }
-        } else {
-          setError(res.data.message || "Failed to load dashboard data");
-        }
-      } catch (err: any) {
-        console.error("Failed to fetch general dashboard data:", err);
-        setError(
-          err?.response?.data?.message || "Failed to connect to dashboard API"
-        );
-      } finally {
-        setLoadingDashboard(false);
-      }
-    };
-
-    fetchGeneralDashboard();
-  }, []);
-
-  // 3. Fetch ONLY analytics data whenever timeRange changes (with AbortController)
-  useEffect(() => {
-    const fetchAnalytics = async () => {
+    const fetchDashboard = async () => {
       if (analyticsAbortRef.current) {
         analyticsAbortRef.current.abort();
       }
@@ -101,29 +70,35 @@ export default function AdminDashboardPage() {
 
       setLoadingAnalytics(true);
       try {
-        const res = await axios.get("/api/admin/dashboard/analytics", {
+        const res = await axios.get("/api/admin/dashboard", {
           params: { range: timeRange },
           withCredentials: true,
           signal: controller.signal,
         });
 
         if (res.data.success && res.data.data) {
-          setAnalyticsData({
-            buckets: res.data.data.buckets,
-            peakDayLabel: res.data.data.peakDayLabel,
-          });
+          setDashboardData(res.data.data);
+          if (res.data.data.revenueChart) {
+            setAnalyticsData(res.data.data.revenueChart);
+          }
+        } else {
+          setError(res.data.message || "Failed to load dashboard data");
         }
       } catch (err: any) {
         if (axios.isCancel(err) || err.name === "CanceledError" || err.name === "AbortError") {
           return; // Ignore aborted requests
         }
-        console.error("Failed to fetch analytics data:", err);
+        console.error("Failed to fetch dashboard data:", err);
+        setError(
+          err?.response?.data?.message || "Failed to connect to dashboard API"
+        );
       } finally {
+        setLoadingDashboard(false);
         setLoadingAnalytics(false);
       }
     };
 
-    fetchAnalytics();
+    fetchDashboard();
 
     return () => {
       if (analyticsAbortRef.current) {

@@ -8,8 +8,6 @@ import {
   Users,
   AlertTriangle,
   Clock,
-  TrendingUp,
-  TrendingDown,
 } from "lucide-react";
 
 export interface EnrollmentKpi {
@@ -17,8 +15,6 @@ export interface EnrollmentKpi {
   title: string;
   value: number;
   description: string;
-  trend: string;
-  isUp: boolean;
   icon: React.ElementType;
 }
 
@@ -46,35 +42,27 @@ export function EnrollmentOverviewCards({
       title: "Active Enrollments",
       value: activeCount,
       description: "Currently active passes",
-      trend: "+8.5%",
-      isUp: true,
       icon: ShieldCheck,
     },
     {
       id: "monthly-plans",
       title: "Monthly Plans",
       value: monthlyCount,
-      description: "$999/month subscriptions",
-      trend: "+6.2%",
-      isUp: true,
+      description: "Monthly recurring passes",
       icon: Calendar,
     },
     {
       id: "yearly-plans",
       title: "Yearly Plans",
       value: yearlyCount,
-      description: "$7,999/year subscriptions",
-      trend: "+14.1%",
-      isUp: true,
+      description: "Annual subscriptions",
       icon: Users,
     },
     {
       id: "expiring-soon",
       title: "Expiring Soon",
       value: expiringSoonCount,
-      description: "Expires within 7 days",
-      trend: "-2.4%",
-      isUp: false,
+      description: "Expires within 5 days",
       icon: AlertTriangle,
     },
     {
@@ -82,8 +70,6 @@ export function EnrollmentOverviewCards({
       title: "Expired",
       value: expiredCount,
       description: "Pending renewal action",
-      trend: "-4.0%",
-      isUp: false,
       icon: Clock,
     },
   ];
@@ -139,21 +125,10 @@ export function EnrollmentOverviewCards({
             key={kpi.id}
             className="group rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-4 flex flex-col justify-between hover:border-[#C9A227]/40 hover:bg-[#151518] transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
           >
-            {/* Top Row: Icon & Trend */}
+            {/* Top Row: Icon */}
             <div className="flex items-center justify-between mb-3">
               <div className="w-8 h-8 rounded-xl bg-[#C9A227]/10 border border-[#C9A227]/30 flex items-center justify-center text-[#C9A227] shadow-sm group-hover:scale-105 transition-transform duration-200">
                 <IconComponent size={16} />
-              </div>
-
-              <div
-                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium ${
-                  kpi.isUp
-                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                    : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                }`}
-              >
-                {kpi.isUp ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
-                <span>{kpi.trend}</span>
               </div>
             </div>
 

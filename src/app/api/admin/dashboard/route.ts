@@ -11,8 +11,9 @@ import {
 
 export const runtime = "nodejs";
 
-function formatCurrencyINR(amount: number): string {
-  return `$${Math.round(amount).toLocaleString("en-IN")}`;
+function formatCurrency(amount: number): string {
+  if (isNaN(amount) || !isFinite(amount)) return "$0";
+  return `$${Math.round(amount).toLocaleString("en-US")}`;
 }
 
 function formatDateIST(dateInput: Date | string | null | undefined): string {
@@ -45,11 +46,17 @@ function computeTrend(
   current: number,
   previous: number,
 ): { trend: string; isUp: boolean } {
+  if (isNaN(current) || isNaN(previous)) {
+    return { trend: "N/A", isUp: true };
+  }
   if (previous === 0) {
-    if (current > 0) return { trend: "+100%", isUp: true };
+    if (current > 0) return { trend: "New", isUp: true };
     return { trend: "0%", isUp: true };
   }
   const diff = ((current - previous) / previous) * 100;
+  if (!isFinite(diff) || isNaN(diff)) {
+    return { trend: "N/A", isUp: true };
+  }
   const isUp = diff >= 0;
   const formatted = `${isUp ? "+" : ""}${diff.toFixed(1)}%`;
   return { trend: formatted, isUp };
@@ -341,7 +348,7 @@ export async function GET(request: NextRequest) {
     buckets.forEach((b) => {
       if (b.amount > peakDayAmount) {
         peakDayAmount = b.amount;
-        peakDayLabel = `${b.label}: ${formatCurrencyINR(b.amount)}`;
+        peakDayLabel = `${b.label}: ${formatCurrency(b.amount)}`;
       }
     });
 
@@ -421,7 +428,7 @@ export async function GET(request: NextRequest) {
         student: o.user?.name || "Student",
         email: o.user?.email || "",
         plan: o.planNameSnapshot || o.plan?.name || "Academy Pass",
-        amount: formatCurrencyINR(Number(o.totalAmount || 0)),
+        amount: formatCurrency(Number(o.totalAmount || 0)),
         status: statusStr,
         date: formatDateIST(o.paidAt || o.createdAt),
       };
@@ -527,7 +534,7 @@ export async function GET(request: NextRequest) {
         synthesized.push({
           id: `act-ord-${o.id}`,
           title: "Payment Received",
-          detail: `${o.user?.name || "Student"} purchased ${o.planNameSnapshot || o.plan?.name} (${formatCurrencyINR(Number(o.totalAmount))}).`,
+          detail: `${o.user?.name || "Student"} purchased ${o.planNameSnapshot || o.plan?.name} (${formatCurrency(Number(o.totalAmount))}).`,
           time: getRelativeTime(o.paidAt || o.createdAt),
           iconCategory: "order",
         });
@@ -559,8 +566,8 @@ export async function GET(request: NextRequest) {
         return {
           id: p.id,
           name: p.name,
-          billing: `${p.type === PlanType.YEARLY ? "Yearly" : "Monthly"} (${formatCurrencyINR(Number(p.price))})`,
-          revenue: formatCurrencyINR(rev),
+          billing: `${p.type === PlanType.YEARLY ? "Yearly" : "Monthly"} (${formatCurrency(Number(p.price))})`,
+          revenue: formatCurrency(rev),
           growth: `${activeSubCount} active ${activeSubCount === 1 ? "subscriber" : "subscribers"}`,
           numericRev: rev,
         };
@@ -575,32 +582,48 @@ export async function GET(request: NextRequest) {
       where: { deletedAt: null },
       include: {
         userProgress: {
-          select: { progressPercentage: true },
+          select: { userId: true, progressPercentage: true },
         },
       },
       take: 5,
     });
 
-    const topCourses = coursesRaw.map((c) => {
-      const studentCount = c.userProgress.length;
-      const avgCompletion =
-        studentCount > 0
-          ? Math.round(
-              c.userProgress.reduce(
-                (sum, p) => sum + Number(p.progressPercentage || 0),
-                0,
-              ) / studentCount,
-            )
-          : 0;
+    const topCourses = await Promise.all(
+      coursesRaw.map(async (c) => {
+        const studentCount = c.userProgress.length;
+        const userIds = c.userProgress.map((p) => p.userId);
+        const avgCompletion =
+          studentCount > 0
+            ? Math.round(
+                c.userProgress.reduce(
+                  (sum, p) => sum + Number(p.progressPercentage || 0),
+                  0,
+                ) / studentCount,
+              )
+            : 0;
 
-      return {
-        id: c.id,
-        title: c.title,
-        students: `${studentCount} ${studentCount === 1 ? "Student" : "Students"}`,
-        revenue: formatCurrencyINR(studentCount * 4999),
-        completion: `${avgCompletion}%`,
-      };
-    });
+        let courseRevenue = 0;
+        if (userIds.length > 0) {
+          const userOrders = await prisma.order.aggregate({
+            where: {
+              userId: { in: userIds },
+              status: OrderStatus.PAID,
+              deletedAt: null,
+            },
+            _sum: { totalAmount: true },
+          });
+          courseRevenue = Number(userOrders._sum.totalAmount || 0);
+        }
+
+        return {
+          id: c.id,
+          title: c.title,
+          students: `${studentCount} ${studentCount === 1 ? "Student" : "Students"}`,
+          revenue: formatCurrency(courseRevenue),
+          completion: `${avgCompletion}%`,
+        };
+      })
+    );
 
     // -------------------------------------------------------------
     // 10. FOOTER STATS
