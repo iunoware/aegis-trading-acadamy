@@ -235,19 +235,19 @@ export function DashboardHeader({ admin }: { admin: AdminUser | null }) {
         <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <a
             href="/admin/courses"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black transition-all duration-200 cursor-pointer hover:brightness-110"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black transition-all duration-200 cursor-pointer hover:brightness-110"
           >
             <Plus size={14} className="stroke-3" />
             <span>Add Course</span>
           </a>
 
-          <a
+          {/* <a
             href="/admin/mentors"
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#161619] border border-white/15 text-zinc-200 hover:text-white hover:border-[#C9A227]/50 hover:bg-[#C9A227]/10 transition-all duration-200 cursor-pointer"
           >
             <Plus size={14} />
             <span>Add Mentor</span>
-          </a>
+          </a> */}
 
           <a
             href="/admin/pricing"
@@ -286,8 +286,8 @@ export function KPISection({
       icon: IndianRupee,
     },
     {
-      id: "students",
-      title: kpis?.students?.title || "Total Students",
+      id: "users",
+      title: "Total Users",
       value: kpis?.students?.value ?? 0,
       prefix: "",
       description: kpis?.students?.description || "Total Enrolled",
