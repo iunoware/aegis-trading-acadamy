@@ -153,6 +153,9 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
 
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
   // Screen resize handler
   useEffect(() => {
     const handleResize = () => {
@@ -183,6 +186,8 @@ export default function Sidebar() {
   // Logout handler
   async function handleLogout() {
     try {
+      setIsLoggingOut(true);
+
       const response = await fetch("/api/admin/auth/logout", {
         method: "POST",
       });
@@ -209,7 +214,6 @@ export default function Sidebar() {
   return (
     <>
       {/* MOBILE TRIGGER BUTTON (TOP NAVBAR ITEM ON MOBILE) */}
-
       <div className="lg:hidden fixed top-3 left-4 z-40">
         <button
           onClick={() => setIsMobileOpen(true)}
@@ -221,7 +225,6 @@ export default function Sidebar() {
       </div>
 
       {/* MOBILE BACKDROP OVERLAY */}
-
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
@@ -235,7 +238,6 @@ export default function Sidebar() {
       </AnimatePresence>
 
       {/* MOBILE SLIDE-OVER SIDEBAR DRAWER */}
-
       <AnimatePresence>
         {isMobileOpen && (
           <motion.aside
@@ -243,7 +245,7 @@ export default function Sidebar() {
             animate={{ x: "0%" }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="lg:hidden fixed top-0 bottom-0 left-0 z-50 w-70 bg-[#050505]/98 backdrop-blur-2xl border-r border-white/10 rounded-tr-2xl rounded-br-2xl p-5 flex flex-col justify-between shadow-[10px_0_30px_rgba(0,0,0,0.9)] overflow-y-auto"
+            className="lg:hidden fixed top-0 bottom-0 left-0 z-999 w-70 bg-[#050505]/98 backdrop-blur-2xl border-r border-white/10 rounded-tr-2xl rounded-br-2xl p-5 flex flex-col justify-between shadow-[10px_0_30px_rgba(0,0,0,0.9)] overflow-y-auto"
           >
             <div>
               {/* Header */}
@@ -319,7 +321,11 @@ export default function Sidebar() {
 
             {/* Bottom Profile & Logout (Mobile) */}
             <div className="pt-4 mt-6 border-t border-white/10 flex flex-col gap-3">
-              <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/3 border border-white/5">
+              <Link
+                href="/admin/profile"
+                onClick={handleLinkClick}
+                className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white/3 border border-white/5"
+              >
                 <div className="relative w-8 h-8 rounded-full bg-[#C9A227]/20 border border-[#C9A227]/40 flex items-center justify-center text-[#C9A227] font-bold text-xs">
                   <span>A</span>
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-[#050505] absolute bottom-0 right-0" />
@@ -332,10 +338,13 @@ export default function Sidebar() {
                     Administrator
                   </span>
                 </div>
-              </div>
+              </Link>
 
               <button
-                onClick={handleLogout}
+                onClick={() => {
+                  // handleLogout();
+                  setIsLogoutModalOpen(true);
+                }}
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-white/10 text-xs font-semibold text-zinc-300 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/30 transition-all duration-200 cursor-pointer"
               >
                 <LogOut size={16} />
@@ -347,7 +356,6 @@ export default function Sidebar() {
       </AnimatePresence>
 
       {/* DESKTOP STICKY SIDEBAR (280px Expanded, 88px Collapsed) */}
-
       <motion.aside
         animate={{ width: isCollapsed ? 88 : 280 }}
         transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
@@ -524,9 +532,13 @@ export default function Sidebar() {
             </div>
 
             <button
-              onClick={handleLogout}
+              // onClick={handleLogout}
+              onClick={() => {
+                // handleLogout();
+                setIsLogoutModalOpen(true);
+              }}
               aria-label="Logout"
-              className={`flex items-center gap-2 rounded-xl border border-white/10 text-xs font-semibold text-zinc-300 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/30 transition-all duration-200 cursor-pointer ${
+              className={`flex items-center gap-2 rounded-xl border border-white/10 text-xs font-semibold text-red-400 bg-red-500/10 hover:bg-red-500/20 hover:border-red-500/30 transition-all duration-200 cursor-pointer ${
                 isCollapsed
                   ? "w-11 h-10 mx-auto justify-center p-0"
                   : "w-full py-2.5 px-3 justify-center"
@@ -538,6 +550,66 @@ export default function Sidebar() {
           </div>
         </div>
       </motion.aside>
+
+      {/* LOGOUT CONFIRMATION MODAL */}
+      <AnimatePresence>
+        {isLogoutModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget && !isLoggingOut) {
+                setIsLogoutModalOpen(false);
+              }
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.15 }}
+              role="dialog"
+              aria-modal="true"
+              className="w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0c] shadow-[0_30px_100px_rgba(0,0,0,0.8)]"
+            >
+              <div className="p-6">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-red-500/30 bg-red-500/10 text-red-400">
+                  <LogOut size={19} />
+                </div>
+
+                <h2 className="mt-4 text-lg font-bold text-white">Log out?</h2>
+
+                <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+                  You&apos;ll need to sign in again to access the admin panel.
+                </p>
+              </div>
+
+              <div className="flex flex-col-reverse gap-3 border-t border-white/10 px-6 py-4 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => setIsLogoutModalOpen(false)}
+                  disabled={isLoggingOut}
+                  className="inline-flex h-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 text-sm font-semibold text-zinc-300 hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red-500 px-5 text-sm font-bold text-white hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <LogOut size={16} />
+                  {isLoggingOut ? "Logging out..." : "Log Out"}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

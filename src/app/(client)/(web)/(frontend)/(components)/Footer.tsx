@@ -313,7 +313,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://youtube.com"
+                href="https://www.youtube.com/@aegistradingacademy-ata"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
