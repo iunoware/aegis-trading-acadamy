@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
@@ -450,7 +451,7 @@ export default function CourseCMS() {
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black shadow-[0_0_20px_rgba(201,162,39,0.35)] hover:shadow-[0_0_30px_rgba(201,162,39,0.55)] transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
             >
               <Plus size={16} className="stroke-3" />
-              <span>Add Course</span>
+              <span>Add Category</span>
             </button>
           </div>
 
@@ -579,7 +580,7 @@ export default function CourseCMS() {
                 onClick={handleOpenCreateCourse}
                 className="px-4 py-2 rounded-xl bg-[#C9A227] text-black font-bold text-xs shadow-md"
               >
-                + Add Course
+                + Add Category
               </button>
             </div>
           )}
