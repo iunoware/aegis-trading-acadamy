@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
   Mail,
-  Phone,
+  // Phone,
   MapPin,
   // Globe,
   // Video,
@@ -288,12 +288,12 @@ export default function Footer() {
                   info@aegistrading.com
                 </a>
               </li>
-              <li className="flex items-center gap-2.5">
+              {/* <li className="flex items-center gap-2.5">
                 <Phone size={16} className="text-primary" />
                 <a target="_blank" rel="noopener noreferrer" href="tel:+919876543210">
                   +91 98765 43210
                 </a>
-              </li>
+              </li> */}
               <li className="flex items-center gap-2.5">
                 <MapPin size={16} className="text-primary" />
                 <span>Chennai, Tamil Nadu, India</span>
