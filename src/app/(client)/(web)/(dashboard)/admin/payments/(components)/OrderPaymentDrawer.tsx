@@ -46,10 +46,10 @@ const formatDate = (value: string, includeTime = false) =>
       : {}),
   }).format(new Date(value));
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("en-IN", {
+const formatCurrency = (value: number, currency: string = "USD") =>
+  new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: currency || "USD",
     maximumFractionDigits: 0,
   }).format(value);
 
@@ -160,9 +160,7 @@ export function OrderPaymentDrawer({
           <section className="space-y-3">
             <SectionTitle icon={CreditCard} title="Payment Information" />
             <div className="grid grid-cols-1 gap-3 rounded-2xl border border-white/10 bg-[#09090b] p-4 sm:grid-cols-2">
-              <Detail label="Amount" value={formatCurrency(record.amount)} accent />
-              {/* <Detail label="Payment Status" value={record.paymentStatus} /> */}
-              {/* <Detail label="Payment Method" value={record.paymentMethod} /> */}+{" "}
+              <Detail label="Amount" value={formatCurrency(record.amount, record.currency)} accent />
               <Detail
                 label="Payment Status"
                 value={paymentStatusLabel[record.paymentStatus]}
