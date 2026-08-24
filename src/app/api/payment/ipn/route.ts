@@ -10,6 +10,7 @@ import {
   SubscriptionSource,
   SubscriptionEventType,
 } from "@/generated/prisma/client";
+import { sendPaymentSuccessEmail } from "@/lib/mail";
 
 export const runtime = "nodejs";
 
@@ -306,8 +307,10 @@ export async function POST(request: NextRequest) {
     if (paymentStatus === "finished") {
       const now = new Date();
 
+      let subscriptionStartDate = now;
+      let subscriptionExpiryDate: Date = new Date();
+
       await prisma.$transaction(async (tx) => {
-        // Idempotency check: check if order already has a subscription
         const existingSubscription =
           order.subscription ||
           (await tx.subscription.findUnique({
@@ -340,24 +343,39 @@ export async function POST(request: NextRequest) {
           },
         });
 
-        // If subscription already exists for this order, preserve idempotency
+        // C. Existing subscription = idempotent webhook
         if (existingSubscription) {
+          subscriptionStartDate =
+            existingSubscription.startDate ||
+            existingSubscription.purchaseDate ||
+            now;
+
+          subscriptionExpiryDate =
+            existingSubscription.currentExpiryDate ||
+            existingSubscription.originalExpiryDate;
+
           if (existingSubscription.status !== SubscriptionStatus.ACTIVE) {
             await tx.subscription.update({
               where: { id: existingSubscription.id },
-              data: { status: SubscriptionStatus.ACTIVE },
+              data: {
+                status: SubscriptionStatus.ACTIVE,
+              },
             });
           }
+
           return;
         }
 
-        // C. Calculate Expiry Date from Database SubscriptionPlan durationMonths
+        // D. Calculate subscription expiry
         const durationMonths =
           order.plan.durationMonths || (order.plan.type === "YEARLY" ? 12 : 1);
-        const expiryDate = new Date(now);
-        expiryDate.setMonth(expiryDate.getMonth() + durationMonths);
 
-        // D. Create Subscription
+        subscriptionExpiryDate = new Date(now);
+        subscriptionExpiryDate.setMonth(
+          subscriptionExpiryDate.getMonth() + durationMonths,
+        );
+
+        // E. Create Subscription
         const newSubscription = await tx.subscription.create({
           data: {
             userId: order.userId,
@@ -367,15 +385,15 @@ export async function POST(request: NextRequest) {
             source: SubscriptionSource.PAYMENT,
             purchaseDate: now,
             startDate: now,
-            originalExpiryDate: expiryDate,
-            currentExpiryDate: expiryDate,
+            originalExpiryDate: subscriptionExpiryDate,
+            currentExpiryDate: subscriptionExpiryDate,
             autoRenew: false,
             gateway: PaymentGateway.NOWPAYMENTS,
             gatewaySubscriptionId: null,
           },
         });
 
-        // E. Create SubscriptionEvent (PURCHASED)
+        // F. Create SubscriptionEvent
         await tx.subscriptionEvent.create({
           data: {
             subscriptionId: newSubscription.id,
@@ -393,8 +411,41 @@ export async function POST(request: NextRequest) {
         });
       });
 
+      // IMPORTANT:
+      // The database transaction has successfully completed.
+      // Email failure must NOT cause the payment webhook to fail.
+      try {
+        if (order.user?.email) {
+          const emailResult = await sendPaymentSuccessEmail({
+            to: order.user.email,
+            userName:
+              order.user.name || order.user.email.split("@")[0] || "Student",
+            planName: order.plan.name,
+            amount: Number(order.totalAmount),
+            currency: order.currency,
+            orderNumber: order.orderNumber,
+            paymentId: gatewayPaymentId || payment.gatewayPaymentId || "N/A",
+            startDate: subscriptionStartDate,
+            expiryDate: subscriptionExpiryDate,
+          });
+
+          if (!emailResult.success) {
+            console.error("[PAYMENT_SUCCESS_EMAIL_FAILED]", emailResult.error);
+          }
+        } else {
+          console.warn(
+            "[PAYMENT_SUCCESS_EMAIL_SKIPPED] User email not available",
+          );
+        }
+      } catch (emailError) {
+        console.error("[PAYMENT_SUCCESS_EMAIL_ERROR]", emailError);
+      }
+
       return NextResponse.json(
-        { success: true, message: "IPN processed successfully" },
+        {
+          success: true,
+          message: "IPN processed successfully",
+        },
         { status: 200 },
       );
     }
