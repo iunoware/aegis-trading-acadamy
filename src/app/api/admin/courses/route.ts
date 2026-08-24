@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import {
@@ -6,7 +7,9 @@ import {
   ContentStatus,
 } from "@/generated/prisma/client";
 import { getRequiredSuperAdmin } from "@/lib/current-user";
-import { saveThumbnail } from "@/lib/video-storage";
+// import { saveThumbnail } from "@/lib/video-storage";
+import { deleteVideoFile } from "@/lib/video-storage";
+import { saveThumbnail, deleteThumbnailFile } from "@/lib/thumbnail-storage";
 
 function slugify(title: string) {
   return title

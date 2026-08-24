@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
@@ -24,6 +26,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
+import { CustomVideoPlayer } from "./components/CustomVideoPlayer";
 
 type ContentStatus = "DRAFT" | "PUBLISHED" | "HIDDEN";
 
@@ -94,11 +97,23 @@ export default function CourseCMS() {
   const [videoDurationSeconds, setVideoDurationSeconds] = useState(0);
   const [videoIsPreview, setVideoIsPreview] = useState(false);
 
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+
   const [confirmModal, setConfirmModal] = useState<{
     title: string;
     message: string;
     onConfirm: () => void;
   } | null>(null);
+
+  //  Video preview
+  const [previewLesson, setPreviewLesson] = useState<Lesson | null>(null);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState(false);
+  const [previewProgress, setPreviewProgress] = useState<number | null>(null);
+
+  const previewBlobUrlRef = useRef<string | null>(null);
+  const previewAbortControllerRef = useRef<AbortController | null>(null);
 
   //  Fetch courses
   const fetchCourses = useCallback(async () => {
@@ -228,6 +243,95 @@ export default function CourseCMS() {
   };
 
   //  Video handlers
+  const handleOpenPreview = (vid: Lesson) => {
+    setPreviewLesson(vid);
+  };
+
+  const handleClosePreview = () => {
+    setPreviewLesson(null);
+  };
+
+  //  Load the clicked lesson's video for preview.
+  //  - External links (pasted URLs) are handed straight to the player.
+  //  - Uploaded files are streamed from S3 through a protected route
+  //    and turned into a blob URL, mirroring the student player.
+  useEffect(() => {
+    if (!previewLesson) {
+      return;
+    }
+
+    if (previewAbortControllerRef.current) {
+      previewAbortControllerRef.current.abort();
+    }
+
+    if (previewBlobUrlRef.current) {
+      URL.revokeObjectURL(previewBlobUrlRef.current);
+      previewBlobUrlRef.current = null;
+    }
+
+    setPreviewSrc(null);
+    setPreviewError(false);
+    setPreviewProgress(null);
+
+    const isExternalLink = previewLesson.videoUrl.startsWith("http");
+
+    if (isExternalLink) {
+      // Works for direct .mp4/.webm links. If admins paste Vimeo/YouTube
+      // share links instead, those need an <iframe> embed, not a raw
+      // <video> tag — flag it here rather than silently failing to play.
+      setPreviewSrc(previewLesson.videoUrl);
+      return;
+    }
+
+    setIsPreviewLoading(true);
+
+    const controller = new AbortController();
+    previewAbortControllerRef.current = controller;
+
+    async function loadPreview() {
+      try {
+        // TODO: point this at whatever route streams an S3-backed lesson
+        // for an admin session. Swap for `/api/stream/${previewLesson!.id}`
+        // if you want to reuse the student-facing route instead.
+        const response = await axios.get(`/api/stream/${previewLesson!.id}`, {
+          responseType: "blob",
+          signal: controller.signal,
+          onDownloadProgress: (event) => {
+            if (event.total) {
+              setPreviewProgress(Math.round((event.loaded / event.total) * 100));
+            }
+          },
+        });
+
+        const objectUrl = URL.createObjectURL(response.data);
+        previewBlobUrlRef.current = objectUrl;
+        setPreviewSrc(objectUrl);
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          return;
+        }
+
+        console.error("Failed to load preview video:", error);
+        setPreviewError(true);
+      } finally {
+        setIsPreviewLoading(false);
+      }
+    }
+
+    loadPreview();
+
+    return () => {
+      controller.abort();
+    };
+  }, [previewLesson?.id]);
+
+  useEffect(() => {
+    return () => {
+      if (previewBlobUrlRef.current) {
+        URL.revokeObjectURL(previewBlobUrlRef.current);
+      }
+    };
+  }, []);
 
   const handleOpenCreateVideo = () => {
     if (!activeCourse) return;
@@ -238,6 +342,7 @@ export default function CourseCMS() {
     setVideoFile(null);
     setVideoDurationSeconds(0);
     setVideoIsPreview(false);
+    setUploadProgress(null);
     setIsVideoModalOpen(true);
   };
 
@@ -249,6 +354,7 @@ export default function CourseCMS() {
     setVideoFile(null);
     setVideoDurationSeconds(v.durationSeconds);
     setVideoIsPreview(v.isPreview);
+    setUploadProgress(null);
     setIsVideoModalOpen(true);
   };
 
@@ -289,6 +395,13 @@ export default function CourseCMS() {
         const res = await axios.patch(
           `/api/admin/courses/${activeCourseId}/lessons/${editingVideo.id}`,
           formData,
+          {
+            onUploadProgress: (event) => {
+              if (videoFile && event.total) {
+                setUploadProgress(Math.round((event.loaded / event.total) * 100));
+              }
+            },
+          },
         );
         setCourses((prev) =>
           prev.map((c) =>
@@ -312,6 +425,7 @@ export default function CourseCMS() {
         );
       } finally {
         setIsSavingVideo(false);
+        setUploadProgress(null);
       }
       return;
     }
@@ -333,6 +447,13 @@ export default function CourseCMS() {
         const res = await axios.post(
           `/api/admin/courses/${activeCourseId}/lessons/upload`,
           formData,
+          {
+            onUploadProgress: (event) => {
+              if (event.total) {
+                setUploadProgress(Math.round((event.loaded / event.total) * 100));
+              }
+            },
+          },
         );
 
         setCourses((prev) =>
@@ -352,9 +473,92 @@ export default function CourseCMS() {
         );
       } finally {
         setIsSavingVideo(false);
+        setUploadProgress(null);
       }
       return;
     }
+
+    // ---- Editing an existing video (title/URL/preview/duration, or replace the file) ----
+    // if (editingVideo) {
+    //   setIsSavingVideo(true);
+    //   try {
+    //     const formData = new FormData();
+    //     formData.append("title", videoTitle);
+    //     formData.append("durationSeconds", String(videoDurationSeconds));
+    //     formData.append("isPreview", String(videoIsPreview));
+    //     if (videoMode === "url" && videoUrl.trim())
+    //       formData.append("videoUrl", videoUrl.trim());
+    //     if (videoFile) formData.append("file", videoFile);
+
+    //     const res = await axios.patch(
+    //       `/api/admin/courses/${activeCourseId}/lessons/${editingVideo.id}`,
+    //       formData,
+    //     );
+    //     setCourses((prev) =>
+    //       prev.map((c) =>
+    //         c.id === activeCourseId
+    //           ? {
+    //               ...c,
+    //               lessons: c.lessons.map((l) =>
+    //                 l.id === editingVideo.id ? res.data.lesson : l,
+    //               ),
+    //             }
+    //           : c,
+    //       ),
+    //     );
+    //     toast.success(res.data.message);
+    //     setIsVideoModalOpen(false);
+    //   } catch (err) {
+    //     toast.error(
+    //       axios.isAxiosError(err)
+    //         ? err.response?.data?.message
+    //         : "Failed to update video",
+    //     );
+    //   } finally {
+    //     setIsSavingVideo(false);
+    //   }
+    //   return;
+    // }
+
+    // ---- Creating a new video: upload ----
+    // if (videoMode === "upload") {
+    //   if (!videoFile) {
+    //     toast.error("Please choose a video file to upload");
+    //     return;
+    //   }
+    //   setIsSavingVideo(true);
+    //   try {
+    //     const formData = new FormData();
+    //     formData.append("file", videoFile);
+    //     formData.append("title", videoTitle);
+    //     formData.append("isPreview", String(videoIsPreview));
+    //     formData.append("durationSeconds", String(videoDurationSeconds));
+
+    //     const res = await axios.post(
+    //       `/api/admin/courses/${activeCourseId}/lessons/upload`,
+    //       formData,
+    //     );
+
+    //     setCourses((prev) =>
+    //       prev.map((c) =>
+    //         c.id === activeCourseId
+    //           ? { ...c, lessons: [...c.lessons, res.data.lesson] }
+    //           : c,
+    //       ),
+    //     );
+    //     toast.success(res.data.message);
+    //     setIsVideoModalOpen(false);
+    //   } catch (err) {
+    //     toast.error(
+    //       axios.isAxiosError(err)
+    //         ? err.response?.data?.message
+    //         : "Failed to upload video",
+    //     );
+    //   } finally {
+    //     setIsSavingVideo(false);
+    //   }
+    //   return;
+    // }
 
     // ---- Creating a new video: URL ----
     if (!videoUrl.trim()) {
@@ -450,7 +654,7 @@ export default function CourseCMS() {
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] text-black shadow-[0_0_20px_rgba(201,162,39,0.35)] hover:shadow-[0_0_30px_rgba(201,162,39,0.55)] transition-all transform hover:-translate-y-0.5 cursor-pointer shrink-0"
             >
               <Plus size={16} className="stroke-3" />
-              <span>Add Course</span>
+              <span>Add Category</span>
             </button>
           </div>
 
@@ -579,7 +783,7 @@ export default function CourseCMS() {
                 onClick={handleOpenCreateCourse}
                 className="px-4 py-2 rounded-xl bg-[#C9A227] text-black font-bold text-xs shadow-md"
               >
-                + Add Course
+                + Add Category
               </button>
             </div>
           )}
@@ -658,7 +862,8 @@ export default function CourseCMS() {
                 .map((vid, idx) => (
                   <div
                     key={vid.id}
-                    className="rounded-2xl bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-[#C9A227]/30 transition-all shadow-md group"
+                    onClick={() => handleOpenPreview(vid)}
+                    className="rounded-2xl cursor-pointer bg-[#111113]/80 backdrop-blur-xl border border-white/10 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-[#C9A227]/30 transition-all shadow-md group"
                   >
                     <div className="flex items-center gap-4">
                       <span className="w-7 h-7 rounded-xl bg-white/5 border border-white/10 font-mono text-xs font-bold text-[#C9A227] flex items-center justify-center shrink-0">
@@ -697,7 +902,7 @@ export default function CourseCMS() {
                         {vid.isPreview ? "Preview ON" : "Preview OFF"}
                       </span> */}
 
-                      <button
+                      {/* <button
                         onClick={() => handleOpenEditVideo(vid)}
                         className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-[#C9A227]/20 text-zinc-300 hover:text-[#C9A227] border border-white/10 text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
                       >
@@ -707,6 +912,28 @@ export default function CourseCMS() {
 
                       <button
                         onClick={() => handleDeleteVideo(vid.id, vid.title)}
+                        className="p-1.5 rounded-xl bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 transition-colors cursor-pointer"
+                        title="Delete Video"
+                      >
+                        <Trash2 size={15} />
+                      </button> */}
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenEditVideo(vid);
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-[#C9A227]/20 text-zinc-300 hover:text-[#C9A227] border border-white/10 text-xs font-semibold transition-colors flex items-center gap-1 cursor-pointer"
+                      >
+                        <Edit size={13} />
+                        <span>Edit</span>
+                      </button>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteVideo(vid.id, vid.title);
+                        }}
                         className="p-1.5 rounded-xl bg-white/5 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 transition-colors cursor-pointer"
                         title="Delete Video"
                       >
@@ -869,7 +1096,24 @@ export default function CourseCMS() {
                 />
               </div>
 
-              <div className="flex items-center gap-2 p-1 rounded-xl bg-black/40 border border-white/10">
+              {/* {isSavingVideo && uploadProgress !== null && (
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
+                    <span>Uploading video...</span>
+                    <span className="text-[#C9A227] font-semibold">
+                      {uploadProgress}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] transition-all duration-200"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                </div>
+              )} */}
+
+              {/* <div className="flex items-center gap-2 p-1 rounded-xl bg-black/40 border border-white/10">
                 <button
                   type="button"
                   onClick={() => setVideoMode("upload")}
@@ -894,7 +1138,7 @@ export default function CourseCMS() {
                   <LinkIcon size={13} />
                   Paste URL
                 </button>
-              </div>
+              </div> */}
 
               {videoMode === "url" && (
                 <div>
@@ -1019,6 +1263,70 @@ export default function CourseCMS() {
               >
                 Delete
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {previewLesson && (
+        <div
+          className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+          onClick={handleClosePreview}
+        >
+          <div
+            className="w-full max-w-3xl rounded-2xl bg-[#111113] border border-[#C9A227]/30 shadow-[0_20px_50px_rgba(0,0,0,0.9)] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#C9A227] block mb-0.5">
+                  VIDEO PREVIEW
+                </span>
+                <h3 className="text-base font-bold text-white font-sans">
+                  {previewLesson.title}
+                </h3>
+              </div>
+              <button
+                onClick={handleClosePreview}
+                className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="relative aspect-video w-full bg-black">
+              {isPreviewLoading && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/90">
+                  <Loader2 size={28} className="text-[#C9A227] animate-spin" />
+                  <p className="text-xs font-mono text-zinc-400">
+                    {previewProgress !== null
+                      ? `Loading video... ${previewProgress}%`
+                      : "Loading video..."}
+                  </p>
+                </div>
+              )}
+
+              {previewError && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[#0b0b0b] text-center px-6">
+                  <FileQuestion size={28} className="text-zinc-600" />
+                  <p className="text-xs text-zinc-400">
+                    Failed to load this video. Please try again.
+                  </p>
+                </div>
+              )}
+
+              {previewSrc && !previewError && (
+                <CustomVideoPlayer key={previewLesson.id} src={previewSrc} />
+              )}
+            </div>
+
+            <div className="flex items-center justify-between px-6 py-3 border-t border-white/10 text-xs font-mono text-zinc-400">
+              <span>{formatDuration(previewLesson.durationSeconds)}</span>
+              {/* <span>
+                {previewLesson.videoUrl.startsWith("http")
+                  ? "External link"
+                  : "S3 upload"}
+              </span> */}
             </div>
           </div>
         </div>
