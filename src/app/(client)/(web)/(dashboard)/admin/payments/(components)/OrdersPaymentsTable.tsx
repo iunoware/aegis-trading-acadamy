@@ -392,10 +392,10 @@ const formatDate = (value: string | null) => {
   }).format(date);
 };
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("en-IN", {
+const formatCurrency = (value: number, currency: string = "USD") =>
+  new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "INR",
+    currency: currency || "USD",
     maximumFractionDigits: 0,
   }).format(value);
 
@@ -635,7 +635,7 @@ export function OrdersPaymentsTable({ records, onSelect }: OrdersPaymentsTablePr
 
                     {/* Amount */}
                     <td className="px-4 py-3.5 font-bold text-white">
-                      {formatCurrency(record.amount)}
+                      {formatCurrency(record.amount, record.currency)}
                     </td>
 
                     {/* Purchase */}
@@ -730,7 +730,7 @@ export function OrdersPaymentsTable({ records, onSelect }: OrdersPaymentsTablePr
                 <div>
                   <span className="block text-zinc-500">AMOUNT</span>
 
-                  <span className="text-[#C9A227]">{formatCurrency(record.amount)}</span>
+                  <span className="text-[#C9A227]">{formatCurrency(record.amount, record.currency)}</span>
                 </div>
 
                 {/* Expiry */}

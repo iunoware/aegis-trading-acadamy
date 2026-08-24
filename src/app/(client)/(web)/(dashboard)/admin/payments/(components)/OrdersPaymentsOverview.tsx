@@ -109,14 +109,15 @@ interface OrdersPaymentsOverviewProps {
   records: OrderPaymentRecord[];
 }
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("en-IN", {
+const formatCurrency = (value: number, currency: string = "USD") =>
+  new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "INR",
+    currency: currency || "USD",
     maximumFractionDigits: 0,
   }).format(value);
 
 export function OrdersPaymentsOverview({ records }: OrdersPaymentsOverviewProps) {
+  const recordCurrency = records[0]?.currency || "USD";
   const paidRecords = records.filter((record) => record.paymentStatus === "PAID");
 
   const totalRevenue = paidRecords.reduce((sum, record) => sum + record.amount, 0);
@@ -136,7 +137,7 @@ export function OrdersPaymentsOverview({ records }: OrdersPaymentsOverviewProps)
   const cards = [
     {
       title: "Total Revenue",
-      value: formatCurrency(totalRevenue),
+      value: formatCurrency(totalRevenue, recordCurrency),
       description: "Successful payments only",
       icon: BadgeIndianRupee,
     },
