@@ -12,7 +12,7 @@ import {
   useRef,
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
-  type MouseEvent as ReactMouseEvent,
+  type PointerEvent as ReactPointerEvent,
 } from "react";
 import {
   ArrowLeft,
@@ -347,26 +347,97 @@ function CustomVideoPlayer({ src, watermark }: CustomVideoPlayerProps) {
     [duration],
   );
 
-  const handleProgressMouseMove = (event: ReactMouseEvent<HTMLDivElement>) => {
-    if (!progressBarRef.current) {
+  // const handleProgressMouseMove = (event: ReactMouseEvent<HTMLDivElement>) => {
+  //   if (!progressBarRef.current) {
+  //     return;
+  //   }
+
+  //   const time = timeFromClientX(event.clientX);
+  //   const x = event.clientX - progressBarRef.current.getBoundingClientRect().left;
+
+  //   setHoverPreview({ time, x });
+  // };
+
+  // const handleProgressMouseLeave = () => {
+  //   if (!isScrubbing) {
+  //     setHoverPreview(null);
+  //   }
+  // };
+
+  // const handleScrubStart = (event: ReactMouseEvent<HTMLDivElement>) => {
+  //   const video = videoRef.current;
+
+  //   setIsScrubbing(true);
+
+  //   const time = timeFromClientX(event.clientX);
+
+  //   if (video) {
+  //     video.currentTime = time;
+  //   }
+
+  //   setCurrentTime(time);
+
+  //   const handleMouseMove = (moveEvent: MouseEvent) => {
+  //     const t = timeFromClientX(moveEvent.clientX);
+
+  //     if (video) {
+  //       video.currentTime = t;
+  //     }
+
+  //     setCurrentTime(t);
+
+  //     if (progressBarRef.current) {
+  //       setHoverPreview({
+  //         time: t,
+  //         x: moveEvent.clientX - progressBarRef.current.getBoundingClientRect().left,
+  //       });
+  //     }
+  //   };
+
+  //   const handleMouseUp = () => {
+  //     setIsScrubbing(false);
+  //     setHoverPreview(null);
+  //     window.removeEventListener("mousemove", handleMouseMove);
+  //     window.removeEventListener("mouseup", handleMouseUp);
+  //   };
+
+  //   window.addEventListener("mousemove", handleMouseMove);
+  //   window.addEventListener("mouseup", handleMouseUp);
+  // };
+
+  const handleProgressPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const bar = progressBarRef.current;
+
+    if (!bar || !duration) {
       return;
     }
 
     const time = timeFromClientX(event.clientX);
-    const x = event.clientX - progressBarRef.current.getBoundingClientRect().left;
+    const x = event.clientX - bar.getBoundingClientRect().left;
 
     setHoverPreview({ time, x });
+
+    if (isScrubbing) {
+      const video = videoRef.current;
+
+      if (video) {
+        video.currentTime = time;
+      }
+
+      setCurrentTime(time);
+    }
   };
 
-  const handleProgressMouseLeave = () => {
+  const handleProgressPointerLeave = () => {
     if (!isScrubbing) {
       setHoverPreview(null);
     }
   };
 
-  const handleScrubStart = (event: ReactMouseEvent<HTMLDivElement>) => {
+  const handleScrubStart = (event: ReactPointerEvent<HTMLDivElement>) => {
     const video = videoRef.current;
 
+    event.currentTarget.setPointerCapture(event.pointerId);
     setIsScrubbing(true);
 
     const time = timeFromClientX(event.clientX);
@@ -376,33 +447,15 @@ function CustomVideoPlayer({ src, watermark }: CustomVideoPlayerProps) {
     }
 
     setCurrentTime(time);
+  };
 
-    const handleMouseMove = (moveEvent: MouseEvent) => {
-      const t = timeFromClientX(moveEvent.clientX);
+  const handleScrubEnd = (event: ReactPointerEvent<HTMLDivElement>) => {
+    setIsScrubbing(false);
+    setHoverPreview(null);
 
-      if (video) {
-        video.currentTime = t;
-      }
-
-      setCurrentTime(t);
-
-      if (progressBarRef.current) {
-        setHoverPreview({
-          time: t,
-          x: moveEvent.clientX - progressBarRef.current.getBoundingClientRect().left,
-        });
-      }
-    };
-
-    const handleMouseUp = () => {
-      setIsScrubbing(false);
-      setHoverPreview(null);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
   };
 
   const toggleFullscreen = useCallback(() => {
@@ -511,10 +564,15 @@ function CustomVideoPlayer({ src, watermark }: CustomVideoPlayerProps) {
         {/* Progress / scrub bar */}
         <div
           ref={progressBarRef}
-          onMouseMove={handleProgressMouseMove}
-          onMouseLeave={handleProgressMouseLeave}
-          onMouseDown={handleScrubStart}
-          className="group/progress relative mb-2 flex h-3 w-full cursor-pointer items-center"
+          // onMouseMove={handleProgressMouseMove}
+          // onMouseLeave={handleProgressMouseLeave}
+          // onMouseDown={handleScrubStart}
+          onPointerMove={handleProgressPointerMove}
+          onPointerLeave={handleProgressPointerLeave}
+          onPointerDown={handleScrubStart}
+          onPointerUp={handleScrubEnd}
+          onPointerCancel={handleScrubEnd}
+          className="group/progress relative mb-2 flex h-3 w-full cursor-pointer touch-none select-none items-center"
         >
           <div className="relative h-1 w-full overflow-hidden rounded-full bg-white/25 transition-all group-hover/progress:h-1.5">
             <div
@@ -917,7 +975,7 @@ export default function CourseCategoryPage({ params }: CourseCategoryPageProps) 
   }
 
   return (
-    <main className="min-h-screen bg-background text-white">
+    <main className="min-h-screen bg-background text-white pt-10 lg:pt-2">
       <section className="relative overflow-hidden px-4 py-10 sm:px-6 lg:px-8 lg:py-25">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-1/3 h-150 w-150 -translate-x-1/2 rounded-full gold-radial-glow opacity-20 blur-3xl" />

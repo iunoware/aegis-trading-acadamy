@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { AccountStatus, UserRole } from "@/generated/prisma/client";
+import { AccountStatus, UserRole, SubscriptionStatus } from "@/generated/prisma/client";
 import {
   STUDENT_SESSION_COOKIE,
   ADMIN_SESSION_COOKIE,
@@ -35,6 +35,35 @@ export async function getCurrentStudentUser() {
       deletedAt: true,
       createdAt: true,
       updatedAt: true,
+      subscriptions: {
+        where: {
+          deletedAt: null,
+          status: SubscriptionStatus.ACTIVE,
+          currentExpiryDate: {
+            gt: new Date(),
+          },
+        },
+        orderBy: {
+          currentExpiryDate: "desc",
+        },
+        take: 1,
+        select: {
+          id: true,
+          status: true,
+          purchaseDate: true,
+          startDate: true,
+          originalExpiryDate: true,
+          currentExpiryDate: true,
+          plan: {
+            select: {
+              id: true,
+              type: true,
+              name: true,
+              durationMonths: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -47,8 +76,54 @@ export async function getCurrentStudentUser() {
     return null;
   }
 
-  return user;
+  const activeSubscription = user.subscriptions[0] ?? null;
+
+  return {
+    ...user,
+    activeSubscription,
+    subscriptions: undefined,
+  };
 }
+
+// export async function getCurrentStudentSubscription() {
+//   const user = await getCurrentStudentUser();
+
+//   if (!user) {
+//     return null;
+//   }
+
+//   const subscription = await prisma.subscription.findFirst({
+//     where: {
+//       userId: user.id,
+//       deletedAt: null,
+//       status: SubscriptionStatus.ACTIVE,
+//       currentExpiryDate: {
+//         gt: new Date(),
+//       },
+//     },
+//     orderBy: {
+//       currentExpiryDate: "desc",
+//     },
+//     select: {
+//       id: true,
+//       status: true,
+//       purchaseDate: true,
+//       startDate: true,
+//       originalExpiryDate: true,
+//       currentExpiryDate: true,
+//       plan: {
+//         select: {
+//           id: true,
+//           type: true,
+//           name: true,
+//           durationMonths: true,
+//         },
+//       },
+//     },
+//   });
+
+//   return subscription;
+// }
 
 export async function getCurrentAdminUser() {
   const cookieStore = await cookies();

@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // // add video via file upload
 
 // import { NextRequest, NextResponse } from "next/server";
 // import { prisma } from "@/lib/prisma";
 // import { ActivityAction, ActivityActorType } from "@/generated/prisma/client";
 // import { getRequiredSuperAdmin } from "@/lib/current-user";
-// import { mkdir, writeFile } from "fs/promises";
+// import { s3Client, S3_BUCKET } from "@/lib/s3";
+// import { Upload } from "@aws-sdk/lib-storage";
+// import { Readable } from "stream";
 // import path from "path";
 // import crypto from "crypto";
 
 // export const runtime = "nodejs";
 
-// const STORAGE_DIR =
-//   process.env.VIDEO_STORAGE_DIR || path.join(process.cwd(), "storage", "videos");
 // const ALLOWED_MIME = ["video/mp4", "video/webm", "video/quicktime", "video/x-matroska"];
 // const MAX_BYTES = 10 * 1024 * 1024 * 1024;
 
@@ -85,14 +86,36 @@
 
 //     const ext = path.extname(file.name) || ".mp4";
 //     const fileName = `${crypto.randomUUID()}${ext}`;
-//     const courseDir = path.join(STORAGE_DIR, courseId);
-//     const destPath = path.join(courseDir, fileName);
-
-//     await mkdir(courseDir, { recursive: true });
-//     const buffer = Buffer.from(await file.arrayBuffer());
-//     await writeFile(destPath, buffer);
-
 //     const internalRef = `${courseId}/${fileName}`;
+
+//     // Stream the upload straight to S3 rather than buffering the whole file
+//     // in memory first — matters once videos get into the hundreds of MB.
+//     const nodeStream = Readable.fromWeb(
+//       file.stream() as import("stream/web").ReadableStream<Uint8Array>,
+//     );
+
+//     try {
+//       const upload = new Upload({
+//         client: s3Client,
+//         params: {
+//           Bucket: S3_BUCKET,
+//           Key: internalRef,
+//           Body: nodeStream,
+//           ContentType: file.type,
+//         },
+//         queueSize: 4,
+//         partSize: 10 * 1024 * 1024,
+//       });
+
+//       await upload.done();
+//     } catch (uploadError) {
+//       console.error("S3 upload failed:", uploadError);
+//       return NextResponse.json(
+//         { success: false, message: "Failed to upload video to storage." },
+//         { status: 500 },
+//       );
+//     }
+
 //     const maxOrder = await prisma.lesson.aggregate({
 //       _max: { displayOrder: true },
 //       where: { courseId },
@@ -169,6 +192,12 @@ import { Upload } from "@aws-sdk/lib-storage";
 import { Readable } from "stream";
 import path from "path";
 import crypto from "crypto";
+import {
+  initProgress,
+  updateProgress,
+  completeProgress,
+  failProgress,
+} from "@/lib/upload-progress-store";
 
 export const runtime = "nodejs";
 
@@ -187,6 +216,8 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ coursesId: string }> },
 ) {
+  let uploadId: string | null = null;
+
   try {
     const adminUser = await getRequiredSuperAdmin();
     const { coursesId } = await params;
@@ -204,10 +235,12 @@ export async function POST(
     }
 
     const formData = await request.formData();
+    console.log("[upload] formData parsed at", Date.now());
     const file = formData.get("file");
     const title = formData.get("title")?.toString().trim() || "";
     const isPreview = formData.get("isPreview")?.toString() === "true";
     const durationSeconds = Number(formData.get("durationSeconds") || 0);
+    uploadId = formData.get("uploadId")?.toString() || null;
 
     if (!title) {
       return NextResponse.json(
@@ -234,6 +267,8 @@ export async function POST(
       );
     }
 
+    if (uploadId) initProgress(uploadId);
+
     const baseSlug = slugify(title);
     let slug = baseSlug;
     let suffix = 1;
@@ -247,11 +282,28 @@ export async function POST(
     const fileName = `${crypto.randomUUID()}${ext}`;
     const internalRef = `${courseId}/${fileName}`;
 
-    // Stream the upload straight to S3 rather than buffering the whole file
-    // in memory first — matters once videos get into the hundreds of MB.
-    const nodeStream = Readable.fromWeb(
-      file.stream() as import("stream/web").ReadableStream<Uint8Array>,
-    );
+    // const nodeStream = Readable.fromWeb(
+    //   file.stream() as import("stream/web").ReadableStream<Uint8Array>,
+    // );
+
+    // try {
+    //   const upload = new Upload({
+    //     client: s3Client,
+    //     params: {
+    //       Bucket: S3_BUCKET,
+    //       Key: internalRef,
+    //       Body: nodeStream,
+    //       ContentType: file.type,
+    //     },
+    //     queueSize: 4,
+    //     partSize: 10 * 1024 * 1024,
+    //   });
+
+    // request.formData() already buffered the whole file into memory,
+    // so hand the AWS SDK a plain Buffer instead of re-wrapping it as a
+    // stream — the Web->Node stream conversion was throttling multipart
+    // uploads to a crawl.
+    const fileBuffer = Buffer.from(await file.arrayBuffer());
 
     try {
       const upload = new Upload({
@@ -259,16 +311,30 @@ export async function POST(
         params: {
           Bucket: S3_BUCKET,
           Key: internalRef,
-          Body: nodeStream,
+          Body: fileBuffer,
           ContentType: file.type,
         },
         queueSize: 4,
         partSize: 10 * 1024 * 1024,
       });
 
+      if (uploadId) {
+        const id = uploadId;
+        upload.on("httpUploadProgress", (progress) => {
+          if (progress.total) {
+            const percent = Math.round((progress.loaded! / progress.total) * 100);
+            updateProgress(id, percent);
+          }
+        });
+      }
+
       await upload.done();
+      console.log("[upload] S3 upload.done() resolved at", Date.now());
+
+      if (uploadId) completeProgress(uploadId);
     } catch (uploadError) {
       console.error("S3 upload failed:", uploadError);
+      if (uploadId) failProgress(uploadId, "Failed to upload video to storage.");
       return NextResponse.json(
         { success: false, message: "Failed to upload video to storage." },
         { status: 500 },
@@ -319,6 +385,7 @@ export async function POST(
     );
   } catch (error: unknown) {
     console.error("Lesson upload error:", error);
+    if (uploadId) failProgress(uploadId, "Failed to upload video.");
     if (
       typeof error === "object" &&
       error !== null &&

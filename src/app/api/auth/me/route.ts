@@ -28,6 +28,7 @@ export async function GET() {
         phone: user.phone,
         role: user.role,
         status: user.status,
+        activeSubscription: user.activeSubscription,
       },
     });
   } catch (error) {
