@@ -71,6 +71,7 @@ function formatDate(dateStr: string) {
 
 export default function CourseCMS() {
   const containerRef = useRef<HTMLDivElement>(null);
+  // const uploadEventSourceRef = useRef<EventSource | null>(null);
 
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -114,6 +115,12 @@ export default function CourseCMS() {
 
   const previewBlobUrlRef = useRef<string | null>(null);
   const previewAbortControllerRef = useRef<AbortController | null>(null);
+
+  // useEffect(() => {
+  //   return () => {
+  //     uploadEventSourceRef.current?.close();
+  //   };
+  // }, []);
 
   //  Fetch courses
   const fetchCourses = useCallback(async () => {
@@ -380,7 +387,7 @@ export default function CourseCMS() {
       return;
     }
 
-    // ---- Editing an existing video (title/URL/preview/duration, or replace the file) ----
+    // Editing an existing video (title/URL/preview/duration, or replace the file)
     if (editingVideo) {
       setIsSavingVideo(true);
       try {
@@ -430,31 +437,112 @@ export default function CourseCMS() {
       return;
     }
 
-    // ---- Creating a new video: upload ----
+    // Creating a new video: upload - properly working one
+    // if (videoMode === "upload") {
+    //   if (!videoFile) {
+    //     toast.error("Please choose a video file to upload");
+    //     return;
+    //   }
+    //   setIsSavingVideo(true);
+    //   try {
+    //     const formData = new FormData();
+    //     formData.append("file", videoFile);
+    //     formData.append("title", videoTitle);
+    //     formData.append("isPreview", String(videoIsPreview));
+    //     formData.append("durationSeconds", String(videoDurationSeconds));
+
+    //     const res = await axios.post(
+    //       `/api/admin/courses/${activeCourseId}/lessons/upload`,
+    //       formData,
+    //       {
+    //         onUploadProgress: (event) => {
+    //           if (event.total) {
+    //             setUploadProgress(Math.round((event.loaded / event.total) * 100));
+    //           }
+    //         },
+    //       },
+    //     );
+
+    //     setCourses((prev) =>
+    //       prev.map((c) =>
+    //         c.id === activeCourseId
+    //           ? { ...c, lessons: [...c.lessons, res.data.lesson] }
+    //           : c,
+    //       ),
+    //     );
+    //     toast.success(res.data.message);
+    //     setIsVideoModalOpen(false);
+    //   } catch (err) {
+    //     toast.error(
+    //       axios.isAxiosError(err)
+    //         ? err.response?.data?.message
+    //         : "Failed to upload video",
+    //     );
+    //   } finally {
+    //     setIsSavingVideo(false);
+    //     setUploadProgress(null);
+    //   }
+    //   return;
+    // }
+
+    // New one: Creating a new video: upload
     if (videoMode === "upload") {
       if (!videoFile) {
         toast.error("Please choose a video file to upload");
         return;
       }
+
       setIsSavingVideo(true);
+      setUploadProgress(0);
+
+      const uploadId = crypto.randomUUID();
+
+      // Server -> S3 leg, weighted into the top half of the bar
+      // const es = new EventSource(`/api/admin/upload-progress/${uploadId}`);
+      // uploadEventSourceRef.current = es;
+
+      // es.onmessage = (event) => {
+      //   try {
+      //     const data = JSON.parse(event.data);
+      //     if (typeof data.percent === "number") {
+      //       setUploadProgress(50 + Math.round(data.percent * 0.5));
+      //     }
+      //     if (data.done) {
+      //       es.close();
+      //       uploadEventSourceRef.current = null;
+      //     }
+      //   } catch {
+      //     // ignore malformed/heartbeat events
+      //   }
+      // };
+
+      // es.onerror = () => {
+      //   es.close();
+      //   uploadEventSourceRef.current = null;
+      // };
+
       try {
         const formData = new FormData();
         formData.append("file", videoFile);
         formData.append("title", videoTitle);
         formData.append("isPreview", String(videoIsPreview));
         formData.append("durationSeconds", String(videoDurationSeconds));
+        formData.append("uploadId", uploadId);
 
         const res = await axios.post(
           `/api/admin/courses/${activeCourseId}/lessons/upload`,
           formData,
           {
             onUploadProgress: (event) => {
+              // Browser -> server leg, weighted into the bottom half of the bar
               if (event.total) {
-                setUploadProgress(Math.round((event.loaded / event.total) * 100));
+                setUploadProgress(Math.round((event.loaded / event.total) * 50));
               }
             },
           },
         );
+
+        setUploadProgress(100);
 
         setCourses((prev) =>
           prev.map((c) =>
@@ -472,6 +560,8 @@ export default function CourseCMS() {
             : "Failed to upload video",
         );
       } finally {
+        // uploadEventSourceRef.current?.close();
+        // uploadEventSourceRef.current = null;
         setIsSavingVideo(false);
         setUploadProgress(null);
       }
@@ -513,46 +603,6 @@ export default function CourseCMS() {
     //       axios.isAxiosError(err)
     //         ? err.response?.data?.message
     //         : "Failed to update video",
-    //     );
-    //   } finally {
-    //     setIsSavingVideo(false);
-    //   }
-    //   return;
-    // }
-
-    // ---- Creating a new video: upload ----
-    // if (videoMode === "upload") {
-    //   if (!videoFile) {
-    //     toast.error("Please choose a video file to upload");
-    //     return;
-    //   }
-    //   setIsSavingVideo(true);
-    //   try {
-    //     const formData = new FormData();
-    //     formData.append("file", videoFile);
-    //     formData.append("title", videoTitle);
-    //     formData.append("isPreview", String(videoIsPreview));
-    //     formData.append("durationSeconds", String(videoDurationSeconds));
-
-    //     const res = await axios.post(
-    //       `/api/admin/courses/${activeCourseId}/lessons/upload`,
-    //       formData,
-    //     );
-
-    //     setCourses((prev) =>
-    //       prev.map((c) =>
-    //         c.id === activeCourseId
-    //           ? { ...c, lessons: [...c.lessons, res.data.lesson] }
-    //           : c,
-    //       ),
-    //     );
-    //     toast.success(res.data.message);
-    //     setIsVideoModalOpen(false);
-    //   } catch (err) {
-    //     toast.error(
-    //       axios.isAxiosError(err)
-    //         ? err.response?.data?.message
-    //         : "Failed to upload video",
     //     );
     //   } finally {
     //     setIsSavingVideo(false);
@@ -707,6 +757,7 @@ export default function CourseCMS() {
                       src={course.thumbnailUrl || "/images/cert-nism.png"}
                       alt={course.title}
                       fill
+                      loading="eager"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent opacity-60 pointer-events-none" />
@@ -1112,6 +1163,31 @@ export default function CourseCMS() {
                   </div>
                 </div>
               )} */}
+
+              {isSavingVideo && uploadProgress !== null && (
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
+                    <span>
+                      {uploadProgress >= 100
+                        ? "Processing video..."
+                        : "Uploading video..."}
+                    </span>
+
+                    <span className="text-[#C9A227] font-semibold">
+                      {uploadProgress >= 100 ? "Processing" : `${uploadProgress}%`}
+                    </span>
+                  </div>
+
+                  <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-linear-to-r from-[#e6c55a] via-[#C9A227] to-[#8f6b12] transition-all duration-200"
+                      style={{
+                        width: `${Math.min(uploadProgress, 100)}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* <div className="flex items-center gap-2 p-1 rounded-xl bg-black/40 border border-white/10">
                 <button

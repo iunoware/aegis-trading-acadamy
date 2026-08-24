@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 // import Image from "next/image";
 import { gsap } from "gsap";
+import axios from "axios";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
@@ -36,6 +38,22 @@ export default function Footer() {
   const columnsRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const isProfile = pathname.startsWith("/student");
+
+  const [activeSubscription, setActiveSubscription] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await axios.get("/api/auth/me");
+
+        setActiveSubscription(response.data.user?.activeSubscription ?? null);
+      } catch {
+        setActiveSubscription(null);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -116,7 +134,7 @@ export default function Footer() {
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
               {/* Primary Button */}
               <a
-                href="#pricing"
+                href="/pricing"
                 className="group inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl font-bold text-sm sm:text-base tracking-wide bg-linear-to-r from-primary-light via-primary to-primary-dark text-black shadow-[0_0_25px_rgba(212,175,55,0.35)] hover:shadow-[0_0_40px_rgba(212,175,55,0.55)] transition-all duration-300 transform hover:-translate-y-0.5 w-full sm:w-auto text-center"
               >
                 <span>Join Academy</span>
@@ -127,12 +145,12 @@ export default function Footer() {
               </a>
 
               {/* Secondary Button */}
-              <a
+              {/* <a
                 href="#contact"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold text-sm sm:text-base tracking-wide glass-panel text-white hover:text-primary border border-white/15 hover:border-primary/40 transition-all duration-300 hover:-translate-y-0.5 w-full sm:w-auto text-center"
               >
                 Contact Us
-              </a>
+              </a> */}
             </div>
           </div>
         ) : (

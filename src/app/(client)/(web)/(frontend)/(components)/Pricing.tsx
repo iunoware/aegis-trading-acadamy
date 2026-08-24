@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
@@ -17,6 +18,8 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { toast } from "sonner";
+import ActiveMembershipCard from "./ActiveMembershipCard";
+import { usePathname } from "next/navigation";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -172,7 +175,8 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, className = "" }) => {
       } else if (status === 502) {
         userMessage = "Unable to initialize the payment. Please try again.";
       } else if (status === 500) {
-        userMessage = "Something went wrong while starting the payment. Please try again.";
+        userMessage =
+          "Something went wrong while starting the payment. Please try again.";
       } else if (error?.response?.data?.message) {
         userMessage = error.response.data.message;
       }
@@ -334,9 +338,7 @@ function convertApiPlanToPricingPlan(
     const savingsAmount = yearlyMonthlyCost - plan.price;
 
     if (savingsAmount > 0) {
-      const savingsPercentage = Math.round(
-        (savingsAmount / yearlyMonthlyCost) * 100,
-      );
+      const savingsPercentage = Math.round((savingsAmount / yearlyMonthlyCost) * 100);
 
       savingsLabel = `Save ${savingsPercentage}%`;
     }
@@ -356,13 +358,10 @@ function convertApiPlanToPricingPlan(
       plan.badge === "Popular" ||
       plan.badge === "Best Value" ||
       plan.badge === "Recommended",
-    popularBadgeText:
-      plan.badge === "None" ? undefined : plan.badge.toUpperCase(),
+    popularBadgeText: plan.badge === "None" ? undefined : plan.badge.toUpperCase(),
     features: plan.features.map((feature) => feature.text),
-    buttonText:
-      plan.id === "monthly" ? "Start Monthly Plan" : "Start Yearly Plan",
-    buttonHref:
-      plan.id === "monthly" ? "#checkout-monthly" : "#checkout-yearly",
+    buttonText: plan.id === "monthly" ? "Start Monthly Plan" : "Start Yearly Plan",
+    buttonHref: plan.id === "monthly" ? "#checkout-monthly" : "#checkout-yearly",
   };
 }
 
@@ -397,15 +396,36 @@ export default function Pricing() {
   // const paymentSectionRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
+  const pathname = usePathname();
+
+  const isHomePage = pathname === "/";
+  const isPricingPage = pathname === "/pricing";
+
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // checking active subscription
+  const [activeSubscription, setActiveSubscription] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await axios.get("/api/auth/me");
+
+        setActiveSubscription(response.data.user?.activeSubscription ?? null);
+      } catch {
+        setActiveSubscription(null);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   const fetchPricing = useCallback(async () => {
     try {
       setIsLoading(true);
 
-      const response =
-        await axios.get<PricingApiResponse>("/api/admin/pricing");
+      const response = await axios.get<PricingApiResponse>("/api/admin/pricing");
 
       const monthlyPlan = response.data.data.monthly;
       const yearlyPlan = response.data.data.yearly;
@@ -421,9 +441,7 @@ export default function Pricing() {
       }
 
       if (yearlyPlan?.status) {
-        formattedPlans.push(
-          convertApiPlanToPricingPlan(yearlyPlan, monthlyPlan?.price),
-        );
+        formattedPlans.push(convertApiPlanToPricingPlan(yearlyPlan, monthlyPlan?.price));
       }
 
       setPricingPlans(formattedPlans);
@@ -504,11 +522,7 @@ export default function Pricing() {
         );
       }
 
-      tl.to(
-        trustStripRef.current,
-        { opacity: 1, y: 0, duration: 0.7 },
-        "-=0.3",
-      );
+      tl.to(trustStripRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.3");
 
       // if (paymentSectionRef.current) {
       //   tl.to(
@@ -540,105 +554,92 @@ export default function Pricing() {
     };
   }, []);
 
+  if (isHomePage && activeSubscription) {
+    return;
+  }
+
   return (
-    <section
-      ref={sectionRef}
-      id="pricing"
-      aria-label="Pricing Section"
-      className="relative w-full py-10 lg:py-15 bg-background text-white overflow-hidden"
-    >
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div
-          ref={glowRef}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 rounded-full gold-radial-glow opacity-30 blur-3xl transform-gpu"
-        />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-        <div ref={labelRef} className="mb-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-primary/5">
-            <ShieldCheck size={14} className="text-primary" />
-            PRICING
-          </div>
+    <>
+      {isPricingPage && activeSubscription ? (
+        <div className="grid place-items-center">
+          <ActiveMembershipCard subscription={activeSubscription} />
         </div>
+      ) : (
+        <section
+          ref={sectionRef}
+          id="pricing"
+          aria-label="Pricing Section"
+          className="relative w-full py-10 lg:py-15 bg-background text-white overflow-hidden"
+        >
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <div
+              ref={glowRef}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 rounded-full gold-radial-glow opacity-30 blur-3xl transform-gpu"
+            />
+          </div>
 
-        <h2
-          ref={headingRef}
-          className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-sans mb-4 text-center max-w-3xl"
-        >
-          Invest in Your <br />
-          <span className="gold-gradient-text">Trading Future.</span>
-        </h2>
-
-        <p
-          ref={paragraphRef}
-          className="text-base sm:text-lg text-text font-normal leading-relaxed max-w-162.5 text-center mb-16 sm:mb-20"
-        >
-          Choose the membership plan that fits your learning journey. Every
-          subscription gives you access to our structured curriculum, live
-          sessions, community, and continuous course updates.
-        </p>
-
-        {/* <div
-          ref={cardsGridRef}
-          className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-220 mx-auto items-stretch mb-16 sm:mb-20"
-        >
-          {pricingPlans.map((plan) => (
-            <div key={plan.id} className="w-full max-w-130 mx-auto">
-              <PricingCard plan={plan} />
-            </div>
-          ))}
-        </div> */}
-        <div
-          ref={cardsGridRef}
-          className="mb-16 grid w-full max-w-220 grid-cols-1 items-stretch gap-8 sm:mb-20 md:grid-cols-2 lg:gap-10"
-        >
-          {isLoading ? (
-            <>
-              <PricingCardSkeleton />
-              <PricingCardSkeleton />
-            </>
-          ) : pricingPlans.length > 0 ? (
-            pricingPlans.map((plan) => (
-              <div key={plan.id} className="mx-auto w-full max-w-130">
-                <PricingCard plan={plan} />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+            <div ref={labelRef} className="mb-4">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/30 text-xs font-semibold tracking-widest text-primary font-mono uppercase bg-primary/5">
+                <ShieldCheck size={14} className="text-primary" />
+                PRICING
               </div>
-            ))
-          ) : (
-            <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
-              <p className="text-sm text-zinc-400">
-                No active pricing plans are currently available.
-              </p>
             </div>
-          )}
-        </div>
 
-        <div
-          ref={trustStripRef}
-          className="w-full max-w-270 mx-auto glass-panel border border-white/10 rounded-2xl py-4 px-6 mb-12"
-        >
-          <div className="flex flex-wrap items-center justify-around gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
-            {TRUST_ITEMS.map((item) => (
-              <TrustItem key={item.id} icon={item.icon} text={item.text} />
-            ))}
+            <h2
+              ref={headingRef}
+              className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-sans mb-4 text-center max-w-3xl"
+            >
+              Invest in Your <br />
+              <span className="gold-gradient-text">Trading Future.</span>
+            </h2>
+
+            <p
+              ref={paragraphRef}
+              className="text-base sm:text-lg text-text font-normal leading-relaxed max-w-162.5 text-center mb-16 sm:mb-20"
+            >
+              Choose the membership plan that fits your learning journey. Every
+              subscription gives you access to our structured curriculum, live sessions,
+              community, and continuous course updates.
+            </p>
+
+            <div
+              ref={cardsGridRef}
+              className="mb-16 grid w-full max-w-220 grid-cols-1 items-stretch gap-8 sm:mb-20 md:grid-cols-2 lg:gap-10"
+            >
+              {isLoading ? (
+                <div>
+                  <PricingCardSkeleton />
+                  <PricingCardSkeleton />
+                </div>
+              ) : pricingPlans.length > 0 ? (
+                pricingPlans.map((plan) => (
+                  <div key={plan.id} className="mx-auto w-full max-w-130">
+                    <PricingCard plan={plan} />
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
+                  <p className="text-sm text-zinc-400">
+                    No active pricing plans are currently available.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div
+              ref={trustStripRef}
+              className="w-full max-w-270 mx-auto glass-panel border border-white/10 rounded-2xl py-4 px-6 mb-12"
+            >
+              <div className="flex flex-wrap items-center justify-around gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+                {TRUST_ITEMS.map((item) => (
+                  <TrustItem key={item.id} icon={item.icon} text={item.text} />
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-
-        {/* <div
-          ref={paymentSectionRef}
-          className="flex flex-col items-center space-y-4 text-center"
-        >
-          <span className="text-xs font-mono font-semibold uppercase tracking-widest text-muted">
-            Secure Payments Accepted
-          </span>
-
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {PAYMENT_METHODS.map((method) => (
-              <PaymentMethod key={method} name={method} />
-            ))}
-          </div>
-        </div> */}
-      </div>
-    </section>
+        </section>
+      )}
+    </>
   );
 }
