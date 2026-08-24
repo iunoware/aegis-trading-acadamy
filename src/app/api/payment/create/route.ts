@@ -229,16 +229,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build IPN Callback URL
+    // Build base URL and IPN Callback URL
     const host =
       request.headers.get("x-forwarded-host") || request.headers.get("host");
     const proto =
       request.headers.get("x-forwarded-proto") ||
       (host?.includes("localhost") ? "http" : "https");
-    const origin = host
-      ? `${proto}://${host}`
-      : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const ipnCallbackUrl = `${origin}/api/payment/ipn`;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+      ? process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "")
+      : host
+        ? `${proto}://${host}`
+        : "http://localhost:3000";
+    const ipnCallbackUrl = `${baseUrl}/api/payment/ipn`;
 
     // STEP 6: NOWPayments request logging
     currentStep = "STEP_6_SENDING_INVOICE";
@@ -260,6 +262,8 @@ export async function POST(request: NextRequest) {
           order_id: order.orderNumber,
           order_description: `${plan.name} Subscription`,
           ipn_callback_url: ipnCallbackUrl,
+          success_url: `${baseUrl}/student?payment=success`,
+          cancel_url: `${baseUrl}/pricing?payment=cancelled`,
         },
         {
           headers: {

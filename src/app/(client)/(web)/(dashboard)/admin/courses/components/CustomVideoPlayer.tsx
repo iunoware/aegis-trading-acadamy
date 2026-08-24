@@ -145,7 +145,7 @@ export function CustomVideoPlayer({ src, watermark }: CustomVideoPlayerProps) {
     }
 
     if (video.paused || video.ended) {
-      video.play().catch(() => {});
+      video.play().catch(() => { });
     } else {
       video.pause();
     }
@@ -278,9 +278,9 @@ export function CustomVideoPlayer({ src, watermark }: CustomVideoPlayerProps) {
     }
 
     if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
+      document.exitFullscreen().catch(() => { });
     } else {
-      container.requestFullscreen().catch(() => {});
+      container.requestFullscreen().catch(() => { });
     }
   }, []);
 
@@ -367,9 +367,8 @@ export function CustomVideoPlayer({ src, watermark }: CustomVideoPlayerProps) {
       )}
 
       <div
-        className={`absolute inset-x-0 bottom-0 z-20 bg-linear-to-t from-black/90 via-black/50 to-transparent px-3 pb-2 pt-10 transition-opacity duration-300 sm:px-4 ${
-          showControls ? "opacity-100" : "pointer-events-none opacity-0"
-        }`}
+        className={`absolute inset-x-0 bottom-0 z-20 bg-linear-to-t from-black/90 via-black/50 to-transparent px-3 pb-2 pt-10 transition-opacity duration-300 sm:px-4 ${showControls ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
       >
         <div
           ref={progressBarRef}
@@ -454,9 +453,8 @@ export function CustomVideoPlayer({ src, watermark }: CustomVideoPlayerProps) {
               </button>
 
               <div
-                className={`overflow-hidden transition-all duration-200 ${
-                  isVolumeHover ? "w-16 sm:w-20" : "w-0"
-                }`}
+                className={`overflow-hidden transition-all duration-200 ${isVolumeHover ? "w-16 sm:w-20" : "w-0"
+                  }`}
               >
                 <input
                   type="range"
