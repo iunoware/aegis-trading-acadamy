@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import {
   // Search,
@@ -239,14 +239,14 @@ function CertificateCardItem({
             }
             className={`w-7 h-7 rounded-lg border flex items-center justify-center cursor-pointer transition-colors ${
               certificate.status === "Published"
-                ? "bg-white/5 border-white/10 hover:border-amber-500/40 text-zinc-400 hover:text-amber-400"
-                : "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
+                ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20"
+                : "bg-white/5 border-white/10 hover:border-amber-500/40 text-zinc-400 hover:text-amber-400"
             }`}
           >
             {certificate.status === "Published" ? (
-              <EyeOff size={13} />
-            ) : (
               <Eye size={13} />
+            ) : (
+              <EyeOff size={13} />
             )}
           </button>
 
