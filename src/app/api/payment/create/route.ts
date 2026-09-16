@@ -12,10 +12,6 @@ import {
 
 export const runtime = "nodejs";
 
-// for pull
-// for pull
-// for pull
-
 interface CreatePaymentRequestBody {
   planId?: string;
 }
@@ -240,7 +236,8 @@ export async function POST(request: NextRequest) {
       : host
         ? `${proto}://${host}`
         : "http://localhost:3000";
-    const ipnCallbackUrl = `${baseUrl}/api/payment/ipn`;
+    const ipnCallbackUrl =
+      process.env.NOWPAYMENTS_IPN_CALLBACK_URL || `${baseUrl}/api/payment/ipn`;
 
     // STEP 6: NOWPayments request logging
     currentStep = "STEP_6_SENDING_INVOICE";
