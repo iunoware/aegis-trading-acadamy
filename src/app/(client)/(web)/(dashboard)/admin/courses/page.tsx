@@ -105,6 +105,7 @@ export default function CourseCMS() {
     message: string;
     onConfirm: () => void;
   } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   //  Video preview
   const [previewLesson, setPreviewLesson] = useState<Lesson | null>(null);
@@ -221,6 +222,36 @@ export default function CourseCMS() {
     }
   };
 
+  // const handleDeleteCourse = (
+  //   e: React.MouseEvent,
+  //   courseId: string,
+  //   courseTitle: string,
+  // ) => {
+  //   e.stopPropagation();
+  //   setConfirmModal({
+  //     title: "Delete Course",
+  //     message: `Delete "${courseTitle}" and all its videos permanently? This cannot be undone.`,
+  //     onConfirm: async () => {
+  //       try {
+  //         const res = await axios.delete(`/api/admin/courses/${courseId}`);
+  //         setCourses((prev) => prev.filter((c) => c.id !== courseId));
+  //         if (activeCourseId === courseId) setActiveCourseId(null);
+  //         toast.success(res.data.message);
+  //       } catch (err) {
+  //         toast.error(
+  //           axios.isAxiosError(err)
+  //             ? err.response?.data?.message
+  //             : "Failed to delete course",
+  //         );
+  //       } finally {
+  //         setConfirmModal(null);
+  //       }
+  //     },
+  //   });
+  // };
+
+  //  Video handlers
+
   const handleDeleteCourse = (
     e: React.MouseEvent,
     courseId: string,
@@ -231,11 +262,13 @@ export default function CourseCMS() {
       title: "Delete Course",
       message: `Delete "${courseTitle}" and all its videos permanently? This cannot be undone.`,
       onConfirm: async () => {
+        setIsDeleting(true);
         try {
           const res = await axios.delete(`/api/admin/courses/${courseId}`);
           setCourses((prev) => prev.filter((c) => c.id !== courseId));
           if (activeCourseId === courseId) setActiveCourseId(null);
           toast.success(res.data.message);
+          setConfirmModal(null);
         } catch (err) {
           toast.error(
             axios.isAxiosError(err)
@@ -243,13 +276,12 @@ export default function CourseCMS() {
               : "Failed to delete course",
           );
         } finally {
-          setConfirmModal(null);
+          setIsDeleting(false);
         }
       },
     });
   };
 
-  //  Video handlers
   const handleOpenPreview = (vid: Lesson) => {
     setPreviewLesson(vid);
   };
@@ -641,12 +673,44 @@ export default function CourseCMS() {
     }
   };
 
+  // const handleDeleteVideo = (videoId: string, videoTitle: string) => {
+  //   if (!activeCourseId) return;
+  //   setConfirmModal({
+  //     title: "Delete Video",
+  //     message: `Delete "${videoTitle}" permanently? The uploaded file will also be removed.`,
+  //     onConfirm: async () => {
+  //       try {
+  //         const res = await axios.delete(
+  //           `/api/admin/courses/${activeCourseId}/lessons/${videoId}`,
+  //         );
+  //         setCourses((prev) =>
+  //           prev.map((c) =>
+  //             c.id === activeCourseId
+  //               ? { ...c, lessons: c.lessons.filter((v) => v.id !== videoId) }
+  //               : c,
+  //           ),
+  //         );
+  //         toast.success(res.data.message);
+  //       } catch (err) {
+  //         toast.error(
+  //           axios.isAxiosError(err)
+  //             ? err.response?.data?.message
+  //             : "Failed to delete video",
+  //         );
+  //       } finally {
+  //         setConfirmModal(null);
+  //       }
+  //     },
+  //   });
+  // };
+
   const handleDeleteVideo = (videoId: string, videoTitle: string) => {
     if (!activeCourseId) return;
     setConfirmModal({
       title: "Delete Video",
       message: `Delete "${videoTitle}" permanently? The uploaded file will also be removed.`,
       onConfirm: async () => {
+        setIsDeleting(true);
         try {
           const res = await axios.delete(
             `/api/admin/courses/${activeCourseId}/lessons/${videoId}`,
@@ -659,6 +723,7 @@ export default function CourseCMS() {
             ),
           );
           toast.success(res.data.message);
+          setConfirmModal(null);
         } catch (err) {
           toast.error(
             axios.isAxiosError(err)
@@ -666,7 +731,7 @@ export default function CourseCMS() {
               : "Failed to delete video",
           );
         } finally {
-          setConfirmModal(null);
+          setIsDeleting(false);
         }
       },
     });
@@ -1314,7 +1379,7 @@ export default function CourseCMS() {
         </div>
       )}
 
-      {confirmModal && (
+      {/* {confirmModal && (
         <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
           <div className="w-full max-w-sm rounded-2xl bg-[#111113] border border-rose-500/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
             <div>
@@ -1337,6 +1402,39 @@ export default function CourseCMS() {
                 onClick={confirmModal.onConfirm}
                 className="px-5 py-2 rounded-xl bg-rose-500 text-white font-bold text-xs shadow-md hover:bg-rose-600 transition-colors cursor-pointer"
               >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )} */}
+
+      {confirmModal && (
+        <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-[#111113] border border-rose-500/30 p-6 flex flex-col gap-5 shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
+            <div>
+              <h3 className="text-lg font-bold text-white font-sans mb-2">
+                {confirmModal.title}
+              </h3>
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                {confirmModal.message}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                onClick={() => setConfirmModal(null)}
+                disabled={isDeleting}
+                className="px-4 py-2 rounded-xl border border-white/15 text-xs font-semibold text-zinc-300 hover:text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmModal.onConfirm}
+                disabled={isDeleting}
+                className="px-5 py-2 rounded-xl bg-rose-500 text-white font-bold text-xs shadow-md hover:bg-rose-600 transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {isDeleting && <Loader2 size={13} className="animate-spin" />}
                 Delete
               </button>
             </div>
