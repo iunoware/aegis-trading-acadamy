@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
 import {
   User,
   LogOut,
@@ -13,9 +14,25 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function StudentDashboardPage() {
   const { user, logout, isLoading } = useAuth();
+
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+  const [subLoading, setSubLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get("/api/courses")
+      .then((res) => {
+        setHasActiveSubscription(Boolean(res.data?.hasActiveSubscription));
+      })
+      .catch(() => {
+        setHasActiveSubscription(false);
+      })
+      .finally(() => setSubLoading(false));
+  }, []);
 
   if (isLoading) {
     return (
@@ -129,7 +146,7 @@ export default function StudentDashboardPage() {
               </div>
             </div>
 
-            <div className="space-y-3">
+            {/* <div className="space-y-3">
               <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
                 <span className="text-[10px] font-mono text-zinc-400 uppercase block">
                   Active Plan
@@ -140,7 +157,28 @@ export default function StudentDashboardPage() {
               <p className="text-xs text-zinc-400">
                 Full access to student resources and trading modules.
               </p>
+            </div> */}
+
+            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1">
+              <span className="text-[10px] font-mono text-zinc-400 uppercase block">
+                Active Plan
+              </span>
+              <p className="text-xs font-bold text-white">
+                {subLoading
+                  ? "Checking..."
+                  : hasActiveSubscription
+                    ? "Academy Student Access"
+                    : "No Active Plan"}
+              </p>
             </div>
+
+            <p className="text-xs text-zinc-400">
+              {subLoading
+                ? ""
+                : hasActiveSubscription
+                  ? "Full access to student resources and trading modules."
+                  : "Purchase a plan to unlock course access."}
+            </p>
           </div>
 
           {/* Activity Overview Card */}
