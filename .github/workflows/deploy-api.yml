@@ -35,7 +35,24 @@ jobs:
           script: |
             cd /home/aegistradingacademy/htdocs/api.aegistradingacademy.com
             
-            echo "DATABASE_URL=\"${{ secrets.DATABASE_URL }}\"" > .env
+            echo "Creating .env file..."
+
+            cat > .env <<EOF
+            DATABASE_URL="${{ secrets.DATABASE_URL }}"
+            AUTH_SECRET="${{ secrets.AUTH_SECRET }}"
+            SMTP_HOST="${{ secrets.SMTP_HOST }}"
+            SMTP_PORT="${{ secrets.SMTP_PORT }}"
+            SMTP_USER="${{ secrets.SMTP_USER }}"
+            SMTP_PASS="${{ secrets.SMTP_PASS }}"
+            SMTP_FROM="${{ secrets.SMTP_FROM }}"
+            NEXT_PUBLIC_APP_URL="${{ secrets.NEXT_PUBLIC_APP_URL }}"
+            NOWPAYMENTS_API_KEY="${{ secrets.NOWPAYMENTS_API_KEY }}"
+            NOWPAYMENTS_IPN_SECRET="${{ secrets.NOWPAYMENTS_IPN_SECRET }}"
+            NOWPAYMENTS_IPN_CALLBACK_URL="${{ secrets.NOWPAYMENTS_IPN_CALLBACK_URL }}"
+            UPLOADS_ROOT="${{ secrets.UPLOADS_ROOT }}"
+            EOF
+
+            echo ".env file created."
             
             npm install
             npx prisma generate
