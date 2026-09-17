@@ -78,10 +78,15 @@ import { unlink, mkdir, writeFile } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 
+const APP_ROOT = process.env.UPLOADS_ROOT || process.cwd();
+
 const CERT_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 const CERT_MAX_BYTES = 50 * 1024 * 1024;
-const CERT_DIR = path.join(process.cwd(), "public", "uploads", "certificates");
-const PUBLIC_DIR = path.join(process.cwd(), "public");
+// const CERT_DIR = path.join(process.cwd(), "public", "uploads", "certificates");
+// const PUBLIC_DIR = path.join(process.cwd(), "public");
+
+const CERT_DIR = path.join(APP_ROOT, "public", "uploads", "certificates");
+const PUBLIC_DIR = path.join(APP_ROOT, "public");
 
 function getFileExtension(file: File) {
   const extensionFromName = path.extname(file.name).toLowerCase();

@@ -89,16 +89,23 @@ import { unlink, mkdir, writeFile } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 
+const APP_ROOT = process.env.UPLOADS_ROOT || process.cwd();
+
 const THUMB_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
 const THUMB_MAX_BYTES = 50 * 1024 * 1024;
-const THUMB_DIR = path.join(process.cwd(), "public", "uploads", "course-thumbnails");
-const PUBLIC_DIR = path.join(process.cwd(), "public");
+// const THUMB_DIR = path.join(process.cwd(), "public", "uploads", "course-thumbnails");
+// const PUBLIC_DIR = path.join(process.cwd(), "public");
+
+// new storage check for thumbnail & certificate not appearing issue
+const THUMB_DIR = path.join(APP_ROOT, "public", "uploads", "course-thumbnails");
+const PUBLIC_DIR = path.join(APP_ROOT, "public");
 
 /**
  * Saves a course thumbnail to local disk under public/uploads/course-thumbnails/
  * and returns its public-relative URL, e.g. "/uploads/course-thumbnails/uuid.jpg".
  */
 export async function saveThumbnail(file: File): Promise<string> {
+  console.log("Writing to:", THUMB_DIR);
   if (!THUMB_MIME.includes(file.type)) {
     throw new Error("Unsupported image type");
   }
