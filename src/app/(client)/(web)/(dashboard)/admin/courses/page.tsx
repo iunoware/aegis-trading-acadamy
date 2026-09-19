@@ -163,6 +163,7 @@ export default function CourseCMS() {
     const matchesStatus = statusFilter === "All" || c.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+  console.log("filtered course: ", filteredCourses[0]);
 
   //  Course handlers
 
