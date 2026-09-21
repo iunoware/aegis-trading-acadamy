@@ -61,7 +61,7 @@ export default function Navbar() {
   // GSAP Initial Page Load Entrance Animation
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     const ctx = gsap.context(() => {
@@ -71,7 +71,7 @@ export default function Navbar() {
           {
             opacity: 1,
             y: 0,
-          }
+          },
         );
         return;
       }
@@ -92,7 +92,7 @@ export default function Navbar() {
         tl.to(
           itemsContainerRef.current.children,
           { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 },
-          "-=0.5"
+          "-=0.5",
         );
       }
       tl.to(buttonsRef.current, { opacity: 1, x: 0, duration: 0.7 }, "-=0.4");
@@ -107,7 +107,7 @@ export default function Navbar() {
       gsap.fromTo(
         mobileMenuRef.current,
         { x: "100%", opacity: 0 },
-        { x: "0%", opacity: 1, duration: 0.4, ease: "power3.out" }
+        { x: "0%", opacity: 1, duration: 0.4, ease: "power3.out" },
       );
     }
   }, [mobileMenuOpen]);
@@ -131,6 +131,8 @@ export default function Navbar() {
                   src="/images/logo.png"
                   alt="Aegis Trading Academy Logo"
                   fill
+                  unoptimized
+                  priority
                   className="object-contain transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
@@ -232,6 +234,8 @@ export default function Navbar() {
                   src="/images/logo.png"
                   alt="Aegis Logo"
                   fill
+                  unoptimized
+                  priority
                   className="object-contain"
                 />
               </div>
