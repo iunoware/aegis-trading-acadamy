@@ -196,7 +196,7 @@ export default function Navbar() {
                 href="/login"
                 className={`px-6 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 ${
                   pathname === "/login"
-                    ? "border-white/15 text-surface hover:text-primary hover:border-(--primary)/40 bg-black/40 backdrop-blur-md"
+                    ? "border-white/15 text-surface hover:text-primary hover:border-primary/40 bg-black/40 backdrop-blur-md"
                     : "bg-linear-to-r from-primary-light via-primary to-primary-dark text-black border-transparent shadow-[0_0_20px_rgba(212,175,55,0.4)]"
                 }`}
               >
@@ -293,7 +293,7 @@ export default function Navbar() {
                 className={`w-full text-center py-3.5 rounded-xl border text-base font-semibold transition-colors ${
                   pathname === "/login"
                     ? "bg-primary text-black font-bold border-primary shadow-[0_0_20px_rgba(212,175,55,0.4)]"
-                    : "border-white/15 text-white hover:border-(--primary)/40"
+                    : "border-white/15 text-white hover:border-primary/40"
                 }`}
               >
                 Login

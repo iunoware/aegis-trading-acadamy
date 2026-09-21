@@ -7,6 +7,13 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 // import Image from "next/image";
 
+// demo commit
+// demo commit
+// demo commit
+// demo commit
+// demo commit
+// demo commit
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
