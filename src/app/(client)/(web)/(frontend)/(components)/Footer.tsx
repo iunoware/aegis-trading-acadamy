@@ -4,9 +4,9 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 // import Image from "next/image";
-import { gsap } from "gsap";
+// import { gsap } from "gsap";
 import axios from "axios";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
   Mail,
@@ -28,9 +28,9 @@ import {
 } from "@/components/Icons";
 import Link from "next/link";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+// if (typeof window !== "undefined") {
+//   gsap.registerPlugin(ScrollTrigger);
+// }
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
@@ -55,48 +55,48 @@ export default function Footer() {
     fetchCurrentUser();
   }, []);
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+  // useEffect(() => {
+  //   const prefersReducedMotion = window.matchMedia(
+  //     "(prefers-reduced-motion: reduce)",
+  //   ).matches;
 
-    const ctx = gsap.context(() => {
-      if (prefersReducedMotion) {
-        gsap.set([ctaBoxRef.current, columnsRef.current?.children], {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-        });
-        return;
-      }
+  //   const ctx = gsap.context(() => {
+  //     if (prefersReducedMotion) {
+  //       gsap.set([ctaBoxRef.current, columnsRef.current?.children], {
+  //         opacity: 1,
+  //         y: 0,
+  //         scale: 1,
+  //       });
+  //       return;
+  //     }
 
-      gsap.set(ctaBoxRef.current, { opacity: 0, y: 30, scale: 0.97 });
-      if (columnsRef.current) {
-        gsap.set(columnsRef.current.children, { opacity: 0, y: 25 });
-      }
+  //     gsap.set(ctaBoxRef.current, { opacity: 0, y: 30, scale: 0.97 });
+  //     if (columnsRef.current) {
+  //       gsap.set(columnsRef.current.children, { opacity: 0, y: 25 });
+  //     }
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none",
-        },
-        defaults: { ease: "power3.out" },
-      });
+  //     const tl = gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: footerRef.current,
+  //         start: "top 80%",
+  //         toggleActions: "play none none none",
+  //       },
+  //       defaults: { ease: "power3.out" },
+  //     });
 
-      tl.to(ctaBoxRef.current, { opacity: 1, y: 0, scale: 1, duration: 0.85 });
+  //     tl.to(ctaBoxRef.current, { opacity: 1, y: 0, scale: 1, duration: 0.85 });
 
-      if (columnsRef.current) {
-        tl.to(
-          columnsRef.current.children,
-          { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 },
-          "-=0.4",
-        );
-      }
-    }, footerRef);
+  //     if (columnsRef.current) {
+  //       tl.to(
+  //         columnsRef.current.children,
+  //         { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 },
+  //         "-=0.4",
+  //       );
+  //     }
+  //   }, footerRef);
 
-    return () => ctx.revert();
-  }, []);
+  //   return () => ctx.revert();
+  // }, []);
 
   return (
     <footer
