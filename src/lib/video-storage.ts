@@ -1,191 +1,10 @@
-// // // // // // src/lib/video-storage.ts
-// // // // // import { unlink } from "fs/promises";
-// // // // // import path from "path";
-// // // // // import { mkdir, writeFile } from "fs/promises";
-// // // // // import crypto from "crypto";
-
-// // // // // const STORAGE_DIR =
-// // // // //   process.env.VIDEO_STORAGE_DIR || path.join(process.cwd(), "storage", "videos");
-
-// // // // // const THUMB_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
-// // // // // const THUMB_MAX_BYTES = 50 * 1024 * 1024;
-// // // // // const THUMB_DIR = path.join(process.cwd(), "public", "uploads", "course-thumbnails");
-
-// // // // // /**
-// // // // //  * Deletes a locally-stored video file given its internal ref ("courseId/fileName").
-// // // // //  * Safe to call even if the file is already gone.
-// // // // //  */
-// // // // // export async function deleteVideoFile(internalRef: string) {
-// // // // //   const filePath = path.join(STORAGE_DIR, internalRef);
-
-// // // // //   // Guard against path traversal
-// // // // //   if (!filePath.startsWith(STORAGE_DIR)) {
-// // // // //     throw new Error("Invalid video file path");
-// // // // //   }
-
-// // // // //   try {
-// // // // //     await unlink(filePath);
-// // // // //   } catch (err: unknown) {
-// // // // //     // ENOENT = already gone, not an error worth surfacing
-// // // // //     if (
-// // // // //       typeof err === "object" &&
-// // // // //       err !== null &&
-// // // // //       "code" in err &&
-// // // // //       err.code === "ENOENT"
-// // // // //     ) {
-// // // // //       return;
-// // // // //     }
-// // // // //     throw err;
-// // // // //   }
-// // // // // }
-
-// // // // // export async function saveThumbnail(file: File): Promise<string> {
-// // // // //   if (!THUMB_MIME.includes(file.type)) throw new Error("Unsupported image type");
-// // // // //   if (file.size > THUMB_MAX_BYTES) throw new Error("Image too large");
-
-// // // // //   await mkdir(THUMB_DIR, { recursive: true });
-// // // // //   const ext = path.extname(file.name) || ".jpg";
-// // // // //   const fileName = `${crypto.randomUUID()}${ext}`;
-// // // // //   await writeFile(path.join(THUMB_DIR, fileName), Buffer.from(await file.arrayBuffer()));
-
-// // // // //   return `/uploads/course-thumbnails/${fileName}`;
-// // // // // }
-
-// // // // import path from "path";
-// // // // import { mkdir, writeFile } from "fs/promises";
-// // // // import crypto from "crypto";
-// // // // import { s3Client, S3_BUCKET } from "@/lib/s3";
-// // // // import { DeleteObjectCommand } from "@aws-sdk/client-s3";
-
-// // // // const THUMB_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
-// // // // const THUMB_MAX_BYTES = 50 * 1024 * 1024;
-// // // // const THUMB_DIR = path.join(process.cwd(), "public", "uploads", "course-thumbnails");
-
-// // // // /**
-// // // //  * Deletes an S3-stored video object given its internal ref ("courseId/fileName").
-// // // //  * Safe to call even if the object is already gone.
-// // // //  */
-// // // // export async function deleteVideoFile(internalRef: string) {
-// // // //   try {
-// // // //     await s3Client.send(new DeleteObjectCommand({ Bucket: S3_BUCKET, Key: internalRef }));
-// // // //   } catch (err) {
-// // // //     // S3 DeleteObject is idempotent by design — it returns success even if
-// // // //     // the key doesn't exist, so a thrown error here means something else
-// // // //     // (auth, network, etc.) actually went wrong and is worth surfacing.
-// // // //     console.error(`Failed to delete S3 object "${internalRef}":`, err);
-// // // //     throw err;
-// // // //   }
-// // // // }
-
-// // // // export async function saveThumbnail(file: File): Promise<string> {
-// // // //   if (!THUMB_MIME.includes(file.type)) throw new Error("Unsupported image type");
-// // // //   if (file.size > THUMB_MAX_BYTES) throw new Error("Image too large");
-
-// // // //   await mkdir(THUMB_DIR, { recursive: true });
-// // // //   const ext = path.extname(file.name) || ".jpg";
-// // // //   const fileName = `${crypto.randomUUID()}${ext}`;
-// // // //   await writeFile(path.join(THUMB_DIR, fileName), Buffer.from(await file.arrayBuffer()));
-
-// // // //   return `/uploads/course-thumbnails/${fileName}`;
-// // // // }
-
-// // // import path from "path";
-// // // import crypto from "crypto";
-// // // import { s3Client, S3_BUCKET, S3_REGION } from "@/lib/s3";
-// // // import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-
-// // // const THUMB_MIME = ["image/jpeg", "image/png", "image/webp", "image/avif"];
-// // // const THUMB_MAX_BYTES = 50 * 1024 * 1024;
-// // // const THUMB_PREFIX = "thumbnails/";
-
-// // // /**
-// // //  * Deletes an S3-stored video object given its internal ref ("courseId/fileName").
-// // //  * Safe to call even if the object is already gone.
-// // //  */
-// // // export async function deleteVideoFile(internalRef: string) {
-// // //   try {
-// // //     await s3Client.send(new DeleteObjectCommand({ Bucket: S3_BUCKET, Key: internalRef }));
-// // //   } catch (err) {
-// // //     console.error(`Failed to delete S3 object "${internalRef}":`, err);
-// // //     throw err;
-// // //   }
-// // // }
-
-// // // /**
-// // //  * Uploads a course thumbnail to S3 under a public prefix and returns
-// // //  * its public URL, e.g.
-// // //  * "https://aegis-s3-demo-bucket.s3.ap-southeast-2.amazonaws.com/thumbnails/uuid.jpg"
-// // //  */
-// // // export async function saveThumbnail(file: File): Promise<string> {
-// // //   if (!THUMB_MIME.includes(file.type)) throw new Error("Unsupported image type");
-// // //   if (file.size > THUMB_MAX_BYTES) throw new Error("Image too large");
-
-// // //   const ext = path.extname(file.name) || ".jpg";
-// // //   const key = `${THUMB_PREFIX}${crypto.randomUUID()}${ext}`;
-// // //   const buffer = Buffer.from(await file.arrayBuffer());
-
-// // //   await s3Client.send(
-// // //     new PutObjectCommand({
-// // //       Bucket: S3_BUCKET,
-// // //       Key: key,
-// // //       Body: buffer,
-// // //       ContentType: file.type,
-// // //     }),
-// // //   );
-
-// // //   return `https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/${key}`;
-// // // }
-
-// // // /**
-// // //  * Deletes a thumbnail given its stored URL. Safe no-op for anything that
-// // //  * isn't one of our own S3 thumbnail URLs (e.g. leftover local paths from
-// // //  * before this migration).
-// // //  */
-// // // export async function deleteThumbnail(thumbnailUrl: string) {
-// // //   const prefix = `https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/${THUMB_PREFIX}`;
-
-// // //   if (!thumbnailUrl.startsWith(prefix)) {
-// // //     return;
-// // //   }
-
-// // //   const key = thumbnailUrl.slice(
-// // //     `https://${S3_BUCKET}.s3.${S3_REGION}.amazonaws.com/`.length,
-// // //   );
-
-// // //   try {
-// // //     await s3Client.send(new DeleteObjectCommand({ Bucket: S3_BUCKET, Key: key }));
-// // //   } catch (err) {
-// // //     console.error(`Failed to delete S3 thumbnail "${key}":`, err);
-// // //   }
-// // // }
-
-// // import { s3Client, S3_BUCKET } from "@/lib/s3";
-// // import { DeleteObjectCommand } from "@aws-sdk/client-s3";
-
-// // /**
-// //  * Deletes an S3-stored video object given its internal ref ("courseId/fileName").
-// //  * Safe to call even if the object is already gone.
-// //  */
-// // export async function deleteVideoFile(internalRef: string) {
-// //   try {
-// //     await s3Client.send(new DeleteObjectCommand({ Bucket: S3_BUCKET, Key: internalRef }));
-// //   } catch (err) {
-// //     console.error(`Failed to delete S3 object "${internalRef}":`, err);
-// //     throw err;
-// //   }
-// // }
-
-// import { unlink, mkdir, writeFile } from "fs/promises";
+// import { unlink, mkdir, writeFile, rmdir, readdir } from "fs/promises";
 // import path from "path";
 // import crypto from "crypto";
 
 // export const STORAGE_DIR =
 //   process.env.VIDEO_STORAGE_DIR || path.join(process.cwd(), "storage", "videos");
 
-// /**
-//  * Saves an uploaded video file to local disk under STORAGE_DIR/courseId/,
-//  * and returns the internal ref ("courseId/fileName") stored in Lesson.videoUrl.
-//  */
 // export async function saveVideo(file: File, courseId: string): Promise<string> {
 //   const ext = path.extname(file.name) || ".mp4";
 //   const fileName = `${crypto.randomUUID()}${ext}`;
@@ -199,7 +18,8 @@
 
 // /**
 //  * Deletes a locally-stored video file given its internal ref ("courseId/fileName").
-//  * Safe to call even if the file is already gone.
+//  * Safe to call even if the file is already gone. After deleting, also removes
+//  * the course's folder if it's now empty (i.e. that was the last video).
 //  */
 // export async function deleteVideoFile(internalRef: string) {
 //   const filePath = path.join(STORAGE_DIR, internalRef);
@@ -223,14 +43,42 @@
 //     }
 //     throw err;
 //   }
+
+//   // Clean up the parent course folder if it's now empty. Failure here
+//   // (folder not empty, already gone, permissions, etc.) is never worth
+//   // surfacing — the video itself was already deleted successfully.
+//   const courseDir = path.dirname(filePath);
+//   try {
+//     const remaining = await readdir(courseDir);
+//     if (remaining.length === 0) {
+//       await rmdir(courseDir);
+//     }
+//   } catch {
+//     // ignore
+//   }
 // }
 
-import { unlink, mkdir, writeFile, rmdir, readdir } from "fs/promises";
+// src\lib\video-storage.ts
+// for video chunking:
+import {
+  unlink,
+  mkdir,
+  writeFile,
+  rmdir,
+  readdir,
+  stat,
+  appendFile,
+  rename,
+} from "fs/promises";
 import path from "path";
 import crypto from "crypto";
 
 export const STORAGE_DIR =
   process.env.VIDEO_STORAGE_DIR || path.join(process.cwd(), "storage", "videos");
+
+const TMP_DIR = path.join(STORAGE_DIR, ".tmp");
+const UPLOAD_ID_RE = /^[0-9a-fA-F-]{36}$/;
+const VIDEO_EXTS = [".mp4", ".webm", ".mov", ".mkv"];
 
 export async function saveVideo(file: File, courseId: string): Promise<string> {
   const ext = path.extname(file.name) || ".mp4";
@@ -241,6 +89,76 @@ export async function saveVideo(file: File, courseId: string): Promise<string> {
   await writeFile(path.join(courseDir, fileName), Buffer.from(await file.arrayBuffer()));
 
   return `${courseId}/${fileName}`;
+}
+
+// ---------- Chunked upload helpers ----------
+
+export function isValidUploadId(id: string) {
+  return UPLOAD_ID_RE.test(id);
+}
+
+function partPath(uploadId: string) {
+  return path.join(TMP_DIR, `${uploadId}.part`);
+}
+
+/**
+ * Appends a chunk at `offset`. Idempotent: if the chunk was already written
+ * (retry after a lost response) it reports success without writing twice.
+ */
+export async function appendChunk(
+  uploadId: string,
+  offset: number,
+  data: Buffer,
+): Promise<{ ok: boolean; receivedBytes: number }> {
+  await mkdir(TMP_DIR, { recursive: true });
+  const p = partPath(uploadId);
+
+  let size = 0;
+  try {
+    size = (await stat(p)).size;
+  } catch (err: unknown) {
+    if (
+      !(typeof err === "object" && err !== null && "code" in err && err.code === "ENOENT")
+    ) {
+      throw err;
+    }
+  }
+
+  if (size === offset + data.length) return { ok: true, receivedBytes: size };
+  if (size !== offset) return { ok: false, receivedBytes: size };
+
+  await appendFile(p, data);
+  return { ok: true, receivedBytes: size + data.length };
+}
+
+/** Moves the finished temp file into the course folder. Returns "courseId/fileName". */
+export async function finalizeChunkedVideo(
+  uploadId: string,
+  courseId: string,
+  originalName: string,
+  expectedSize: number,
+): Promise<string> {
+  const p = partPath(uploadId);
+  const { size } = await stat(p);
+  if (size !== expectedSize) throw new Error("SIZE_MISMATCH");
+
+  const rawExt = path.extname(originalName).toLowerCase();
+  const ext = VIDEO_EXTS.includes(rawExt) ? rawExt : ".mp4";
+  const fileName = `${crypto.randomUUID()}${ext}`;
+  const courseDir = path.join(STORAGE_DIR, courseId);
+
+  await mkdir(courseDir, { recursive: true });
+  await rename(p, path.join(courseDir, fileName));
+
+  return `${courseId}/${fileName}`;
+}
+
+export async function abortChunkedUpload(uploadId: string) {
+  try {
+    await unlink(partPath(uploadId));
+  } catch {
+    // already gone
+  }
 }
 
 /**
@@ -259,7 +177,6 @@ export async function deleteVideoFile(internalRef: string) {
   try {
     await unlink(filePath);
   } catch (err: unknown) {
-    // ENOENT = already gone, not an error worth surfacing
     if (
       typeof err === "object" &&
       err !== null &&
@@ -271,9 +188,6 @@ export async function deleteVideoFile(internalRef: string) {
     throw err;
   }
 
-  // Clean up the parent course folder if it's now empty. Failure here
-  // (folder not empty, already gone, permissions, etc.) is never worth
-  // surfacing — the video itself was already deleted successfully.
   const courseDir = path.dirname(filePath);
   try {
     const remaining = await readdir(courseDir);

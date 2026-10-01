@@ -27,6 +27,8 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 import { CustomVideoPlayer } from "./components/CustomVideoPlayer";
+// for video chunking:
+import { uploadVideoInChunks } from "@/lib/chunked-upload";
 
 type ContentStatus = "DRAFT" | "PUBLISHED" | "HIDDEN";
 
@@ -530,52 +532,51 @@ export default function CourseCMS() {
 
       const uploadId = crypto.randomUUID();
 
-      // Server -> S3 leg, weighted into the top half of the bar
-      // const es = new EventSource(`/api/admin/upload-progress/${uploadId}`);
-      // uploadEventSourceRef.current = es;
+      // try {
+      //   const formData = new FormData();
+      //   formData.append("file", videoFile);
+      //   formData.append("title", videoTitle);
+      //   formData.append("isPreview", String(videoIsPreview));
+      //   formData.append("durationSeconds", String(videoDurationSeconds));
+      //   formData.append("uploadId", uploadId);
 
-      // es.onmessage = (event) => {
-      //   try {
-      //     const data = JSON.parse(event.data);
-      //     if (typeof data.percent === "number") {
-      //       setUploadProgress(50 + Math.round(data.percent * 0.5));
-      //     }
-      //     if (data.done) {
-      //       es.close();
-      //       uploadEventSourceRef.current = null;
-      //     }
-      //   } catch {
-      //     // ignore malformed/heartbeat events
-      //   }
-      // };
+      //   const res = await axios.post(
+      //     `/api/admin/courses/${activeCourseId}/lessons/upload`,
+      //     formData,
+      //     {
+      //       onUploadProgress: (event) => {
+      //         // Browser -> server leg, weighted into the bottom half of the bar
+      //         if (event.total) {
+      //           setUploadProgress(Math.round((event.loaded / event.total) * 50));
+      //         }
+      //       },
+      //     },
+      //   );
 
-      // es.onerror = () => {
-      //   es.close();
-      //   uploadEventSourceRef.current = null;
-      // };
-
+      //   setUploadProgress(100);
+      // for video chunking:
       try {
-        const formData = new FormData();
-        formData.append("file", videoFile);
-        formData.append("title", videoTitle);
-        formData.append("isPreview", String(videoIsPreview));
-        formData.append("durationSeconds", String(videoDurationSeconds));
-        formData.append("uploadId", uploadId);
+        await uploadVideoInChunks({
+          file: videoFile,
+          uploadId,
+          courseId: activeCourseId,
+          onProgress: setUploadProgress,
+        });
+
+        setUploadProgress(100);
 
         const res = await axios.post(
           `/api/admin/courses/${activeCourseId}/lessons/upload`,
-          formData,
           {
-            onUploadProgress: (event) => {
-              // Browser -> server leg, weighted into the bottom half of the bar
-              if (event.total) {
-                setUploadProgress(Math.round((event.loaded / event.total) * 50));
-              }
-            },
+            uploadId,
+            fileName: videoFile.name,
+            fileSize: videoFile.size,
+            mimeType: videoFile.type,
+            title: videoTitle,
+            isPreview: videoIsPreview,
+            durationSeconds: videoDurationSeconds,
           },
         );
-
-        setUploadProgress(100);
 
         setCourses((prev) =>
           prev.map((c) =>
@@ -587,10 +588,14 @@ export default function CourseCMS() {
         toast.success(res.data.message);
         setIsVideoModalOpen(false);
       } catch (err) {
+        // toast.error(
+        //   axios.isAxiosError(err)
+        //     ? err.response?.data?.message
+        //     : "Failed to upload video",
+        // );
         toast.error(
-          axios.isAxiosError(err)
-            ? err.response?.data?.message
-            : "Failed to upload video",
+          (axios.isAxiosError(err) && err.response?.data?.message) ||
+            "Upload failed. Check your connection and try again.",
         );
       } finally {
         // uploadEventSourceRef.current?.close();
